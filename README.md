@@ -1,4 +1,4 @@
-# dialecttranslationtool-frontend
+# Dialect Translation Tool Frontend
 
 ## Project setup
 To get started with vue.js, first clone the repository then run ```npm install```.
