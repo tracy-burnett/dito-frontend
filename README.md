@@ -2,12 +2,12 @@
 
 ## Project setup
 To get started with vue.js, first clone the repository then run ```npm install```.
-Make sure you have both the lastest version of NodeJS installed and npm installed.
+Make sure you have both the latest version of NodeJS installed and npm installed.
 
 You can find the link to install these here: https://nodejs.org/en/download/
 
 Once installed, run ```npm run serve``` and open https://localhost:8080 in your browser to view a local version of the site.
-Vue.js has hot reloading enabled by default. Any changes will be reflected in immeidately.
+Vue.js has hot reloading enabled by default. Any changes will be reflected immediately.
 
 To build and minify for production, run ```npm run build```.
 
