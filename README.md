@@ -14,13 +14,21 @@ To build and minify for production, run ```npm run build```.
 ### A note on project structure
 
 /public
+
 /src
+
   /assets
+  
   /components
+  
   /router
+  
   /store
+  
   /views
+  
   App.vue
+  
   main.js
  
 ```/public``` contains index.html and other public static files such as robots.txt
