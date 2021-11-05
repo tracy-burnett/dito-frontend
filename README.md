@@ -13,30 +13,17 @@ To build and minify for production, run ```npm run build```.
 
 ### A note on project structure
 
-/public
-
-/src
-
-  /assets
-  
-  /components
-  
-  /router
-  
-  /store
-  
-  /views
-  
-  App.vue
-  
-  main.js
- 
 ```/public``` contains index.html and other public static files such as robots.txt
-  ```/assets``` contains static assets such as images and fonts
-  ```/components``` contains vue components which are imported by the files in ```/views```
-  ```/router``` contains routing logic
-  ```/store``` contains vuex, which is used to store the application state in local storage
-  ```/views``` contains the pages
+
+```/assets``` contains static assets such as images and fonts
+
+```/components``` contains vue components which are imported by the files in ```/views```
+
+```/router``` contains routing logic
+
+```/store``` contains vuex, which is used to store the application state in local storage
+
+```/views``` contains the pages
 
 ### Compiles and hot-reloads for development
 ```
