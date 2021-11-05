@@ -25,6 +25,10 @@ To build and minify for production, run ```npm run build```.
 
 ```/views``` contains the pages
 
+### Viewing tasks
+
+There is a GitHub project board located in the ```Projects``` tab of this repository. Please refer to this for your individual tasks and check it frequenty to keep up to date with development progress.
+
 ### Compiles and hot-reloads for development
 ```npm run serve```
 
