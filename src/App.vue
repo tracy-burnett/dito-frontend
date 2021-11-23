@@ -9,6 +9,6 @@ html,
 body,
 #app {
   height: 100%;
-  background: #f1f3f5;
+  /* background: #f1f3f5; */
 }
 </style>
