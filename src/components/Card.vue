@@ -4,7 +4,7 @@
         <div class="px-4 py-2">
             <div class="font-bold text-xl mt-1 mb-2">Lorem Ipsum</div>
             <p class="text-gray-400 text-xs mb-3">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis  ...
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis...
             </p>
             <label class="text-gray-400 text-xs">Created by Alex McDowell on 10/26/2021</label>
         </div>
@@ -16,7 +16,8 @@
 
 <script>
 export default {
-    
+    name: "Card",
+    props: ["title", "image", "description", "author", "date", "id"]
 }
 </script>
 

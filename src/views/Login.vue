@@ -6,7 +6,7 @@
                 <h1 class="text-2xl font-bold">Login</h1>
                 <input class="border border-gray-300 rounded w-full mt-12 mb-3 px-3 py-1" placeholder="Email" />
                 <input class="border border-gray-300 rounded w-full px-3 py-1" placeholder="Password" type="password" />
-                <button class="bg-indigo-500 border border-indigo-400 w-full text-sm px-3 py-1 mt-16 rounded font-medium text-white hover:bg-indigo-400 transition-colors">Login</button>
+                <button class="bg-indigo-500 border border-indigo-400 w-full text-sm px-3 py-2 mt-16 rounded font-medium text-white hover:bg-indigo-400 transition-colors">Login</button>
             </div>
         </div>
     </div>
