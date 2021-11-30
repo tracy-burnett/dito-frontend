@@ -1,7 +1,7 @@
 <template>
-    <div class="lg:mx-16 mx-5">
+    <div class="lg:ml-16 mx-5">
         <h1 class="font-bold text-2xl mt-8 mb-6">{{ title }}</h1>
-        <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-8">
+        <div class="flex items-center">
             <Card />
             <Card />
             <Card />
@@ -23,5 +23,7 @@ export default {
 </script>
 
 <style scoped>
-
+.flex {
+    flex-wrap: wrap;
+}
 </style>

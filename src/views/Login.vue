@@ -1,6 +1,6 @@
 <template>
     <div class="h-full overflow-hidden">
-        <Navbar />
+        <Navbar text="Login" />
         <div class="flex justify-center items-center h-full -mt-10">
             <div class="flex flex-col items-center border border-gray-300 bg-white shadow-md rounded-xl p-8 xl:w-1/5 lg:w-1/4 md:w-1/3">
                 <h1 class="text-2xl font-bold">Login</h1>

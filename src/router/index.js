@@ -5,6 +5,7 @@ import Login from '../views/Login.vue'
 import About from '../views/About.vue'
 import User from '../views/User.vue'
 import Editor from '../views/Editor.vue'
+import Storybook from '../views/Storybook.vue'
 
 Vue.use(VueRouter)
 
@@ -28,6 +29,11 @@ const routes = [
     path: '/user/:id',
     name: 'User',
     component: User
+  },
+  {
+    path: '/storybook/:id',
+    name: 'Storybook',
+    component: Storybook
   },
   {
     path: "/editor",

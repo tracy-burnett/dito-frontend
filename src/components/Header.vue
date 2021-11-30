@@ -1,7 +1,7 @@
 <template>
-    <div class="flex flex-col w-screen border-t border-indigo-500 hero py-14 lg:px-16 px-5">
+    <div class="flex flex-col border-t border-indigo-500 hero py-14 lg:px-16 px-5">
         <h1 class="text-white text-5xl font-extrabold mb-5">{{ title }}</h1>
-        <p class="text-gray-200 font-light text-sm lg:w-1/2 md:w-2/3 sm:w-full">{{ body }}</p>
+        <p class="text-indigo-200 font-light text-sm lg:w-2/3 md:w-3/4 sm:w-full">{{ body }}</p>
     </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
     <div class="h-full overflow-hidden">
-        <Navbar />
+        <Navbar text="Xygil" />
         <CardList title="My Storybooks" />
     </div>
 </template>
