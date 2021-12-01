@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <Navbar />
-    <Header title="About" body="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec semper orci in pellentesque condimentum. Pellentesque eu sem ornare, commodo urna vitae, tempus felis. Aenean sit amet magna sed sapien pharetra tempus eu a sem. Duis eget est egestas mi sollicitudin mattis. Maecenas placerat nulla nec dui posuere varius. Donec ultricies nulla at velit aliquet ornare. Donec pharetra tempor auctor. Maecenas ultrices ante commodo mi egestas, nec dictum nibh tincidunt." />
+    <Header title="About" body="Are you a social science researcher with hours of recorded audio interviews that you would love to understand better?" body="Are you struggling to revive a language or dialect that you care about?" body="Do you want to learn what it feels like to think in another language?" body="You've come to the right place." />
   </div>
 </template>
 
