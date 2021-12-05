@@ -27,5 +27,8 @@
 </template>
 
 <script>
-
+export default {
+    name: 'Languagemenu',
+    props: ["text"]
+}
 </script>
