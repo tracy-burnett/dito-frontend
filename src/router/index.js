@@ -26,6 +26,21 @@ const routes = [
     component: About
   },
   {
+    path: "/contact",
+    name: "Contact",
+    component: () => import('../views/Contact.vue')
+  },
+  {
+    path: "/faq",
+    name: "FAQ",
+    component: () => import('../views/FAQ.vue')
+  },
+  {
+    path: "/statement",
+    name: "Statement",
+    component: () => import('../views/Statement.vue')
+  },
+  {
     path: '/user/:id',
     name: 'User',
     component: User
