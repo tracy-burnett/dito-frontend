@@ -24,6 +24,9 @@
   </div>
 </div>
 
+<input onclick="makeMenu()" value="+" type= "button" class="buttonplus">
+
+
 </template>
 
 <script>
@@ -69,6 +72,24 @@ export default {
   text-decoration: none;
   display: block;
 }
+
+.buttonplus {
+background-color: #7833FF;
+  border: none;
+  color: white;
+  padding: 9px 12px;
+  position:fixed;
+  left:600px;
+  top:300px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 16px;
+}
+
+.buttonplus {border-radius: 100%;}
 
 .dropdown-content a:hover {background-color: #f1f1f1;}
 .dropdown:hover .dropdown-content {display: block;}
