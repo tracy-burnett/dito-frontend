@@ -7,6 +7,7 @@
 <script>
 import Navbar from "@/components/Navbar.vue";
 import HeaderAlt from "@/components/HeaderAlt.vue";
+import Languagemenu from "@/components/Languagemenu.vue";
 
 export default {
     name: "Storybook",
