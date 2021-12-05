@@ -1,8 +1,8 @@
 <template>
 
-<div class="dropdown1" style="float:right;">
-  <button class="dropbtn1">Select Language 1</button>
-  <div class="dropdown-content1">
+<div class="dropdown" style="float:right;">
+  <button class="dropbtn">Select Translation 1</button>
+  <div class="dropdown-content">
   	  <a href="#">Language 1</a>
       <a href="#">Language 2</a>
       <a href="#">Language 3</a>
@@ -14,9 +14,9 @@
 <br>
 <br>
 
-<div class="dropdown2" style="float:right;">
-  <button class="dropbtn2">Select Language 2</button>
-  <div class="dropdown-content2">
+<div class="dropdown" style="float:right;">
+  <button class="dropbtn">Select Translation 2</button>
+  <div class="dropdown-content">
   	  <a href="#">Language 1</a>
       <a href="#">Language 2</a>
       <a href="#">Language 3</a>
