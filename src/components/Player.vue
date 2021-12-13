@@ -1,16 +1,14 @@
 <template>
-    <div>
-        <div class="container rounded-full shadow-lg">
-            <button id="play" @click="play" class="play items-center">
-                <div class="h-10 w-10">
-                    <img v-if="playing" src="@/assets/pauseAudio.svg"/>
-                    <img v-else src="@/assets/playAudio.svg"/>
-                </div>
-            </button>
-            <div id="current" ref="current" class="song-length">00:00:00</div>
-            <div id="waveform" class="waveform"></div>
-            <div id="length" ref="length" class="song-length">00:00:00</div>
-        </div>
+    <div class="container rounded-full shadow-lg items-center">
+        <button id="play" @click="play" class="play">
+            <div class="h-10 w-10">
+                <img v-if="playing" src="@/assets/pauseAudio.svg"/>
+                <img v-else src="@/assets/playAudio.svg"/>
+            </div>
+        </button>
+        <div id="current" ref="current" class="current">00:00:00</div>
+        <div id="waveform" class="waveform"></div>
+        <div id="length" ref="length" class="song-length">00:00:00</div>
     </div>
     
     <!-- <div class="lg:mx-16 mx-5">
@@ -45,8 +43,11 @@ export default {
             this.wavesurfer = WaveSurfer.create({
                 container: '#waveform',
                 waveColor: 'grey',
-                progressColor: 'purple'
-            })
+                progressColor: '#5D5FEF',
+                barWidth: 2,
+                barRadius: 3,
+                height: 50,
+            });
             
             var audio = this.audio;
             if (!this.audio) {
@@ -100,11 +101,16 @@ export default {
     /* margin-right: 10px; */
 }
 .play {
-    width: "44px";
-    padding: 10px;
+    /* width: "50px"; */
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 2px;
+}
+
+.current {
+    padding: 5px;
 }
 .song-length {
-    margin: auto;
-    padding: 10px;
+    padding: 5px;
 }
 </style>
