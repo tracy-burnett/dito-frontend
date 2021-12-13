@@ -1,12 +1,15 @@
 <template>
     <div>
-        <div class="container">
-            <button @click="play" class="play">
-                Play/Pause
+        <div class="container rounded-full shadow-lg">
+            <button id="play" @click="play" class="play items-center">
+                <div class="h-10 w-10">
+                    <img v-if="playing" src="@/assets/pauseAudio.svg"/>
+                    <img v-else src="@/assets/playAudio.svg"/>
+                </div>
             </button>
-            <div id="current" ref="current" class="song-length">0:00</div>
+            <div id="current" ref="current" class="song-length">00:00:00</div>
             <div id="waveform" class="waveform"></div>
-            <div id="length" ref="length" class="song-length">0:00</div>
+            <div id="length" ref="length" class="song-length">00:00:00</div>
         </div>
     </div>
     
@@ -28,7 +31,13 @@ function secondsToTime(seconds) {
 
 export default {
     name: "Player",
+    props: ["audio"],
     components: {
+    },
+    data: () => {
+        return {
+            playing: false,
+        }
     },
     mounted() {
         this.$nextTick(() => {
@@ -38,9 +47,15 @@ export default {
                 waveColor: 'grey',
                 progressColor: 'purple'
             })
-            // change this to load whatever audio file you want
-            this.wavesurfer.load('https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_5MG.mp3')
             
+            var audio = this.audio;
+            if (!this.audio) {
+                // change this to load whatever audio file you want
+                audio = 'https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_5MG.mp3'
+            }
+            this.wavesurfer.load(audio);
+            
+            this.playing = false;
             const wavesurfer = this.wavesurfer;
             this.wavesurfer.on('ready', function () {
                 document.getElementById('length').innerText = secondsToTime(wavesurfer.getDuration());
@@ -58,7 +73,14 @@ export default {
     },
     methods: {
         play() {
-            this.wavesurfer.playPause()
+            this.wavesurfer.playPause();
+            this.playing = !this.playing;
+            // var src = "@/assets/playAudio.svg";
+            // if (this.wavesurfer.isPlaying()) {
+            //     var src = "@/assets/pause.svg";
+            // }
+            // console.log(src);
+            // document.getElementById('playImg').src = src;
         },
         updateDuration() {
             this.$refs.length.innerText = secondsToTime(this.wavesurfer.getDuration())
@@ -78,7 +100,7 @@ export default {
     /* margin-right: 10px; */
 }
 .play {
-    width: "fill-content";
+    width: "44px";
     padding: 10px;
 }
 .song-length {
