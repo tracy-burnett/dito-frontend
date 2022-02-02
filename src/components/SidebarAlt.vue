@@ -15,12 +15,12 @@
   </nav>-->
   <div class="hidden lg:block navbar-menu relative z-50">
     <div class="navbar-backdrop fixed lg:hidden inset-0 bg-gray-800 opacity-10"></div>
-    <nav class="fixed top-0 left-0 bottom-0 flex flex-col w-3/4 lg:w-80 sm:max-w-xs pt-4 bg-gray-800 opacity-80 hover:overflow-y-auto">
-      <div class="flex w-full items-center px-6 pb-4 mb-6 lg:border-b border-gray-700">
+    <nav class="fixed top-14 right-0 bottom-0 flex flex-col w-3/4 lg:w-80 sm:max-w-xs pt-4 bg-gray-800 opacity-90 hover:overflow-y-auto">
+      <!-- <div class="flex w-full items-center px-6 pb-4 mb-6 lg:border-b border-gray-700">
         <a class="text-xl text-white font-semibold" href="/">
           Lorem ipsum
         </a>
-      </div>
+      </div> -->
       <div class="px-4 pb-6">
         <h3 class="mb-2 text-xs uppercase text-gray-500 font-medium">Menu</h3>
         <ul class="mb-8 text-sm font-medium">

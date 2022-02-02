@@ -1,5 +1,5 @@
 <template>
-  <div class="flex">
+  <div class="flex-auto">
     <SidebarAlt />
     <div class="flex flex-col">
       <Navbar />
