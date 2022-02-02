@@ -8,7 +8,7 @@
             </p>
             <label class="text-gray-400 text-xs">Created by Alex McDowell on 10/26/2021</label>
         </div>
-        <div class="flex justify-center items-center bg-indigo-500 absolute h-14 w-14 rounded-full play shadow-lg mr-4">
+        <div class="flex justify-center items-center bg-sky-700 absolute h-14 w-14 rounded-full play shadow-lg mr-4">
             <img class="text-white h-8 w-8 ml-1" src="@/assets/play.svg" />
         </div>
     </div>

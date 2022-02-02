@@ -2,7 +2,7 @@
   <div class="home">
     <Navbar text="Xygil" />
     <Header title="About" body="Are you a social science researcher with hours of recorded audio interviews that you would love to understand better? Are you struggling to revive a language or dialect that you care about? Do you want to learn what it feels like to think in another language? You've come to the right place." />
-    <Essay title="About" body="Lorem ipsum" />
+    <Essay title="About" body1="Lorem ipsum" body2="Let's try this"/>
   </div>
 </template>
 

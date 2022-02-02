@@ -1,5 +1,5 @@
 <template>
-<div v-if="showSidebar">
+<div v-if="!showSidebar">
   <!--<nav class="lg:hidden py-3 px-6 bg-gray-800">
     <div class="flex items-center justify-between">
       <a class="text-2xl text-white font-semibold" href="#">
@@ -15,17 +15,17 @@
   </nav>-->
   <div class="hidden lg:block navbar-menu relative z-50">
     <div class="navbar-backdrop fixed lg:hidden inset-0 bg-gray-800 opacity-10"></div>
-    <nav class="fixed top-0 left-0 bottom-0 flex flex-col w-3/4 lg:w-80 sm:max-w-xs pt-4 bg-gray-800 overflow-y-auto">
+    <nav class="fixed top-0 left-0 bottom-0 flex flex-col w-3/4 lg:w-80 sm:max-w-xs pt-4 bg-gray-800 opacity-80 hover:overflow-y-auto">
       <div class="flex w-full items-center px-6 pb-4 mb-6 lg:border-b border-gray-700">
-        <a class="text-xl text-white font-semibold" href="#">
-          Xygil
+        <a class="text-xl text-white font-semibold" href="/">
+          Lorem ipsum
         </a>
       </div>
       <div class="px-4 pb-6">
         <h3 class="mb-2 text-xs uppercase text-gray-500 font-medium">Menu</h3>
         <ul class="mb-8 text-sm font-medium">
           <li>
-            <a class="flex items-center pl-3 py-3 pr-2 text-gray-50 bg-indigo-600 rounded" href="#">
+            <a class="flex items-center pl-3 py-3 pr-2 text-gray-50 bg-cyan-800 rounded" href="#">
               <span class="inline-block mr-3">
                 <svg class="text-indigo-100 w-5 h-5" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M9.0002 0.666626C4.41687 0.666626 0.66687 4.41663 0.66687 8.99996C0.66687 13.5833 4.41687 17.3333 9.0002 17.3333C13.5835 17.3333 17.3335 13.5833 17.3335 8.99996C17.3335 4.41663 13.5835 0.666626 9.0002 0.666626ZM2.58354 10.6666C2.41687 10.0833 2.33354 9.58329 2.33354 8.99996C2.33354 8.41663 2.41687 7.91663 2.58354 7.33329H4.16687C4.0002 8.41663 4.0002 9.58329 4.16687 10.6666H2.58354ZM3.2502 12.3333H4.41687C4.58354 13.0833 4.83354 13.8333 5.2502 14.5C4.41687 13.9166 3.7502 13.1666 3.2502 12.3333ZM4.41687 5.66663H3.2502C3.7502 4.83329 4.41687 4.08329 5.2502 3.49996C4.83354 4.16663 4.58354 4.91663 4.41687 5.66663ZM8.16687 15.4166C7.16687 14.6666 6.41687 13.5833 6.16687 12.3333H8.16687V15.4166ZM8.16687 10.6666H5.7502C5.66687 10.0833 5.66687 9.58329 5.66687 8.99996C5.66687 8.41663 5.66687 7.91663 5.7502 7.33329H8.16687V10.6666ZM8.16687 5.66663H6.16687C6.41687 4.41663 7.16687 3.33329 8.16687 2.58329V5.66663ZM14.7502 5.66663H13.5835C13.4169 4.91663 13.1669 4.16663 12.7502 3.49996C13.5835 4.08329 14.2502 4.83329 14.7502 5.66663ZM9.83354 2.58329C10.8335 3.33329 11.5835 4.41663 11.8335 5.66663H9.83354V2.58329ZM9.83354 15.4166V12.3333H11.8335C11.5835 13.5833 10.8335 14.6666 9.83354 15.4166ZM12.2502 10.6666H9.83354V7.33329H12.2502C12.3335 8.41663 12.3335 9.58329 12.2502 10.6666ZM12.8335 14.5C13.1669 13.8333 13.4169 13.0833 13.6669 12.3333H14.8335C14.2502 13.1666 13.5835 13.9166 12.8335 14.5ZM13.9169 10.6666C14.0835 9.58329 14.0835 8.41663 13.9169 7.33329H15.5002C15.8335 8.41663 15.8335 9.58329 15.5002 10.6666H13.9169Z" fill="currentColor"></path>

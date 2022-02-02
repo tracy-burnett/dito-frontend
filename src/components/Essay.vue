@@ -1,7 +1,9 @@
 <template>
     <div class="lg:ml-16 mx-5">
         <h1 class="font-bold text-2xl mt-8 mb-6">{{ title }}</h1>
-        <p class="text-gray-800 font-light text-sm lg:w-2/3 md:w-3/4 sm:w-full">{{ body }}</p>
+        <p class="text-gray-800 font-light text-sm lg:w-2/3 md:w-3/4 sm:w-full">{{ body1 }}</p>
+        <br />
+        <p class="text-gray-800 font-light text-sm lg:w-2/3 md:w-3/4 sm:w-full">{{ body2 }}</p>
     </div>
 </template>
 
@@ -9,7 +11,7 @@
 <script>
 export default {
     name: "Essay",
-    props: ["title", "body"]
+    props: ["title", "body1", "body2"]
 }
 </script>
 
