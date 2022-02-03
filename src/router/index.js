@@ -1,19 +1,5 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import Login from '../views/Login.vue'
-import About from '../views/About.vue'
-import User from '../views/User.vue'
-import Editor from '../views/Editor.vue'
-import Storybook from '../views/Storybook.vue'
-import Register from '../views/Register.vue'
-import { initializeApp } from 'firebase/app';
 
-
-
-Vue.use(VueRouter)
-
-
+import { initializeApp } from 'firebase/app'
 
 const firebaseConfig = {
   apiKey: "AIzaSyDzNlYb6KECB-rBnKUhb9t1am75ifIvGrw",
@@ -27,6 +13,24 @@ const firebaseConfig = {
 
 // For production apps, the config details are added in a separate file and referred to in the main file.  Do I need to do this with the above data?
 const app = initializeApp(firebaseConfig);
+
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import Home from '../views/Home.vue'
+import Login from '../views/Login.vue'
+import About from '../views/About.vue'
+import User from '../views/User.vue'
+import Editor from '../views/Editor.vue'
+import Storybook from '../views/Storybook.vue'
+import Register from '../views/Register.vue';
+
+
+
+Vue.use(VueRouter)
+
+
+
+
 
 const routes = [
   {
