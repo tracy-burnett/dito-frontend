@@ -19,10 +19,10 @@
 <script>
 import Navbar from "@/components/Navbar.vue";
 import SidebarAlt from "@/components/SidebarAlt.vue";
+
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
-const auth = getAuth();
-
+const auth = getAuth;
 
 
 export default {

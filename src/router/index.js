@@ -9,7 +9,11 @@ import Storybook from '../views/Storybook.vue'
 import Register from '../views/Register.vue'
 import { initializeApp } from 'firebase/app';
 
+
+
 Vue.use(VueRouter)
+
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyDzNlYb6KECB-rBnKUhb9t1am75ifIvGrw",
