@@ -67,7 +67,7 @@ createUserWithEmailAndPassword(auth, email, password)
     const errorCode = error.code;
     const errorMessage = error.message;
     
-alert('error');
+    alert("Oops. " + error.code + error.message);
     // ..
   });
 

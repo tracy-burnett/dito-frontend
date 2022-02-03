@@ -8,7 +8,7 @@
                 <h1 class="text-2xl font-bold">Login</h1>
                 <input class="border border-gray-300 rounded w-full mt-12 mb-3 px-3 py-1" placeholder="Email" v-model="email" />
                 <input class="border border-gray-300 rounded w-full px-3 py-1" placeholder="Password" type="password" v-model="password" />
-                <button class="bg-indigo-500 border border-indigo-400 w-full text-sm px-3 py-2 mt-16 rounded font-medium text-white hover:bg-indigo-400 transition-colors" @submit="login">Login</button>
+                <button class="bg-indigo-500 border border-indigo-400 w-full text-sm px-3 py-2 mt-16 rounded font-medium text-white hover:bg-indigo-400 transition-colors" @click="login(email, password)">Login</button>
                 <router-link to="/register"><button class="bg-indigo-500 border border-indigo-400 w-full text-sm px-3 py-2 mt-16 rounded font-medium text-white hover:bg-indigo-400 transition-colors">Register</button></router-link>
             </div>
         </div>
@@ -52,12 +52,13 @@ data() {
   },
   methods: {
     login: function(email, password) {
-
 signInWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
     // Signed in 
     const user = userCredential.user;
-    this.$router.replace("Home");
+    alert("success");
+    this.$router.replace("/");
+    
     // ...
   })
   .catch((error) => {
@@ -67,19 +68,6 @@ signInWithEmailAndPassword(auth, email, password)
   });
 
 
-
-
-    //   firebase
-    //     .auth()
-    //     .signInWithEmailAndPassword(this.email, this.password)
-    //     .then(
-    //       user => {
-    //         this.$router.replace("Home");
-    //       },
-    //       err => {
-    //         alert("Oops. " + err.message);
-    //       }
-    //     );
     }
   }
 }
