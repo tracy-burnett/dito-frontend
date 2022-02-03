@@ -19,7 +19,23 @@
 <script>
 import Navbar from "@/components/Navbar.vue";
 import SidebarAlt from "@/components/SidebarAlt.vue";
+import { initializeApp } from 'firebase/app'
 
+const firebaseConfig = {
+  apiKey: "AIzaSyDzNlYb6KECB-rBnKUhb9t1am75ifIvGrw",
+  authDomain: "dito-4b412.firebaseapp.com",
+  projectId: "dito-4b412",
+  storageBucket: "dito-4b412.appspot.com",
+  messagingSenderId: "69037442589",
+  appId: "1:69037442589:web:e4d9aa6d36ca42648228f4",
+  measurementId: "G-Q4MK1SYW8X"
+};
+
+// For production apps, the config details are added in a separate file and referred to in the main file.  Do I need to do this with the above data?
+const app = initializeApp(firebaseConfig);
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+
+const auth = getAuth();
 
 
 export default {
@@ -35,18 +51,35 @@ data() {
     };
   },
   methods: {
-    login: function() {
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(this.email, this.password)
-        .then(
-          user => {
-            this.$router.replace("Home");
-          },
-          err => {
-            alert("Oops. " + err.message);
-          }
-        );
+    login: function(email, password) {
+
+signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    this.$router.replace("Home");
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    alert("Oops. " + error.code + error.message);
+  });
+
+
+
+
+    //   firebase
+    //     .auth()
+    //     .signInWithEmailAndPassword(this.email, this.password)
+    //     .then(
+    //       user => {
+    //         this.$router.replace("Home");
+    //       },
+    //       err => {
+    //         alert("Oops. " + err.message);
+    //       }
+    //     );
     }
   }
 }
