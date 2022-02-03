@@ -33,7 +33,7 @@ const firebaseConfig = {
 
 // For production apps, the config details are added in a separate file and referred to in the main file.  Do I need to do this with the above data?
 const app = initializeApp(firebaseConfig);
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const auth = getAuth();
 
