@@ -62,6 +62,7 @@ createUserWithEmailAndPassword(auth, email, password)
     const user = userCredential.user;
     // ...
     alert('success');
+    this.$router.replace("/");
   })
   .catch((error) => {
     const errorCode = error.code;
