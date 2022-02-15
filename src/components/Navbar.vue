@@ -89,7 +89,6 @@ const firebaseConfig = {
   measurementId: "G-Q4MK1SYW8X",
 };
 
-// For production apps, the config details are added in a separate file and referred to in the main file.  Do I need to do this with the above data?
 const app = initializeApp(firebaseConfig);
 
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
@@ -107,7 +106,7 @@ export default {
 
   methods: {
     toggleSidebar() {
-      this.$store.commit(
+      this.$store.dispatch(
         "toggleSidebar",
         this.$store.state.sidebar ? false : true
       );

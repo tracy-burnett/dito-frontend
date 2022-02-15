@@ -183,6 +183,7 @@
 export default {
     name: "SidebarAlt",
     computed: {
+      //We're not defining it here; we're using a computed property to reach out and get it.
       showSidebar: function() {
         return this.$store.state.sidebar
       }
