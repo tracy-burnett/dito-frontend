@@ -89,7 +89,6 @@ export default {
     },
 
     signoutuser: function () {
-      console.log("try to sign out");
       this.$store.dispatch("Logout_User");
     },
 

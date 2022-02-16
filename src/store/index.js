@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import router from '../router'
 import { auth } from '../firebase'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
@@ -25,6 +26,7 @@ export default new Vuex.Store({
         .then((userCredential) => {
           const user = userCredential.user;
           state.user = user
+          router.replace({ path: '/' })
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -39,6 +41,7 @@ export default new Vuex.Store({
       signOut(auth)
         .then(() => {
           state.user = null
+          router.replace({ path: '/' })
         })
         .catch((error) => {
           // An error happened.
@@ -53,6 +56,7 @@ export default new Vuex.Store({
         .then((userCredential) => {
           const user = userCredential.user;
           state.user = user
+          router.replace({ path: '/' })
         })
         .catch((error) => {
           const errorCode = error.code;
