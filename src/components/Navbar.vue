@@ -70,7 +70,6 @@
 </template>
 
 <script>
-
 export default {
   name: "Navbar",
   props: ["text"],
@@ -89,18 +88,18 @@ export default {
     },
 
     signoutuser: function () {
-      this.$store.dispatch("Logout_User");
+      this.$store.dispatch("Logout_User").then(() => {
+        this.$router.replace("/");
+      });
     },
-
   },
 
-    computed: {
-      //We're not defining it here; we're using a computed property to reach out and get it.
-      LoginLogoutButton: function() {
-        return this.$store.state.user
-      }
-    }
-
+  computed: {
+    //We're not defining it here; we're using a computed property to reach out and get it.
+    LoginLogoutButton: function () {
+      return this.$store.state.user;
+    },
+  },
 };
 </script>
 

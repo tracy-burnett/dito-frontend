@@ -93,7 +93,9 @@ export default {
   },
   methods: {
     login: function (email, password) {
-      this.$store.dispatch("Login_User", { email, password });
+      this.$store.dispatch("Login_User", { email, password }).then(() => {
+        this.$router.replace("/");
+      });
     },
   },
 };

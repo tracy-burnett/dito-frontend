@@ -101,7 +101,9 @@ export default {
           this.$store.dispatch(
             "Register_User",
             {email, password}
-          )
+          ).then(() => {
+        this.$router.replace("/");
+      });
     },
   },
 };
