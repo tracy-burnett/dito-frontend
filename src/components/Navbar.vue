@@ -22,36 +22,28 @@
       </div>
     </router-link>
 
-
-
-
-
-
-
-
-    {{ verifyuser(user) }}
-
     <div class="flex">
-      <div v-if="this.buttonvalue">
-
-                    <form @submit="signoutuser()">
-        <button type="submit"
-          class="
-            bg-blue-700
-            text-sm
-            px-3
-            py-2
-            rounded
-            font-medium
-            text-gray-100
-            hover:bg-indigo-400
-            transition-colors
-          ">
-          LOGOUT
-        </button></form>
+      <div v-if="LoginLogoutButton">
+        <form @submit="signoutuser()">
+          <button
+            type="submit"
+            class="
+              bg-blue-700
+              text-sm
+              px-3
+              py-2
+              rounded
+              font-medium
+              text-gray-100
+              hover:bg-indigo-400
+              transition-colors
+            "
+          >
+            LOGOUT
+          </button>
+        </form>
       </div>
       <div v-else>
-
         <router-link
           class="
             bg-blue-700
@@ -65,7 +57,8 @@
             transition-colors
           "
           to="/login"
-          >LOGIN</router-link>
+          >LOGIN</router-link
+        >
       </div>
       <img
         src="@/assets/menu-outline.svg"
@@ -77,22 +70,6 @@
 </template>
 
 <script>
-import { initializeApp } from "firebase/app";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDzNlYb6KECB-rBnKUhb9t1am75ifIvGrw",
-  authDomain: "dito-4b412.firebaseapp.com",
-  projectId: "dito-4b412",
-  storageBucket: "dito-4b412.appspot.com",
-  messagingSenderId: "69037442589",
-  appId: "1:69037442589:web:e4d9aa6d36ca42648228f4",
-  measurementId: "G-Q4MK1SYW8X",
-};
-
-const app = initializeApp(firebaseConfig);
-
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-const auth = getAuth();
 
 export default {
   name: "Navbar",
@@ -100,7 +77,6 @@ export default {
   data() {
     return {
       user: "",
-      buttonvalue: false
     };
   },
 
@@ -112,34 +88,20 @@ export default {
       );
     },
 
-    signoutuser() {
-      signOut(auth)
-        .then(() => {
-            
-            alert('signed out');
-        })
-        .catch((error) => {
-          // An error happened.
-          alert("error");
-        });
+    signoutuser: function () {
+      console.log("try to sign out");
+      this.$store.dispatch("Logout_User");
     },
 
-    verifyuser(user) {
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          // User is signed in, see docs for a list of available properties
-          // https://firebase.google.com/docs/reference/js/firebase.User
-          const uid = user.uid;
-          this.buttonvalue = true;
-          // ...
-        } else {
-          // User is signed out
-          // ...
-          this.buttonvalue = false;
-        }
-      });
-    },
   },
+
+    computed: {
+      //We're not defining it here; we're using a computed property to reach out and get it.
+      LoginLogoutButton: function() {
+        return this.$store.state.user
+      }
+    }
+
 };
 </script>
 

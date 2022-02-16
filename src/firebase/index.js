@@ -4,7 +4,7 @@
 
 
 import { initializeApp } from "firebase/app";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDzNlYb6KECB-rBnKUhb9t1am75ifIvGrw",
@@ -19,6 +19,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 
 
-const auth = getAuth(app)
+const auth = getAuth()
 
 export { auth }
