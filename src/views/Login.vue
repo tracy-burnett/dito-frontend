@@ -95,7 +95,12 @@ export default {
     login: function (email, password) {
       this.$store.dispatch("Login_User", { email, password }).then(() => {
         this.$router.replace("/");
-      });
+      })
+        .catch((error) => {
+          // An error happened.
+          console.log("Oops. " + error.code + ": " + error.message);
+        })    
+    ;
     },
   },
 };

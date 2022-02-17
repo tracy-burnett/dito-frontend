@@ -103,7 +103,13 @@ export default {
             {email, password}
           ).then(() => {
         this.$router.replace("/");
-      });
+      })
+        .catch((error) => {
+          // An error happened.
+          console.log("Oops. " + error.code + ": " + error.message);
+        })      
+      
+      ;
     },
   },
 };
