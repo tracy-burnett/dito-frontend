@@ -39,7 +39,6 @@
           >
             LOGOUT
           </button>
-        </form>
       </div>
       <div v-else>
         <router-link
