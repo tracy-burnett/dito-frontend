@@ -24,9 +24,7 @@
 
     <div class="flex">
       <div v-if="LoginLogoutButton">
-        <form @submit="signoutuser()">
-          <button
-            type="submit"
+        <button @click="signoutuser()"
             class="
               bg-blue-700
               text-sm

@@ -23,8 +23,7 @@ export default new Vuex.Store({
       const password2 = password
       signInWithEmailAndPassword(auth, email2, password2)
         .then((userCredential) => {
-          const user = userCredential.user;
-          state.user = user
+          // onAuthStateChanged listener will handle user assignment
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -38,7 +37,7 @@ export default new Vuex.Store({
     Logout_User(state) {
       signOut(auth)
         .then(() => {
-          state.user = null
+          // onAuthStateChanged listener will handle user assignment
         })
         .catch((error) => {
           // An error happened.
@@ -51,8 +50,7 @@ export default new Vuex.Store({
       const register_password = password
       createUserWithEmailAndPassword(auth, register_email, register_password)
         .then((userCredential) => {
-          const user = userCredential.user;
-          state.user = user
+          // onAuthStateChanged listener will handle user assignment
         })
         .catch((error) => {
           const errorCode = error.code;
