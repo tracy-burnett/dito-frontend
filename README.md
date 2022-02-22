@@ -1,5 +1,7 @@
 # Dialect Translation Tool Frontend
 
+Note: main branch auto-deploys to www.xygil.net.
+
 ## Project setup
 To get started with vue.js, first clone the repository then run ```npm install```.
 Make sure you have both the latest version of NodeJS installed and npm installed.
