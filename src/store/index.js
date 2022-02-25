@@ -61,7 +61,6 @@ export default new Vuex.Store({
 
     },
 
-
     toggleSidebar(state, visibility) {
       state.sidebar = visibility;
     },
@@ -69,12 +68,13 @@ export default new Vuex.Store({
   },
   actions: {
     
-    Logout_User: (context) => {
-      context.commit('Logout_User')
-    },
-
+    
     Login_User: (context, { email, password }) => {
       context.commit('Login_User', { email, password })
+    },
+
+    Logout_User: (context) => {
+      context.commit('Logout_User')
     },
 
     Register_User: (context, { email, password }) => {
