@@ -79,7 +79,6 @@
 </template>
 
 <script>
-import { parse, stringify, toJSON, fromJSON } from "flatted";
 
 export default {
   name: "PlayerVertical",
