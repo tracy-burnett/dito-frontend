@@ -44,6 +44,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ### 04/07/2022 Audio Player Functionality (working on Windows Chrome)
 
 - % loaded is displayed until the audio file is ready to be played
+- the audio file can be played once it is loaded (and the loading timer stops), even before the waveform is completely rendered
 - the entire audio file is initially highlighted
 - the highlighted area can be adjusted in multiple ways
 -- you can manually change the topmost and bottommost timestamp displayed
