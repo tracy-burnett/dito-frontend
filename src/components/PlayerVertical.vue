@@ -1,6 +1,7 @@
 <template>
   <div class="container rounded-full shadow-lg">
     <!-- <div id="test" ref="test" class="test">
+
         <input
           type="number"
           v-model="zoomnumber"
@@ -49,7 +50,12 @@
     </div>
     <!-- <div id="current" ref="current" class="current">00:00:00</div> -->
 
-    <div id="waveform" ref="waveform" class="waveform"></div>
+    <div id="waveform" ref="waveform" class="waveform" @wheel.prevent="getzoomnumber($event)">
+        <!-- I need to put something in here that changes "zoomnumber" with pinch events
+        use @wheel -->
+
+
+    </div>
     <div id="end" ref="end" class="end">
       <input
         type="string"
@@ -63,6 +69,10 @@
           }
         "
       />
+    </div>
+        <div id="end" ref="end" class="end">
+      <button @click="clearallregions()">clear highlight</button>
+
     </div>
 
     <!-- <div id="test"><h1>{{currentTimeNumber}}</h1></div> -->
@@ -91,7 +101,7 @@ export default {
   data: () => {
     return {
       wavesurferLoaded: false,
-      zoomnumber: "",
+      zoomnumber: 1,
       startTime: "00:00:00",
       endTime: "00:00:00",
       currentTime: "00:00:00",
@@ -184,7 +194,7 @@ export default {
           //       "font-size": "10px",
           //     },
           //   }),
-          WaveSurfer.regions.create(),
+          WaveSurfer.regions.create({maxRegions: 1,}),
         ],
       });
 
@@ -202,6 +212,10 @@ export default {
           id: "region",
           loop: true,
         });
+        wavesurfer.enableDragSelection({
+        id: "region",
+        loop: true,
+      });
 
         // document.getElementById("length").innerText = secondsToTime(
         //   wavesurfer.getDuration()
@@ -222,6 +236,12 @@ export default {
       console.log(temporarythis.startTime);
       console.log(temporarythis.endTime);
         });
+
+//                 this.wavesurfer.on("region-created", function () {
+//                     console.log("hey")
+//                     console.log(Object.entries(temporarythis.wavesurfer.regions['list']))
+// console.log(Object.values(temporarythis.wavesurfer.regions)) //delete the old region
+//         });
 
       this.wavesurfer.on("audioprocess", function () {
         // if (this.wavesurfer.isPlaying()) {
@@ -293,10 +313,56 @@ export default {
   // );
   //   },
   methods: {
-    //   zoom() {
+      zoom() {
+    this.wavesurfer.zoom(Number(this.zoomnumber));
+      },
 
-    // this.wavesurfer.zoom(Number(this.zoomnumber));
-    //   },
+// newdraggedregion(event){
+
+//       this.wavesurfer.clearRegions();
+//       console.log(event)
+
+// },
+
+getzoomnumber(event){
+    console.log(event.deltaY)
+    let isPinch = Math.abs(event.deltaY) < 50;
+console.log('start pinch')
+  if (isPinch) {
+    // This is a pinch on a trackpad
+    let factor = 1 - 0.01 * event.deltaY;
+    this.zoomnumber *= factor;
+    console.log(this.zoomnumber)
+  } else {
+    // This is a mouse wheel
+    let strength = 1.4;
+    let factor = event.deltaY < 0 ? strength : 1.0 / strength;
+    this.zoomnumber *= factor;
+    console.log(this.zoomnumber)
+  }
+  this.zoom()
+//   ev.preventDefault();
+
+//   // This is an empirically determined heuristic.
+//   // Unfortunately I don't know of any way to do this better.
+//   // Typical deltaY values from a trackpad pinch are under 1.0
+//   // Typical deltaY values from a mouse wheel are more than 100.
+//   let isPinch = Math.abs(ev.deltaY) < 50;
+
+//   if (isPinch) {
+//     // This is a pinch on a trackpad
+//     let factor = 1 - 0.01 * ev.deltaY;
+//     scale *= factor;
+//     element.innerText = `Pinch: scale is ${scale}`;
+//   } else {
+//     // This is a mouse wheel
+//     let strength = 1.4;
+//     let factor = ev.deltaY < 0 ? strength : 1.0 / strength;
+//     scale *= factor;
+//     element.innerText = `Mouse: scale is ${scale}`;
+//   }
+},
+
 
     play() {
       console.log(this.startTimeNumber);
@@ -355,6 +421,10 @@ export default {
       this.wavesurfer.seekTo(this.currentSeekNumber);
       this.currentTime = this.secondsToTime(this.wavesurfer.getCurrentTime());
     },
+
+clearallregions(){
+this.wavesurfer.clearRegions()
+},
 
     updateRegion() {
       this.wavesurfer.clearRegions();
