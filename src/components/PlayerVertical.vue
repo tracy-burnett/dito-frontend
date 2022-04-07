@@ -197,11 +197,10 @@ export default {
           temporarythis.totalDuration
         );
         wavesurfer.addRegion({
-          start: temporarythis.startTime,
-          end: temporarythis.endTime,
-          id: "myregion",
+          start: 0,
+          end: temporarythis.totalDuration,
+          id: "region",
           loop: true,
-          drag: false,
         });
 
         // document.getElementById("length").innerText = secondsToTime(
@@ -218,9 +217,10 @@ export default {
         this.wavesurfer.on("region-update-end", function () {
       temporarythis.AfterDragStartTime = Object.values(temporarythis.wavesurfer.regions.list.region)[7];
       temporarythis.AfterDragEndTime = Object.values(temporarythis.wavesurfer.regions.list.region)[8];
-      console.log(temporarythis.AfterDragStartTime);
-      console.log(temporarythis.AfterDragEndTime);
-          return;
+      temporarythis.startTime=temporarythis.secondsToTime(temporarythis.AfterDragStartTime)
+      temporarythis.endTime=temporarythis.secondsToTime(temporarythis.AfterDragEndTime)
+      console.log(temporarythis.startTime);
+      console.log(temporarythis.endTime);
         });
 
       this.wavesurfer.on("audioprocess", function () {
@@ -363,7 +363,6 @@ export default {
         end: this.endTimeNumber,
         id: "region",
         loop: true,
-        drag: false,
       });
       
 
