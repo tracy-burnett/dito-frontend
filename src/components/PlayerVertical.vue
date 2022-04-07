@@ -6,11 +6,9 @@
         v-model="startTime"
         pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
         @keyup.enter="
-          {
-            {
+
               updateRegion();
-            }
-          }
+
         "
       />
     </div>
@@ -39,7 +37,7 @@
       ref="waveform"
       class="waveform"
       @wheel.prevent="getzoomnumber($event)"
-    ></div>
+    >    <h1 v-if="loadingpercent < 100">audio {{       loadingpercent  }}% loaded</h1></div>
     <div id="end" ref="end" class="end">
       <input
         type="string"
@@ -69,6 +67,7 @@ export default {
   components: {},
   data: () => {
     return {
+      loadingpercent: 0,
       wavesurferLoaded: false,
       zoomnumber: 1,
       startTime: "00:00:00",
@@ -191,11 +190,23 @@ export default {
         console.log(temporarythis.endTime);
       });
 
+      this.wavesurfer.on("loading", function (progress) {
+        temporarythis.loadingpercent=progress
+
+      });
+
       this.wavesurfer.on("audioprocess", function () {
         temporarythis.currentTime = temporarythis.secondsToTime(
           temporarythis.wavesurfer.getCurrentTime()
         );
       });
+
+            this.wavesurfer.on("finish", function () {
+
+            temporarythis.playing = !temporarythis.playing;
+      });
+
+      
 
       this.wavesurfer.on("seek", function (position) {
         if (temporarythis.playing) {
