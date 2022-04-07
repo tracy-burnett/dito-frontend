@@ -1,19 +1,5 @@
 <template>
   <div class="container rounded-full shadow-lg">
-    <!-- <div id="test" ref="test" class="test">
-
-        <input
-          type="number"
-          v-model="zoomnumber"
-          @keyup.enter="
-            {
-              {
-                zoom();
-              }
-            }
-          "
-        />
-      </div> -->
     <div id="start" ref="start" class="start">
       <input
         type="string"
@@ -48,14 +34,13 @@
         "
       />
     </div>
-    <!-- <div id="current" ref="current" class="current">00:00:00</div> -->
 
-    <div id="waveform" ref="waveform" class="waveform" @wheel.prevent="getzoomnumber($event)">
-        <!-- I need to put something in here that changes "zoomnumber" with pinch events
-        use @wheel -->
-
-
-    </div>
+    <div
+      id="waveform"
+      ref="waveform"
+      class="waveform"
+      @wheel.prevent="getzoomnumber($event)"
+    ></div>
     <div id="end" ref="end" class="end">
       <input
         type="string"
@@ -70,26 +55,13 @@
         "
       />
     </div>
-        <div id="end" ref="end" class="end">
+    <div id="end" ref="end" class="end">
       <button @click="clearallregions()">clear highlight</button>
-
     </div>
-
-    <!-- <div id="test"><h1>{{currentTimeNumber}}</h1></div> -->
   </div>
-
-  <!-- <div class="lg:mx-16 mx-5">
-        <h1 class="font-bold text-2xl mt-10 mb-7">Audio Player</h1>
-        <audio controls>
-            <source src="https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_5MG.mp3" type="audio/mpeg">
-            Your browser does not support the audio tag.
-        </audio>
-        <audio/>
-    </div> -->
 </template>
 
 <script>
-
 export default {
   name: "PlayerVertical",
   props: {
@@ -182,20 +154,7 @@ export default {
         hideScrollbar: true,
         barRadius: 3,
         vertical: true,
-        plugins: [
-          //   WaveSurfer.cursor.create({
-          //     showTime: true,
-          //     // formatTimeCallback: function(){formattimefunction(null, arguments)},
-          //     opacity: 1,
-          //     customShowTimeStyle: {
-          //       "background-color": "#000",
-          //       color: "#fff",
-          //       padding: "2px",
-          //       "font-size": "10px",
-          //     },
-          //   }),
-          WaveSurfer.regions.create({maxRegions: 1,}),
-        ],
+        plugins: [WaveSurfer.regions.create({ maxRegions: 1 })],
       });
 
       this.playing = false;
@@ -213,65 +172,35 @@ export default {
           loop: true,
         });
         wavesurfer.enableDragSelection({
-        id: "region",
-        loop: true,
-      });
-
-        // document.getElementById("length").innerText = secondsToTime(
-        //   wavesurfer.getDuration()
-        // );
-
-        // wavesurfer.addRegion({
-        //   start: 0,
-        //   end: wavesurfer.getDuration(),
-        //   id: "region",
-        //   drag: false,
-      });
-
-        this.wavesurfer.on("region-update-end", function () {
-      temporarythis.AfterDragStartTime = Object.values(temporarythis.wavesurfer.regions.list.region)[7];
-      temporarythis.AfterDragEndTime = Object.values(temporarythis.wavesurfer.regions.list.region)[8];
-      temporarythis.startTime=temporarythis.secondsToTime(temporarythis.AfterDragStartTime)
-      temporarythis.endTime=temporarythis.secondsToTime(temporarythis.AfterDragEndTime)
-      console.log(temporarythis.startTime);
-      console.log(temporarythis.endTime);
+          id: "region",
+          loop: true,
         });
+      });
 
-//                 this.wavesurfer.on("region-created", function () {
-//                     console.log("hey")
-//                     console.log(Object.entries(temporarythis.wavesurfer.regions['list']))
-// console.log(Object.values(temporarythis.wavesurfer.regions)) //delete the old region
-//         });
+      this.wavesurfer.on("region-update-end", function () {
+        temporarythis.AfterDragStartTime = Object.values(
+          temporarythis.wavesurfer.regions.list.region
+        )[7];
+        temporarythis.AfterDragEndTime = Object.values(
+          temporarythis.wavesurfer.regions.list.region
+        )[8];
+        temporarythis.startTime = temporarythis.secondsToTime(
+          temporarythis.AfterDragStartTime
+        );
+        temporarythis.endTime = temporarythis.secondsToTime(
+          temporarythis.AfterDragEndTime
+        );
+        console.log(temporarythis.startTime);
+        console.log(temporarythis.endTime);
+      });
 
       this.wavesurfer.on("audioprocess", function () {
-        // if (this.wavesurfer.isPlaying()) {
-        //     var currentTime = this.wavesurfer.getCurrentTime();
-
-        // }
-        // this.updateDuration();
         temporarythis.currentTime = temporarythis.secondsToTime(
           temporarythis.wavesurfer.getCurrentTime()
         );
-
-        //   if (temporarythis.currentTime > temporarythis.endTimeNumber){
-
-        //     temporarythis.wavesurfer.pause();
-        //     temporarythis.playing = !temporarythis.playing;
-
-        //   }
       });
 
-      //       wavesurfer.on('seek', function (position) {
-      //     var currentTime = position * wavesurfer.getDuration();
-      // });
-
       this.wavesurfer.on("seek", function (position) {
-        // if (this.wavesurfer.isPlaying()) {
-        //     var currentTime = this.wavesurfer.getCurrentTime();
-
-        // }
-        // this.updateDuration();
-
         if (temporarythis.playing) {
           if (
             position * temporarythis.wavesurfer.getDuration() <=
@@ -304,65 +233,38 @@ export default {
         );
       });
     });
-    // this.$refs.length.innerText = new Date(audioLength * 1000).toISOString().substr(11, 8);
 
-    //   wavesurfer.on("region-click", editAnnotation);
     this.wavesurferLoaded = true;
   },
 
-  // );
-  //   },
   methods: {
-      zoom() {
-    this.wavesurfer.zoom(Number(this.zoomnumber));
-      },
+    zoom() {
+      this.wavesurfer.zoom(Number(this.zoomnumber));
+    },
 
-// newdraggedregion(event){
+    getzoomnumber(event) {
+      console.log(event.deltaY);
+      let isPinch = Math.abs(event.deltaY) < 50;
+      console.log("start pinch");
+      if (isPinch) {
+        // This is a pinch on a trackpad
+        let factor = 1 - 0.01 * event.deltaY;
+        this.zoomnumber *= factor;
+        console.log(this.zoomnumber);
+      } else {
+        // This is a mouse wheel
+        let strength = 1.4;
+        let factor = event.deltaY < 0 ? strength : 1.0 / strength;
+        this.zoomnumber *= factor;
+        console.log(this.zoomnumber);
+      }
+      this.zoom();
 
-//       this.wavesurfer.clearRegions();
-//       console.log(event)
-
-// },
-
-getzoomnumber(event){
-    console.log(event.deltaY)
-    let isPinch = Math.abs(event.deltaY) < 50;
-console.log('start pinch')
-  if (isPinch) {
-    // This is a pinch on a trackpad
-    let factor = 1 - 0.01 * event.deltaY;
-    this.zoomnumber *= factor;
-    console.log(this.zoomnumber)
-  } else {
-    // This is a mouse wheel
-    let strength = 1.4;
-    let factor = event.deltaY < 0 ? strength : 1.0 / strength;
-    this.zoomnumber *= factor;
-    console.log(this.zoomnumber)
-  }
-  this.zoom()
-//   ev.preventDefault();
-
-//   // This is an empirically determined heuristic.
-//   // Unfortunately I don't know of any way to do this better.
-//   // Typical deltaY values from a trackpad pinch are under 1.0
-//   // Typical deltaY values from a mouse wheel are more than 100.
-//   let isPinch = Math.abs(ev.deltaY) < 50;
-
-//   if (isPinch) {
-//     // This is a pinch on a trackpad
-//     let factor = 1 - 0.01 * ev.deltaY;
-//     scale *= factor;
-//     element.innerText = `Pinch: scale is ${scale}`;
-//   } else {
-//     // This is a mouse wheel
-//     let strength = 1.4;
-//     let factor = ev.deltaY < 0 ? strength : 1.0 / strength;
-//     scale *= factor;
-//     element.innerText = `Mouse: scale is ${scale}`;
-//   }
-},
-
+      //   // This is an empirically determined heuristic.
+      //   // Unfortunately I don't know of any way to do this better.
+      //   // Typical deltaY values from a trackpad pinch are under 1.0
+      //   // Typical deltaY values from a mouse wheel are more than 100.
+    },
 
     play() {
       console.log(this.startTimeNumber);
@@ -385,46 +287,21 @@ console.log('start pinch')
         this.wavesurfer.pause();
         this.playing = !this.playing;
       }
-
-      // var src = "@/assets/playAudio.svg";
-      // if (this.wavesurfer.isPlaying()) {
-      //     var src = "@/assets/pause.svg";
-      // }
-      // console.log(src);
-      // document.getElementById('playImg').src = src;
     },
-
     secondsToTime(seconds) {
       var date = new Date(1970, 0, 1);
       date.setSeconds(seconds);
       return date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
     },
 
-    //   defaultDuration() {
-    //     return secondsToTime(
-    //       this.wavesurfer.getDuration()
-    //     );
-    //   },
-
-    // formattimefunction(seconds) {
-    //     var date = new Date(1970,0,1);
-    //     date.setSeconds(seconds);
-    //     return date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
-    // },
-
-    // playfromcurrent() {
-    //     this.wavesurfer.playPause(this.currentTimeNumber);
-    //   this.playing = !this.playing;
-    // },
-
     seekfunction() {
       this.wavesurfer.seekTo(this.currentSeekNumber);
       this.currentTime = this.secondsToTime(this.wavesurfer.getCurrentTime());
     },
 
-clearallregions(){
-this.wavesurfer.clearRegions()
-},
+    clearallregions() {
+      this.wavesurfer.clearRegions();
+    },
 
     updateRegion() {
       this.wavesurfer.clearRegions();
@@ -434,43 +311,9 @@ this.wavesurfer.clearRegions()
         id: "region",
         loop: true,
       });
-      
-
-
-      // currentTime() {
-      //     if (!this.wavesurferLoaded){
-      //         return null
-      //     }
-      //     return this.wavesurfer.getCurrentTime()
-      // }
     },
   },
 };
-// function editAnnotation(region) {
-//   let form = document.forms.edit;
-//   console.log(region);
-//   console.log(form);
-//   form.style.opacity = 1;
-//   (form.elements.start.value = Math.round(region.start * 10) / 10),
-//     (form.elements.end.value = Math.round(region.end * 10) / 10);
-//   form.elements.note.value = region.data.note || "";
-//   form.onsubmit = function (e) {
-//     e.preventDefault();
-//     region.update({
-//       start: form.elements.start.value,
-//       end: form.elements.end.value,
-//       data: {
-//         note: form.elements.note.value,
-//       },
-//     });
-//     form.style.opacity = 0;
-//   };
-//   form.onreset = function () {
-//     form.style.opacity = 0;
-//     form.dataset.region = null;
-//   };
-//   form.dataset.region = region.id;
-// }
 </script>
 
 <style scoped>
