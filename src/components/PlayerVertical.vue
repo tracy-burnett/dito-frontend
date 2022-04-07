@@ -26,11 +26,10 @@
         v-model="currentTime"
         pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
         @keyup.enter="
-          {
-            {
+  
               seekfunction();
-            }
-          }
+       
+
         "
       />
     </div>
@@ -47,11 +46,9 @@
         v-model="endTime"
         pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
         @keyup.enter="
-          {
-            {
+      
               updateRegion();
-            }
-          }
+       
         "
       />
     </div>
@@ -301,6 +298,10 @@ export default {
 
     clearallregions() {
       this.wavesurfer.clearRegions();
+      this.startTime="00:00:00"
+      this.endTime=this.secondsToTime(
+          this.totalDuration
+        );
     },
 
     updateRegion() {
