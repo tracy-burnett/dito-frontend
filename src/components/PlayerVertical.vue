@@ -37,7 +37,7 @@
       ref="waveform"
       class="waveform"
       @wheel.prevent="getzoomnumber($event)"
-    >    <h1 v-if="loadingpercent < 100">audio {{       loadingpercent  }}% loaded</h1></div>
+    >    <h1 class="align-middle" v-if="loadingpercent < 100">audio {{       loadingpercent  }}% loaded</h1></div>
     <div id="end" ref="end" class="end">
       <input
         type="string"
@@ -138,15 +138,14 @@ export default {
         console.error("Error:", error);
       });
 
-    this.$nextTick(() => {
       // https://wavesurfer-js.org
       this.wavesurfer = WaveSurfer.create({
         container: this.$refs.waveform,
-        backend: "MediaElement",
+        backend: "WebAudio",
         waveColor: "grey",
         progressColor: "#5D5FEF",
         barWidth: 2,
-        barHeight: 3,
+      //  barHeight: 1,
         hideScrollbar: true,
         barRadius: 3,
         vertical: true,
@@ -239,8 +238,8 @@ export default {
         temporarythis.currentTime = temporarythis.secondsToTime(
           position * temporarythis.wavesurfer.getDuration()
         );
-      });
-    });
+    }
+   );
 
     this.wavesurferLoaded = true;
   },

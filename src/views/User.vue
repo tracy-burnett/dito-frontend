@@ -3,7 +3,7 @@
     <Navbar text="dito" />
     <!-- <PlayerHorizontal /> -->
     <div class="flex items-center">
-    <PlayerVertical audio_ID="oPKHTtoCnJI.mp3"/>
+    <PlayerVertical audio_ID="YTYcT2awNpo.mp3"/>
     <CardList :title="usernameStorybooks" />
     </div>
   </div>
