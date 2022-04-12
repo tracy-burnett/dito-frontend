@@ -112,7 +112,7 @@ export default {
   mounted() {
     //get secure url from server
     console.log(this.audio_ID);
-    const apiUrl = "http://localhost:8000/api/s3/presignedgeturl";
+    const apiUrl = process.env.VUE_APP_api_URL + 's3/presignedgeturl';
     fetch(apiUrl, {
       method: "POST",
 
