@@ -6,6 +6,7 @@ import About from '../views/About.vue'
 import User from '../views/User.vue'
 import Editor from '../views/Editor.vue'
 import Storybook from '../views/Storybook.vue'
+import CreateStorybook from '../views/CreateStorybook.vue'
 import Register from '../views/Register.vue';
 
 
@@ -66,6 +67,11 @@ const routes = [
     path: "/editor",
     name: "Editor",
     component: Editor
+  },
+  {
+    path: "/createstorybook",
+    name: "CreateStorybook",
+    component: CreateStorybook
   }
 ]
 
