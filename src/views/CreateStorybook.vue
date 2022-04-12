@@ -75,7 +75,8 @@ export default {
       this.name = this.file["name"];
       this.myArray = this.name.split(".");
       this.ext = "." + this.myArray[1];
-      const apiUrl = "http://localhost:8000/api/s3/presignedposturl";
+      console.log(process.env.VUE_APP_api_URL + 's3/presignedposturl')
+      const apiUrl = process.env.VUE_APP_api_URL + 's3/presignedposturl';
       fetch(apiUrl, {
         method: "POST",
         headers: {
