@@ -131,7 +131,6 @@ export default {
       })
       .then((data) => {
         this.audioURL = data["url"];
-        console.log(this.audioURL);
         this.wavesurfer.load(this.audioURL);
       })
       .catch((error) => {
