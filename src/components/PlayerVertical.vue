@@ -37,7 +37,7 @@
       ref="waveform"
       class="waveform"
       @wheel.prevent="getzoomnumber($event)"
-    >    <h1 class="align-middle" v-if="loadingpercent < 100">audio {{       loadingpercent  }}% loaded</h1></div>
+    >    <span v-if="loadingpercent < 100">audio {{       loadingpercent  }}% loaded</span></div>
     <div id="end" ref="end" class="end">
       <input
         type="string"
