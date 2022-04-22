@@ -1,25 +1,30 @@
 <template>
   <div class="flex-auto">
     Display text here for filename {{ audio_filename }}.<br /><br />
-    <span v-for="substring in substringArray" :key="substring.startingcharacter">
-       <span v-if="highlight(substring.startingcharacter)"><h1 color="red">{{substring.text}}</h1></span>
-       <span v-else>{{substring.text}}</span>
+    {{ relevantCharacters }}<br /><br />
+    {{ parsedAssociations }}<br /><br />
+    <span
+      v-for="substring in substringArray"
+      :key="substring.startingcharacter"
+    >
+      <span
+        v-if="highlight(substring.startingcharacter)"
+        class="text-red-600"
+        >{{ substring.text }}</span
+      >
+      <!-- <span v-if="true" class="text-red-600">{{substring.text}}</span> -->
+      <span v-else>{{ substring.text }}</span>
     </span>
     <br />
+
+    <!-- {{$store.state.audioplayertime}} -->
     <br />
     <!-- {{displayed_latest_text}} -->
     <!-- raw associations: {{ associations }}<br /> -->
     <!-- number of trigger timestamps: {{ numberOfRelevantTimestamps }}<br /> -->
-check against: <br>{{ parsedAssociations}}
-    <div>
-      <button @click="latest_text_slices">
-        click me to print text slices in console
-      </button>
-    </div>
     <br />
-    audio player time: {{ $store.state.audioplayertime }}<br />
-    next timestamp to change highlight at: {{ $store.state.nextTimestamp
-    }}<br />
+    <!-- next timestamp to change highlight at: {{ $store.state.nextTimestamp
+    }}<br /> -->
     <!-- next next timestamp to change highlight at:
     {{ $store.state.nextnextTimestamp }} -->
   </div>
@@ -42,9 +47,9 @@ export default {
     };
   },
   computed: {
-    numberOfRelevantTimestamps: function () {
-      return this.$store.state.triggerTimestamps.length;
-    },
+    // numberOfRelevantTimestamps: function () {
+    //   return this.$store.state.triggerTimestamps.length;
+    // },
     //     displayed_latest_text: function () {
     // const text = 'This is a test to see whether nested style spans work properly.'
     // const styling = [
@@ -73,7 +78,7 @@ export default {
     },
   },
   components: {},
-  beforeMount() {
+  mounted() {
     const apiUrl =
       process.env.VUE_APP_api_URL +
       "audio/" +
@@ -110,12 +115,13 @@ export default {
       .then((data) => {
         this.associations = data.associations;
       })
-      .then(() => this.clearTriggerTimestamps())
-      .then(() =>
-        console.log(JSON.stringify(this.$store.state.triggerTimestamps))
-      )
-      .then(() => this.assignTriggerTimestamps())
-            .then(() => this.parsed_associations())
+      // .then(() => this.clearTriggerTimestamps())
+      // .then(() =>
+      //   console.log(JSON.stringify(this.$store.state.triggerTimestamps))
+      // )
+      // .then(() => this.assignTriggerTimestamps())
+      .then(() => this.parsed_associations())
+      .then(() => {this.latest_text_slices()})
       .catch((error) => console.error("Error:", error));
 
     //     const temporarythis = this;
@@ -126,9 +132,14 @@ export default {
     // })
   },
 
+//   updated(){      this.parsedAssociations.forEach((element) => {
+//  if (element.endTime == "end") {
+//               element.endTime = this.$store.state.audioDuration
+//             }})},
+
   methods: {
-    clearTriggerTimestamps() {
-      this.$store.commit("clearTriggerTimestamp");
+    // clearTriggerTimestamps() {
+    //   this.$store.commit("clearTriggerTimestamp");
 
       // console.log(this.$store.state.triggerTimestamps)
       //           for (let i = 0; i < Object.keys(this.associations).length; i++) {
@@ -139,59 +150,72 @@ export default {
       // this.$store.commit('addTriggerTimestamp', endTime)
 
       // }
-    },
+    // },
 
-    highlight(startingcharacter){
+    highlight(startingcharacter) {
 
-// if current timestamp is within a range of parsedAssociations start and end times, AND startingcharacter is also in the associated range, then return true
+      let k = 0;
+      this.parsedAssociations.forEach((element) => {
+//  if (element.endTime == "end") {
+//               element.endTime = this.$store.state.audioDuration
+//             }
+            // console.log(element.endTime)
+        if (
+          this.$store.state.audioplayertime >= element.startTime &&
+          (this.$store.state.audioplayertime <= element.endTime || element.endTime == "end")
+        ) {
 
-    },
+          if (          startingcharacter >= element.startCharacter &&
+          startingcharacter < element.endCharacter) {
+      //         console.log(this.$store.state.audioplayertime + " >= " + element.startTime)
+      // console.log(this.$store.state.audioplayertime + " <= " + element.endTime)
+      // console.log(startingcharacter + " >= " + element.startCharacter)
+      // console.log(startingcharacter + " <= " + element.endCharacter)
 
-    assignTriggerTimestamps() {
-      for (let i = 0; i < Object.keys(this.associations).length; i++) {
-        let startTime = parseInt(
-          Object.keys(this.associations)[i].split("-")[0]
-        );
-        let endTime = parseInt(Object.keys(this.associations)[i].split("-")[1]);
-        if (startTime != 0) {
-          this.$store.commit("addTriggerTimestamp", startTime);
+          k++;}
         }
-        if (Number.isInteger(endTime)) {
-          this.$store.commit("addTriggerTimestamp", endTime);
-        }
-      }
-
-
-
-      console.log(JSON.stringify(this.$store.state.triggerTimestamps));
-      this.$store.commit("orderTriggerTimestamp");
-      console.log(JSON.stringify(this.$store.state.triggerTimestamps));
+      });
+      return k;
     },
 
-              assignRelevantCharacters() {
+    // assignTriggerTimestamps() {
+    //   for (let i = 0; i < Object.keys(this.associations).length; i++) {
+    //     let startTime = parseInt(
+    //       Object.keys(this.associations)[i].split("-")[0]
+    //     );
+    //     let endTime = parseInt(Object.keys(this.associations)[i].split("-")[1]);
+    //     if (startTime != 0) {
+    //       this.$store.commit("addTriggerTimestamp", startTime);
+    //     }
+    //     if (Number.isInteger(endTime)) {
+    //       this.$store.commit("addTriggerTimestamp", endTime);
+    //     }
+    //   }
 
+    //   console.log(JSON.stringify(this.$store.state.triggerTimestamps));
+    //   this.$store.commit("orderTriggerTimestamp");
+    //   console.log(JSON.stringify(this.$store.state.triggerTimestamps));
+    // },
 
-Object.values(this.associations).forEach(element => { // for each character substring
-      for (let i = 0; i < element.length; i++) {
-
-        let startCharacter = parseInt(
-          element[i].split("-")[0]
-        );
-        let endCharacter = parseInt(element[i].split("-")[1]);
-        this.relevantCharacters.push(startCharacter)
-        this.relevantCharacters.push(endCharacter)
-
-      }}
-)
-      },
+    assignRelevantCharacters() {
+      Object.values(this.associations).forEach((element) => {
+        // for each character substring
+        for (let i = 0; i < element.length; i++) {
+          let startCharacter = parseInt(element[i].split("-")[0]);
+          let endCharacter = parseInt(element[i].split("-")[1])+1;
+          this.relevantCharacters.push(startCharacter);
+          this.relevantCharacters.push(endCharacter);
+        }
+      });
+    },
 
     latest_text_slices() {
-      this.relevantCharacters.length=0
-      this.assignRelevantCharacters()
-            this.relevantCharacters.sort((a,b) => a-b)
-      this.relevantCharacters = [...new Set(this.relevantCharacters)]
-      this.substringArray=[]
-      console.log(JSON.stringify(this.relevantCharacters));
+      this.relevantCharacters.length = 0;
+      this.assignRelevantCharacters();
+      this.relevantCharacters.sort((a, b) => a - b);
+      this.relevantCharacters = [...new Set(this.relevantCharacters)];
+      this.substringArray = [];
+      // console.log(JSON.stringify(this.relevantCharacters));
       // let beginningslice={}
       // this.startslice = 0;
       // this.endslice = this.relevantCharacters[0];
@@ -203,35 +227,32 @@ Object.values(this.associations).forEach(element => { // for each character subs
       // this.substringArray.push(beginningslice);
       // console.log("slice " + this.startslice + " - " + this.endslice + ": " + this.slice)
       // console.log(this.substringArray[0])
-            console.log(JSON.stringify(this.substringArray))
+      // console.log(JSON.stringify(this.substringArray));
       this.i = 0;
       while (this.i + 2 < this.relevantCharacters.length) {
         // console.log("in while loop")
         // console.log(this.i)
-        let slice= {}
+        let slice = {};
         this.startslice = this.relevantCharacters[this.i];
         this.endslice = this.relevantCharacters[this.i + 1];
-        slice.text = this.latest_text.substring(
-          this.startslice,
-          this.endslice
-        );
+        slice.text = this.latest_text.substring(this.startslice, this.endslice);
         slice.startingcharacter = this.startslice;
         this.substringArray.push(slice);
-              // console.log(JSON.stringify(this.substringArray))
+        // console.log(JSON.stringify(this.substringArray))
         // console.log("slice " + this.startslice + " - " + this.endslice + ": " + this.latest_text.substring(this.startslice,this.endslice))
         this.i++;
       }
-      let finalslice={}
+      let finalslice = {};
       this.startslice = this.relevantCharacters[this.i];
       finalslice.text = this.latest_text.substring(this.startslice);
       finalslice.startingcharacter = this.startslice;
       this.substringArray.push(finalslice);
       // console.log("slice " + this.startslice + " - end: " + this.latest_text.substring(this.startslice))
-      console.log(JSON.stringify(this.substringArray))
+      // console.log(JSON.stringify(this.substringArray));
     },
 
     parsed_associations: function () {
-      this.parsedAssociations.length=0
+      this.parsedAssociations.length = 0;
       // this.associations.forEach(element => console.log(element))
       if (this.associations) {
         // console.log(Object.entries(this.associations))
@@ -244,7 +265,6 @@ Object.values(this.associations).forEach(element => { // for each character subs
           let intervalsCount = Object.values(this.associations)[i].length;
 
           for (let j = 0; j < intervalsCount; j++) {
-
             // console.log(Object.values(this.associations)[i][j]) // this is the character interval, and the time interval is described above.
             let startCharacter = Object.values(this.associations)[i][j].split(
               "-"
@@ -253,13 +273,13 @@ Object.values(this.associations).forEach(element => { // for each character subs
               "-"
             )[1];
 
+            let associationsObject = {};
+            associationsObject.startTime = startTime;
+                        associationsObject.endTime = endTime;
 
-        let associationsObject= {}
-        associationsObject.startTime = startTime
-        associationsObject.endTime = endTime
-        associationsObject.startCharacter = startCharacter
-        associationsObject.endCharacter = endCharacter
-        this.parsedAssociations.push(associationsObject);
+            associationsObject.startCharacter = startCharacter;
+            associationsObject.endCharacter = Number.parseInt(endCharacter)+1;
+            this.parsedAssociations.push(associationsObject);
 
             // console.log("start time: " + startTime);
             // console.log("end time: " + endTime);
@@ -274,9 +294,10 @@ Object.values(this.associations).forEach(element => { // for each character subs
             // }
           }
         }
-        console.log(JSON.stringify(this.parsedAssociations))
+        // console.log(JSON.stringify(this.parsedAssociations));
+      } else {
+        // console.log("no associations fetched yet");
       }
-      else {console.log("no associations fetched yet")}
       // return JSON.stringify(this.associations)
     },
   },

@@ -58,8 +58,8 @@ updateAssociations() {
       "/associations/", {
       method: "POST",
         body: JSON.stringify({
-    "text": this.latest_text,
-    "associations": '{ 2: 200, 7: 400, 20: 600 }'
+    "text": "For one thing", // Pass in a string that meets a minimum character count and includes all the new tags you want to save
+    "associations": '{ 1: 2000, 2: 1500, 3: 1700 }' // Pass in the list of the new tags
 }),
       headers: {
         "Content-Type": "application/json",
