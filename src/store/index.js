@@ -10,6 +10,12 @@ export default new Vuex.Store({
     // It's like data, but for your store.
     user: null,
     sidebar: true,
+    nextnextTimestamp: 0, // just for dev, can comment out in production
+    nextTimestamp: 0,
+    styleoption: "Viewer",
+    audioplayertime: 0,
+    triggerTimestamps: []
+
   },
   getters: {
     // it's like computed properties, but for your store.
@@ -65,6 +71,35 @@ export default new Vuex.Store({
       state.sidebar = visibility;
     },
 
+    updateAudioTime(state, audiotime) {
+      state.audioplayertime = audiotime;
+    },
+
+    addTriggerTimestamp(state, nextTriggerTimestamp) {
+      state.triggerTimestamps.push(nextTriggerTimestamp)
+    },
+    
+    clearTriggerTimestamp(state) {
+      state.triggerTimestamps.length=0
+    },
+
+    orderTriggerTimestamp(state) {
+      state.triggerTimestamps.sort((a,b) => a-b)
+      state.triggerTimestamps = [...new Set(state.triggerTimestamps)]
+    },
+
+    updateNextTimestamp(state, nextTimestamp) {
+      state.nextTimestamp = nextTimestamp
+    },
+
+    updateNextNextTimestamp(state, nextnextTimestamp) { // just for dev, can comment out in production
+      state.nextnextTimestamp = nextnextTimestamp
+    },
+
+    toggleStorybookStyle(state, styleselection) {
+      state.styleoption = styleselection;
+    },
+
   },
   actions: {
     
@@ -81,9 +116,16 @@ export default new Vuex.Store({
       context.commit('Register_User', { email, password })
     },
 
-    toggleSidebar: (context, visibility) => {
-      context.commit('toggleSidebar', visibility)
-    },
+    // clearTriggerTimestamp: (context) => {
+    //   context.commit('clearTriggerTimestamp')
+    //   console.log('store 1')
+    //   console.log(context.triggerTimestamps)
+    //   console.log('store 2')
+    // },
+
+    toggleStorybookStyle: (context, styleselection) => {
+      context.commit('toggleStorybookStyle', styleselection)
+    }, // oops this is not necessary, please directly call synchronous mutation instead of this.
 
   },
   modules: {

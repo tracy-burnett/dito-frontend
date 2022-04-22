@@ -58,9 +58,10 @@ const routes = [
     component: User
   },
   {
-    path: '/storybook/:id',
+    path: '/storybook/',
     name: 'Storybook',
-    component: Storybook
+    component: Storybook,
+    props: true
   },
   {
     path: "/createstorybook",
