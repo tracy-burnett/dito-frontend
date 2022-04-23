@@ -1,8 +1,8 @@
 <template>
   <div class="flex-auto">
     Display text here for filename {{ audio_filename }}.<br /><br />
-    {{ relevantCharacters }}<br /><br />
-    {{ parsedAssociations }}<br /><br />
+     <!-- {{ relevantCharacters }}<br /><br /> -->
+    <!-- {{ parsedAssociations }}<br /><br />  -->
     <span
       v-for="substring in substringArray"
       :key="substring.startingcharacter"

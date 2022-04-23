@@ -1,8 +1,15 @@
 <template>
   <div class="flex-auto">
     Display text here for filename {{ audio_filename }}.<br /><br />
-    {{ latest_text }}
-    
+
+<button @click="clearTimestamps()">CLICK ME to clear new timestamps</button><br><br><br>
+
+    <span v-for="character in latest_text_character_array" :key="character.index">
+      <span @click="addNewAssociation(character.index)">{{
+        character.value
+      }}</span>
+    </span>
+
     <button
       class="
         bg-indigo-500
@@ -22,7 +29,6 @@
     >
       Save Tags
     </button>
-
   </div>
 </template>
 
@@ -32,11 +38,13 @@ export default {
   data: () => {
     return {
       latest_text: "Hello hello hello",
-      associations: {
-        "": [],
-      },
+      latest_text_character_array: [],
+      
+      string_including_new_tags: "",
+      new_associations: {},
     };
   },
+
   props: {
     audio_filename: {
       default: "fTv6JuCXbCc.mp3",
@@ -49,29 +57,55 @@ export default {
     },
   },
   methods: {
-updateAssociations() {
-    fetch(process.env.VUE_APP_api_URL +
-      "audio/" +
-      this.audio_id +
-      "/translations/" +
-      this.interpretation_id +
-      "/associations/", {
-      method: "POST",
-        body: JSON.stringify({
-    "text": "For one thing", // Pass in a string that meets a minimum character count and includes all the new tags you want to save
-    "associations": '{ 1: 2000, 2: 1500, 3: 1700 }' // Pass in the list of the new tags
+
+    clearTimestamps() {
+      this.new_associations = {}
+      console.log(JSON.stringify(this.new_associations))
+    },
+
+addNewAssociation(characterindex) {
+let clicktime = this.$store.state.audioplayertime
+this.new_associations[characterindex] = Math.round(clicktime * 100)
+console.log(JSON.stringify(this.new_associations))
+},
+
+    updateAssociations() {
+      // console.log(this.new_associations)
+            // this.new_associations_string=JSON.stringify(this.new_associations)
+            // .replace(/"/g,"")
+                  // console.log(JSON.stringify({
+    // "text": "Yesterday", // Pass in a string that meets a minimum character count and includes all the new tags you want to save
+    // "associations": this.new_associations // Pass in the list of the new tags
+// }))
+
+      fetch(
+        process.env.VUE_APP_api_URL +
+          "audio/" +
+          this.audio_id +
+          "/translations/" +
+          this.interpretation_id +
+          "/associations/",
+        {
+          method: "POST",
+          // body: JSON.stringify({
+          //   "text": this.latest_text, // Pass in a string that meets a minimum character count and includes all the new tags you want to save
+          //   "associations": this.new_associations, // Pass in the list of the new tags
+          // }),
+
+
+                  body: JSON.stringify({
+    "text": "Yesterday", // Pass in a string that meets a minimum character count and includes all the new tags you want to save
+    "associations": '{0: 2200,1:2300}' // Pass in the list of the new tags
 }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    //   .then((response) => response.json())
-    //   .then((data) => (this.latest_text = data.text))
-      .catch((error) => console.error("Error:", error));
-}
-
-
-
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+          .then((response) => response)
+          .then((data) => (console.log(data)))
+        .catch((error) => console.error("Error:", error));
+    },
   },
   mounted() {
     const apiUrl =
@@ -90,7 +124,19 @@ updateAssociations() {
     })
       .then((response) => response.json())
       .then((data) => (this.latest_text = data.text))
+      .then(() => {
+        // console.log(this.latest_text.length);
+        let character_array = this.latest_text.split("");
+        for (let i = 0; i < character_array.length; i++) {
+          let sample_object = {}
+          sample_object.index = i
+          sample_object.value = character_array[i]
+          this.latest_text_character_array.push(sample_object)
+        }
+        // console.log(this.latest_text_character_array.length)
+      })
       .catch((error) => console.error("Error:", error));
   },
+
 };
 </script>
