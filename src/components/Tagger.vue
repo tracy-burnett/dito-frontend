@@ -2,10 +2,19 @@
   <div class="flex-auto">
     Display text here for filename {{ audio_filename }}.<br /><br />
 
-<button @click="clearTimestamps()">CLICK ME to clear new timestamps</button><br><br><br>
+    <button @click="clearTimestamps()">CLICK ME to clear new timestamps</button
+    ><br /><br /><br />
 
-    <span v-for="character in latest_text_character_array" :key="character.index">
-      <span @click="addNewAssociation(character.index)">{{
+    <span
+      v-for="character in latest_text_character_array"
+      :key="character.index"
+    >
+      <span v-if="(!character.newtag)">
+        <span @click="addNewAssociation(character.index)">{{
+          character.value
+        }}</span></span
+      >
+      <span v-else class="text-green-500 font-extrabold" @click="removeThisAssociation(character.index)">{{
         character.value
       }}</span>
     </span>
@@ -39,7 +48,7 @@ export default {
     return {
       latest_text: "Hello hello hello",
       latest_text_character_array: [],
-      
+
       string_including_new_tags: "",
       new_associations: {},
     };
@@ -57,26 +66,32 @@ export default {
     },
   },
   methods: {
-
     clearTimestamps() {
-      this.new_associations = {}
-      console.log(JSON.stringify(this.new_associations))
+      this.new_associations = {};
+      console.log(JSON.stringify(this.new_associations));
     },
 
-addNewAssociation(characterindex) {
-let clicktime = this.$store.state.audioplayertime
-this.new_associations[characterindex] = Math.round(clicktime * 100)
-console.log(JSON.stringify(this.new_associations))
-},
+        removeThisAssociation(characterindex) {
+      this.latest_text_character_array[characterindex].newtag = false;
+      delete this.new_associations[characterindex]
+      console.log(JSON.stringify(this.new_associations));
+    },
+
+    addNewAssociation(characterindex) {
+      let clicktime = this.$store.state.audioplayertime;
+      this.latest_text_character_array[characterindex].newtag = true;
+      this.new_associations[characterindex] = Math.round(clicktime * 100);
+      console.log(JSON.stringify(this.new_associations));
+    },
 
     updateAssociations() {
       // console.log(this.new_associations)
-            // this.new_associations_string=JSON.stringify(this.new_associations)
-            // .replace(/"/g,"")
-                  // console.log(JSON.stringify({
-    // "text": "Yesterday", // Pass in a string that meets a minimum character count and includes all the new tags you want to save
-    // "associations": this.new_associations // Pass in the list of the new tags
-// }))
+      // this.new_associations_string=JSON.stringify(this.new_associations)
+      // .replace(/"/g,"")
+      // console.log(JSON.stringify({
+      // "text": "Yesterday", // Pass in a string that meets a minimum character count and includes all the new tags you want to save
+      // "associations": this.new_associations // Pass in the list of the new tags
+      // }))
 
       fetch(
         process.env.VUE_APP_api_URL +
@@ -92,18 +107,17 @@ console.log(JSON.stringify(this.new_associations))
           //   "associations": this.new_associations, // Pass in the list of the new tags
           // }),
 
-
-                  body: JSON.stringify({
-    "text": "Yesterday", // Pass in a string that meets a minimum character count and includes all the new tags you want to save
-    "associations": '{0: 2200,1:2300}' // Pass in the list of the new tags
-}),
+          body: JSON.stringify({
+            text: "Yesterday", // Pass in a string that meets a minimum character count and includes all the new tags you want to save
+            associations: "{0: 2200,1:2300}", // Pass in the list of the new tags
+          }),
           headers: {
             "Content-Type": "application/json",
           },
         }
       )
-          .then((response) => response)
-          .then((data) => (console.log(data)))
+        .then((response) => response)
+        .then((data) => console.log(data))
         .catch((error) => console.error("Error:", error));
     },
   },
@@ -128,15 +142,15 @@ console.log(JSON.stringify(this.new_associations))
         // console.log(this.latest_text.length);
         let character_array = this.latest_text.split("");
         for (let i = 0; i < character_array.length; i++) {
-          let sample_object = {}
-          sample_object.index = i
-          sample_object.value = character_array[i]
-          this.latest_text_character_array.push(sample_object)
+          let sample_object = {};
+          sample_object.index = i;
+          sample_object.value = character_array[i];
+          sample_object.newtag = false;
+          this.latest_text_character_array.push(sample_object);
         }
         // console.log(this.latest_text_character_array.length)
       })
       .catch((error) => console.error("Error:", error));
   },
-
 };
 </script>
