@@ -95,7 +95,7 @@ export default {
     addNewAssociation(characterindex) {
       let clicktime = this.$store.state.audioplayertime;
       this.latest_text_character_array[characterindex].newtag = true;
-      this.new_associations[characterindex] = Math.round(clicktime * 100);
+      this.new_associations[characterindex] = Math.round(clicktime);
       console.log(JSON.stringify(this.new_associations));
     },
 
