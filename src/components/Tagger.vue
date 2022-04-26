@@ -3,6 +3,8 @@
     Display text here for filename {{ audio_filename }}.<br /><br />
 
     <button @click="clearTimestamps()">CLICK ME to clear new timestamps</button
+    ><br />
+        <button @click="clearOldTimestamps()">CLICK ME to clear old timestamps</button
     ><br /><br /><br />
 
     <span
@@ -69,6 +71,19 @@ export default {
     clearTimestamps() {
       this.new_associations = {};
       console.log(JSON.stringify(this.new_associations));
+      for (let k = 0; k< this.latest_text_character_array.length; k++) {
+        
+      this.latest_text_character_array[k].newtag = false;
+      }
+    },
+
+        clearOldTimestamps() {
+          
+      for (let k = 0; k< this.latest_text_character_array.length; k++) {
+        this.addNewNullAssociation(k)
+      }
+      
+      this.updateAssociations()
     },
 
         removeThisAssociation(characterindex) {
@@ -84,6 +99,10 @@ export default {
       console.log(JSON.stringify(this.new_associations));
     },
 
+        addNewNullAssociation(characterindex) {
+      this.new_associations[characterindex] = null
+    },
+
     updateAssociations() {
       // console.log(this.new_associations)
       // this.new_associations_string=JSON.stringify(this.new_associations)
@@ -92,6 +111,10 @@ export default {
       // "text": "Yesterday", // Pass in a string that meets a minimum character count and includes all the new tags you want to save
       // "associations": this.new_associations // Pass in the list of the new tags
       // }))
+      console.log(JSON.stringify({
+            "text": this.latest_text, // Pass in a string that meets a minimum character count and includes all the new tags you want to save
+            "associations": this.new_associations, // Pass in the list of the new tags
+          }))
 
       fetch(
         process.env.VUE_APP_api_URL +
@@ -102,15 +125,15 @@ export default {
           "/associations/",
         {
           method: "POST",
-          // body: JSON.stringify({
-          //   "text": this.latest_text, // Pass in a string that meets a minimum character count and includes all the new tags you want to save
-          //   "associations": this.new_associations, // Pass in the list of the new tags
-          // }),
-
           body: JSON.stringify({
-            text: "Yesterday", // Pass in a string that meets a minimum character count and includes all the new tags you want to save
-            associations: "{0: 2200,1:2300}", // Pass in the list of the new tags
+            text: this.latest_text, // Pass in a string that meets a minimum character count and includes all the new tags you want to save
+            associations: this.new_associations, // Pass in the list of the new tags
           }),
+
+          // body: JSON.stringify({
+          //   text: "Yesterday", // Pass in a string that meets a minimum character count and includes all the new tags you want to save
+          //   associations: '{"0": 2200,"1":2300}', // Pass in the list of the new tags
+          // }),
           headers: {
             "Content-Type": "application/json",
           },
