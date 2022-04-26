@@ -74,14 +74,14 @@ export default {
       this.file = this.$refs.audioInput.files[0];
       this.name = this.file["name"];
       this.myArray = this.name.split(".");
-      this.ext = "." + this.myArray[1];
-      console.log(process.env.VUE_APP_api_URL + 's3/presignedposturl')
-      const apiUrl = process.env.VUE_APP_api_URL + 's3/presignedposturl';
+      this.ext = "." + this.myArray[this.myArray.length - 1];
+      console.log(process.env.VUE_APP_api_URL + "s3/presignedposturl");
+      const apiUrl = process.env.VUE_APP_api_URL + "s3/presignedposturl";
       fetch(apiUrl, {
         method: "POST",
         headers: {
-        "Content-Type": "application/json",
-      },
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           ext: this.ext,
 
@@ -93,10 +93,11 @@ export default {
         })
         .then((data) => {
           console.log("uploading file, please wait");
-          fetch(data["url"], 
-          
-          { method: "PUT",    
-      body: this.file })
+          fetch(
+            data["url"],
+
+            { method: "PUT", body: this.file }
+          )
             .then((response) => console.log(response))
             .catch((error) => console.error("Error:", error));
           return data["audio_ID"];

@@ -4,7 +4,6 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import About from '../views/About.vue'
 import User from '../views/User.vue'
-import Editor from '../views/Editor.vue'
 import Storybook from '../views/Storybook.vue'
 import CreateStorybook from '../views/CreateStorybook.vue'
 import Register from '../views/Register.vue';
@@ -59,14 +58,10 @@ const routes = [
     component: User
   },
   {
-    path: '/storybook/:id',
+    path: '/storybook/',
     name: 'Storybook',
-    component: Storybook
-  },
-  {
-    path: "/editor",
-    name: "Editor",
-    component: Editor
+    component: Storybook,
+    props: true
   },
   {
     path: "/createstorybook",
