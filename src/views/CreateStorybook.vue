@@ -75,9 +75,7 @@ export default {
       this.name = this.file["name"];
       this.myArray = this.name.split(".");
       this.ext = "." + this.myArray[this.myArray.length - 1];
-      console.log(process.env.VUE_APP_api_URL + "s3/presignedposturl");
-      const apiUrl = process.env.VUE_APP_api_URL + "s3/presignedposturl";
-      fetch(apiUrl, {
+      fetch(process.env.VUE_APP_api_URL + "s3/presignedposturl", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -105,7 +103,37 @@ export default {
         .then((audio_ID) =>
           // post request to create new entry in audio table that includes data['audio_ID'], audio_URL (different from presigned URL), and other important information.
           {
-            console.log(audio_ID);
+
+      fetch(process.env.VUE_APP_api_URL + "audio/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: audio_ID,
+          url: "coverimage.jpg",
+          title: "Palsang's Interview",
+          description: "from 2019",
+          archived: false,
+          uploaded_by: 1,
+          last_updated_by: 1,
+          shared_with: [],
+          public: false,
+          id_token: "randomToken"
+
+          // accessToken: this.$store.state.user.getIdToken()
+        }),
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((response) => {
+          console.log(response)
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+
             return;
           }
         )

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { auth } from '../firebase'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, getIdToken } from "firebase/auth";
 
 Vue.use(Vuex)
 
@@ -15,6 +15,7 @@ export default new Vuex.Store({
     // audioDuration: 0,
     styleoption: "Viewer",
     audioplayertime: 0,
+    idToken: null,
     // triggerTimestamps: []
 
   },
@@ -31,6 +32,7 @@ export default new Vuex.Store({
       signInWithEmailAndPassword(auth, email2, password2)
         .then((userCredential) => {
           // onAuthStateChanged listener will handle user assignment
+          state.user = userCredential
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -45,6 +47,7 @@ export default new Vuex.Store({
       signOut(auth)
         .then(() => {
           // onAuthStateChanged listener will handle user assignment
+          state.user = null
         })
         .catch((error) => {
           // An error happened.
@@ -52,20 +55,13 @@ export default new Vuex.Store({
         });
     },
 
-    Register_User(state, { email, password }) {
-      const register_email = email
-      const register_password = password
-      createUserWithEmailAndPassword(auth, register_email, register_password)
-        .then((userCredential) => {
-          // onAuthStateChanged listener will handle user assignment
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log("Oops. " + error.code + ": " + error.message);
-        });
+    Register_User(state, user) {
 
+      state.user = user
+    },
 
+    SetIdToken(state, token) {
+      state.idToken = token
     },
 
     toggleSidebar(state, visibility) {
@@ -79,7 +75,7 @@ export default new Vuex.Store({
     // addTriggerTimestamp(state, nextTriggerTimestamp) {
     //   state.triggerTimestamps.push(nextTriggerTimestamp)
     // },
-    
+
     // clearTriggerTimestamp(state) {
     //   state.triggerTimestamps.length=0
     // },
@@ -107,8 +103,8 @@ export default new Vuex.Store({
 
   },
   actions: {
-    
-    
+
+
     Login_User: (context, { email, password }) => {
       context.commit('Login_User', { email, password })
     },
@@ -118,7 +114,33 @@ export default new Vuex.Store({
     },
 
     Register_User: (context, { email, password }) => {
-      context.commit('Register_User', { email, password })
+      const register_email = email
+      const register_password = password
+   return   createUserWithEmailAndPassword(auth, register_email, register_password)
+        .then((userCredential) => { return userCredential })
+        .then((data) => {
+          // onAuthStateChanged listener will handle user assignment
+          // console.log(data)
+      context.commit('Register_User', data.user)
+          // console.log(context.state.user)
+          getIdToken(context.state.user)
+            .then((idToken) => {
+              context.commit('SetIdToken', idToken)
+              // console.log(context.state.idToken)
+            })
+            .catch((error) => {
+              // An error happened.
+              console.log("Oops. " + error.code + ": " + error.message);
+            })
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log("Oops. " + error.code + ": " + error.message);
+        });
+
+
+
     },
 
     // clearTriggerTimestamp: (context) => {
