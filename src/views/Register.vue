@@ -120,12 +120,13 @@ export default {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+                      'Authorization': this.$store.state.idToken
             },
             body: JSON.stringify({
               display_name: this.display_name,
               description: this.description,
               anonymous: this.anonymous,
-              id_token: this.$store.state.idToken,
+              // id_token: this.$store.state.idToken,
             }),
           })
             .then((response) => response.json())

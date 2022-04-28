@@ -25,6 +25,16 @@
             accept="audio/*"
             ref="audioInput"
           />
+                    <input
+            class="border border-gray-300 rounded w-full px-3 py-1"
+            placeholder="Storybook/Audio Title"
+            v-model="title"
+          />
+                    <input
+            class="border border-gray-300 rounded w-full px-3 py-1"
+            placeholder="Description of Content"
+            v-model="description"
+          />
           <button
             class="
               bg-indigo-500
@@ -64,6 +74,8 @@ export default {
     return {
       ext: "",
       name: "",
+      title: "",
+      description: "",
       myArray: null,
       file: null,
     };
@@ -112,16 +124,11 @@ export default {
         body: JSON.stringify({
           id: audio_ID,
           url: "coverimage.jpg",
-          title: "Palsang's Interview",
-          description: "from 2019",
-          archived: false,
-          uploaded_by: 1,
-          last_updated_by: 1,
-          shared_with: [],
-          public: false,
-          id_token: "randomToken"
+          title: this.title,
+          description: this.description,
+          // shared_with: [],
+          id_token: this.$store.state.idToken,
 
-          // accessToken: this.$store.state.user.getIdToken()
         }),
       })
         .then((response) => {
