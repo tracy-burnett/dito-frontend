@@ -2,10 +2,11 @@
   <div class="lg:ml-16 mx-5">
     <h1 class="font-bold text-2xl mt-8 mb-6">{{ title }}</h1>
     <div class="flex items-center">
+      
       <div v-for="audio in audioArray" :key="audio.ID">
         <Card
           :date="audio.uploaded_at.substring(0, 10)"
-          :uploader="audio.uploaded_by"
+          :uploader="audio.uploaded_by.display_name"
           :description="audio.description"
           :title="audio.title"
           :audio_ID="audio.ID"
@@ -38,12 +39,13 @@ this.getStorybooks()
     Card,
   },
     mounted() {
-        this.getStorybooks()
+      if (this.$store.state.idToken){
+        this.getStorybooks()}
     },
   methods: {
 getStorybooks() {
-          console.log(this.$store.state.user);
-      console.log(this.$store.state.idToken);
+          // console.log(this.$store.state.user);
+      // console.log(this.$store.state.idToken);
       fetch(process.env.VUE_APP_api_URL + "audio/user/", {
         method: "GET",
 

@@ -25,12 +25,12 @@
             accept="audio/*"
             ref="audioInput"
           />
-                    <input
+          <input
             class="border border-gray-300 rounded w-full px-3 py-1"
             placeholder="Storybook/Audio Title"
             v-model="title"
           />
-                    <input
+          <input
             class="border border-gray-300 rounded w-full px-3 py-1"
             placeholder="Description of Content"
             v-model="description"
@@ -115,31 +115,29 @@ export default {
         .then((audio_ID) =>
           // post request to create new entry in audio table that includes data['audio_ID'], audio_URL (different from presigned URL), and other important information.
           {
-
-      fetch(process.env.VUE_APP_api_URL + "audio/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: audio_ID,
-          url: "coverimage.jpg",
-          title: this.title,
-          description: this.description,
-          // shared_with: [],
-          id_token: this.$store.state.idToken,
-
-        }),
-      })
-        .then((response) => {
-          return response.json();
-        })
-        .then((response) => {
-          console.log(response)
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+            fetch(process.env.VUE_APP_api_URL + "audio/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                id: audio_ID,
+                url: "coverimage.jpg",
+                title: this.title,
+                description: this.description,
+                // shared_with: [],
+                id_token: this.$store.state.idToken,
+              }),
+            })
+              .then((response) => {
+                return response.json();
+              })
+              .then((response) => {
+                console.log(response);
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
 
             return;
           }
