@@ -14,6 +14,7 @@ export default new Vuex.Store({
     // nextTimestamp: 0,
     // audioDuration: 0,
     styleoption: "Viewer",
+    currentTime: "00:00:00",
     audioplayertime: 0,
     idToken: null,
     // triggerTimestamps: []
@@ -43,6 +44,10 @@ export default new Vuex.Store({
 
     toggleSidebar(state, visibility) {
       state.sidebar = visibility;
+    },
+
+    updateCurrentTime(state, value) {
+      state.currentTime = value
     },
 
     updateAudioTime(state, audiotime) {
