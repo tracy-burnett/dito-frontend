@@ -16,8 +16,8 @@ export default new Vuex.Store({
     styleoption: "Viewer",
     currentTime: "00:00:00",
     audioplayertime: 0,
+    triggerTimestamps: []
     idToken: null,
-    // triggerTimestamps: []
 
   },
   getters: {
@@ -54,18 +54,18 @@ export default new Vuex.Store({
       state.audioplayertime = audiotime;
     },
 
-    // addTriggerTimestamp(state, nextTriggerTimestamp) {
-    //   state.triggerTimestamps.push(nextTriggerTimestamp)
-    // },
+    addTriggerTimestamp(state, nextTriggerTimestamp) {
+      state.triggerTimestamps.push(nextTriggerTimestamp)
+    },
+    
+    clearTriggerTimestamp(state) {
+      state.triggerTimestamps.length=0
+    },
 
-    // clearTriggerTimestamp(state) {
-    //   state.triggerTimestamps.length=0
-    // },
-
-    // orderTriggerTimestamp(state) {
-    //   state.triggerTimestamps.sort((a,b) => a-b)
-    //   state.triggerTimestamps = [...new Set(state.triggerTimestamps)]
-    // },
+    orderTriggerTimestamp(state) {
+      state.triggerTimestamps.sort((a,b) => a-b)
+      state.triggerTimestamps = [...new Set(state.triggerTimestamps)]
+    },
 
     // updateNextTimestamp(state, nextTimestamp) {
     //   state.nextTimestamp = nextTimestamp

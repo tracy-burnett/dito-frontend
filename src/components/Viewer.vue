@@ -2,18 +2,18 @@
   <div class="flex-auto">
     Display text here for filename {{ audio_filename }}.<br /><br />
      <!-- {{ relevantCharacters }}<br /><br /> -->
-    <!-- {{ parsedAssociations }}<br /><br />  -->
+    {{ parsedAssociations }}<br /><br /> 
     <span
       v-for="substring in substringArray"
       :key="substring.startingcharacter"
     >
       <span
         v-if="highlight(substring.startingcharacter)"
-        class="text-red-600"
+        class="text-red-600" @click="snapToTimestamp(substring.startingcharacter)"
         >{{ substring.text }}</span
       >
       <!-- <span v-if="true" class="text-red-600">{{substring.text}}</span> -->
-      <span v-else>{{ substring.text }}</span>
+      <span v-else  @click="snapToTimestamp(substring.startingcharacter)">{{ substring.text }}</span>
     </span>
     <br />
 
@@ -115,11 +115,11 @@ export default {
       .then((data) => {
         this.associations = data.associations;
       })
-      // .then(() => this.clearTriggerTimestamps())
+      .then(() => this.clearTriggerTimestamps())
       // .then(() =>
       //   console.log(JSON.stringify(this.$store.state.triggerTimestamps))
       // )
-      // .then(() => this.assignTriggerTimestamps())
+      .then(() => this.assignTriggerTimestamps())
       .then(() => this.parsed_associations())
       .then(() => {this.latest_text_slices()})
       .catch((error) => console.error("Error:", error));
@@ -138,19 +138,50 @@ export default {
 //             }})},
 
   methods: {
-    // clearTriggerTimestamps() {
-    //   this.$store.commit("clearTriggerTimestamp");
+    clearTriggerTimestamps() {
+      this.$store.commit("clearTriggerTimestamp");
 
       // console.log(this.$store.state.triggerTimestamps)
-      //           for (let i = 0; i < Object.keys(this.associations).length; i++) {
+                for (let i = 0; i < Object.keys(this.associations).length; i++) {
 
-      // let startTime = Object.keys(this.associations)[i].split("-")[0]
-      // let endTime = Object.keys(this.associations)[i].split("-")[1]
-      // this.$store.commit('addTriggerTimestamp', startTime)
-      // this.$store.commit('addTriggerTimestamp', endTime)
+      let startTime = Object.keys(this.associations)[i].split("-")[0]
+      let endTime = Object.keys(this.associations)[i].split("-")[1]
+      this.$store.commit('addTriggerTimestamp', startTime)
+      this.$store.commit('addTriggerTimestamp', endTime)
 
-      // }
-    // },
+      }
+    },
+
+    snapToTimestamp(startingcharacter) {
+
+
+      let potentialSnapArray = []
+      this.parsedAssociations.forEach((element) => {
+//  if (element.endTime == "end") {
+//               element.endTime = this.$store.state.audioDuration
+//             }
+            // console.log(element.endTime)
+
+
+          if (          startingcharacter >= element.startCharacter &&
+          startingcharacter < element.endCharacter) {
+      //         console.log(this.$store.state.audioplayertime + " >= " + element.startTime)
+      // console.log(this.$store.state.audioplayertime + " <= " + element.endTime)
+      // console.log(startingcharacter + " >= " + element.startCharacter)
+      // console.log(startingcharacter + " <= " + element.endCharacter)
+
+          potentialSnapArray.push(element.startTime)}
+
+        
+      });
+          potentialSnapArray.sort(((a,b) => a-b))
+          let playFromTimestamp = potentialSnapArray[potentialSnapArray.length - 1]
+// throw an event to make playervertical start playing from playFromTimestamp
+          console.log(potentialSnapArray)
+          console.log(potentialSnapArray.length)
+          console.log(playFromTimestamp)
+          potentialSnapArray.length = 0
+    },
 
     highlight(startingcharacter) {
 
@@ -178,24 +209,24 @@ export default {
       return k;
     },
 
-    // assignTriggerTimestamps() {
-    //   for (let i = 0; i < Object.keys(this.associations).length; i++) {
-    //     let startTime = parseInt(
-    //       Object.keys(this.associations)[i].split("-")[0]
-    //     );
-    //     let endTime = parseInt(Object.keys(this.associations)[i].split("-")[1]);
-    //     if (startTime != 0) {
-    //       this.$store.commit("addTriggerTimestamp", startTime);
-    //     }
-    //     if (Number.isInteger(endTime)) {
-    //       this.$store.commit("addTriggerTimestamp", endTime);
-    //     }
-    //   }
+    assignTriggerTimestamps() {
+      for (let i = 0; i < Object.keys(this.associations).length; i++) {
+        let startTime = parseInt(
+          Object.keys(this.associations)[i].split("-")[0]
+        );
+        let endTime = parseInt(Object.keys(this.associations)[i].split("-")[1]);
+        if (startTime != 0) {
+          this.$store.commit("addTriggerTimestamp", startTime);
+        }
+        if (Number.isInteger(endTime)) {
+          this.$store.commit("addTriggerTimestamp", endTime);
+        }
+      }
 
     //   console.log(JSON.stringify(this.$store.state.triggerTimestamps));
-    //   this.$store.commit("orderTriggerTimestamp");
+      this.$store.commit("orderTriggerTimestamp");
     //   console.log(JSON.stringify(this.$store.state.triggerTimestamps));
-    // },
+    },
 
     assignRelevantCharacters() {
       Object.values(this.associations).forEach((element) => {
