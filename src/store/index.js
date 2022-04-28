@@ -16,7 +16,7 @@ export default new Vuex.Store({
     styleoption: "Viewer",
     currentTime: "00:00:00",
     audioplayertime: 0,
-    triggerTimestamps: []
+    triggerTimestamps: [],
     idToken: null,
 
   },
