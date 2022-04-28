@@ -52,7 +52,7 @@ export default {
   name: "PlayerVertical",
   props: {
     audio_ID: {
-      default: "fTv6JuCXbCc.mp3",
+      default: "",
     },
   },
   components: {},

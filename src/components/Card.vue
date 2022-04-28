@@ -73,7 +73,9 @@ export default {
       default: "10/26/2021",
     },
 
-    audio_ID: "",
+    audio_ID: {
+      default: "",
+    },
   },
 
 
@@ -86,7 +88,7 @@ export default {
     openstorybook() {
       this.$router.push({
         name: "Storybook",
-        params: { audio_ID: this.audio_ID },
+        params: {audio_ID: this.audio_ID},
       });
     },
   },

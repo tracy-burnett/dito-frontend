@@ -9,7 +9,7 @@
           :uploader="audio.uploaded_by.display_name"
           :description="audio.description"
           :title="audio.title"
-          :audio_ID="audio.ID"
+          :audio_ID="audio.id"
         />
         <!-- <Card /> -->
         <!-- <Card /> -->

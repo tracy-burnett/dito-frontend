@@ -5,7 +5,7 @@
       <Navbar />
       <StorybookStyleMenu />
           <div class="flex items-center">
-      <PlayerVertical :audio_filename="audio_ID" />
+      <PlayerVertical :audio_ID="audio_ID" />
       <component v-bind:is="showStyleOption" :audio_filename="audio_ID"></component>
       </div>
     </div>
@@ -35,9 +35,7 @@ export default {
       }
     },
     props: {
-    audio_ID: {
-      default: "fTv6JuCXbCc.mp3",
-    },
+    audio_ID: "",
   },
 
     components: {
