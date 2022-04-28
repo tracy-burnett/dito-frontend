@@ -70,7 +70,7 @@ export default {
       startTimeSeconds: 0,
       currentTimeSeconds: 0,
       endTimeSeconds: 0,
-      currentTime: "00:00:00",
+      // currentTime: "00:00:00",
       AfterDragStartTime: 0,
       AfterDragEndTime: 0,
       totalDuration: 0,
@@ -79,6 +79,14 @@ export default {
     };
   },
   computed: {
+
+      currentTime: {
+        get() {return this.$store.state.currentTime},
+        set (value) {
+          this.$store.commit('updateCurrentTime', value)
+        }
+      },
+
     startTimeNumber() {
       let startTimeArray = this.startTime.split(":");
       return (

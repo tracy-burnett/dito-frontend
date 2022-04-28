@@ -27,6 +27,17 @@
           />
           <input
             class="border border-gray-300 rounded w-full px-3 py-1"
+            placeholder="Description"
+            v-model="description"
+          />
+          <input
+            class="border border-gray-300 rounded w-full px-3 py-1"
+            placeholder="Display Name"
+            v-model="display_name"
+            maxlength="254"
+          />
+          <input
+            class="border border-gray-300 rounded w-full px-3 py-1"
             placeholder="Password"
             type="password"
             v-model="password"
@@ -94,22 +105,45 @@ export default {
     return {
       email: "",
       password: "",
+      display_name: "",
+      description: "",
+      anonymous: false,
     };
   },
   methods: {
     register: function (email, password) {
-          this.$store.dispatch(
-            "Register_User",
-            {email, password}
-          ).then(() => {
-        this.$router.replace("/");
-      })
+      this.$store
+        .dispatch("Register_User", { email, password })
+        .then(() => {
+          // console.log(this.$store.state.idToken);
+          fetch(process.env.VUE_APP_api_URL + "user/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+                      'Authorization': this.$store.state.idToken
+            },
+            body: JSON.stringify({
+              display_name: this.display_name,
+              description: this.description,
+              anonymous: this.anonymous,
+              // id_token: this.$store.state.idToken,
+            }),
+          })
+            .then((response) => response.json())
+            .then((response) => console.log(response))
+            .catch((error) => console.error("Error:", error))
+
+            .catch(function (error) {
+              console.log("Oops. " + error.code + ": " + error.message);
+            });
+        })
+        .then(() => {
+          this.$router.replace("/");
+        })
         .catch((error) => {
           // An error happened.
           console.log("Oops. " + error.code + ": " + error.message);
-        })      
-      
-      ;
+        });
     },
   },
 };
