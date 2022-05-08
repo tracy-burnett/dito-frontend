@@ -6,7 +6,7 @@
       <StorybookStyleMenu />
           <div class="flex items-center">
       <PlayerVertical :audio_ID="audio_ID" />
-      <component v-bind:is="showStyleOption" :audio_filename="audio_ID"></component>
+      <component v-bind:is="showStyleOption" :audio_id="audio_ID"></component> <!-- this is the viewer, editor, or tagger component -->
       </div>
     </div>
   </div>

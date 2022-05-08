@@ -15,6 +15,7 @@ export default new Vuex.Store({
     // audioDuration: 0,
     styleoption: "Viewer",
     currentTime: "00:00:00",
+    // playFromTimestamp: 0,
     audioplayertime: 0,
     triggerTimestamps: [],
     idToken: null,
@@ -53,6 +54,10 @@ export default new Vuex.Store({
     updateAudioTime(state, audiotime) {
       state.audioplayertime = audiotime;
     },
+
+    // updatePlayFromTimestamp(state, timestamp) {
+    //   state.playFromTimestamp = timestamp;
+    // },
 
     addTriggerTimestamp(state, nextTriggerTimestamp) {
       state.triggerTimestamps.push(nextTriggerTimestamp)

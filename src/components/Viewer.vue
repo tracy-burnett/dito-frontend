@@ -1,8 +1,9 @@
 <template>
   <div class="flex-auto">
-    Display text here for filename {{ audio_filename }}.<br /><br />
+    Display text here for filename {{ audio_id }}.<br /><br />
      <!-- {{ relevantCharacters }}<br /><br /> -->
     {{ parsedAssociations }}<br /><br /> 
+    
     <span
       v-for="substring in substringArray"
       :key="substring.startingcharacter"
@@ -71,10 +72,10 @@ export default {
       default: "fTv6JuCXbCc.mp3",
     },
     audio_id: {
-      default: 6,
+      default: 0,
     },
     interpretation_id: {
-      default: 2,
+      default: 1,
     },
   },
   components: {},
@@ -91,11 +92,14 @@ export default {
 
       headers: {
         "Content-Type": "application/json",
+        
+          Authorization: this.$store.state.idToken,
       },
     })
       .then((response) => response.json())
       .then((data) => (this.latest_text = data.text))
-      .catch((error) => console.error("Error:", error));
+
+.then(()=> {
 
     fetch(
       process.env.VUE_APP_api_URL +
@@ -108,6 +112,8 @@ export default {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          
+          Authorization: this.$store.state.idToken,
         },
       }
     )
@@ -123,6 +129,17 @@ export default {
       .then(() => this.parsed_associations())
       .then(() => {this.latest_text_slices()})
       .catch((error) => console.error("Error:", error));
+
+})
+
+
+
+
+
+
+      .catch((error) => console.error("Error:", error));
+
+
 
     //     const temporarythis = this;
     // this.$nextTick(function () {
@@ -177,6 +194,10 @@ export default {
           potentialSnapArray.sort(((a,b) => a-b))
           let playFromTimestamp = potentialSnapArray[potentialSnapArray.length - 1]
 // throw an event to make playervertical start playing from playFromTimestamp
+      let date = new Date(1970, 0, 1);
+      date.setSeconds(playFromTimestamp);
+      
+          this.$store.commit('updateCurrentTime', date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1"))
           console.log(potentialSnapArray)
           console.log(potentialSnapArray.length)
           console.log(playFromTimestamp)

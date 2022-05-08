@@ -1,5 +1,20 @@
 <template>
   <div class="flex-auto">
+    <!-- <button style="padding-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 2px;" @click="newInterpretation()">
+      <div class="h-10 w-10 
+        flex
+        justify-center
+        items-center
+        bg-sky-700
+        rounded-full
+        play
+        shadow-lg
+        text-white
+        mr-4">+
+      </div>
+    </button><br><br><br><br><br> -->
     Display text here for filename {{ audio_filename }}.<br /><br />
     <textarea v-model="latest_text"></textarea>
 
@@ -45,7 +60,7 @@ export default {
       default: 6,
     },
     interpretation_id: {
-      default: 2,
+      default: 1,
     },
   },
   methods: {
@@ -68,6 +83,9 @@ export default {
             .then((response) => console.log(response))
         .catch((error) => console.error("Error:", error));
     },
+
+
+    // newInterpretation() {},
   },
   mounted() {
     fetch(

@@ -110,23 +110,26 @@ export default {
           )
             .then((response) => console.log(response))
             .catch((error) => console.error("Error:", error));
-          return data["audio_ID"];
+          this.name = data["audio_ID"];
+          return;
         })
-        .then((audio_ID) =>
+        .then(() =>
           // post request to create new entry in audio table that includes data['audio_ID'], audio_URL (different from presigned URL), and other important information.
           {
             fetch(process.env.VUE_APP_api_URL + "audio/", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
+
+                Authorization: this.$store.state.idToken,
               },
               body: JSON.stringify({
-                id: audio_ID,
+                id: this.name,
                 url: "coverimage.jpg",
                 title: this.title,
                 description: this.description,
                 // shared_with: [],
-                id_token: this.$store.state.idToken,
+                // id_token: this.$store.state.idToken,
               }),
             })
               .then((response) => {
@@ -135,6 +138,49 @@ export default {
               .then((response) => {
                 console.log(response);
               })
+
+              .then(() =>
+                // post request to create new interpretation for this audio
+                {
+                  fetch(
+                    process.env.VUE_APP_api_URL +
+                      "audio/" +
+                      this.name +
+                      "/translations/1/",
+                    {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+
+                        Authorization: this.$store.state.idToken,
+                      },
+                      body: JSON.stringify({
+                        user: "skysnolimit08",
+                        title: "testtitle",
+                        lid: "1",
+                        text: "Lorem ipsum",
+                        public: false,
+
+                        // title: this.title,
+                        // description: this.description,
+                        // shared_with: [],
+                        // id_token: this.$store.state.idToken,
+                      }),
+                    }
+                  )
+                    .then((response) => {
+                      return response.json();
+                    })
+                    .then((response) => {
+                      console.log(response);
+                    })
+                    .catch((error) => {
+                      console.error("Error:", error);
+                    });
+
+                  return;
+                }
+              )
               .catch((error) => {
                 console.error("Error:", error);
               });
@@ -142,6 +188,7 @@ export default {
             return;
           }
         )
+
         .catch((error) => {
           console.error("Error:", error);
         });
