@@ -15,6 +15,7 @@ export default new Vuex.Store({
     // audioDuration: 0,
     styleoption: "Viewer",
     currentTime: "00:00:00",
+    incomingCurrentTime: 0,
     // playFromTimestamp: 0,
     audioplayertime: 0,
     triggerTimestamps: [],
@@ -49,6 +50,10 @@ export default new Vuex.Store({
 
     updateCurrentTime(state, value) {
       state.currentTime = value
+    },
+
+    updateIncomingCurrentTime(state, value) {
+      state.incomingCurrentTime = value
     },
 
     updateAudioTime(state, audiotime) {
@@ -175,9 +180,9 @@ export default new Vuex.Store({
     //   console.log('store 2')
     // },
 
-    toggleStorybookStyle: (context, styleselection) => {
-      context.commit('toggleStorybookStyle', styleselection)
-    }, // oops this is not necessary, please directly call synchronous mutation instead of this.
+    // toggleStorybookStyle: (context, styleselection) => {
+    //   context.commit('toggleStorybookStyle', styleselection)
+    // }, // oops this is not necessary, please directly call synchronous mutation instead of this.
 
   },
   modules: {

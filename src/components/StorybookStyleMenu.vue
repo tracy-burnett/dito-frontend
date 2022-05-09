@@ -23,7 +23,7 @@ export default {
   props: ["text"],
   methods: {
           toggleStorybookStyle(styleselection) {
-      this.$store.dispatch(
+      this.$store.commit(
         "toggleStorybookStyle",
         styleselection
       );

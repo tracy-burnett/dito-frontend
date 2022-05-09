@@ -192,12 +192,15 @@ export default {
         
       });
           potentialSnapArray.sort(((a,b) => a-b))
-          let playFromTimestamp = potentialSnapArray[potentialSnapArray.length - 1]
+          let playFromTimestamp = potentialSnapArray[potentialSnapArray.length - 1]/100
 // throw an event to make playervertical start playing from playFromTimestamp
-      let date = new Date(1970, 0, 1);
-      date.setSeconds(playFromTimestamp);
+
       
-          this.$store.commit('updateCurrentTime', date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1"))
+          this.$store.commit('updateIncomingCurrentTime', playFromTimestamp)
+                this.$store.commit(
+        "updateAudioTime",
+        playFromTimestamp*100
+      );
           console.log(potentialSnapArray)
           console.log(potentialSnapArray.length)
           console.log(playFromTimestamp)
@@ -216,7 +219,8 @@ export default {
           this.$store.state.audioplayertime >= element.startTime &&
           (this.$store.state.audioplayertime <= element.endTime || element.endTime == "end")
         ) {
-
+// console.log(this.$store.state.audioplayertime + " >= " + element.startTime)
+// console.log(this.$store.state.audioplayertime + " <= " + element.endTime + " or " + element.endTime + " = end")
           if (          startingcharacter >= element.startCharacter &&
           startingcharacter < element.endCharacter) {
       //         console.log(this.$store.state.audioplayertime + " >= " + element.startTime)

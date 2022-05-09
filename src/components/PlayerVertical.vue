@@ -19,6 +19,7 @@
         type="string"
         v-model="currentTime"
         pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
+        @click="pausePlayer()"
         @keyup.enter="seekfunction()"
       />
     </div>
@@ -78,6 +79,15 @@ export default {
       audioURL: "",
     };
   },
+
+  watch: {
+
+      "$store.state.incomingCurrentTime": function () {
+        this.seekTimestampfunction(this.$store.state.incomingCurrentTime)},
+
+
+  },
+
   computed: {
 
       currentTime: {
@@ -214,7 +224,7 @@ export default {
 
       temporarythis.$store.commit(
         "updateAudioTime",
-        temporarythis.currentTimeSeconds * 100
+        temporarythis.currentTimeSeconds*100
       );
       // if (
       //   (temporarythis.currentTimeSeconds * 100 <
@@ -269,7 +279,7 @@ export default {
       );
       temporarythis.$store.commit(
         "updateAudioTime",
-        temporarythis.currentTimeSeconds * 100
+        temporarythis.currentTimeSeconds*100
       );
       // temporarythis.identifySeekRelevantTimestamps();
     });
@@ -364,6 +374,8 @@ export default {
       // console.log(this.currentTimeSeconds); // is this always up-to-date?
       // console.log(this.endTimeSeconds);
       if (!this.playing) {
+        
+      this.currentTimeSeconds = this.currentTimeNumber
         if (
           this.currentTimeSeconds <= this.endTimeSeconds &&
           this.currentTimeSeconds >= this.startTimeSeconds
@@ -388,13 +400,28 @@ export default {
       return date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
     },
 
+    pausePlayer() {
+        this.wavesurfer.pause();
+        this.playing = false
+    },
+
+    seekTimestampfunction(timestamp) {
+      console.log(timestamp + " is in milliseconds")
+      this.wavesurfer.seekTo((timestamp) / this.totalDuration);
+      this.currentTimeSeconds = timestamp
+      console.log(this.currentTimeSeconds + " is in seconds")
+      this.currentTime = this.secondsToTime(this.currentTimeSeconds);
+      console.log (this.currentTime + " is in HH:MM:SS")
+      // this.identifySeekRelevantTimestamps();
+    },
+
     seekfunction() {
       this.wavesurfer.seekTo(this.currentSeekNumber);
       this.currentTimeSeconds = this.currentTimeNumber
       this.currentTime = this.secondsToTime(this.currentTimeSeconds);
       this.$store.commit(
         "updateAudioTime",
-        this.currentTimeSeconds * 100
+        this.currentTimeSeconds*100
       );
       // this.identifySeekRelevantTimestamps();
     },
