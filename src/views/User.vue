@@ -1,9 +1,10 @@
 <template>
   <div class="h-full">
+    <SidebarAlt />
     <Navbar text="dito" />
-    <!-- <PlayerHorizontal /> -->
+    <PlayerHorizontal audio_ID="Ha2gIvV_0CA.mp3"/>
     <div class="flex items-center">
-    <PlayerVertical audio_ID="YTYcT2awNpo.mp3"/>
+    <PlayerVertical audio_ID="Ha2gIvV_0CA.mp3"/>
     <CardList :title="usernameStorybooks" />
     </div>
   </div>
@@ -14,6 +15,7 @@ import Navbar from "@/components/Navbar.vue";
 import CardList from "@/components/CardList.vue";
 import PlayerHorizontal from "@/components/PlayerHorizontal.vue";
 import PlayerVertical from "@/components/PlayerVertical.vue";
+import SidebarAlt from "@/components/SidebarAlt.vue";
 
 export default {
   name: "User",
@@ -21,7 +23,8 @@ export default {
     Navbar,
     CardList,
     PlayerHorizontal,
-    PlayerVertical
+    PlayerVertical,
+    SidebarAlt
   },
   computed: {
     usernameStorybooks() {

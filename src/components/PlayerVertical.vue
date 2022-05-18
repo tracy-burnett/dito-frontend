@@ -1,5 +1,9 @@
 <template>
-  <div class="container rounded-full shadow-lg">
+
+  <!-- audio player body -->
+  <div class="container rounded-xl shadow-xl">
+    
+    <!-- top-most time entry box (for start of view window) -->
     <div id="start" ref="start" class="start">
       <input
         type="string"
@@ -12,12 +16,18 @@
         "
       />
     </div>
+
+
+    <!-- play button -->
     <button id="play" @click="play" class="play">
       <div class="h-10 w-10">
         <img v-if="playing" src="@/assets/pauseAudio.svg" />
         <img v-else src="@/assets/playAudio.svg" />
       </div>
     </button>
+
+
+    <!-- middle time entry box (for current time) -->
     <div id="current" ref="current" class="current">
       <input
         type="string"
@@ -32,28 +42,38 @@
       />
     </div>
 
-    <div
-      id="waveform"
-      ref="waveform"
-      class="waveform"
-      @wheel.prevent="getzoomnumber($event)"
-    >    <span v-if="loadingpercent < 100">audio {{       loadingpercent  }}% loaded</span></div>
-    <div id="end" ref="end" class="end">
-      <input
-        type="string"
-        v-model="endTime"
-        pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
-        @keyup.enter="
-      
-              updateRegion();
-       
-        "
-      />
+
+    <!-- waveform display -->
+    <div id="waveform" ref="waveform" class="flex waveform" @wheel.prevent="getzoomnumber($event)">
+
+        <!-- audio loading display -->
+        <span class="flex loading flex-col justify-center" v-if="loadingpercent<100" >
+                audio {{ loadingpercent }}% loaded
+        </span>
     </div>
+
+
+    <!-- bottom-most time entry box (for end of view window) -->
     <div id="end" ref="end" class="end">
-      <button @click="clearallregions()">clear highlight</button>
+        <input
+          type="string"
+          v-model="endTime"
+          pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
+          @keyup.enter="
+
+                updateRegion();
+
+         "
+        />
+    </div>
+
+
+    <!-- clear highlight button -->
+    <div id="end" ref="end" class="end">
+      <button class="clear rounded-full" @click="clearallregions()">Clear Highlight</button>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -141,14 +161,17 @@ export default {
       this.wavesurfer = WaveSurfer.create({
         container: this.$refs.waveform,
         backend: "WebAudio",
-        waveColor: "grey",
-        progressColor: "#5D5FEF",
+        waveColor: "#94a3b8",
+        cursorColor: "red",
+        progressColor: "#475569",
         barWidth: 2,
       //  barHeight: 1,
         hideScrollbar: true,
         barRadius: 3,
         vertical: true,
-        plugins: [WaveSurfer.regions.create({ maxRegions: 1 })],
+        plugins: [WaveSurfer.regions.create({
+                    maxRegions: 1
+                })],
       });
 
       this.playing = false;
@@ -327,33 +350,93 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  display: inline;
-  max-width: 128px;
+.clear {
+  font-size: 70%;
+  color: white;
   text-align: center;
+  position: relative;
+  top:5px;
+  height:22px;
+  width:94%;
+  /*background: radial-gradient(#798597, #616977);*/
+  background: #475569;
+}
+.clear:hover {
+  border-width: 2px;
+  border-color: white;
+}
+.clear:active {
+  /*background: radial-gradient(#636c7a, #94a3b8);*/
+  /*transform: translateX(1px) translateY(1px);*/
+  background: white;
+}
+.container {
+  height: 85vh;
+  min-height: 600px;
+  width: 8vw;
+  min-width: 100px;
+  position: relative;
+  left: 10px;
+  top: 5px;
+  display: inline;
+  /*max-width: 7%;*/
+  text-align: center;
+  background: #334155;
+  /*background: linear-gradient(90deg, #164e63, 30%, #1e293b, 70%, #164e63);*/
 }
 .waveform {
   /* flex: 1; */
   display: flex;
   height: 410px;
+  background: #dbeafe;
+  
+  /* background: linear-gradient(90deg, #155E75, #64748B, #155E75) */
   /* margin-left: 10px; */
   /* margin-right: 10px; */
 }
+.loading {
+  display: flex;
+  margin-left: 30%;
+}
 .play {
   /* width: "50px"; */
-  padding-left: 10px;
-  padding-top: 10px;
-  padding-bottom: 2px;
+  position: relative;
+  top: -.5px;
+  padding-left: -10px;
+  padding-top: 8px;
 }
-
+.play:active {
+  transform: translateX(1px) translateY(1px);
+}
 .start {
   padding: 5px;
+  position: relative;
+  top: 3px;
+}
+.current {
+  position: relative;
+  top: -5px;
 }
 .end {
+  top: 5px;
   padding: 5px;
 }
 
 input {
   box-sizing: border-box;
+  /*border: slategray solid 1px;*/
+  width: 65px;
+  /*width: 65px;
+  height: 18px;*/
+  position: relative;
+  left: 100% - 65px;
+  /*background-color: #e2e8f0;*/
+  background: #334155;
+  color: white;
+  /* border-radius: 15%; */
+  border-radius: 3px;
+  text-align: center;
 }
+
+
 </style>
