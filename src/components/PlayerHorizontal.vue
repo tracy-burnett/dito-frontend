@@ -1,47 +1,43 @@
 <template>
-<div class="outerbox rounded-xl shadow-xl items-center">
+<div class="outerbox rounded-xl shadow-xl">
 
-
-  <div class="upperbox rounded-xl">
-      <input class="start rounded-md" type="string" v-model="startTime" pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
-            @keyup.enter="updateRegion();"
-      />
-      <div class="topwave" id="topwave" ref="topwave" @wheel.prevent="getzoomnumber($event)"></div>
-      <input class="start rounded-md" type="string" v-model="startTime" pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
-            @keyup.enter="updateRegion();"
-      />
-  </div>
-  
-  
-  <div class="lowerbox rounded-xl">
-      
-      <div class="head">
-        <div class="button">
-            <button id="play" @click="play" class="play">
-              <div class="h-10 w-10">
-                <img v-if="playing" src="@/assets/pauseAudio.svg" />
-                <img v-else src="@/assets/playAudio.svg" />
-              </div>
-            </button>
-        </div>
-        <!-- <div id="current" ref="current" class="current"> -->
-          <input class="mybox rounded-md" type="string" v-model="startTime" pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
-              @keyup.enter="updateRegion();"
+      <div class="upperbox rounded-md">
+          <input class="regionBound rounded-sm" type="string" v-model="startTime" pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
+                @keyup.enter="updateRegion();"
           />
-        <!-- </div> -->
-      </div>
-     
-      <div id="waveform" ref="waveform" class="waveform" @wheel.prevent="getzoomnumber($event)">
-            <!-- audio loading display -->
-            <span class="loading" v-if="loadingpercent<100" >
-                    audio {{ loadingpercent }}% loaded
-            </span>
+          <div class="topwave" id="topwave" ref="topwave" @wheel.prevent="getzoomnumber($event)"></div>
+          <input class="regionBound rounded-sm" type="string" v-model="endTime" pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
+                @keyup.enter="updateRegion();"
+          />
       </div>
       
-      <div id="length" ref="length" class="song-length">00:00:00</div>
- 
-  </div>
-
+      
+      <div class="lowerbox rounded-xl">
+          
+          <div class="head">
+                <div class="button">
+                    <button class="play" id="play" @click="play">
+                      <div class="h-10 w-10">
+                        <img v-if="playing" src="@/assets/pauseAudio.svg" />
+                        <img v-else src="@/assets/playAudio.svg" />
+                      </div>
+                    </button>
+                </div>
+                <input class="current rounded-md" type="string" v-model="currentTime" pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
+                    @keyup.enter="updateRegion();"
+                />
+          </div>
+        
+          <div id="waveform" ref="waveform" class="waveform" @wheel.prevent="getzoomnumber($event)">
+                <!-- audio loading display -->
+                <span class="loading" v-if="loadingpercent<100" >
+                        audio {{ loadingpercent }}% loaded
+                </span>
+          </div>
+          
+          <div id="length" ref="length" class="song-length">{{totalDuration}}</div>
+    
+      </div>
 
 </div>
 
@@ -181,7 +177,7 @@ export default {
               this.playing = false;
               const wavesurfer = this.wavesurfer;
               const temporarythis = this;
-              wave2.on("ready", function () {
+              this.wavesurfer.on("ready", function () {
                       temporarythis.totalDuration = wavesurfer.getDuration();
                       temporarythis.endTime = temporarythis.secondsToTime(temporarythis.totalDuration);
                       wave2.addRegion({
@@ -459,98 +455,83 @@ export default {
   background: purple;
 }
 
+        .upperbox {
+          display: flex;
+          justify-items: center;
+          align-items: center;
+          background: #a1e0f4;
+          margin-bottom: 3px;
+        }
+        .upperbox:hover {
+          background: red;
+        }
 
-.upperbox {
-  display: flex;
-  background: #a1e0f4;
-  padding-left: 2px;
-  margin-bottom: 3px;
-}
-.upperbox:hover {
-  background: red;
-}
-.start {
-  box-sizing: border-box;
-  border-color: gray;
-  position: relative;
-  top: 4.5px;
-  width: 60px;
-  height: 16px;
-}
-.topwave {
-  width: 1394px;
-  height: 25px;
-  background: #e0f2fe;
-}
+                .regionBound {
+                  margin-left: 5px;
+                  margin-right: 5px;
+                  box-sizing: border-box;
+                  border-color: gray;
+                  background: #a1e0f4;
+                  width: 60px;
+                  height: 16px;
+                }
+                .topwave {
+                  width: 1300px;
+                  height: 25px;
+                  background: #e0f2fe;
+                }
 
-
-.button {
-  padding-left: 15px;
-
-}
-
-
-.lowerbox {
-  display: flex;
-  background: #334155;
-  height: 70px;
-    align-items: center;
-
-}
-.lowerbox:hover {
-  background: black;
-}
-
-
-.waveform {
-  /* flex: 1; */
-  width: 100%;
-  height: 100%;
-  background: #dbeafe;
-  /* margin-left: 10px; */
-  /* margin-right: 10px; */
-}
-.waveform:hover {
-  background: green;
-}
-.play {
-  /* width: "50px"; */
-  position: relative;
-  top: 2px;
-  border-radius: 40%;
-  padding-top: 5px;
-  /*display: flex;*/
-}
-.play:hover {
-  background: purple;
-}
-.current {
-  position: relative;
-  left: 7px;
-  top: -4px;
-  color: white;
-  width: 60px;
-  height: 16px;
-}
-.current:hover {
-  background: blue;
-}
-.song-length {
-  padding: 10px;
-  color: white;
-}
-.head {
-  max-width: 100%;
-  width: 80px;
-}
-.mybox {
-  position: relative;
-  left: 7px;
-  top: -7px;
-  width: 85%;
-  height: 16px;
-  background: #334155;
-  color: white;
-}
+        .lowerbox {
+          display: flex;
+          background: #334155;
+          height: 70px;
+          align-items: center;
+        }
+        .lowerbox:hover {
+          background: black;
+        }
+                .head {
+                  display: flex;
+                  flex-direction: column;
+                  max-width: 100%;
+                  width: 80px;
+                  align-items: center;
+                }
+                        
+                        .play {
+                          /* width: "50px"; */
+                          position: relative;
+                          top: 2px;
+                          border-radius: 40%;
+                          padding-top: 5px;
+                          /*display: flex;*/
+                        }
+                        .play:hover {
+                          background: purple;
+                        }
+                        .current {
+                          position: relative;
+                          top: -7px;
+                          width: 85%;
+                          height: 16px;
+                          background: #334155;
+                          color: white;
+                        }
+                .waveform {
+                  /* flex: 1; */
+                  width: 100%;
+                  height: 100%;
+                  background: #dbeafe;
+                  /* margin-left: 10px; */
+                  /* margin-right: 10px; */
+                }
+                .waveform:hover {
+                  background: green;
+                }
+                .song-length {
+                  padding: 10px;
+                  color: white;
+                  width: 50px;
+                }
 
 </style>
