@@ -181,22 +181,22 @@ export default {
               this.playing = false;
               const wavesurfer = this.wavesurfer;
               const temporarythis = this;
-              this.wavesurfer.on("ready", function () {
+              wave2.on("ready", function () {
                       temporarythis.totalDuration = wavesurfer.getDuration();
                       temporarythis.endTime = temporarythis.secondsToTime(temporarythis.totalDuration);
-                      wavesurfer.addRegion({
+                      wave2.addRegion({
                         start: 0,
                         end: temporarythis.totalDuration,
                         id: "region",
                         loop: true,
                       });
-                      wavesurfer.enableDragSelection({
+                      wave2.enableDragSelection({
                         id: "region",
                         loop: true,
                       });
               });
 
-              this.wavesurfer.on("region-update-end", function () {
+              wave2.on("region-update-end", function () {
                       temporarythis.AfterDragStartTime = Object.values(
                                     temporarythis.wavesurfer.regions.list.region)[7];
                       temporarythis.AfterDragEndTime = Object.values(
@@ -329,8 +329,8 @@ export default {
             },
 
             updateRegion() {
-                    this.wavesurfer.clearRegions();
-                    this.wavesurfer.addRegion({
+                    wave2.clearRegions();
+                    wave2.addRegion({
                       start: this.startTimeNumber,
                       end: this.endTimeNumber,
                       id: "region",
