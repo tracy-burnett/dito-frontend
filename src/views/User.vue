@@ -1,12 +1,12 @@
 <template>
   <div class="h-full">
-    <SidebarAlt />
-    <Navbar text="dito" />
-    <PlayerHorizontal audio_ID="Ha2gIvV_0CA.mp3"/>
-    <div class="flex items-center">
-    <PlayerVertical audio_ID="Ha2gIvV_0CA.mp3"/>
-    <CardList :title="usernameStorybooks" />
-    </div>
+        <SidebarAlt />
+        <Navbar text="dito" />
+        <PlayerHorizontal audio_ID="Ha2gIvV_0CA.mp3"/>
+        <div class="flex items-center">
+              <PlayerVertical audio_ID="Ha2gIvV_0CA.mp3"/>
+              <CardList :title="usernameStorybooks" />
+        </div>
   </div>
 </template>
 

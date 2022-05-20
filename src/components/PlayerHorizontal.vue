@@ -23,7 +23,7 @@
                       </div>
                     </button>
                 </div>
-                <input class="current rounded-md" type="string" v-model="currentTime" pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
+                <input class="current rounded-sm" type="string" v-model="currentTime" pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
                     @keyup.enter="updateRegion();"
                 />
           </div>
@@ -167,7 +167,7 @@ export default {
                       // backend: "WebAudio",
                       waveColor: "#94a3b8",
                       cursorColor: "red",
-                      progressColor: "#475569",
+                      progressColor: "#94a3b8",
                       barWidth: 2,
                       barHeight: 1,
                       height: 25,
@@ -176,7 +176,8 @@ export default {
                       barRadius: 3,
                       vertical: false,
                       plugins: [WaveSurfer.regions.create({
-                                  maxRegions: 1
+                                  maxRegions: 1,
+                                  color: "rgb(219, 234, 254)",
                               })],
               });
 
@@ -220,8 +221,10 @@ export default {
               });
 
               this.wavesurfer.on("audioprocess", function () {
-                      temporarythis.currentTime = temporarythis.secondsToTime(
-                                    temporarythis.wavesurfer.getCurrentTime());
+                      var curr = temporarythis.wavesurfer.getCurrentTime();
+                      var total = temporarythis.wavesurfer.getDuration();
+                      temporarythis.currentTime = temporarythis.secondsToTime(curr);
+                      temporarythis.wave2.seekTo(curr/total);
               });
 
               this.wavesurfer.on("finish", function () {
@@ -405,24 +408,26 @@ export default {
 
         .upperbox {
           display: flex;
+          flex-direction: row;
           justify-items: center;
           align-items: center;
-          background: #a1e0f4;
+          background: #e6f1f7;
           margin-bottom: 3px;
         }
                 .regionBound {
-                  margin-left: 5px;
-                  margin-right: 5px;
+                  padding-left: 2px;
+                  margin-left: 3px;
+                  margin-right: 3px;
                   box-sizing: border-box;
-                  border-color: gray;
-                  background: #a1e0f4;
-                  width: 60px;
-                  height: 16px;
+                  border: 1px solid rgb(142, 169, 188);
+                  background: #e6f1f7;
+                  width: 64px;
+                  height: 18px;
                 }
                 .topwave {
-                  width: 1300px;
+                  width: 1400px;
                   height: 25px;
-                  background: #e0f2fe;
+                  background: #e6f1f7;
                 }
 
         .lowerbox {
@@ -434,7 +439,7 @@ export default {
                 .head {
                   display: flex;
                   flex-direction: column;
-                  max-width: 100%;
+                  min-width: 80px;
                   width: 80px;
                   align-items: center;
                 }
@@ -442,16 +447,17 @@ export default {
                         .play {
                           /* width: "50px"; */
                           position: relative;
-                          top: 2px;
+                          top: 0px;
                           border-radius: 40%;
                           padding-top: 5px;
                           /*display: flex;*/
                         }
                         .current {
                           position: relative;
-                          top: -7px;
-                          width: 85%;
-                          height: 16px;
+                          bottom: 4px;
+                          padding-left: 2px;
+                          width: 64px;
+                          height: 18px;
                           background: #334155;
                           color: white;
                         }
@@ -469,7 +475,7 @@ export default {
                   align-items: center;
                   justify-content: center;
                   color: white;
-                  width: 70px;
+                  width: 80px;
                   height: 100%;
                 }
                 .zoomdata {
