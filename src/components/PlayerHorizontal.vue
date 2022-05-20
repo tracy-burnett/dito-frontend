@@ -225,6 +225,10 @@ export default {
                       var total = temporarythis.wavesurfer.getDuration();
                       temporarythis.currentTime = temporarythis.secondsToTime(curr);
                       temporarythis.wave2.seekTo(curr/total);
+
+                      if ((curr > temporarythis.endSeconds) || (curr < temporarythis.startSeconds)) {
+                              temporarythis.wavesurfer.seekTo(temporarythis.startSeconds/total);
+                      }
               });
 
               this.wavesurfer.on("finish", function () {
@@ -234,66 +238,46 @@ export default {
               
 
               this.wavesurfer.on("seek", function (position) {
-                      var total = temporarythis.wavesurfer.getDuration();
-                      var curr = position * total;
+                      var wave2curr = temporarythis.wave2.getCurrentTime();
+                      var curr = position * temporarythis.wavesurfer.getDuration();
+                      temporarythis.currentTime = temporarythis.secondsToTime(curr);
 
                       if (temporarythis.playing) {
                               if ((curr <= temporarythis.endTimeNumber) && (curr >= temporarythis.startTimeNumber)) {
-                                      console.log(temporarythis.startTimeNumber);
-                                      console.log(curr);
-                                      console.log(temporarythis.endTimeNumber);
                                       console.log("valid time");
                               } else {
-                                      console.log(temporarythis.startTimeNumber);
-                                      console.log(curr);
-                                      console.log(temporarythis.endTimeNumber);
                                       console.log("invalid time");
                                       temporarythis.wavesurfer.pause();
                                       temporarythis.playing = !temporarythis.playing;
                               }
                       }
  
+                      if ((wave2curr > (curr + .5)) || (wave2curr < (curr - .5))) {
+                              temporarythis.wave2.seekTo(position);
+                      }
+
+              });
+
+
+              wave2.on("seek", function (position) {
+                      var surfcurr = temporarythis.wavesurfer.getCurrentTime();
+                      var curr = position * temporarythis.wave2.getDuration();
                       temporarythis.currentTime = temporarythis.secondsToTime(curr);
-                      temporarythis.wave2.seekTo(position);
+ 
+                      if ((surfcurr > (curr + .5)) || (surfcurr < (curr - .5))) {
+                              temporarythis.wavesurfer.seekTo(position);
+                      }
                       
               });
 
-              // seeking works, but gives static
-              // wave2.on("seek", function (position) {
-              //         var total = temporarythis.wavesurfer.getDuration();
-              //         var curr = position * total;
-
-              //         if (temporarythis.wavesurfer.playing) {
-              //                 if ((curr <= temporarythis.endTimeNumber) && (curr >= temporarythis.startTimeNumber)) {
-              //                         console.log(temporarythis.startTimeNumber);
-              //                         console.log(curr);
-              //                         console.log(temporarythis.endTimeNumber);
-              //                         console.log("valid time");
-              //                 } else {
-              //                         console.log(temporarythis.startTimeNumber);
-              //                         console.log(curr);
-              //                         console.log(temporarythis.endTimeNumber);
-              //                         console.log("invalid time");
-              //                         temporarythis.wavesurfer.pause();
-              //                         temporarythis.playing = !temporarythis.playing;
-              //                 }
-              //         }
- 
-              //         temporarythis.currentTime = temporarythis.secondsToTime(curr);
-              //         temporarythis.wavesurfer.seekTo(position);
-                      
-              // });
-
 
               this.wavesurfer.on("zoom", function (minPxPerSec) {
-                      // if (minPxPerSec < 1) {
-                      //             minPxPerSec = 1;
-                      // }
+                      
                       var secs = 1300 / minPxPerSec / 2;
                       //console.log("Zoom radius: ", secs, " seconds");
           
                       temporarythis.startSeconds = temporarythis.wavesurfer.getCurrentTime() - secs;                      
-                      if (temporarythis.startSeconds < 0) {
+                      if (temporarythis.startSeconds <= 0) {
                                   temporarythis.startSeconds = 0;
                       }
                       temporarythis.startTime = temporarythis.secondsToTime(temporarythis.startSeconds);
