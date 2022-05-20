@@ -234,37 +234,56 @@ export default {
               
 
               this.wavesurfer.on("seek", function (position) {
+                      var total = temporarythis.wavesurfer.getDuration();
+                      var curr = position * total;
+
                       if (temporarythis.playing) {
-                              if (
-                                      position * temporarythis.wavesurfer.getDuration() <=
-                                        temporarythis.endTimeNumber &&
-                                      position * temporarythis.wavesurfer.getDuration() >=
-                                        temporarythis.startTimeNumber
-                                    ) {
+                              if ((curr <= temporarythis.endTimeNumber) && (curr >= temporarythis.startTimeNumber)) {
                                       console.log(temporarythis.startTimeNumber);
-                                      console.log(position * temporarythis.wavesurfer.getDuration());
+                                      console.log(curr);
                                       console.log(temporarythis.endTimeNumber);
                                       console.log("valid time");
-                                      temporarythis.currentTime = temporarythis.secondsToTime(
-                                        position * temporarythis.wavesurfer.getDuration()
-                                      );
                               } else {
                                       console.log(temporarythis.startTimeNumber);
-                                      console.log(position * temporarythis.wavesurfer.getDuration());
+                                      console.log(curr);
                                       console.log(temporarythis.endTimeNumber);
                                       console.log("invalid time");
                                       temporarythis.wavesurfer.pause();
                                       temporarythis.playing = !temporarythis.playing;
-                                      temporarythis.currentTime = temporarythis.secondsToTime(
-                                        position * temporarythis.wavesurfer.getDuration()
-                                      );
                               }
                       }
-
-                      temporarythis.currentTime = temporarythis.secondsToTime(
-                              position * temporarythis.wavesurfer.getDuration()
-                      );
+ 
+                      temporarythis.currentTime = temporarythis.secondsToTime(curr);
+                      temporarythis.wave2.seekTo(position);
+                      
               });
+
+              // seeking works, but gives static
+              // wave2.on("seek", function (position) {
+              //         var total = temporarythis.wavesurfer.getDuration();
+              //         var curr = position * total;
+
+              //         if (temporarythis.wavesurfer.playing) {
+              //                 if ((curr <= temporarythis.endTimeNumber) && (curr >= temporarythis.startTimeNumber)) {
+              //                         console.log(temporarythis.startTimeNumber);
+              //                         console.log(curr);
+              //                         console.log(temporarythis.endTimeNumber);
+              //                         console.log("valid time");
+              //                 } else {
+              //                         console.log(temporarythis.startTimeNumber);
+              //                         console.log(curr);
+              //                         console.log(temporarythis.endTimeNumber);
+              //                         console.log("invalid time");
+              //                         temporarythis.wavesurfer.pause();
+              //                         temporarythis.playing = !temporarythis.playing;
+              //                 }
+              //         }
+ 
+              //         temporarythis.currentTime = temporarythis.secondsToTime(curr);
+              //         temporarythis.wavesurfer.seekTo(position);
+                      
+              // });
+
 
               this.wavesurfer.on("zoom", function (minPxPerSec) {
                       // if (minPxPerSec < 1) {
