@@ -28,14 +28,17 @@
                 />
           </div>
         
-          <div id="waveform" ref="waveform" class="waveform" @wheel.prevent="getzoomnumber($event)">
+          <div class="bottomwave" id="waveform" ref="waveform" @wheel.prevent="getzoomnumber($event)">
                 <!-- audio loading display -->
                 <span class="loading" v-if="loadingpercent<100" >
                         audio {{ loadingpercent }}% loaded
                 </span>
           </div>
           
-          <div id="length" ref="length" class="song-length">{{totalDuration}}</div>
+          <div class="zoom">
+                <div class="zoomdata">Zoom:</div>
+                <div class="zoomdata">{{Math.round(zoomnumber)}}</div>
+          </div>
     
       </div>
 
@@ -64,10 +67,10 @@ export default {
                 wavesurferLoaded: false,
                 zoomnumber: 1,
                 startTime: "00:00:00",
+                startSeconds: 0,
                 endTime: "00:00:00",
+                endSeconds: 0,
                 currentTime: "00:00:00",
-                AfterDragStartTime: 0,
-                AfterDragEndTime: 0,
                 totalDuration: 0,
                 playing: false,
                 audioURL: "",
@@ -75,6 +78,11 @@ export default {
               };
       },
       computed: {
+              timeToSeconds(time) {
+                      let array = time.split(":");
+                      return time[0] * 3600 + time[1] * 60 + time[2];
+              },
+
               startTimeNumber() {
                 let startTimeArray = this.startTime.split(":");
                 return (
@@ -127,7 +135,7 @@ export default {
             .then((data) => {
                     this.audioURL = data["url"];
                     this.wavesurfer.load(this.audioURL);
-                    wave2.load(this.audioURL);
+                    this.wave2.load(this.audioURL);
             })
             .catch((error) => {
                     console.error("Error:", error);
@@ -154,7 +162,7 @@ export default {
                               })],
               });
 
-              var wave2 = WaveSurfer.create({
+              this.wave2 = WaveSurfer.create({
                       container: "#topwave",
                       // backend: "WebAudio",
                       waveColor: "#94a3b8",
@@ -176,33 +184,35 @@ export default {
 
               this.playing = false;
               const wavesurfer = this.wavesurfer;
+              const wave2 = this.wave2;
               const temporarythis = this;
               this.wavesurfer.on("ready", function () {
                       temporarythis.totalDuration = wavesurfer.getDuration();
                       temporarythis.endTime = temporarythis.secondsToTime(temporarythis.totalDuration);
-                      wave2.addRegion({
+                      temporarythis.wave2.addRegion({
                         start: 0,
                         end: temporarythis.totalDuration,
                         id: "region",
                         loop: true,
                       });
-                      wave2.enableDragSelection({
+                      temporarythis.wave2.enableDragSelection({
                         id: "region",
                         loop: true,
                       });
               });
 
-              wave2.on("region-update-end", function () {
-                      temporarythis.AfterDragStartTime = Object.values(
-                                    temporarythis.wavesurfer.regions.list.region)[7];
-                      temporarythis.AfterDragEndTime = Object.values(
-                                    temporarythis.wavesurfer.regions.list.region)[8];
+              this.wave2.on("region-update-end", function () {
+                      let regies = Object.keys(temporarythis.wave2.regions.list);
+                      temporarythis.startSeconds = temporarythis.wave2.regions.list[regies[0]].start;
+                      temporarythis.endSeconds = temporarythis.wave2.regions.list[regies[0]].end;
                       temporarythis.startTime = temporarythis.secondsToTime(
-                                    temporarythis.AfterDragStartTime);
+                                    temporarythis.startSeconds);
                       temporarythis.endTime = temporarythis.secondsToTime(
-                                    temporarythis.AfterDragEndTime);
+                                    temporarythis.endSeconds);
                       console.log(temporarythis.startTime);
                       console.log(temporarythis.endTime);
+
+                      temporarythis.updateRegion();
               });
 
               this.wavesurfer.on("loading", function (progress) {
@@ -253,6 +263,37 @@ export default {
                       );
               });
 
+              this.wavesurfer.on("zoom", function (minPxPerSec) {
+                      // if (minPxPerSec < 1) {
+                      //             minPxPerSec = 1;
+                      // }
+                      var secs = 1300 / minPxPerSec / 2;
+                      //console.log("Zoom radius: ", secs, " seconds");
+          
+                      temporarythis.startSeconds = temporarythis.wavesurfer.getCurrentTime() - secs;                      
+                      if (temporarythis.startSeconds < 0) {
+                                  temporarythis.startSeconds = 0;
+                      }
+                      temporarythis.startTime = temporarythis.secondsToTime(temporarythis.startSeconds);
+
+                      //console.log("startTime: ", temporarythis.startTime);
+                      //console.log("startSeconds: ", temporarythis.startSeconds);
+                      
+                      temporarythis.endSeconds = temporarythis.wavesurfer.getCurrentTime() + secs;
+                      if (temporarythis.endSeconds >= temporarythis.wavesurfer.getDuration()) {
+                                  temporarythis.endSeconds = temporarythis.wavesurfer.getDuration();
+                      }
+                      temporarythis.endTime = temporarythis.secondsToTime(temporarythis.endSeconds);
+                  
+                      temporarythis.wave2.clearRegions();
+                      temporarythis.wave2.addRegion({
+                        start: temporarythis.startSeconds,
+                        end: temporarythis.endSeconds,
+                        id: "region",
+                        loop: true,
+                      });
+              });
+
               this.wavesurferLoaded = true;
       },
 
@@ -262,23 +303,35 @@ export default {
             },
 
             getzoomnumber(event) {
-                    console.log(event.deltaY);
-                    let isPinch = Math.abs(event.deltaY) < 50;
-                    console.log("start pinch");
-                    if (isPinch) {
-                      // This is a pinch on a trackpad
-                      let factor = 1 - 0.01 * event.deltaY;
-                      this.zoomnumber *= factor;
-                      console.log(this.zoomnumber);
-                    } else {
-                      // This is a mouse wheel
-                      let strength = 1.4;
-                      let factor = event.deltaY < 0 ? strength : 1.0 / strength;
-                      this.zoomnumber *= factor;
-                      console.log(this.zoomnumber);
-                    }
-                    this.zoom();
+              if ((event.deltaY <= 0 && this.zoomnumber >= 150) || (event.deltaY >= 0 && this.zoomnumber <= 1)) {
+                      return;
+              } else {
+                      // console.log("deltaY: ", event.deltaY);
+                      let isPinch = Math.abs(event.deltaY) < 50;
+                      console.log("start pinch");
+                      if (isPinch) {
+                        // This is a pinch on a trackpad
+                        let factor = 1 - 0.01 * event.deltaY;
+                        this.zoomnumber *= factor;
+                        // console.log("factor: ", factor);
+                      } else {
+                        // This is a mouse wheel
+                        let strength = 1.4;
+                        let factor = event.deltaY < 0 ? strength : 1.0 / strength;
+                        this.zoomnumber *= factor;
+                        // console.log("factor: ", factor);
+                      }
 
+                      if (this.zoomnumber <= 1) {
+                                this.zoomnumber = 1;
+                      }
+                      if (this.zoomnumber >= 150) {
+                                this.zoomnumber = 150;
+                      }
+                      // console.log("zoomnumber: ", this.zoomnumber);
+
+                      this.zoom();
+              }
                     //   // This is an empirically determined heuristic.
                     //   // Unfortunately I don't know of any way to do this better.
                     //   // Typical deltaY values from a trackpad pinch are under 1.0
@@ -286,23 +339,24 @@ export default {
             },
 
             play() {
-                    console.log(this.startTimeNumber);
-                    console.log(this.currentTimeNumber);
-                    console.log(this.endTimeNumber);
-                    if (!this.playing) {
+                    // console.log(this.startTimeNumber);
+                    // console.log(this.currentTimeNumber);
+                    // console.log(this.endTimeNumber);
+                    if (!this.wavesurfer.isPlaying()) {
                             if (
-                                    this.currentTimeNumber <= this.endTimeNumber &&
-                                    this.currentTimeNumber >= this.startTimeNumber
+                                    this.currentTime <= this.endTime &&
+                                    this.currentTime >= this.startTime
                                   ) {
                                     console.log("playing inside region");
-                                    this.wavesurfer.play(this.currentTimeNumber);
+                                    this.wavesurfer.play(this.wavesurfer.getCurrentTime());
                                     this.playing = !this.playing;
                             } else {
                                     console.log("playing from start of region");
-                                    this.wavesurfer.play(this.startTimeNumber);
+                                    //next line should play from startTime!!!
+                                    this.wavesurfer.play(this.startSeconds);
                                     this.playing = !this.playing;
                             }
-                    } else if (this.playing) {
+                    } else if (this.wavesurfer.isPlaying()) {
                             this.wavesurfer.pause();
                             this.playing = !this.playing;
                     }
@@ -320,15 +374,18 @@ export default {
 
             clearallregions() {
                     this.wavesurfer.clearRegions();
-                    this.startTime="00:00:00"
+                    this.startTime="00:00:00";
+                    this.startSeconds = 0;
                     this.endTime=this.secondsToTime(this.totalDuration);
             },
 
             updateRegion() {
-                    wave2.clearRegions();
-                    wave2.addRegion({
-                      start: this.startTimeNumber,
-                      end: this.endTimeNumber,
+                    this.startSeconds = this.startTimeNumber;
+                    this.endSeconds = this.endTimeNumber;
+                    this.wave2.clearRegions();
+                    this.wave2.addRegion({
+                      start: this.startSeconds,
+                      end: this.endSeconds,
                       id: "region",
                       loop: true,
                     });
@@ -336,123 +393,14 @@ export default {
       },
 };
 
-
-// original code
-// function secondsToTime(seconds) {
-//   return new Date(seconds * 1000).toISOString().substr(11, 8);
-// }
-
-// export default {
-//   name: "PlayerHorizontal",
-//   props: {
-//     audio_ID: {
-//       default: "hcGrwbxNrO8.mp3",
-//     },
-//     //     vertical: {
-//     //   default: false,
-//     // },
-//   },
-//   components: {},
-//   data: () => {
-//     return {
-//       playing: false,
-//       audioURL: "",
-//       //   file: null,
-//     };
-//   },
-//   created() {},
-//   mounted() {
-//     //get secure url from server
-//     console.log(this.audio_ID);
-//     const apiUrl = "http://localhost:8000/api/s3/presignedgeturl";
-//     fetch(apiUrl, {
-//       method: "POST",
-
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-
-//       body: JSON.stringify({
-//         audio_ID: this.audio_ID,
-
-//         // accessToken: this.$store.state.user.getIdToken()
-//       }),
-//     })
-//       .then((response) => {
-//         return response.json();
-//       })
-//       .then((data) => {
-//         this.audioURL = data["url"];
-//         console.log(this.audioURL);
-//         this.wavesurfer.load(this.audioURL);
-//       })
-//       .catch((error) => {
-//         console.error("Error:", error);
-//       });
-
-//     this.$nextTick(() => {
-//       // https://wavesurfer-js.org
-//       this.wavesurfer = WaveSurfer.create({
-//         container: this.$refs.waveform,
-//         backend: "MediaElement",
-//         waveColor: "grey",
-//         progressColor: "#5D5FEF",
-//         barWidth: 2,
-//         barRadius: 3,
-//         height: 50,
-//         barHeight: 3,
-//         hideScrollbar: true,
-//       });
-
-//       this.playing = false;
-//       const wavesurfer = this.wavesurfer;
-//       this.wavesurfer.on("ready", function () {
-//         document.getElementById("length").innerText = secondsToTime(
-//           wavesurfer.getDuration()
-//         );
-//       });
-//       // this.$refs.length.innerText = new Date(audioLength * 1000).toISOString().substr(11, 8);
-
-//       this.wavesurfer.on("audioprocess", function () {
-//         // if (this.wavesurfer.isPlaying()) {
-//         //     var currentTime = this.wavesurfer.getCurrentTime();
-
-//         // }
-//         // this.updateDuration();
-//         document.getElementById("current").innerText = secondsToTime(
-//           wavesurfer.getCurrentTime()
-//         );
-//       });
-
-//     });
-//   },
-//   methods: {
-//     play() {
-//       this.wavesurfer.playPause();
-//       this.playing = !this.playing;
-//       // var src = "@/assets/playAudio.svg";
-//       // if (this.wavesurfer.isPlaying()) {
-//       //     var src = "@/assets/pause.svg";
-//       // }
-//       // console.log(src);
-//       // document.getElementById('playImg').src = src;
-//     },
-//     // updateDuration() {
-//     //   this.$refs.length.innerText = secondsToTime(
-//     //     this.wavesurfer.getDuration()
-//     //   );
-//     // },
-//   },
-// };
 </script>
+
+
 
 <style scoped>
 
 .outerbox {
   height: 98px;
-}
-.outerbox:hover {
-  background: purple;
 }
 
         .upperbox {
@@ -462,10 +410,6 @@ export default {
           background: #a1e0f4;
           margin-bottom: 3px;
         }
-        .upperbox:hover {
-          background: red;
-        }
-
                 .regionBound {
                   margin-left: 5px;
                   margin-right: 5px;
@@ -487,9 +431,6 @@ export default {
           height: 70px;
           align-items: center;
         }
-        .lowerbox:hover {
-          background: black;
-        }
                 .head {
                   display: flex;
                   flex-direction: column;
@@ -506,9 +447,6 @@ export default {
                           padding-top: 5px;
                           /*display: flex;*/
                         }
-                        .play:hover {
-                          background: purple;
-                        }
                         .current {
                           position: relative;
                           top: -7px;
@@ -517,7 +455,7 @@ export default {
                           background: #334155;
                           color: white;
                         }
-                .waveform {
+                .bottomwave {
                   /* flex: 1; */
                   width: 100%;
                   height: 100%;
@@ -525,13 +463,24 @@ export default {
                   /* margin-left: 10px; */
                   /* margin-right: 10px; */
                 }
-                .waveform:hover {
-                  background: green;
-                }
-                .song-length {
-                  padding: 10px;
+                .zoom {
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  justify-content: center;
                   color: white;
-                  width: 50px;
+                  width: 70px;
+                  height: 100%;
                 }
+                .zoomdata {
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  justify-items: center;
+                  color: white;
+                  width: 92%;
+                  height: 30%;
+                }
+
 
 </style>
