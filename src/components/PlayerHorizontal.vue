@@ -16,7 +16,7 @@
           
           <div class="head">
                 <div class="button">
-                    <button class="play" id="play" @click="play">
+                    <button class="play" id="play" @click="play()">
                       <div class="h-10 w-10">
                         <img v-if="playing" src="@/assets/pauseAudio.svg" />
                         <img v-else src="@/assets/playAudio.svg" />
@@ -37,7 +37,9 @@
           
           <div class="zoom">
                 <div class="zoomdata">Zoom:</div>
-                <div class="zoomdata">{{Math.round(zoomnumber)}}</div>
+                <button class="zoombutton rounded-xl" id="minzoom" @click="minzoom">Min</button>
+                <button class="zoombutton rounded-xl" id="maxzoom" @click="maxzoom">Max</button>
+                <!-- <div class="zoomdata">x{{Math.round(zoomnumber)}}</div> -->
           </div>
     
       </div>
@@ -187,18 +189,21 @@ export default {
               const wavesurfer = this.wavesurfer;
               const wave2 = this.wave2;
               const temporarythis = this;
+
+
               this.wavesurfer.on("ready", function () {
                       temporarythis.totalDuration = wavesurfer.getDuration();
-                      temporarythis.endTime = temporarythis.secondsToTime(temporarythis.totalDuration);
+                      temporarythis.endSeconds = temporarythis.totalDuration;
+                      temporarythis.endTime = temporarythis.secondsToTime(temporarythis.endSeconds);
                       temporarythis.wave2.addRegion({
-                        start: 0,
-                        end: temporarythis.totalDuration,
-                        id: "region",
-                        loop: true,
+                              start: 0,
+                              end: temporarythis.totalDuration,
+                              id: "region",
+                              loop: true,
                       });
                       temporarythis.wave2.enableDragSelection({
-                        id: "region",
-                        loop: true,
+                              id: "region",
+                              loop: true,
                       });
               });
 
@@ -396,6 +401,19 @@ export default {
                       loop: true,
                     });
             },
+
+            minzoom() {
+                    this.zoomnumber = 1;
+                    console.log("Zoom: ", this.zoomnumber);
+                    this.zoom();
+            },
+
+            maxzoom() {
+                    this.zoomnumber = 150;
+                    console.log("Zoom: ", this.zoomnumber);
+                    this.zoom();
+            },
+
       },
 };
 
@@ -428,7 +446,8 @@ export default {
                   height: 18px;
                 }
                 .topwave {
-                  width: 1400px;
+                  /*width: 1375px;*/
+                  width: 100vw;
                   height: 25px;
                   background: #e6f1f7;
                 }
@@ -482,14 +501,29 @@ export default {
                   height: 100%;
                 }
                 .zoomdata {
-                  display: flex;
-                  flex-direction: column;
-                  align-items: center;
-                  justify-items: center;
+                  text-align: center;
+                  font-size: 80%;
                   color: white;
-                  width: 92%;
-                  height: 30%;
+                  width: 70%;
+                  height: 25%;
                 }
-
+                .zoombutton {
+                  text-align: center;
+                  font-size: 70%;
+                  color: white;
+                  width: 70%;
+                  height: 25%;
+                  margin-top: 4px;
+                  box-sizing: border-box;
+                  background: #475569;
+                  /*border: 1px solid white;*/
+                }
+                .zoombutton:hover {
+                  border: 1px solid;
+                  border-color: white;
+                }
+                .zoombutton:active {
+                  background: white;
+                }
 
 </style>
