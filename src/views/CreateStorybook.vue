@@ -25,6 +25,16 @@
             accept="audio/*"
             ref="audioInput"
           />
+          <input
+            class="border border-gray-300 rounded w-full px-3 py-1"
+            placeholder="Storybook/Audio Title"
+            v-model="title"
+          />
+          <input
+            class="border border-gray-300 rounded w-full px-3 py-1"
+            placeholder="Description of Content"
+            v-model="description"
+          />
           <button
             class="
               bg-indigo-500
@@ -64,6 +74,8 @@ export default {
     return {
       ext: "",
       name: "",
+      title: "",
+      description: "",
       myArray: null,
       file: null,
     };
@@ -74,14 +86,12 @@ export default {
       this.file = this.$refs.audioInput.files[0];
       this.name = this.file["name"];
       this.myArray = this.name.split(".");
-      this.ext = "." + this.myArray[1];
-      console.log(process.env.VUE_APP_api_URL + 's3/presignedposturl')
-      const apiUrl = process.env.VUE_APP_api_URL + 's3/presignedposturl';
-      fetch(apiUrl, {
+      this.ext = "." + this.myArray[this.myArray.length - 1];
+      fetch(process.env.VUE_APP_api_URL + "s3/presignedposturl", {
         method: "POST",
         headers: {
-        "Content-Type": "application/json",
-      },
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           ext: this.ext,
 
@@ -93,21 +103,92 @@ export default {
         })
         .then((data) => {
           console.log("uploading file, please wait");
-          fetch(data["url"], 
-          
-          { method: "PUT",    
-      body: this.file })
+          fetch(
+            data["url"],
+
+            { method: "PUT", body: this.file }
+          )
             .then((response) => console.log(response))
             .catch((error) => console.error("Error:", error));
-          return data["audio_ID"];
+          this.name = data["audio_ID"];
+          return;
         })
-        .then((audio_ID) =>
+        .then(() =>
           // post request to create new entry in audio table that includes data['audio_ID'], audio_URL (different from presigned URL), and other important information.
           {
-            console.log(audio_ID);
+            fetch(process.env.VUE_APP_api_URL + "audio/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+
+                Authorization: this.$store.state.idToken,
+              },
+              body: JSON.stringify({
+                id: this.name,
+                url: "coverimage.jpg",
+                title: this.title,
+                description: this.description,
+                // shared_with: [],
+                // id_token: this.$store.state.idToken,
+              }),
+            })
+              .then((response) => {
+                return response.json();
+              })
+              .then((response) => {
+                console.log(response);
+              })
+
+              .then(() =>
+                // post request to create new interpretation for this audio
+                {
+                  fetch(
+                    process.env.VUE_APP_api_URL +
+                      "audio/" +
+                      this.name +
+                      "/translations/1/",
+                    {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+
+                        Authorization: this.$store.state.idToken,
+                      },
+                      body: JSON.stringify({
+                        user: "skysnolimit08",
+                        title: "testtitle",
+                        lid: "1",
+                        text: "Lorem ipsum",
+                        public: false,
+
+                        // title: this.title,
+                        // description: this.description,
+                        // shared_with: [],
+                        // id_token: this.$store.state.idToken,
+                      }),
+                    }
+                  )
+                    .then((response) => {
+                      return response.json();
+                    })
+                    .then((response) => {
+                      console.log(response);
+                    })
+                    .catch((error) => {
+                      console.error("Error:", error);
+                    });
+
+                  return;
+                }
+              )
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+
             return;
           }
         )
+
         .catch((error) => {
           console.error("Error:", error);
         });

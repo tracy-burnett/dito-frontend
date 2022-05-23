@@ -78,7 +78,7 @@ export default {
 
   methods: {
     toggleSidebar() {
-      this.$store.dispatch(
+      this.$store.commit(
         "toggleSidebar",
         this.$store.state.sidebar ? false : true
       );
