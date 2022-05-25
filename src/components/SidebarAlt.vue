@@ -13,8 +13,9 @@
       </button>
     </div>
   </nav>-->
-  <div class="hidden lg:block navbar-menu relative z-50">
-    <div class="navbar-backdrop fixed lg:hidden inset-0 bg-gray-800 opacity-10"></div>
+  <!-- add this to class in the next line if things go sideways - hidden lg:block md:block sm:block  -->
+  <div class="navbar-menu relative z-50">
+    <div class="navbar-backdrop fixed lg:hidden md:hidden sm:hidden inset-0 bg-gray-800 opacity-10"></div>
     <nav class="fixed top-14 right-0 bottom-0 flex flex-col w-3/4 lg:w-80 sm:max-w-xs pt-4 bg-gray-800 opacity-90 hover:overflow-y-auto">
       <!-- <div class="flex w-full items-center px-6 pb-4 mb-6 lg:border-b border-gray-700">
         <a class="text-xl text-white font-semibold" href="/">
