@@ -142,11 +142,13 @@ export default {
               .then(() =>
                 // post request to create new interpretation for this audio
                 {
+
+
                   fetch(
                     process.env.VUE_APP_api_URL +
-                      "audio/" +
+                      "interpretations/audio/" +
                       this.name +
-                      "/translations/1/",
+                      "/",
                     {
                       method: "POST",
                       headers: {
@@ -157,8 +159,9 @@ export default {
                       body: JSON.stringify({
                         user: "skysnolimit08",
                         title: "testtitle",
-                        lid: "1",
-                        text: "Lorem ipsum",
+                        latest_text: "beealkjvlakwejflai ihgoaiehfoajiewf",
+                        language_name: "English",
+                        spaced_by: null,
                         public: false,
 
                         // title: this.title,
@@ -168,6 +171,38 @@ export default {
                       }),
                     }
                   )
+
+
+
+
+
+
+                  // fetch(
+                  //   process.env.VUE_APP_api_URL +
+                  //     "audio/" +
+                  //     this.name +
+                  //     "/translations/1/",
+                  //   {
+                  //     method: "POST",
+                  //     headers: {
+                  //       "Content-Type": "application/json",
+
+                  //       Authorization: this.$store.state.idToken,
+                  //     },
+                  //     body: JSON.stringify({
+                  //       user: "skysnolimit08",
+                  //       title: "testtitle",
+                  //       lid: "1",
+                  //       text: "Lorem ipsum",
+                  //       public: false,
+
+                  //       // title: this.title,
+                  //       // description: this.description,
+                  //       // shared_with: [],
+                  //       // id_token: this.$store.state.idToken,
+                  //     }),
+                  //   }
+                  // )
                     .then((response) => {
                       return response.json();
                     })

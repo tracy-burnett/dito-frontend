@@ -6,6 +6,7 @@
       <StorybookStyleMenu />
           <div class="flex items-center">
       <PlayerVertical :audio_ID="audio_ID" />
+      <SelectInterpretationMenu :audio_id="audio_ID" />
       <component v-bind:is="showStyleOption" :audio_id="audio_ID"></component> <!-- this is the viewer, editor, or tagger component -->
       </div>
     </div>
@@ -16,6 +17,7 @@
 import Navbar from "@/components/Navbar.vue";
 import SidebarAlt from "@/components/SidebarAlt.vue";
 import StorybookStyleMenu from "@/components/StorybookStyleMenu.vue";
+import SelectInterpretationMenu from "@/components/SelectInterpretationMenu.vue"
 import PlayerVertical from "@/components/PlayerVertical.vue";
 import Viewer from "@/components/Viewer.vue";
 import Editor from "@/components/Editor.vue";
@@ -41,6 +43,7 @@ export default {
     components: {
         Navbar,
         StorybookStyleMenu,
+        SelectInterpretationMenu,
         PlayerVertical,
         Viewer,
         SidebarAlt,

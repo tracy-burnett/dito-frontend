@@ -61,10 +61,12 @@ export default {
       default: "fTv6JuCXbCc.mp3",
     },
     audio_id: {
-      default: 6,
+      default: 0,
     },
-    interpretation_id: {
-      default: 2,
+  },
+  computed: {
+        interpretation_id: function () {
+      return this.$store.state.interpretationchoice;
     },
   },
   methods: {
@@ -117,12 +119,11 @@ export default {
           }))
 
       fetch(
-        process.env.VUE_APP_api_URL +
-          "audio/" +
-          this.audio_id +
-          "/translations/" +
-          this.interpretation_id +
-          "/associations/",
+          process.env.VUE_APP_api_URL +
+            "content/" +
+            this.audio_id +
+            "/" +
+            this.interpretation_id,
         {
           method: "POST",
           body: JSON.stringify({
@@ -136,6 +137,8 @@ export default {
           // }),
           headers: {
             "Content-Type": "application/json",
+            
+              Authorization: this.$store.state.idToken,
           },
         }
       )
@@ -145,22 +148,27 @@ export default {
     },
   },
   mounted() {
-    const apiUrl =
+    fetch(
       process.env.VUE_APP_api_URL +
-      "audio/" +
-      this.audio_id +
-      "/translations/" +
+      "interpretations/" +
       this.interpretation_id +
-      "/";
-    fetch(apiUrl, {
-      method: "GET",
+      "/audio/" +
+      this.audio_id +
+      "/" + this.$store.state.interpretationStatus + "/",
+      {
+        method: "GET",
 
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+        headers: {
+          "Content-Type": "application/json",
+          
+        Authorization: this.$store.state.idToken,
+        },
+      }
+    )
       .then((response) => response.json())
-      .then((data) => (this.latest_text = data.text))
+      .then((data) => (
+        this.latest_text = data.interpretation.latest_text
+        ))
       .then(() => {
         // console.log(this.latest_text.length);
         let character_array = this.latest_text.split("");

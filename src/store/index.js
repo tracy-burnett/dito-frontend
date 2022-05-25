@@ -14,7 +14,10 @@ export default new Vuex.Store({
     // nextTimestamp: 0,
     // audioDuration: 0,
     styleoption: "Viewer",
+    interpretationStatus: null,
     currentTime: "00:00:00",
+    latest_text: null,
+    interpretationchoice: null,
     incomingCurrentTime: 0,
     // playFromTimestamp: 0,
     audioplayertime: 0,
@@ -48,6 +51,10 @@ export default new Vuex.Store({
       state.sidebar = visibility;
     },
 
+    setInterpretationStatus(state, status) {
+      state.interpretationStatus = status;
+    },
+
     updateCurrentTime(state, value) {
       state.currentTime = value
     },
@@ -58,6 +65,10 @@ export default new Vuex.Store({
 
     updateAudioTime(state, audiotime) {
       state.audioplayertime = audiotime;
+    },
+
+    updateLatestText(state, newtext) {
+      state.latest_text = newtext;
     },
 
     // updatePlayFromTimestamp(state, timestamp) {
@@ -91,6 +102,10 @@ export default new Vuex.Store({
 
     toggleStorybookStyle(state, styleselection) {
       state.styleoption = styleselection;
+    },
+
+    selectInterpretationMenu(state, interpretationselection) {
+      state.interpretationchoice = interpretationselection;
     },
 
   },
