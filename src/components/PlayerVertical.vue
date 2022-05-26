@@ -113,7 +113,7 @@ export default {
       );
     },
 
-    // the beginning of the highlighted region as manually typed in by the user, in seconds
+    // the end of the highlighted region as manually typed in by the user, in seconds
     endTimeNumber() {
       let endTimeArray = this.endTime.split(":");
       return (
@@ -183,10 +183,9 @@ export default {
       ],
     });
 
-    this.playing = false;
     const temporarythis = this;
 
-    // When the audio file is loaded, create a new highlighted and draggable/adjustable region that spans the entire waveform
+    // When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
     this.wavesurfer.on("ready", function () {
       temporarythis.totalDuration = temporarythis.wavesurfer.getDuration();
       temporarythis.endTimeSeconds = temporarythis.totalDuration;
@@ -205,7 +204,7 @@ export default {
       });
     });
 
-    // whenever the highlighted region is dragged or adjusted, update our data about where it begins and ends accordingly.
+    // whenever the highlighted region or either of its bounds is dragged, update our data about where the region begins and ends accordingly
     this.wavesurfer.on("region-update-end", function () {
       temporarythis.startTimeSeconds = Object.values(
         temporarythis.wavesurfer.regions.list.region
@@ -221,7 +220,7 @@ export default {
       );
     });
 
-    // calculate how much of the audio file has been loaded so far
+    // calculate how much of the audio file has been loaded, so far
     this.wavesurfer.on("loading", function (progress) {
       temporarythis.loadingpercent = progress;
     });
@@ -350,8 +349,8 @@ export default {
         id: "region",
         loop: true,
       });
-      this.startTimeSeconds = this.startTimeNumber; // wavesurfer's "region-update-end" event doesn't seem to catch this so I am doing it manually here
-      this.endTimeSeconds = this.endTimeNumber; // wavesurfer's "region-update-end" event doesn't seem to catch this so I am doing it manually here
+      this.startTimeSeconds = this.startTimeNumber; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
+      this.endTimeSeconds = this.endTimeNumber; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
     },
   },
 };
