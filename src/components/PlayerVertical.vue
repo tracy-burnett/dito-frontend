@@ -147,7 +147,6 @@ export default {
       body: JSON.stringify({
         audio_ID: this.audio_ID,
 
-        // accessToken: this.$store.state.user.getIdToken()
       }),
     })
       .then((response) => {
@@ -235,11 +234,6 @@ export default {
       );
     });
 
-    //       this.wavesurfer.on("finish", function () {
-
-    //       temporarythis.playing = !temporarythis.playing;
-    // });
-
     this.wavesurfer.on("seek", function (position) {
       temporarythis.currentTimeSeconds = position * temporarythis.totalDuration;
       if (temporarythis.playing) {
@@ -247,18 +241,10 @@ export default {
           temporarythis.currentTimeSeconds <= temporarythis.endTimeSeconds &&
           temporarythis.currentTimeSeconds >= temporarythis.startTimeSeconds
         ) {
-          // console.log(temporarythis.startTimeNumber);
-          // console.log(temporarythis.currentTimeSeconds);
-          // console.log(temporarythis.endTimeSeconds);
-          // console.log("valid time");
           temporarythis.currentTime = temporarythis.secondsToTime(
             temporarythis.currentTimeSeconds
           );
         } else {
-          // console.log(temporarythis.startTimeSeconds);
-          // console.log(temporarythis.currentTimeSeconds);
-          // console.log(temporarythis.endTimeSeconds);
-          // console.log("invalid time");
           temporarythis.wavesurfer.pause();
           temporarythis.playing = !temporarythis.playing;
           temporarythis.currentTime = temporarythis.secondsToTime(
@@ -273,7 +259,6 @@ export default {
         "updateAudioTime",
         temporarythis.currentTimeSeconds * 100
       );
-      // temporarythis.identifySeekRelevantTimestamps();
     });
     this.wavesurferLoaded = true;
   },
@@ -308,9 +293,6 @@ export default {
     },
 
     play() {
-      // console.log(this.startTimeNumber);
-      // console.log(this.currentTimeNumber);
-      // console.log(this.endTimeNumber);
       if (!this.playing) {
         this.currentTimeSeconds = this.currentTimeNumber;
         if (
@@ -323,7 +305,6 @@ export default {
         } else {
           // console.log("playing from start of region");
           this.wavesurfer.play(this.startTimeSeconds);
-          // this.identifySeekRelevantTimestamps();
           this.playing = !this.playing;
         }
       } else if (this.playing) {
@@ -348,7 +329,6 @@ export default {
       console.log(this.currentTimeSeconds + " is in seconds");
       this.currentTime = this.secondsToTime(this.currentTimeSeconds);
       console.log(this.currentTime + " is in HH:MM:SS");
-      // this.identifySeekRelevantTimestamps();
     },
 
     seekfunction() {
@@ -356,7 +336,6 @@ export default {
       this.currentTimeSeconds = this.currentTimeNumber;
       this.currentTime = this.secondsToTime(this.currentTimeSeconds);
       this.$store.commit("updateAudioTime", this.currentTimeSeconds * 100);
-      // this.identifySeekRelevantTimestamps();
     },
     clearallregions() {
       this.wavesurfer.clearRegions();
