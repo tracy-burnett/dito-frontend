@@ -59,7 +59,7 @@
     <!-- clear highlight button -->
     <div id="end" ref="end" class="end">
       <button class="clear rounded-full" @click="clearallregions()">
-        Clear Highlight{{ startTimeSeconds }}
+        Clear Highlight
       </button>
     </div>
   </div>
