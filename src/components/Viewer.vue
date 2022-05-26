@@ -3,6 +3,7 @@
     Display text here for filename {{ audio_id }}.<br /><br />
     <!-- {{ relevantCharacters }}<br /><br /> -->
     {{ parsedAssociations }}<br /><br />
+    {{substringArray}}<br><br>
 
     <span
       v-for="substring in substringArray"
@@ -21,7 +22,7 @@
     </span>
     <br />
 
-    <!-- {{$store.state.audioplayertime}} -->
+    {{$store.state.audioplayertime}}
     <br />
     <!-- {{displayed_latest_text}} -->
     <!-- raw associations: {{ associations }}<br /> -->
@@ -180,6 +181,7 @@ fetchNewInterpretation(){
     },
 
     snapToTimestamp(startingcharacter) {
+      console.log("starting character is " + startingcharacter)
       let potentialSnapArray = [];
       this.parsedAssociations.forEach((element) => {
         //  if (element.endTime == "end") {
@@ -205,14 +207,16 @@ fetchNewInterpretation(){
       // throw an event to make playervertical start playing from playFromTimestamp
 
       this.$store.commit("updateIncomingCurrentTime", playFromTimestamp);
-      this.$store.commit("updateAudioTime", playFromTimestamp * 100);
-      console.log(potentialSnapArray);
-      console.log(potentialSnapArray.length);
-      console.log(playFromTimestamp);
+      console.log("potential snap array is " + potentialSnapArray + ", all in milliseconds");
+      console.log("potential snap array length is " + potentialSnapArray.length);
+      console.log("start playing from " + playFromTimestamp + " seconds");
       potentialSnapArray.length = 0;
+
+      
     },
 
     highlight(startingcharacter) {
+      console.log("highlight starting character " + startingcharacter)
       let k = 0;
       this.parsedAssociations.forEach((element) => {
         //  if (element.endTime == "end") {
@@ -221,7 +225,7 @@ fetchNewInterpretation(){
         // console.log(element.endTime)
         if (
           this.$store.state.audioplayertime >= element.startTime &&
-          (this.$store.state.audioplayertime <= element.endTime ||
+          (this.$store.state.audioplayertime < element.endTime ||
             element.endTime == "end")
         ) {
           // console.log(this.$store.state.audioplayertime + " >= " + element.startTime)
@@ -230,15 +234,16 @@ fetchNewInterpretation(){
             startingcharacter >= element.startCharacter &&
             startingcharacter < element.endCharacter
           ) {
-            //         console.log(this.$store.state.audioplayertime + " >= " + element.startTime)
-            // console.log(this.$store.state.audioplayertime + " <= " + element.endTime)
-            // console.log(startingcharacter + " >= " + element.startCharacter)
-            // console.log(startingcharacter + " <= " + element.endCharacter)
+                    console.log(this.$store.state.audioplayertime + " >= " + element.startTime)
+            console.log(this.$store.state.audioplayertime + " < " + element.endTime)
+            console.log(startingcharacter + " >= " + element.startCharacter)
+            console.log(startingcharacter + " <= " + element.endCharacter)
 
             k++;
           }
         }
       });
+      console.log(k + " is greater than 0")
       return k;
     },
 
