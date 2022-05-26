@@ -59,7 +59,7 @@
     <!-- clear highlight button -->
     <div id="end" ref="end" class="end">
       <button class="clear rounded-full" @click="clearallregions()">
-        Clear Highlight
+        Clear Highlight{{ startTimeSeconds }}
       </button>
     </div>
   </div>
@@ -67,44 +67,43 @@
 
 <script>
 export default {
+  // name of component
   name: "PlayerVertical",
+
+  // data that it inherits from parent component
   props: {
     audio_ID: {
       default: "",
     },
   },
-  components: {},
+
+  // declare the variables and default values that this component will need
   data: () => {
     return {
       loadingpercent: 0,
-      wavesurferLoaded: false,
       zoomnumber: 1,
-      startTime: "00:00:00",
-      endTime: "00:00:00",
-      AfterDragStartTime: 0,
-      startTimeSeconds: 0,
-      currentTimeSeconds: 0,
-      endTimeSeconds: 0,
-      AfterDragEndTime: 0,
-      totalDuration: 0,
+      startTime: "00:00:00", // the beginning of the highlighted region as calculated by wavesurfer OR manually input by the user, in HH:MM:SS
+      currentTime: "00:00:00", // wherever the audio is currently playing as calculated by wavesurfer OR manually input by the user, in HH:MM:SS
+      endTime: "00:00:00", // the end of the highlighted region as calculated by wavesurfer OR manually input by the user, in HH:MM:SS
+      startTimeSeconds: 0, // the beginning of the highlighted region as calculated by wavesurfer, in seconds
+      currentTimeSeconds: 0, // wherever the audio is currently playing as calculated by wavesurfer, in seconds
+      endTimeSeconds: 0, // the end of the highlighted region as calculated by wavesurfer, in seconds
+      totalDuration: 0, // the total length of the audio, in seconds
       playing: false,
       audioURL: "",
     };
   },
+
+  // watch these variables to see if they change.  if they do, then call the corresponding functions.
   watch: {
     "$store.state.incomingCurrentTime": function () {
       this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
     },
   },
+
+  // these are variables whose values are dynamically updated when necessary.
   computed: {
-    currentTime: {
-      get() {
-        return this.$store.state.currentTime;
-      },
-      set(value) {
-        this.$store.commit("updateCurrentTime", value);
-      },
-    },
+    // the beginning of the highlighted region as manually typed in by the user, in seconds
     startTimeNumber() {
       let startTimeArray = this.startTime.split(":");
       return (
@@ -113,12 +112,16 @@ export default {
         startTimeArray[2] * 1
       );
     },
+
+    // the beginning of the highlighted region as manually typed in by the user, in seconds
     endTimeNumber() {
       let endTimeArray = this.endTime.split(":");
       return (
         endTimeArray[0] * 3600 + endTimeArray[1] * 60 + endTimeArray[2] * 1
       );
     },
+
+    // wherever the audio is currently playing as manually typed in by the user, in seconds
     currentTimeNumber() {
       let currentTimeArray = this.currentTime.split(":");
       return (
@@ -127,11 +130,13 @@ export default {
         currentTimeArray[2] * 1
       );
     },
+
+    // the wavesurfer "number" that the user wants to seek to, based on their manual editing of the current time HH:MM:SS
     currentSeekNumber() {
       return this.currentTimeNumber / this.totalDuration;
     },
   },
-  created() {},
+
   mounted() {
     //get secure url from server
     console.log(this.audio_ID);
@@ -146,7 +151,6 @@ export default {
 
       body: JSON.stringify({
         audio_ID: this.audio_ID,
-
       }),
     })
       .then((response) => {
@@ -180,78 +184,72 @@ export default {
     });
 
     this.playing = false;
-    const wavesurfer = this.wavesurfer;
     const temporarythis = this;
+
+    // When the audio file is loaded, create a new highlighted and draggable/adjustable region that spans the entire waveform
     this.wavesurfer.on("ready", function () {
-      temporarythis.totalDuration = wavesurfer.getDuration();
+      temporarythis.totalDuration = temporarythis.wavesurfer.getDuration();
       temporarythis.endTimeSeconds = temporarythis.totalDuration;
       temporarythis.endTime = temporarythis.secondsToTime(
         temporarythis.endTimeSeconds
       );
-      wavesurfer.addRegion({
+      temporarythis.wavesurfer.addRegion({
         start: 0,
         end: temporarythis.totalDuration,
         id: "region",
         loop: true,
       });
-      wavesurfer.enableDragSelection({
+      temporarythis.wavesurfer.enableDragSelection({
         id: "region",
         loop: true,
       });
     });
 
+    // whenever the highlighted region is dragged or adjusted, update our data about where it begins and ends accordingly.
     this.wavesurfer.on("region-update-end", function () {
-      temporarythis.AfterDragStartTime = Object.values(
+      temporarythis.startTimeSeconds = Object.values(
         temporarythis.wavesurfer.regions.list.region
       )[7];
-      temporarythis.AfterDragEndTime = Object.values(
+      temporarythis.endTimeSeconds = Object.values(
         temporarythis.wavesurfer.regions.list.region
       )[8];
-      temporarythis.startTimeSeconds = temporarythis.AfterDragStartTime;
       temporarythis.startTime = temporarythis.secondsToTime(
         temporarythis.startTimeSeconds
       );
-      temporarythis.endTimeSeconds = temporarythis.AfterDragEndTime;
       temporarythis.endTime = temporarythis.secondsToTime(
         temporarythis.endTimeSeconds
       );
     });
 
+    // calculate how much of the audio file has been loaded so far
     this.wavesurfer.on("loading", function (progress) {
       temporarythis.loadingpercent = progress;
     });
 
+    // whenever the audio is playing, update our data about where we are in the file accordingly, including in the Vuex store
     this.wavesurfer.on("audioprocess", function () {
       temporarythis.currentTimeSeconds =
         temporarythis.wavesurfer.getCurrentTime();
       temporarythis.currentTime = temporarythis.secondsToTime(
         temporarythis.currentTimeSeconds
       );
-
       temporarythis.$store.commit(
         "updateAudioTime",
         temporarythis.currentTimeSeconds * 100
       );
     });
 
+    // whenever the user drags and drops the cursor on the waveform, if the audio is playing but the cursor is now out of bounds of the highlighted region, then pause the player
     this.wavesurfer.on("seek", function (position) {
       temporarythis.currentTimeSeconds = position * temporarythis.totalDuration;
-      if (temporarythis.playing) {
-        if (
-          temporarythis.currentTimeSeconds <= temporarythis.endTimeSeconds &&
-          temporarythis.currentTimeSeconds >= temporarythis.startTimeSeconds
-        ) {
-          temporarythis.currentTime = temporarythis.secondsToTime(
-            temporarythis.currentTimeSeconds
-          );
-        } else {
-          temporarythis.wavesurfer.pause();
-          temporarythis.playing = !temporarythis.playing;
-          temporarythis.currentTime = temporarythis.secondsToTime(
-            temporarythis.currentTimeSeconds
-          );
-        }
+      if (
+        temporarythis.playing &&
+        (temporarythis.currentTimeSeconds < temporarythis.startTimeSeconds ||
+          temporarythis.currentTimeSeconds > temporarythis.endTimeSeconds)
+      ) {
+        temporarythis.pausePlayer();
       }
+      // regardless whether the cursor is dropped inside or outside of the highlighted region, update the data about where we are in the audio file, both within this component and in the Vuex store.
       temporarythis.currentTime = temporarythis.secondsToTime(
         temporarythis.currentTimeSeconds
       );
@@ -260,7 +258,6 @@ export default {
         temporarythis.currentTimeSeconds * 100
       );
     });
-    this.wavesurferLoaded = true;
   },
 
   methods: {
@@ -294,13 +291,13 @@ export default {
 
     play() {
       if (!this.playing) {
-        this.currentTimeSeconds = this.currentTimeNumber;
+        // when the player starts playing, make sure it plays from whenever is currently displayed in the "current time" box that the user is also able to manually inpput into, unless of course that value is outside of the highlighted region
         if (
-          this.currentTimeSeconds <= this.endTimeSeconds &&
-          this.currentTimeSeconds >= this.startTimeSeconds
+          this.currentTimeNumber <= this.endTimeSeconds &&
+          this.currentTimeNumber >= this.startTimeSeconds
         ) {
           // console.log("playing inside region");
-          this.wavesurfer.play(this.currentTimeSeconds);
+          this.wavesurfer.play(this.currentTimeNumber);
           this.playing = !this.playing;
         } else {
           // console.log("playing from start of region");
@@ -308,10 +305,12 @@ export default {
           this.playing = !this.playing;
         }
       } else if (this.playing) {
-        this.wavesurfer.pause();
-        this.playing = !this.playing;
+        // if you click "pause," then pause the player
+        this.pausePlayer();
       }
     },
+
+    // convert a value from seconds to HH:MM:SS
     secondsToTime(seconds) {
       var date = new Date(1970, 0, 1);
       date.setSeconds(seconds);
@@ -322,27 +321,27 @@ export default {
       this.wavesurfer.pause();
       this.playing = false;
     },
+
+    // when the user clicks in the "Viewer" component, it starts playing the audio player from this timestamp and updates the HH:MM:SS display of current time accordingly
     seekTimestampfunction(timestamp) {
-      console.log(timestamp + " is in milliseconds");
       this.wavesurfer.seekTo(timestamp / this.totalDuration);
-      this.currentTimeSeconds = timestamp;
-      console.log(this.currentTimeSeconds + " is in seconds");
-      this.currentTime = this.secondsToTime(this.currentTimeSeconds);
-      console.log(this.currentTime + " is in HH:MM:SS");
+      this.currentTime = this.secondsToTime(timestamp);
     },
 
+    // when the user submits a new manual input of HH:MM:SS current time, the cursor moves accordingly and the change is also communicated to the Vuex store
     seekfunction() {
       this.wavesurfer.seekTo(this.currentSeekNumber);
-      this.currentTimeSeconds = this.currentTimeNumber;
-      this.currentTime = this.secondsToTime(this.currentTimeSeconds);
-      this.$store.commit("updateAudioTime", this.currentTimeSeconds * 100);
+      this.$store.commit("updateAudioTime", this.currentTimeNumber * 100);
     },
+
+    // clear the highlighted region and reset the HH:MM:SS displays of start and end time accordingly
     clearallregions() {
       this.wavesurfer.clearRegions();
       this.startTime = "00:00:00";
       this.endTime = this.secondsToTime(this.totalDuration);
     },
 
+    // change the highlighted region based on manual HH:MM:SS inputs of start and end times by the user
     updateRegion() {
       this.wavesurfer.clearRegions();
       this.wavesurfer.addRegion({
@@ -351,8 +350,8 @@ export default {
         id: "region",
         loop: true,
       });
-      this.startTimeSeconds = this.startTimeNumber;
-      this.endTimeSeconds = this.endTimeNumber;
+      this.startTimeSeconds = this.startTimeNumber; // wavesurfer's "region-update-end" event doesn't seem to catch this so I am doing it manually here
+      this.endTimeSeconds = this.endTimeNumber; // wavesurfer's "region-update-end" event doesn't seem to catch this so I am doing it manually here
     },
   },
 };

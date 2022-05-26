@@ -15,7 +15,7 @@ export default new Vuex.Store({
     // audioDuration: 0,
     styleoption: "Viewer",
     interpretationStatus: null,
-    currentTime: "00:00:00",
+    // currentTime: "00:00:00",
     latest_text: null,
     interpretationchoice: null,
     incomingCurrentTime: 0,
@@ -55,9 +55,9 @@ export default new Vuex.Store({
       state.interpretationStatus = status;
     },
 
-    updateCurrentTime(state, value) {
-      state.currentTime = value
-    },
+    // updateCurrentTime(state, value) {
+    //   state.currentTime = value
+    // },
 
     updateIncomingCurrentTime(state, value) {
       state.incomingCurrentTime = value
