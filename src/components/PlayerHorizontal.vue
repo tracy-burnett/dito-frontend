@@ -24,7 +24,8 @@
                     </button>
                 </div>
                 <input class="current rounded-sm" type="string" v-model="currentTime" pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
-                    @keyup.enter="updateRegion();"
+                    @click="pausePlayer()"
+                    @keyup.enter="seekfunction()"
                 />
           </div>
         
@@ -79,12 +80,12 @@ export default {
                 //   file: null,
               };
       },
+      watch: {
+                "$store.state.incomingCurrentTime": function () {
+                this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
+                },
+        },
       computed: {
-              timeToSeconds(time) {
-                      let array = time.split(":");
-                      return time[0] * 3600 + time[1] * 60 + time[2];
-              },
-
               startTimeNumber() {
                 let startTimeArray = this.startTime.split(":");
                 return (
@@ -122,7 +123,8 @@ export default {
                     method: "POST",
 
                     headers: {
-                      "Content-Type": "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: this.$store.state.idToken,
                     },
 
                     body: JSON.stringify({
@@ -227,13 +229,15 @@ export default {
 
               this.wavesurfer.on("audioprocess", function () {
                       var curr = temporarythis.wavesurfer.getCurrentTime();
-                      var total = temporarythis.wavesurfer.getDuration();
+                      var total = temporarythis.totalDuration;
                       temporarythis.currentTime = temporarythis.secondsToTime(curr);
                       temporarythis.wave2.seekTo(curr/total);
 
                       if ((curr > temporarythis.endSeconds) || (curr < temporarythis.startSeconds)) {
                               temporarythis.wavesurfer.seekTo(temporarythis.startSeconds/total);
                       }
+
+                      temporarythis.$store.commit("updateAudioTime", curr);
               });
 
               this.wavesurfer.on("finish", function () {
@@ -244,7 +248,7 @@ export default {
 
               this.wavesurfer.on("seek", function (position) {
                       var wave2curr = temporarythis.wave2.getCurrentTime();
-                      var curr = position * temporarythis.wavesurfer.getDuration();
+                      var curr = position * temporarythis.totalDuration;
                       temporarythis.currentTime = temporarythis.secondsToTime(curr);
 
                       if (temporarythis.playing) {
@@ -253,11 +257,13 @@ export default {
                               } else {
                                       console.log("invalid time");
                                       temporarythis.wavesurfer.pause();
-                                      temporarythis.playing = !temporarythis.playing;
+                                      temporarythis.playing = false;
                               }
                       }
  
-                      if ((wave2curr > (curr + .5)) || (wave2curr < (curr - .5))) {
+                      temporarythis.$store.commit("updateAudioTime", curr);
+
+                      if ((wave2curr > (curr + .2)) || (wave2curr < (curr - .2))) {
                               temporarythis.wave2.seekTo(position);
                       }
 
@@ -266,10 +272,10 @@ export default {
 
               wave2.on("seek", function (position) {
                       var surfcurr = temporarythis.wavesurfer.getCurrentTime();
-                      var curr = position * temporarythis.wave2.getDuration();
+                      var curr = position * temporarythis.totalDuration;
                       temporarythis.currentTime = temporarythis.secondsToTime(curr);
  
-                      if ((surfcurr > (curr + .5)) || (surfcurr < (curr - .5))) {
+                      if ((surfcurr > (curr + .2)) || (surfcurr < (curr - .2))) {
                               temporarythis.wavesurfer.seekTo(position);
                       }
                       
@@ -278,10 +284,10 @@ export default {
 
               this.wavesurfer.on("zoom", function (minPxPerSec) {
                       
-                      var secs = 1300 / minPxPerSec / 2;
+                      var secs = (window.innerWidth - 144) / minPxPerSec / 2;
                       //console.log("Zoom radius: ", secs, " seconds");
           
-                      temporarythis.startSeconds = temporarythis.wavesurfer.getCurrentTime() - secs;                      
+                      temporarythis.startSeconds = temporarythis.currentTimeNumber - secs;                      
                       if (temporarythis.startSeconds <= 0) {
                                   temporarythis.startSeconds = 0;
                       }
@@ -290,9 +296,9 @@ export default {
                       //console.log("startTime: ", temporarythis.startTime);
                       //console.log("startSeconds: ", temporarythis.startSeconds);
                       
-                      temporarythis.endSeconds = temporarythis.wavesurfer.getCurrentTime() + secs;
-                      if (temporarythis.endSeconds >= temporarythis.wavesurfer.getDuration()) {
-                                  temporarythis.endSeconds = temporarythis.wavesurfer.getDuration();
+                      temporarythis.endSeconds = temporarythis.currentTimeNumber + secs;
+                      if (temporarythis.endSeconds >= temporarythis.totalDuration) {
+                                  temporarythis.endSeconds = temporarythis.totalDuration;
                       }
                       temporarythis.endTime = temporarythis.secondsToTime(temporarythis.endSeconds);
                   
@@ -353,23 +359,16 @@ export default {
                     // console.log(this.startTimeNumber);
                     // console.log(this.currentTimeNumber);
                     // console.log(this.endTimeNumber);
-                    if (!this.wavesurfer.isPlaying()) {
-                            if (
-                                    this.currentTime <= this.endTime &&
-                                    this.currentTime >= this.startTime
-                                  ) {
+                    if (!this.playing) {
+                            if (this.currentTime <= this.endTime && this.currentTime >= this.startTime) {
                                     console.log("playing inside region");
-                                    this.wavesurfer.play(this.wavesurfer.getCurrentTime());
-                                    this.playing = !this.playing;
+                                    this.runPlayer(this.wavesurfer.getCurrentTime());
                             } else {
                                     console.log("playing from start of region");
-                                    //next line should play from startTime!!!
-                                    this.wavesurfer.play(this.startSeconds);
-                                    this.playing = !this.playing;
+                                    this.runPlayer(this.startSeconds);
                             }
-                    } else if (this.wavesurfer.isPlaying()) {
-                            this.wavesurfer.pause();
-                            this.playing = !this.playing;
+                    } else if (this.playing) {
+                            this.pausePlayer();
                     }
             },
             secondsToTime(seconds) {
@@ -377,10 +376,11 @@ export default {
                     date.setSeconds(seconds);
                     return date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
             },
-
+            seekTimestampfunction(timestamp) {
+                        this.wavesurfer.seekTo(timestamp / this.totalDuration);
+            },
             seekfunction() {
                     this.wavesurfer.seekTo(this.currentSeekNumber);
-                    this.currentTime = this.secondsToTime(this.wavesurfer.getCurrentTime());
             },
 
             clearallregions() {
@@ -413,6 +413,21 @@ export default {
                     console.log("Zoom: ", this.zoomnumber);
                     this.zoom();
             },
+            timeToSeconds(time) {
+                        let array = time.split(":");
+                        return time[0] * 3600 + time[1] * 60 + time[2];
+                },
+
+                pausePlayer() {
+                        this.wavesurfer.pause();
+                        this.playing = false;
+                },
+                runPlayer(from) {
+                        this.wavesurfer.play(from);
+                        this.playing = true;
+                }
+
+
 
       },
 };
