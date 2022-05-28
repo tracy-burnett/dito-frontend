@@ -1,28 +1,36 @@
 <template>
   <div>
+    <!-- this SingleInterpretation component represents what is viewable in a single interpretation column of an open storybook -->
     <div>
-
+      <!-- the StorybookStyleMenu component allows the user to choose whether they want to interact with the interpretation via the Viewer, Tagger, or Editor feature -->
+      <!-- the user's selection is communicated back to this SingleInterpretation component via the toggleStorybookStyle event -->
       <StorybookStyleMenu
-        @toggleStorybookStyle="toggleStorybookStyle($event)"
+        @toggleStorybookStyle="toggleStorybookStylefunction($event)"
       />
+      <!-- SelectInterpretationMenu allows the user to swap out the interpretation they are currently viewing for a different one -->
+      <!-- this SingleInterpretation component tells the SelectInterpretationMenu component what interpretations to place in its Dropdown menu via interpretationsList -->
+      <!-- the user's selection of a new interpretation is communicated back to this SingleInterpretation component via the changeInterpretationID event -->
       <SelectInterpretationMenu
         :interpretationsList="interpretationsList"
-        @changeInterpretationID="changeInterpretationID($event)"
+        @changeInterpretationID="changeInterpretationIDfunction($event)"
       />
     </div>
     <br /><br /><br /><br /><br />
     <div>
+      <!-- this component will be Viewer, Tagger, or Editor, depending on the user's selection of "styleoption" via the StorybookStyleMenu -->
       <component
         v-bind:is="styleoption"
         :audio_id="audio_id"
         :interpretationStatus="interpretationStatus"
         :interpretation_id="interpretation_id"
       ></component>
-      <DeleteInterpretationViewer 
-        :interpretation_id="interpretation_id" 
-        @returnFormerInterpretation="returnFormerInterpretation($event)"/>
+
+      <!-- this component allows the user to remove the entire interpretation column from their browser window -->
+      <DeleteInterpretationViewer
+        :interpretation_id="interpretation_id"
+        @returnFormerInterpretation="returnFormerInterpretation($event)"
+      />
     </div>
-    <!-- this is the viewer, editor, or tagger component -->
   </div>
 </template>
 
@@ -36,38 +44,6 @@ import DeleteInterpretationViewer from "@/components/DeleteInterpretationViewer.
 
 export default {
   name: "SingleInterpretation",
-
-  data: () => {
-    return {
-      interpretationStatus: "",
-      // interpretation_id: "",
-      styleoption: "Viewer",
-      interpretationFull: {}
-    };
-  },
-  mounted() {
-    // get the information about status out of the interpretation, which should be inherited from Storybook
-    this.interpretationFull=this.formerInterpretationsList.filter(element => element.id == this.interpretation_id)
-    // console.log(JSON.stringify(this.interpretationFull))
-    this.sharingSetting(this.interpretationFull[0].created_by,
-                this.interpretationFull[0].shared_editors,
-                this.interpretationFull[0].shared_viewers)
-  },
-  props: {
-    audio_id: {
-      default: "",
-    },       
-     interpretation_id: {
-      default: "",
-    },    
-    interpretationsList: {
-      default: [],
-    },
-        formerInterpretationsList: {
-      default: [],
-    },
-  },
-  computed: {},
   components: {
     Editor,
     Viewer,
@@ -76,42 +52,72 @@ export default {
     SelectInterpretationMenu,
     DeleteInterpretationViewer,
   },
+
+  data: () => {
+    return {
+      interpretationStatus: "", // this remembers whether the currently logged-in user is a viewer, editor, or owner of the currently-displayed interpretation
+      styleoption: "Viewer", // this can be Viewer, Editor, or Tagger, depending on how the user is currently interacting with the displayed interpretation
+      interpretationFull: {}, // this contains all of the information about the currently displayed interpretation
+    };
+  },
+
+  props: {
+    audio_id: {
+      default: "",
+    },
+    interpretation_id: {
+      default: "",
+    },
+    // list of interpretations to be displayed in the dropdown menu
+    interpretationsList: {
+      default: [],
+    },
+
+    // list of interpretations currently displayed in columns in the viewer
+    formerInterpretationsList: {
+      default: [],
+    },
+  },
+  computed: {},
+
+  mounted() {
+    // get all the information about the interpretation displayed in this particular column in the browser
+    this.interpretationFull = this.formerInterpretationsList.filter(
+      (element) => element.id == this.interpretation_id
+    )[0];
+
+    // call a function to identify whether the currently logged-in user is a viewer, editor, or owner of the interpretation displayed in this column in the browser
+    this.sharingSetting(
+      this.interpretationFull.created_by,
+      this.interpretationFull.shared_editors,
+      this.interpretationFull.shared_viewers
+    );
+  },
   methods: {
-    toggleStorybookStyle(styleselection) {
+    toggleStorybookStylefunction(styleselection) {
       this.styleoption = styleselection;
     },
 
-        sharingSetting(owner, editors, viewers) {
-console.log(owner)
-console.log(this.$store.state.user.uid)
+    sharingSetting(owner, editors, viewers) {
       if (owner == this.$store.state.user.uid) {
-        this.interpretationStatus="owner"
+        this.interpretationStatus = "owner";
       } else if (editors.includes(this.$store.state.user.uid)) {
-        this.interpretationStatus="editor"
+        this.interpretationStatus = "editor";
       } else if (viewers.includes(this.$store.state.user.uid)) {
-        this.interpretationStatus="viewer"
+        this.interpretationStatus = "viewer";
       }
-      
     },
 
-    changeInterpretationID(newID) {
-      let formerinterpretation=this.interpretation_id
-      console.log("former" + formerinterpretation)
-      console.log("intid" + this.interpretation_id)
-      console.log("newID" + newID)
-            this.$emit("changeInterpretationID", newID);
-            this.returnFormerInterpretation(formerinterpretation)
+    // when the user chooses to swap the interpretation they are currently viewing for a different interpretation...
+    changeInterpretationIDfunction(newID) {
+      let formerinterpretation = this.interpretation_id;
+      this.$emit("displayInterpretationID", newID); // ...tell the parent component to create a new column for the new interpretation the user wants to view
+      this.returnFormerInterpretation(formerinterpretation); // ...tell the parent component to remove this column currently being worked in
     },
 
     returnFormerInterpretation(formerinterpretation) {
-            this.$emit("returnFormerInterpretation", formerinterpretation);
-            console.log("former interpretation from singleInt" + formerinterpretation)
+      this.$emit("returnFormerInterpretation", formerinterpretation);
     },
-
-    // changeInterpretationStatus(newStatus) {
-    //   this.interpretationStatus = newStatus;
-    //   console.log("STATUS " + this.interpretationStatus)
-    // },
   },
 };
 </script>

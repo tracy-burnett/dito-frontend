@@ -1,6 +1,7 @@
 <template>
   <div class="flex-auto">
-    Display text here for {{ interpretation_id }} {{ title }}, in {{language_name}}.<br /><br />
+    Display text here for {{ interpretation_id }} {{ title }}, in
+    {{ language_name }}.<br /><br />
     <!-- {{ relevantCharacters }}<br /><br /> -->
     <!-- {{ parsedAssociations }}<br /><br /> -->
     <!-- {{ substringArray }}<br /><br /> -->
@@ -59,11 +60,8 @@ export default {
       console.log("switched");
       this.fetchNewInterpretation();
     },
-
-    
   },
   computed: {
-
     //     displayed_latest_text: function () {
     // const text = 'This is a test to see whether nested style spans work properly.'
     // const styling = [
@@ -87,13 +85,14 @@ export default {
     audio_id: {
       default: "",
     },
-        interpretation_id: {default: ""},
-                interpretationStatus: {default: ""}
+    interpretation_id: { default: "" },
+    interpretationStatus: { default: "" },
   },
   components: {},
   mounted() {
-    if(this.interpretationStatus){
-    this.fetchNewInterpretation();}
+    if (this.interpretationStatus) {
+      this.fetchNewInterpretation();
+    }
     //     const temporarythis = this;
     // this.$nextTick(function () {
     // console.log('hi' + this.associations)
@@ -110,7 +109,7 @@ export default {
   methods: {
     fetchNewInterpretation() {
       // console.log("hi");
-    console.log("status " + this.interpretationStatus)
+      console.log("status " + this.interpretationStatus);
       const apiUrl =
         process.env.VUE_APP_api_URL +
         "interpretations/" +
@@ -131,18 +130,16 @@ export default {
         },
       })
         .then((response) => response.json())
-        .then((data) =>
-          {
-          this.title = data.interpretation.title
-          this.language_name = data.interpretation.language_name
-          this.latest_text = data.interpretation.latest_text
+        .then((data) => {
+          this.title = data.interpretation.title;
+          this.language_name = data.interpretation.language_name;
+          this.latest_text = data.interpretation.latest_text;
 
           //   this.$store.commit(
           //   "updateLatestText",
           //   data.interpretation.latest_text
           // )
-          }
-        )
+        })
 
         .then(() => {
           fetch(
@@ -323,10 +320,7 @@ export default {
         let slice = {};
         this.startslice = this.relevantCharacters[this.i];
         this.endslice = this.relevantCharacters[this.i + 1];
-        slice.text = this.latest_text.substring(
-          this.startslice,
-          this.endslice
-        );
+        slice.text = this.latest_text.substring(this.startslice, this.endslice);
         slice.startingcharacter = this.startslice;
         this.substringArray.push(slice);
         // console.log(JSON.stringify(this.substringArray))
@@ -335,9 +329,7 @@ export default {
       }
       let finalslice = {};
       this.startslice = this.relevantCharacters[this.i];
-      finalslice.text = this.latest_text.substring(
-        this.startslice
-      );
+      finalslice.text = this.latest_text.substring(this.startslice);
       finalslice.startingcharacter = this.startslice;
       this.substringArray.push(finalslice);
       // console.log("slice " + this.startslice + " - end: " + this.latest_text.substring(this.startslice))

@@ -4,18 +4,14 @@
       <button class="dropbtn">Select Interpretation</button>
 
       <div class="dropdown-content">
+        <!-- for each interpretation in the list of interpretations to show in the Dropdownmenu, create a menu option that displays the language name -->
         <span
           v-for="interpretation in interpretationsList"
           :key="interpretation.id"
         >
-          <a
-            @click="
-              selectInterpretationMenu(
-                interpretation.id
-              )
-            "
-            >{{ interpretation.language_name }}</a
-          >
+          <a @click="selectInterpretationMenu(interpretation.id)">{{
+            interpretation.language_name
+          }}</a>
         </span>
       </div>
     </div>
@@ -26,22 +22,19 @@
 export default {
   name: "SelectInterpretationMenu",
   data: () => {
-    return {
-      // interpretationsList: [],
-    };
   },
-      props: {
+  props: {
+
+    // the list of interpretations available to be selected in the Dropdown menu (does not include the interpretations currently being viewed)
     interpretationsList: {
       default: [],
     },
-    },
+  },
 
   methods: {
+    // tell the parent component that we are swapping the interpretation currently in the viewer with the one the User just selected from the Dropdown menu
     selectInterpretationMenu(interpretationselection) {
-      console.log(interpretationselection)
-            this.$emit("changeInterpretationID", interpretationselection);
-
-      
+      this.$emit("changeInterpretationID", interpretationselection);
     },
   },
 };

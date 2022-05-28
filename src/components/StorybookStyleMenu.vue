@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div class="dropdown" style="float: right">
       <button class="dropbtn">Select Interaction Style</button>
       <div class="dropdown-content">
@@ -9,29 +8,22 @@
         <a @click="toggleStorybookStyle('Tagger')">Tagging</a>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
 export default {
   name: "StorybookStyleMenu",
-      data: () => {
-    return {
-    };
+  data: () => {
+    return {};
   },
   props: [],
   methods: {
-          toggleStorybookStyle(styleselection) {
-      // this.$store.commit(
-      //   "toggleStorybookStyle",
-      //   styleselection
-      // );
-          {
-      this.$emit('toggleStorybookStyle', styleselection)
-    }
+    toggleStorybookStyle(styleselection) {
+      // tell the parent component to load Viewer, Editor, or Tagger, corresponding with what the user has selected in this dropdown menu
+      this.$emit("toggleStorybookStyle", styleselection);
     },
-  }
+  },
 };
 </script>
 

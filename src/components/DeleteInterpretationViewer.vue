@@ -1,15 +1,12 @@
 <template>
   <div>
+    <!-- clicking this button removes the interpretation column associated with it -->
     <div id="destroy" @click="destroy">
       <div class="h-10 w-10">
-        <img src="@/assets/pauseAudio.svg" />
+        <img src="@/assets/pauseAudio.svg" /> <!-- needs to be replaced with a more appropriate icon -->
       </div>
-    </div><br>
-        <!-- <button id="add" @click="subtract">
-      <div class="h-10 w-10">
-        <img src="@/assets/pauseAudio.svg" />
-      </div>
-    </button> -->
+    </div>
+    <br />
   </div>
 </template>
 
@@ -17,26 +14,21 @@
 export default {
   name: "DeleteInterpretationViewer",
   data: () => {
-    return {
-    };
+    return {};
   },
   mounted() {},
-  props: {   
-       interpretation_id: {
+  props: {
+    
+    // id of the interpretation associated with this delete button
+    interpretation_id: {
       default: "",
     },
-    // interpretationsList: {
-    //   default: [],
-    // },
-    },
+  },
   methods: {
     destroy() {
-            this.$emit("returnFormerInterpretation", this.interpretation_id);
-    //   this.$store.commit("deleteConsole", this.interpretation_id); // pull this out of the next available
+      // tell the parent component to move this interpretation ID from a viewer column back to the dropdown menu of interpretations available to view
+      this.$emit("returnFormerInterpretation", this.interpretation_id);
     },
-    //     subtract() {
-    //   this.$store.commit("subtractConsolesCount");
-    // },
   },
 };
 </script>

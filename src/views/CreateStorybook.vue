@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     async upload() {
-      //get secure url from server
+      // get secure url from server
       this.file = this.$refs.audioInput.files[0];
       this.name = this.file["name"];
       this.myArray = this.name.split(".");
@@ -91,11 +91,10 @@ export default {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: this.$store.state.idToken,
         },
         body: JSON.stringify({
           ext: this.ext,
-
-          // accessToken: this.$store.state.user.getIdToken()
         }),
       })
         .then((response) => {
@@ -129,7 +128,6 @@ export default {
                 title: this.title,
                 description: this.description,
                 // shared_with: [],
-                // id_token: this.$store.state.idToken,
               }),
             })
               .then((response) => {
@@ -142,8 +140,6 @@ export default {
               .then(() =>
                 // post request to create new interpretation for this audio
                 {
-
-
                   fetch(
                     process.env.VUE_APP_api_URL +
                       "interpretations/audio/" +
@@ -171,38 +167,6 @@ export default {
                       }),
                     }
                   )
-
-
-
-
-
-
-                  // fetch(
-                  //   process.env.VUE_APP_api_URL +
-                  //     "audio/" +
-                  //     this.name +
-                  //     "/translations/1/",
-                  //   {
-                  //     method: "POST",
-                  //     headers: {
-                  //       "Content-Type": "application/json",
-
-                  //       Authorization: this.$store.state.idToken,
-                  //     },
-                  //     body: JSON.stringify({
-                  //       user: "skysnolimit08",
-                  //       title: "testtitle",
-                  //       lid: "1",
-                  //       text: "Lorem ipsum",
-                  //       public: false,
-
-                  //       // title: this.title,
-                  //       // description: this.description,
-                  //       // shared_with: [],
-                  //       // id_token: this.$store.state.idToken,
-                  //     }),
-                  //   }
-                  // )
                     .then((response) => {
                       return response.json();
                     })
@@ -228,7 +192,6 @@ export default {
           console.error("Error:", error);
         });
     },
-    //       accessToken: this.$store.state.user.getIdToken(),
   },
 };
 </script>

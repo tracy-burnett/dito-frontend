@@ -1,20 +1,20 @@
 <template>
   <div>
+    <!-- this is a button for creating a new Interpretation and having it displayed in its own column -->
     <div id="create" @click="create">
       <div class="h-10 w-10">
         <img src="@/assets/menu-bars.svg" />
+        <!-- change this icon to something more appropriate -->
       </div>
-      </div>
+    </div>
+    <!-- this is a button for adding another column that shows an Interpretation that you have access to but aren't yet viewing -->
     <div id="add" @click="add">
       <div class="h-10 w-10">
         <img src="@/assets/playAudio.svg" />
+        <!-- change this icon to something more appropriate -->
       </div>
-    </div><br>
-        <!-- <button id="add" @click="subtract">
-      <div class="h-10 w-10">
-        <img src="@/assets/pauseAudio.svg" />
-      </div>
-    </button> -->
+    </div>
+    <br />
   </div>
 </template>
 
@@ -22,63 +22,58 @@
 export default {
   name: "AddInterpretationViewer",
   data: () => {
-    return {
-    };
+    return {};
   },
-  mounted() {},
-  props: {    audio_id: {
+  props: {
+    audio_id: {
       default: "",
     },
     interpretationsList: {
+      // the list of interpretations that can be added as new columns. this does not include interpretations that are already being viewed.
       default: [],
-    },},
+    },
+  },
+  mounted() {},
   methods: {
-          create() {
-                                fetch(
-                    process.env.VUE_APP_api_URL +
-                      "interpretations/audio/" +
-                      this.audio_id +
-                      "/",
-                    {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-
-                        Authorization: this.$store.state.idToken,
-                      },
-                      body: JSON.stringify({
-                        user: "skysnolimit08",
-                        title: "testtitle",
-                        latest_text: "beealkjvlakwejflai ihgoaiehfoajiewf",
-                        language_name: "Unknown Dialect",
-                        spaced_by: null,
-                        public: false,
-
-                      }),
-                    }
-                  )
-         
-                    .then((response) => {
-                      return response.json();
-                    })
-                    .then((response) => {
-                      console.log(response.interpretation);
-                      this.$emit("addCreatedInterpretation", response.interpretation) // pull this out of the response
-                            this.$store.commit("addConsolesCount", response.interpretation.id); // pull this out of the response
-                    })
-                    .catch((error) => {
-                      console.error("Error:", error);
-                    });
-
+    // creates a new interpretation, with hardcoded defaults for now
+    create() {
+      fetch(
+        process.env.VUE_APP_api_URL +
+          "interpretations/audio/" +
+          this.audio_id +
+          "/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: this.$store.state.idToken,
+          },
+          body: JSON.stringify({
+            user: "skysnolimit08",
+            title: "testtitle",
+            latest_text: "beealkjvlakwejflai ihgoaiehfoajiewf",
+            language_name: "Unknown Dialect",
+            spaced_by: null,
+            public: false,
+          }),
+        }
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((response) => {
+          // if the interpretation was created successfully, then tell the parent component to add it to the list of interpretations potentially displayed in the dropdown menu, and tell the Vuex store that we need to add another column to the main screen for viewing the new interpretation
+          this.$emit("addCreatedInterpretation", response.interpretation);
+          this.$store.commit("addConsolesCount", response.interpretation.id);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     },
     add() {
-        let newID=this.interpretationsList[0].id
-            this.$emit("changeInterpretationID", newID);
-    //   this.$store.commit("addConsolesCount", newID); // pull this out of the next available
+      let newID = this.interpretationsList[0].id; // prepare to display whichever interpretation was listed FIRST in the dropdown menu in a viewer
+      this.$emit("displayInterpretationID", newID); // tell the parent component that the interpretation with that ID is now displayed in a viewer, and should no longer be available in the dropdown menu
     },
-    //     subtract() {
-    //   this.$store.commit("subtractConsolesCount");
-    // },
   },
 };
 </script>

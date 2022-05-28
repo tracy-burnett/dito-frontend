@@ -1,24 +1,28 @@
 <template>
   <div class="flex-auto">
-    Display text here for {{ title }}, in {{language_name}}.<br /><br />
+    Display text here for {{ title }}, in {{ language_name }}.<br /><br />
 
     <button @click="clearTimestamps()">CLICK ME to clear new timestamps</button
     ><br />
-        <button @click="clearOldTimestamps()">CLICK ME to clear old timestamps</button
+    <button @click="clearOldTimestamps()">
+      CLICK ME to clear old timestamps</button
     ><br /><br /><br />
 
     <span
       v-for="character in latest_text_character_array"
       :key="character.index"
     >
-      <span v-if="(!character.newtag)">
+      <span v-if="!character.newtag">
         <span @click="addNewAssociation(character.index)">{{
           character.value
         }}</span></span
       >
-      <span v-else class="text-green-500 font-extrabold" @click="removeThisAssociation(character.index)">{{
-        character.value
-      }}</span>
+      <span
+        v-else
+        class="text-green-500 font-extrabold"
+        @click="removeThisAssociation(character.index)"
+        >{{ character.value }}</span
+      >
     </span>
 
     <button
@@ -65,35 +69,31 @@ export default {
     audio_id: {
       default: "",
     },
-        interpretation_id: {default: ""},
-        
-                interpretationStatus: {default: ""}
-  },
-  computed: {
+    interpretation_id: { default: "" },
 
+    interpretationStatus: { default: "" },
   },
+  computed: {},
   methods: {
     clearTimestamps() {
       this.new_associations = {};
       console.log(JSON.stringify(this.new_associations));
-      for (let k = 0; k< this.latest_text_character_array.length; k++) {
-        
-      this.latest_text_character_array[k].newtag = false;
+      for (let k = 0; k < this.latest_text_character_array.length; k++) {
+        this.latest_text_character_array[k].newtag = false;
       }
     },
 
-        clearOldTimestamps() {
-          
-      for (let k = 0; k< this.latest_text_character_array.length; k++) {
-        this.addNewNullAssociation(k)
+    clearOldTimestamps() {
+      for (let k = 0; k < this.latest_text_character_array.length; k++) {
+        this.addNewNullAssociation(k);
       }
-      
-      this.updateAssociations()
+
+      this.updateAssociations();
     },
 
-        removeThisAssociation(characterindex) {
+    removeThisAssociation(characterindex) {
       this.latest_text_character_array[characterindex].newtag = false;
-      delete this.new_associations[characterindex]
+      delete this.new_associations[characterindex];
       console.log(JSON.stringify(this.new_associations));
     },
 
@@ -104,8 +104,8 @@ export default {
       console.log(JSON.stringify(this.new_associations));
     },
 
-        addNewNullAssociation(characterindex) {
-      this.new_associations[characterindex] = null
+    addNewNullAssociation(characterindex) {
+      this.new_associations[characterindex] = null;
     },
 
     updateAssociations() {
@@ -116,17 +116,19 @@ export default {
       // "text": "Yesterday", // Pass in a string that meets a minimum character count and includes all the new tags you want to save
       // "associations": this.new_associations // Pass in the list of the new tags
       // }))
-      console.log(JSON.stringify({
-            "text": this.latest_text, // Pass in a string that meets a minimum character count and includes all the new tags you want to save
-            "associations": this.new_associations, // Pass in the list of the new tags
-          }))
+      console.log(
+        JSON.stringify({
+          text: this.latest_text, // Pass in a string that meets a minimum character count and includes all the new tags you want to save
+          associations: this.new_associations, // Pass in the list of the new tags
+        })
+      );
 
       fetch(
-          process.env.VUE_APP_api_URL +
-            "content/" +
-            this.audio_id +
-            "/" +
-            this.interpretation_id,
+        process.env.VUE_APP_api_URL +
+          "content/" +
+          this.audio_id +
+          "/" +
+          this.interpretation_id,
         {
           method: "POST",
           body: JSON.stringify({
@@ -140,8 +142,8 @@ export default {
           // }),
           headers: {
             "Content-Type": "application/json",
-            
-              Authorization: this.$store.state.idToken,
+
+            Authorization: this.$store.state.idToken,
           },
         }
       )
@@ -153,27 +155,29 @@ export default {
   mounted() {
     fetch(
       process.env.VUE_APP_api_URL +
-      "interpretations/" +
-      this.interpretation_id +
-      "/audio/" +
-      this.audio_id +
-      "/" + this.interpretationStatus + "/",
+        "interpretations/" +
+        this.interpretation_id +
+        "/audio/" +
+        this.audio_id +
+        "/" +
+        this.interpretationStatus +
+        "/",
       {
         method: "GET",
 
         headers: {
           "Content-Type": "application/json",
-          
-        Authorization: this.$store.state.idToken,
+
+          Authorization: this.$store.state.idToken,
         },
       }
     )
       .then((response) => response.json())
       .then((data) => {
-          this.title = data.interpretation.title
-          this.language_name = data.interpretation.language_name
-        this.latest_text = data.interpretation.latest_text
-  })
+        this.title = data.interpretation.title;
+        this.language_name = data.interpretation.language_name;
+        this.latest_text = data.interpretation.latest_text;
+      })
       .then(() => {
         // console.log(this.latest_text.length);
         let character_array = this.latest_text.split("");

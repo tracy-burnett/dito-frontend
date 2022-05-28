@@ -7,16 +7,30 @@
     <div class="flex items-top">
       <PlayerVertical :audio_ID="audio_ID" />
 
-      <span v-for="interpretation in $store.state.consoles" :key="interpretation">
+      <!-- given the Vuex store's list of interpretation ID's that the user wants displayed in columns in the browser window, create a column for each one -->
+      <span
+        v-for="interpretation in $store.state.consoles"
+        :key="interpretation"
+      >
+        <!-- tell the column which audio ID we are working with, which interpretations to put in the dropdown menu for viewing, which interpretations are currently being viewed (formerInterpretationsList),
+      and the id of the interpretation to be displayed in this column in the browser window.  The SingleInterpretation component can use events
+      to tell this Storybook component to delete this interpretation column and add a new one for a different interpretation ID. -->
         <SingleInterpretation
           :audio_id="audio_ID"
           :interpretationsList="interpretationsList"
           :formerInterpretationsList="formerInterpretationsList"
           :interpretation_id="interpretation"
           @returnFormerInterpretation="returnFormerInterpretation($event)"
-          @changeInterpretationID="changeInterpretationID($event)"
+          @displayInterpretationID="displayInterpretationID($event)"
       /></span>
-      <AddInterpretationViewer :audio_id="audio_ID" :interpretationsList="interpretationsList" @addCreatedInterpretation="addCreatedInterpretation($event)" @changeInterpretationID="changeInterpretationID($event)"/>
+      <!-- the AddInterpretationViewer component can tell this Storybook component to add a new column for an interpretation that it just created (addCreatedInterpretation),
+      or to add a new column for an interpretation that has previously been created (displayInterpretationID). -->
+      <AddInterpretationViewer
+        :audio_id="audio_ID"
+        :interpretationsList="interpretationsList"
+        @addCreatedInterpretation="addCreatedInterpretation($event)"
+        @displayInterpretationID="displayInterpretationID($event)"
+      />
     </div>
   </div>
 </template>
@@ -30,81 +44,26 @@ import AddInterpretationViewer from "@/components/AddInterpretationViewer.vue";
 
 export default {
   name: "Storybook",
+  components: {
+    Navbar,
+    PlayerVertical,
+    SidebarAlt,
+    SingleInterpretation,
+    AddInterpretationViewer,
+  },
   data: () => {
     return {
-      interpretationsList: [],
-      formerInterpretationsList: [],
+      interpretationsList: [], // the list of interpretations that can be selected from the dropdown menu (does not include interpretations currently being viewed by this user in this browser window)
+      formerInterpretationsList: [], // the list of interpretations currently being viewed by this user in this browser window
     };
-  },
-  computed: {
-    //We're not defining it here; we're using a computed property to reach out and get it.
   },
   props: {
     audio_ID: "",
   },
-
-  methods: {
-    returnFormerInterpretation(oldInterpretation) {
-      let mappedoldIDsArray = this.formerInterpretationsList.map(
-        (item) => item.id
-      );
-      // console.log("mapped old ids array " + mappedoldIDsArray);
-      // console.log("int to add back into main array " + oldInterpretation);
-      let indexofold = mappedoldIDsArray.indexOf(oldInterpretation);
-      // console.log(indexofold);
-      if (indexofold > -1) {
-        // console.log("inside the if statement");
-        this.interpretationsList.unshift(
-          this.formerInterpretationsList[indexofold]
-        );
-        this.formerInterpretationsList.splice(indexofold, 1); // 2nd parameter means remove one item only
-      }
-
-      // console.log(
-      //   "timeout array " + JSON.stringify(this.formerInterpretationsList)
-      // );
-      // console.log(
-      //   "still available array" + JSON.stringify(this.interpretationsList)
-      // );
-      
-                            this.$store.commit("deleteConsole", oldInterpretation); 
-    },
-
-    changeInterpretationID(newID) {
-      // console.log("list " + JSON.stringify(this.interpretationsList));
-
-      // console.log("new int id " + newID);
-      let mappedIDsArray = this.interpretationsList.map((item) => item.id);
-      // console.log("map array " + mappedIDsArray);
-      let index = mappedIDsArray.indexOf(newID);
-      // console.log("index" + index);
-
-      if (index > -1) {
-        this.formerInterpretationsList.push(this.interpretationsList[index]);
-        this.interpretationsList.splice(index, 1); // 2nd parameter means remove one item only
-      }
-                            this.$store.commit("addConsolesCount", newID); 
-      
-    },
-
-        addCreatedInterpretation(interpretation) {
-      // console.log("list " + JSON.stringify(this.interpretationsList));
-
-      // console.log("new int id " + newID);
-      // let mappedIDsArray = this.interpretationsList.map((item) => item.id);
-      // console.log("map array " + mappedIDsArray);
-      // let index = mappedIDsArray.indexOf(newID);
-      // console.log("index" + index);
-
-      // if (index > -1) {
-        this.formerInterpretationsList.push(interpretation);
-        // this.interpretationsList.splice(index, 1); // 2nd parameter means remove one item only
-      // }
-    },
-  },
+  computed: {},
 
   mounted() {
-    //fetch the interpretations I have access to for this audio
+    //fetch the interpretations the logged-in user has access to for this audio file
     const apiUrl =
       process.env.VUE_APP_api_URL +
       "interpretations/audio/" +
@@ -125,12 +84,52 @@ export default {
       })
       .catch((error) => console.error("Error:", error));
   },
-  components: {
-    Navbar,
-    PlayerVertical,
-    SidebarAlt,
-    SingleInterpretation,
-    AddInterpretationViewer,
+
+  methods: {
+    // move an interpretation from a column in the browser window to the dropdown menu
+    returnFormerInterpretation(oldInterpretation) {
+      // make an array of the ID's of interpretations currently being viewed
+      let mappedoldIDsArray = this.formerInterpretationsList.map(
+        (item) => item.id
+      );
+
+      // find the index # of the ID to be returned to the dropdown menu (and removed from the viewer)
+      let indexofold = mappedoldIDsArray.indexOf(oldInterpretation);
+      if (indexofold > -1) {
+        // if the index # is successfully identified, then add the whole interpretation object to the list of interpretations for the dropdown menu...
+        this.interpretationsList.unshift(
+          this.formerInterpretationsList[indexofold]
+        );
+        // ... and remove it from the list of interpretations currently being viewed
+        this.formerInterpretationsList.splice(indexofold, 1); // 2nd parameter means remove one item only
+      }
+
+      // tell the Vuex store to remove the ID number of the interpretation in question from the list of interpretions that currently need columns in the browser window
+      this.$store.commit("deleteConsole", oldInterpretation);
+    },
+
+    displayInterpretationID(newID) {
+      // make an array of the ID's of interpretations currently in the Dropdown menu
+      let mappedIDsArray = this.interpretationsList.map((item) => item.id);
+
+      // find the index # of the interpretation ID that we want to add into a column in the browser window (and removed from the Dropdown menu)
+      let index = mappedIDsArray.indexOf(newID);
+      if (index > -1) {
+        // if the index # is successfully identified, then add the whole interpretation object to the list of interpretations for the browser window...
+
+        this.formerInterpretationsList.push(this.interpretationsList[index]);
+        // ... and remove it from the list of interpretations currently in the Dropdown menu
+        this.interpretationsList.splice(index, 1); // 2nd parameter means remove one item only
+      }
+
+      // tell the Vuex store to add the ID number of the interpretation in question to the list of interpretions that currently need columns in the browser window
+      this.$store.commit("addConsolesCount", newID);
+    },
+
+    // add a whole interpretation object (which was emitted by the child component that just created it and also created a new column for it) to the list of interpretations that are being viewed in the browser window
+    addCreatedInterpretation(interpretation) {
+      this.formerInterpretationsList.push(interpretation);
+    },
   },
 };
 </script>

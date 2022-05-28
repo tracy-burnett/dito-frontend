@@ -78,17 +78,13 @@ export default {
     },
   },
 
-
-
-  mounted() {
-
-  },
+  mounted() {},
 
   methods: {
     openstorybook() {
       this.$router.push({
         name: "Storybook",
-        params: {audio_ID: this.audio_ID},
+        params: { audio_ID: this.audio_ID },
       });
     },
   },

@@ -115,18 +115,16 @@ export default {
       this.$store
         .dispatch("Register_User", { email, password })
         .then(() => {
-          // console.log(this.$store.state.idToken);
           fetch(process.env.VUE_APP_api_URL + "user/", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-                      'Authorization': this.$store.state.idToken
+              Authorization: this.$store.state.idToken,
             },
             body: JSON.stringify({
               display_name: this.display_name,
               description: this.description,
               anonymous: this.anonymous,
-              // id_token: this.$store.state.idToken,
             }),
           })
             .then((response) => response.json())
