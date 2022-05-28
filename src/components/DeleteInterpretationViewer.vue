@@ -1,48 +1,42 @@
 <template>
   <div>
-    <div class="dropdown" style="float: right">
-      <button class="dropbtn">Select Interpretation</button>
-
-      <div class="dropdown-content">
-        <span
-          v-for="interpretation in interpretationsList"
-          :key="interpretation.id"
-        >
-          <a
-            @click="
-              selectInterpretationMenu(
-                interpretation.id
-              )
-            "
-            >{{ interpretation.language_name }}</a
-          >
-        </span>
+    <div id="destroy" @click="destroy">
+      <div class="h-10 w-10">
+        <img src="@/assets/pauseAudio.svg" />
       </div>
-    </div>
+    </div><br>
+        <!-- <button id="add" @click="subtract">
+      <div class="h-10 w-10">
+        <img src="@/assets/pauseAudio.svg" />
+      </div>
+    </button> -->
   </div>
 </template>
 
 <script>
 export default {
-  name: "SelectInterpretationMenu",
+  name: "DeleteInterpretationViewer",
   data: () => {
     return {
-      // interpretationsList: [],
     };
   },
-      props: {
-    interpretationsList: {
-      default: [],
+  mounted() {},
+  props: {   
+       interpretation_id: {
+      default: "",
     },
+    // interpretationsList: {
+    //   default: [],
+    // },
     },
-
   methods: {
-    selectInterpretationMenu(interpretationselection) {
-      console.log(interpretationselection)
-            this.$emit("changeInterpretationID", interpretationselection);
-
-      
+    destroy() {
+            this.$emit("returnFormerInterpretation", this.interpretation_id);
+    //   this.$store.commit("deleteConsole", this.interpretation_id); // pull this out of the next available
     },
+    //     subtract() {
+    //   this.$store.commit("subtractConsolesCount");
+    // },
   },
 };
 </script>

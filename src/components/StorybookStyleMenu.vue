@@ -20,13 +20,16 @@ export default {
     return {
     };
   },
-  props: ["text"],
+  props: [],
   methods: {
           toggleStorybookStyle(styleselection) {
-      this.$store.commit(
-        "toggleStorybookStyle",
-        styleselection
-      );
+      // this.$store.commit(
+      //   "toggleStorybookStyle",
+      //   styleselection
+      // );
+          {
+      this.$emit('toggleStorybookStyle', styleselection)
+    }
     },
   }
 };

@@ -1,6 +1,6 @@
 <template>
   <div class="flex-auto">
-    Display text here for filename {{ audio_filename }}.<br /><br />
+    Display text here for {{ title }}, in {{language_name}}.<br /><br />
 
     <button @click="clearTimestamps()">CLICK ME to clear new timestamps</button
     ><br />
@@ -48,6 +48,8 @@ export default {
   name: "Tagger",
   data: () => {
     return {
+      language_name: "",
+      title: "",
       latest_text: "Hello hello hello",
       latest_text_character_array: [],
 
@@ -58,16 +60,17 @@ export default {
 
   props: {
     audio_filename: {
-      default: "fTv6JuCXbCc.mp3",
+      default: "",
     },
     audio_id: {
-      default: 0,
+      default: "",
     },
+        interpretation_id: {default: ""},
+        
+                interpretationStatus: {default: ""}
   },
   computed: {
-        interpretation_id: function () {
-      return this.$store.state.interpretationchoice;
-    },
+
   },
   methods: {
     clearTimestamps() {
@@ -154,7 +157,7 @@ export default {
       this.interpretation_id +
       "/audio/" +
       this.audio_id +
-      "/" + this.$store.state.interpretationStatus + "/",
+      "/" + this.interpretationStatus + "/",
       {
         method: "GET",
 
@@ -166,9 +169,11 @@ export default {
       }
     )
       .then((response) => response.json())
-      .then((data) => (
+      .then((data) => {
+          this.title = data.interpretation.title
+          this.language_name = data.interpretation.language_name
         this.latest_text = data.interpretation.latest_text
-        ))
+  })
       .then(() => {
         // console.log(this.latest_text.length);
         let character_array = this.latest_text.split("");

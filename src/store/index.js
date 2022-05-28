@@ -13,11 +13,12 @@ export default new Vuex.Store({
     // nextnextTimestamp: 0, // just for dev, can comment out in production
     // nextTimestamp: 0,
     // audioDuration: 0,
-    styleoption: "Viewer",
-    interpretationStatus: null,
+    // styleoption: "Viewer",
+    // interpretationStatus: null,
     // currentTime: "00:00:00",
-    latest_text: null,
-    interpretationchoice: null,
+    // latest_text: null,
+    consoles: [],
+    // interpretationchoice: null,
     incomingCurrentTime: 0,
     // playFromTimestamp: 0,
     audioplayertime: 0,
@@ -51,9 +52,9 @@ export default new Vuex.Store({
       state.sidebar = visibility;
     },
 
-    setInterpretationStatus(state, status) {
-      state.interpretationStatus = status;
-    },
+    // setInterpretationStatus(state, status) {
+    //   state.interpretationStatus = status;
+    // },
 
     // updateCurrentTime(state, value) {
     //   state.currentTime = value
@@ -67,9 +68,9 @@ export default new Vuex.Store({
       state.audioplayertime = audiotime;
     },
 
-    updateLatestText(state, newtext) {
-      state.latest_text = newtext;
-    },
+    // updateLatestText(state, newtext) {
+    //   state.latest_text = newtext;
+    // },
 
     // updatePlayFromTimestamp(state, timestamp) {
     //   state.playFromTimestamp = timestamp;
@@ -88,6 +89,18 @@ export default new Vuex.Store({
       state.triggerTimestamps = [...new Set(state.triggerTimestamps)]
     },
 
+    addConsolesCount(state, interpretation_id) {
+      state.consoles.push(interpretation_id)
+    },
+
+    deleteConsole(state, interpretation_id) {
+      let index = state.consoles.indexOf(interpretation_id);
+
+      if (index > -1) {
+        state.consoles.splice(index, 1); // 2nd parameter means remove one item only
+      }
+    },
+
     // updateNextTimestamp(state, nextTimestamp) {
     //   state.nextTimestamp = nextTimestamp
     // },
@@ -100,13 +113,13 @@ export default new Vuex.Store({
     //   state.nextnextTimestamp = nextnextTimestamp
     // },
 
-    toggleStorybookStyle(state, styleselection) {
-      state.styleoption = styleselection;
-    },
+    // toggleStorybookStyle(state, styleselection) {
+    //   state.styleoption = styleselection;
+    // },
 
-    selectInterpretationMenu(state, interpretationselection) {
-      state.interpretationchoice = interpretationselection;
-    },
+    // selectInterpretationMenu(state, interpretationselection) {
+    //   state.interpretationchoice = interpretationselection;
+    // },
 
   },
   actions: {
