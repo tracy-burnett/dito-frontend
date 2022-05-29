@@ -22,6 +22,7 @@
 export default {
   name: "SelectInterpretationMenu",
   data: () => {
+    return {}
   },
   props: {
 

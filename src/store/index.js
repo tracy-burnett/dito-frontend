@@ -13,7 +13,6 @@ export default new Vuex.Store({
     consoles: [], // array of ID's of interpretations for which there should be a viewer column currently displayed in the browser
     incomingCurrentTime: 0, // Viewer.vue can update this, and when it is updated, Player will start playing audio from this time
     audioplayertime: 0, // the current time of the audio player
-    triggerTimestamps: [], // a list of timestamps currently interacted with only by Viewer.vue, at which the highlight will move from one text substring to another
     idToken: null, // the idToken of the currently logged-in user
 
   },
@@ -49,19 +48,6 @@ export default new Vuex.Store({
 
     updateAudioTime(state, audiotime) {
       state.audioplayertime = audiotime;
-    },
-
-    addTriggerTimestamp(state, nextTriggerTimestamp) {
-      state.triggerTimestamps.push(nextTriggerTimestamp)
-    },
-
-    clearTriggerTimestamp(state) {
-      state.triggerTimestamps.length = 0
-    },
-
-    orderTriggerTimestamp(state) {
-      state.triggerTimestamps.sort((a, b) => a - b)
-      state.triggerTimestamps = [...new Set(state.triggerTimestamps)]
     },
 
     addConsolesCount(state, interpretation_id) {
