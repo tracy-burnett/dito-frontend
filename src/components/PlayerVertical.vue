@@ -265,23 +265,33 @@ export default {
     },
 
     getzoomnumber(event) {
-      // console.log(event.deltaY);
-      let isPinch = Math.abs(event.deltaY) < 50;
-      // console.log("start pinch");
-      if (isPinch) {
-        // This is a pinch on a trackpad
-        let factor = 1 - 0.01 * event.deltaY;
-        this.zoomnumber *= factor;
-        // console.log(this.zoomnumber);
+      if ((event.deltaY <= 0 && this.zoomnumber >= 150) || (event.deltaY >= 0 && this.zoomnumber <= 1)) {
+          return;
       } else {
-        // This is a mouse wheel
-        let strength = 1.4;
-        let factor = event.deltaY < 0 ? strength : 1.0 / strength;
-        this.zoomnumber *= factor;
-        // console.log(this.zoomnumber);
-      }
-      this.zoom();
+          // console.log(event.deltaY);
+          let isPinch = Math.abs(event.deltaY) < 50;
+          // console.log("start pinch");
+          if (isPinch) {
+            // This is a pinch on a trackpad
+            let factor = 1 - 0.01 * event.deltaY;
+            this.zoomnumber *= factor;
+            // console.log(this.zoomnumber);
+          } else {
+            // This is a mouse wheel
+            let strength = 1.4;
+            let factor = event.deltaY < 0 ? strength : 1.0 / strength;
+            this.zoomnumber *= factor;
+            // console.log(this.zoomnumber);
 
+            if (this.zoomnumber <= 1) {
+                  this.zoomnumber = 1;
+            }
+            if (this.zoomnumber >= 150) {
+                  this.zoomnumber = 150;
+            }
+          }
+          this.zoom();
+      }
       //   // This is an empirically determined heuristic.
       //   // Unfortunately I don't know of any way to do this better.
       //   // Typical deltaY values from a trackpad pinch are under 1.0
