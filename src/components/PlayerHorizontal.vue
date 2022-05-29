@@ -237,7 +237,7 @@ export default {
                               temporarythis.wavesurfer.seekTo(temporarythis.startSeconds/total);
                       }
 
-                      temporarythis.$store.commit("updateAudioTime", curr);
+                      temporarythis.$store.commit("updateAudioTime", Math.round(curr));
               });
 
               this.wavesurfer.on("finish", function () {
@@ -261,7 +261,7 @@ export default {
                               }
                       }
  
-                      temporarythis.$store.commit("updateAudioTime", curr);
+                      temporarythis.$store.commit("updateAudioTime", Math.round(curr));
 
                       if ((wave2curr > (curr + .2)) || (wave2curr < (curr - .2))) {
                               temporarythis.wave2.seekTo(position);

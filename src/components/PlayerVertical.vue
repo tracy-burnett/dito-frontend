@@ -234,11 +234,11 @@ export default {
       );
       temporarythis.$store.commit(
         "updateAudioTime",
-        temporarythis.currentTimeSeconds * 100
+        Math.round(temporarythis.currentTimeSeconds * 100)
       );
     });
 
-    // whenever the user drags and drops the cursor on the waveform, if the audio is playing but the cursor is now out of bounds of the highlighted region, then pause the player
+    // whenever the audio jumps from one position to another for whatever reason, if the audio is playing but the cursor is now out of bounds of the highlighted region, then pause the player
     this.wavesurfer.on("seek", function (position) {
       temporarythis.currentTimeSeconds = position * temporarythis.totalDuration;
       if (
@@ -254,7 +254,7 @@ export default {
       );
       temporarythis.$store.commit(
         "updateAudioTime",
-        temporarythis.currentTimeSeconds * 100
+        Math.round(temporarythis.currentTimeSeconds * 100)
       );
     });
   },
@@ -340,7 +340,6 @@ export default {
     // when the user submits a new manual input of HH:MM:SS current time, the cursor moves accordingly and the change is also communicated to the Vuex store
     seekfunction() {
       this.wavesurfer.seekTo(this.currentSeekNumber);
-      this.$store.commit("updateAudioTime", this.currentTimeNumber * 100);
     },
 
     // clear the highlighted region and reset the HH:MM:SS displays of start and end time accordingly
