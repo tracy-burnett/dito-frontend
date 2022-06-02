@@ -3,21 +3,10 @@
     <SidebarAlt />
     <div class="flex flex-col">
       <Navbar />
+      
+      <PlayerHorizontal :audio_ID="audio_ID" />
     </div>
     <div class="flex items-top">
-      <span
-        v-if="showAddInterpretationModal"
-        class="fixed inset-0 w-full h-screen flex items-center justify-center"
-        ><AddInterpretationModal
-          :audio_id="audio_ID"
-          @addCreatedInterpretation="addCreatedInterpretation($event)"
-          @closeInterpretationModal="closeInterpretationModal()"
-      /></span>
-      <PlayerVertical
-        :key="playerKey"
-        :audio_ID="audio_ID"
-        @rerenderPlayer="playerKey++"
-      />
 
       <!-- given the Vuex store's list of interpretation ID's that the user wants displayed in columns in the browser window, create a column for each one -->
       <span
@@ -37,11 +26,10 @@
       /></span>
       <!-- the AddInterpretationViewer component can tell this Storybook component to add a new column for an interpretation that it just created (addCreatedInterpretation),
       or to add a new column for an interpretation that has previously been created (displayInterpretationID). -->
-
       <AddInterpretationViewer
         :audio_id="audio_ID"
         :interpretationsList="interpretationsList"
-        @toggleInterpretationModal="toggleInterpretationModal()"
+        @addCreatedInterpretation="addCreatedInterpretation($event)"
         @displayInterpretationID="displayInterpretationID($event)"
       />
     </div>
@@ -51,27 +39,23 @@
 <script>
 import Navbar from "@/components/Navbar.vue";
 import SidebarAlt from "@/components/SidebarAlt.vue";
-import PlayerVertical from "@/components/PlayerVertical.vue";
+import PlayerHorizontal from "@/components/PlayerHorizontal.vue";
 import SingleInterpretation from "@/components/SingleInterpretation.vue";
 import AddInterpretationViewer from "@/components/AddInterpretationViewer.vue";
-import AddInterpretationModal from "@/components/AddInterpretationModal.vue";
 
 export default {
   name: "Storybook",
   components: {
     Navbar,
-    PlayerVertical,
+    PlayerHorizontal,
     SidebarAlt,
     SingleInterpretation,
     AddInterpretationViewer,
-    AddInterpretationModal,
   },
   data: () => {
     return {
-      playerKey: 0, // helper; when it changes, reload Player Vertical
       interpretationsList: [], // the list of interpretations that can be selected from the dropdown menu (does not include interpretations currently being viewed by this user in this browser window)
       formerInterpretationsList: [], // the list of interpretations currently being viewed by this user in this browser window
-      showAddInterpretationModal: false,
     };
   },
   props: {
@@ -98,7 +82,6 @@ export default {
       .then((response) => response.json())
       .then((data) => {
         this.interpretationsList = data["interpretations"];
-        this.displayInterpretationID(this.interpretationsList[0].id)
       })
       .catch((error) => console.error("Error:", error));
   },
@@ -147,12 +130,6 @@ export default {
     // add a whole interpretation object (which was emitted by the child component that just created it and also created a new column for it) to the list of interpretations that are being viewed in the browser window
     addCreatedInterpretation(interpretation) {
       this.formerInterpretationsList.push(interpretation);
-    },
-    toggleInterpretationModal() {
-      this.showAddInterpretationModal = !this.showAddInterpretationModal;
-    },
-    closeInterpretationModal() {
-      this.showAddInterpretationModal = false;
     },
   },
 };

@@ -37,13 +37,17 @@
       class="flex waveform"
       @wheel.prevent="getzoomnumber($event)"
     >
-      <!-- audio loading display -->
-      <span
-        class="flex loading flex-col justify-center"
-        v-if="loadingpercent < 100"
-      >
-        audio {{ loadingpercent }}% loaded
+      <span v-if="loadingpercent > 0">
+        <span
+          class="flex loading flex-col justify-center"
+          v-if="loadingpercent < 100"
+        >
+          audio {{ loadingpercent }}% loaded
+        </span>
       </span>
+      <span v-else
+        >please be patient while your audio file is uploaded to the server</span
+      >
     </div>
 
     <!-- bottom-most time entry box (for end of view window) -->
@@ -99,6 +103,9 @@ export default {
     "$store.state.incomingCurrentTime": function () {
       this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
     },
+    "$store.state.playerRerender": function () {
+      this.shouldRerender(this.$store.state.playerRerender);
+    },
   },
 
   // these are variables whose values are dynamically updated when necessary.
@@ -139,7 +146,6 @@ export default {
 
   mounted() {
     //get secure url from server
-    console.log(this.audio_ID);
     const apiUrl = process.env.VUE_APP_api_URL + "s3/presignedgeturl";
     fetch(apiUrl, {
       method: "POST",
@@ -260,37 +266,47 @@ export default {
   },
 
   methods: {
+    // if we get news that this audio file just completed being uploaded, then rerender this audio player
+    shouldRerender(incomingID) {
+      if (incomingID == this.audio_ID) {
+      }
+      this.$emit("rerenderPlayer");
+    },
+
     zoom() {
       this.wavesurfer.zoom(Number(this.zoomnumber));
     },
 
     getzoomnumber(event) {
-      if ((event.deltaY <= 0 && this.zoomnumber >= 150) || (event.deltaY >= 0 && this.zoomnumber <= 1)) {
-          return;
+      if (
+        (event.deltaY <= 0 && this.zoomnumber >= 150) ||
+        (event.deltaY >= 0 && this.zoomnumber <= 1)
+      ) {
+        return;
       } else {
-          // console.log(event.deltaY);
-          let isPinch = Math.abs(event.deltaY) < 50;
-          // console.log("start pinch");
-          if (isPinch) {
-            // This is a pinch on a trackpad
-            let factor = 1 - 0.01 * event.deltaY;
-            this.zoomnumber *= factor;
-            // console.log(this.zoomnumber);
-          } else {
-            // This is a mouse wheel
-            let strength = 1.4;
-            let factor = event.deltaY < 0 ? strength : 1.0 / strength;
-            this.zoomnumber *= factor;
-            // console.log(this.zoomnumber);
+        // console.log(event.deltaY);
+        let isPinch = Math.abs(event.deltaY) < 50;
+        // console.log("start pinch");
+        if (isPinch) {
+          // This is a pinch on a trackpad
+          let factor = 1 - 0.01 * event.deltaY;
+          this.zoomnumber *= factor;
+          // console.log(this.zoomnumber);
+        } else {
+          // This is a mouse wheel
+          let strength = 1.4;
+          let factor = event.deltaY < 0 ? strength : 1.0 / strength;
+          this.zoomnumber *= factor;
+          // console.log(this.zoomnumber);
 
-            if (this.zoomnumber <= 1) {
-                  this.zoomnumber = 1;
-            }
-            if (this.zoomnumber >= 150) {
-                  this.zoomnumber = 150;
-            }
+          if (this.zoomnumber <= 1) {
+            this.zoomnumber = 1;
           }
-          this.zoom();
+          if (this.zoomnumber >= 150) {
+            this.zoomnumber = 150;
+          }
+        }
+        this.zoom();
       }
       //   // This is an empirically determined heuristic.
       //   // Unfortunately I don't know of any way to do this better.

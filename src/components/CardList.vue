@@ -2,7 +2,6 @@
   <div class="lg:ml-16 mx-5">
     <h1 class="font-bold text-2xl mt-8 mb-6">{{ title }}</h1>
     <div class="flex items-center">
-
       <!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
       <div v-for="audio in audioArray" :key="audio.ID">
         <Card
@@ -27,7 +26,7 @@ export default {
     };
   },
   name: "CardList",
-  props: ["title", "cards"],
+  props: ["title"],
   watch: {
     "$store.state.idToken": function () {
       this.getStorybooks();

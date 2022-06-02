@@ -10,6 +10,7 @@ export default new Vuex.Store({
     // It's like data, but for your store.
     user: null, // currently logged-in user
     sidebar: true, // sidebar displayed or not
+    playerRerender: "", // ID of audio file as it finishes uploading to AWS S3
     consoles: [], // array of ID's of interpretations for which there should be a viewer column currently displayed in the browser
     incomingCurrentTime: 0, // Viewer.vue can update this, and when it is updated, Player will start playing audio from this time
     audioplayertime: 0, // the current time of the audio player
@@ -61,6 +62,11 @@ export default new Vuex.Store({
         state.consoles.splice(index, 1); // 2nd parameter means remove one item only
       }
     },
+
+    forcePlayerRerender(state, interpretation_id) {
+      state.playerRerender = interpretation_id
+    },
+
   },
   actions: {
 

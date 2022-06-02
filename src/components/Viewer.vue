@@ -1,7 +1,6 @@
 <template>
   <div class="flex-auto">
-    Display text here for {{ interpretation_id }} {{ title }}, in
-    {{ language_name }}.<br /><br />
+    Display text here for {{ title }}, in {{ language_name }}.<br /><br />
 
     <!-- for each substring that would be independently highlighted, render it as highlighted or not based on running the highlight function on it whenever the current audioplayer time changes.
 also, if the user clicks on the text of that substring, snap the audio player to play the corresponding audio for that substring. -->
