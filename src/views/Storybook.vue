@@ -80,6 +80,8 @@ export default {
   computed: {},
 
   mounted() {
+    this.formerInterpretationsList.forEach(formerinterpretation =>
+    this.returnFormerInterpretation(formerinterpretation))
     //fetch the interpretations the logged-in user has access to for this audio file
     const apiUrl =
       process.env.VUE_APP_api_URL +
