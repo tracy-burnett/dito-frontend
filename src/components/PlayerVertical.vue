@@ -269,8 +269,8 @@ export default {
     // if we get news that this audio file just completed being uploaded, then rerender this audio player
     shouldRerender(incomingID) {
       if (incomingID == this.audio_ID) {
-      }
-      this.$emit("rerenderPlayer");
+      
+      this.$emit("rerenderPlayer");}
     },
 
     zoom() {
