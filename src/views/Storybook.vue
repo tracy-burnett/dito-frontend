@@ -80,8 +80,6 @@ export default {
   computed: {},
 
   mounted() {
-    this.formerInterpretationsList.forEach(formerinterpretation =>
-    this.returnFormerInterpretation(formerinterpretation))
     //fetch the interpretations the logged-in user has access to for this audio file
     const apiUrl =
       process.env.VUE_APP_api_URL +
@@ -100,15 +98,23 @@ export default {
       .then((response) => response.json())
       .then((data) => {
         this.interpretationsList = data["interpretations"];
-        this.displayInterpretationID(this.interpretationsList[0].id)
+        let temp_id = this.interpretationsList[0].id;
+        this.displayInterpretationID(temp_id);
       })
       .catch((error) => console.error("Error:", error));
+  },
+
+  beforeDestroy() {
+    this.$store.commit("clearConsoles");
+    this.interpretationsList.length = 0;
+    this.formerInterpretationsList.length = 0;
   },
 
   methods: {
     // move an interpretation from a column in the browser window to the dropdown menu
     returnFormerInterpretation(oldInterpretation) {
       // make an array of the ID's of interpretations currently being viewed
+      console.log(oldInterpretation);
       let mappedoldIDsArray = this.formerInterpretationsList.map(
         (item) => item.id
       );
