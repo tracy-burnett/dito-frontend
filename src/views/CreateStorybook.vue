@@ -167,7 +167,9 @@ export default {
 
               .then(() =>
                 // post request to create new interpretation for this audio
-                {
+                {  
+          this.$router.replace("/");
+        
                   fetch(
                     process.env.VUE_APP_api_URL +
                       "interpretations/audio/" +
