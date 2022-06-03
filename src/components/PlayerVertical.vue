@@ -189,22 +189,22 @@ export default {
       ],
     });
 
-    const temporarythis = this;
+    const that = this;
 
     // When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
     this.wavesurfer.on("ready", function () {
-      temporarythis.totalDuration = temporarythis.wavesurfer.getDuration();
-      temporarythis.endTimeSeconds = temporarythis.totalDuration;
-      temporarythis.endTime = temporarythis.secondsToTime(
-        temporarythis.endTimeSeconds
+      that.totalDuration = that.wavesurfer.getDuration();
+      that.endTimeSeconds = that.totalDuration;
+      that.endTime = that.secondsToTime(
+        that.endTimeSeconds
       );
-      temporarythis.wavesurfer.addRegion({
+      that.wavesurfer.addRegion({
         start: 0,
-        end: temporarythis.totalDuration,
+        end: that.totalDuration,
         id: "region",
         loop: true,
       });
-      temporarythis.wavesurfer.enableDragSelection({
+      that.wavesurfer.enableDragSelection({
         id: "region",
         loop: true,
       });
@@ -212,55 +212,55 @@ export default {
 
     // whenever the highlighted region or either of its bounds is dragged, update our data about where the region begins and ends accordingly
     this.wavesurfer.on("region-update-end", function () {
-      temporarythis.startTimeSeconds = Object.values(
-        temporarythis.wavesurfer.regions.list.region
+      that.startTimeSeconds = Object.values(
+        that.wavesurfer.regions.list.region
       )[7];
-      temporarythis.endTimeSeconds = Object.values(
-        temporarythis.wavesurfer.regions.list.region
+      that.endTimeSeconds = Object.values(
+        that.wavesurfer.regions.list.region
       )[8];
-      temporarythis.startTime = temporarythis.secondsToTime(
-        temporarythis.startTimeSeconds
+      that.startTime = that.secondsToTime(
+        that.startTimeSeconds
       );
-      temporarythis.endTime = temporarythis.secondsToTime(
-        temporarythis.endTimeSeconds
+      that.endTime = that.secondsToTime(
+        that.endTimeSeconds
       );
     });
 
     // calculate how much of the audio file has been loaded, so far
     this.wavesurfer.on("loading", function (progress) {
-      temporarythis.loadingpercent = progress;
+      that.loadingpercent = progress;
     });
 
     // whenever the audio is playing, update our data about where we are in the file accordingly, including in the Vuex store
     this.wavesurfer.on("audioprocess", function () {
-      temporarythis.currentTimeSeconds =
-        temporarythis.wavesurfer.getCurrentTime();
-      temporarythis.currentTime = temporarythis.secondsToTime(
-        temporarythis.currentTimeSeconds
+      that.currentTimeSeconds =
+        that.wavesurfer.getCurrentTime();
+      that.currentTime = that.secondsToTime(
+        that.currentTimeSeconds
       );
-      temporarythis.$store.commit(
+      that.$store.commit(
         "updateAudioTime",
-        Math.round(temporarythis.currentTimeSeconds * 100)
+        Math.round(that.currentTimeSeconds * 100)
       );
     });
 
     // whenever the audio jumps from one position to another for whatever reason, if the audio is playing but the cursor is now out of bounds of the highlighted region, then pause the player
     this.wavesurfer.on("seek", function (position) {
-      temporarythis.currentTimeSeconds = position * temporarythis.totalDuration;
+      that.currentTimeSeconds = position * that.totalDuration;
       if (
-        temporarythis.playing &&
-        (temporarythis.currentTimeSeconds < temporarythis.startTimeSeconds ||
-          temporarythis.currentTimeSeconds > temporarythis.endTimeSeconds)
+        that.playing &&
+        (that.currentTimeSeconds < that.startTimeSeconds ||
+          that.currentTimeSeconds > that.endTimeSeconds)
       ) {
-        temporarythis.pausePlayer();
+        that.pausePlayer();
       }
       // regardless whether the cursor is dropped inside or outside of the highlighted region, update the data about where we are in the audio file, both within this component and in the Vuex store.
-      temporarythis.currentTime = temporarythis.secondsToTime(
-        temporarythis.currentTimeSeconds
+      that.currentTime = that.secondsToTime(
+        that.currentTimeSeconds
       );
-      temporarythis.$store.commit(
+      that.$store.commit(
         "updateAudioTime",
-        Math.round(temporarythis.currentTimeSeconds * 100)
+        Math.round(that.currentTimeSeconds * 100)
       );
     });
   },
@@ -411,8 +411,9 @@ export default {
   width: 8vw;
   min-width: 100px;
   position: relative;
-  left: 10px;
-  top: 5px;
+  /* left: 10px; */
+  margin: 5px;
+  /* top: 5px; */
   display: inline;
   /*max-width: 7%;*/
   text-align: center;

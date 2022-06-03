@@ -8,7 +8,6 @@
       flex
       justify-center
       items-center
-      h-full
       mt-10
     "
     @click.self="closeModal()"
