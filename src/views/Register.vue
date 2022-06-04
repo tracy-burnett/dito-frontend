@@ -27,7 +27,7 @@
           />
           <input
             class="border border-gray-300 rounded w-full px-3 py-1"
-            placeholder="Description"
+            placeholder="Blurb"
             v-model="description"
           />
           <input

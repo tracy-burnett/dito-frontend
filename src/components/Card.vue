@@ -52,7 +52,7 @@ export default {
 
   props: {
     title: {
-      default: "Lorem Ipsum",
+      default: "",
     },
 
     image: {
@@ -62,15 +62,15 @@ export default {
 
     description: {
       default:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis...",
+        "",
     },
 
     uploader: {
-      default: "Alex McDowell",
+      default: "",
     },
 
     date: {
-      default: "10/26/2021",
+      default: "",
     },
 
     audio_ID: {

@@ -85,9 +85,7 @@ export default {
     },
 
     signoutuser: function () {
-      this.$store.dispatch("Logout_User").then(() => {
-        this.$router.replace("/");
-      });
+      this.$store.dispatch("Logout_User")
     },
   },
 

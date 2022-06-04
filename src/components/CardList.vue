@@ -5,7 +5,7 @@
       <!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
       <div v-for="audio in audioArray" :key="audio.ID">
         <Card
-          :date="audio.uploaded_at.substring(0, 10)"
+          :date="audio.uploaded_at.substring(0, 10) + ' UTC'"
           :uploader="audio.uploaded_by.display_name"
           :description="audio.description"
           :title="audio.title"
@@ -31,6 +31,7 @@ export default {
     "$store.state.idToken": function () {
       this.getStorybooks();
     },
+    
   },
   components: {
     Card,

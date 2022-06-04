@@ -39,6 +39,10 @@ export default new Vuex.Store({
       state.idToken = token
     },
 
+    ClearIDToken(state) {
+      state.idToken = null
+    },
+
     toggleSidebar(state, visibility) {
       state.sidebar = visibility;
     },
@@ -103,10 +107,10 @@ export default new Vuex.Store({
     Logout_User: (context) => {
 
       signOut(auth)
-        .then(() => {
+        // .then(() => {
           // onAuthStateChanged listener will handle user assignment
-          context.commit('Logout_User')
-        })
+          // context.commit('Logout_User')
+        // })
         .catch((error) => {
           // An error happened.
           console.log("Oops. " + error.code + ": " + error.message);
