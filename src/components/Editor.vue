@@ -1,7 +1,8 @@
 <template>
   <div class="flex-auto">
-    Display text here for {{ title }}, in {{ language_name }}.<br /><br />
-    <textarea v-model="latest_text"></textarea>
+    <input class="font-bold rounded w-full mt-12 mb-3 px-3 py-1" v-model="title" /><br>
+    <input class="rounded w-full mt-12 mb-3 px-3 py-1" v-model="language_name" /><br>
+    <textarea class="border border-gray-300 rounded w-full mt-12 mb-3 px-3 py-1" v-model="latest_text"></textarea>
 
     <button
       class="
@@ -66,6 +67,8 @@ export default {
           method: "PATCH",
           body: JSON.stringify({
             latest_text: this.latest_text,
+            title: this.title,
+            language_name: this.language_name,
           }),
           headers: {
             "Content-Type": "application/json",

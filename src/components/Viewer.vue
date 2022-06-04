@@ -10,11 +10,11 @@ also, if the user clicks on the text of that substring, snap the audio player to
     >
       <span
         v-if="highlight(substring.startingcharacter)"
-        class="text-red-600"
+        class="text-red-600" style="white-space: pre-wrap;"
         @click="snapToTimestamp(substring.startingcharacter)"
         >{{ substring.text }}</span
       >
-      <span v-else @click="snapToTimestamp(substring.startingcharacter)">{{
+      <span v-else @click="snapToTimestamp(substring.startingcharacter)" style="white-space: pre-wrap;">{{
         substring.text
       }}</span>
     </span>

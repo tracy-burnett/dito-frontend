@@ -1,6 +1,7 @@
 <template>
   <div class="flex-auto">
     Display text here for {{ title }}, in {{ language_name }}.<br /><br />
+    
 
     <!-- quick and dirty way to undo tags you haven't saved to the database yet -->
     <button @click="clearTimestamps()">CLICK ME to clear new timestamps</button
@@ -16,13 +17,13 @@
       :key="character.index"
     >
       <span v-if="!character.newtag">
-        <span @click="addNewAssociation(character.index)">{{
+        <span @click="addNewAssociation(character.index)" style="white-space: pre-wrap;">{{
           character.value
         }}</span></span
       >
       <span
         v-else
-        class="text-green-500 font-extrabold"
+        class="text-green-500 font-extrabold" style="white-space: pre-wrap;"
         @click="removeThisAssociation(character.index)"
         >{{ character.value }}</span
       >
