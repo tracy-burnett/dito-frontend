@@ -24,16 +24,19 @@
             type="file"
             accept="audio/*"
             ref="audioInput"
+            @keyup.enter="upload"
           />
           <input
             class="border border-gray-300 rounded w-full px-3 py-1"
             placeholder="Storybook/Audio Title"
             v-model="title"
+            @keyup.enter="upload"
           />
           <input
             class="border border-gray-300 rounded w-full px-3 py-1"
             placeholder="Description of Content"
             v-model="description"
+            @keyup.enter="upload"
           />
           <br /><br />
           <h1 class="text-2xl font-bold">Start First Interpretation</h1>
@@ -42,16 +45,21 @@
             class="border border-gray-300 rounded w-full px-3 py-1"
             placeholder="Title of First Interpretation"
             v-model="int_title"
-          />
-          <textarea
-            class="border border-gray-300 rounded w-full px-3 py-1"
-            placeholder="Text of First Interpretation"
-            v-model="int_text"
+            @keyup.enter="upload"
           />
           <input
             class="border border-gray-300 rounded w-full px-3 py-1"
             placeholder="Language of First Interpretation"
             v-model="int_language"
+            @keyup.enter="upload"
+          />
+          <textarea
+            class="border border-gray-300 rounded w-full px-3 py-1"
+            placeholder="Text of First Interpretation"
+            v-model="int_text"
+            @keyup.enter="upload"
+            style="overflow:hidden;"
+            oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
           />
           <button
             class="

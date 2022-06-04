@@ -24,23 +24,27 @@
             class="border border-gray-300 rounded w-full mt-12 mb-3 px-3 py-1"
             placeholder="Email"
             v-model="email"
+            @keyup.enter="register(email, password)"
           />
           <input
             class="border border-gray-300 rounded w-full px-3 py-1"
             placeholder="Blurb"
             v-model="description"
+            @keyup.enter="register(email, password)"
           />
           <input
             class="border border-gray-300 rounded w-full px-3 py-1"
             placeholder="Display Name"
             v-model="display_name"
             maxlength="254"
+            @keyup.enter="register(email, password)"
           />
           <input
             class="border border-gray-300 rounded w-full px-3 py-1"
             placeholder="Password"
             type="password"
             v-model="password"
+            @keyup.enter="register(email, password)"
           />
           <button
             type="submit"

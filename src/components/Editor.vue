@@ -1,8 +1,8 @@
 <template>
-  <div class="flex-auto">
+  <div class="flex-auto h-full">
     <input class="font-bold rounded w-full mt-12 mb-3 px-3 py-1" v-model="title" /><br>
     <input class="rounded w-full mt-12 mb-3 px-3 py-1" v-model="language_name" /><br>
-    <textarea class="border border-gray-300 rounded w-full mt-12 mb-3 px-3 py-1" v-model="latest_text"></textarea>
+    <textarea class="border border-gray-300 rounded w-full h-full mt-12 mb-3 px-3 py-1" style="overflow: hidden;" v-model="latest_text" ></textarea>
 
     <button
       class="
