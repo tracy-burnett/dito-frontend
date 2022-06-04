@@ -46,7 +46,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .dropbtn {
   background-color: #7833ff;
   border: none;
