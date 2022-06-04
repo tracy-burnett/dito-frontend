@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between items-center bg-gray-900 px-5 py-3">
+  <div class="bar flex justify-between items-center bg-gray-900 px-5 py-3">
     <router-link class="text-xl text-gray-100 font-semibold" to="/">
       <div class="flex">
         <svg
@@ -85,9 +85,7 @@ export default {
     },
 
     signoutuser: function () {
-      this.$store.dispatch("Logout_User").then(() => {
-        this.$router.replace("/");
-      });
+      this.$store.dispatch("Logout_User")
     },
   },
 
@@ -101,4 +99,9 @@ export default {
 </script>
 
 <style scoped>
+
+.bar {
+  min-width: 42rem;
+}
+
 </style>

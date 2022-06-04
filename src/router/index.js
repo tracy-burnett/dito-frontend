@@ -4,7 +4,8 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import About from '../views/About.vue'
 import User from '../views/User.vue'
-import Storybook from '../views/Storybook.vue'
+import StorybookHorizontal from '../views/StorybookHorizontal.vue' // eventually may need to remove this
+import Storybook from '../views/Storybook.vue' // eventually may need to remove this
 import CreateStorybook from '../views/CreateStorybook.vue'
 import Register from '../views/Register.vue';
 

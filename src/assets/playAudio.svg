@@ -1,18 +1,25 @@
 <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g filter="url(#filter0_d_116_469)">
-<rect x="4" width="44" height="44" rx="22" fill="#5D5FEF"/>
-<path d="M38 22L20 32.3923L20 11.6077L38 22Z" fill="white"/>
-</g>
-<defs>
-<filter id="filter0_d_116_469" x="0" y="0" width="52" height="52" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-<feOffset dy="4"/>
-<feGaussianBlur stdDeviation="2"/>
-<feComposite in2="hardAlpha" operator="out"/>
-<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
-<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_116_469"/>
-<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_116_469" result="shape"/>
-</filter>
-</defs>
+    <g filter="url(#filter0_d_116_469)">
+        <!-- round portion of play button  original value = #5D5FEF -->
+        <rect x="4" width="44" height="44" rx="22" fill="#0369a1"></rect>
+        <!-- in rect, put fill="url(#grad1)" -->
+        <!-- play arrow -->
+        <path d="M38 22L20 32.3923L20 11.6077L38 22Z" fill="white"/>
+    </g>
+    <defs>
+        <filter id="filter0_d_116_469" x="0" y="0" width="52" height="52" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+            <feOffset dy="4"/>
+            <feGaussianBlur stdDeviation="2"/>
+            <feComposite in2="hardAlpha" operator="out"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_116_469"/>
+            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_116_469" result="shape"/>
+        </filter>
+        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#e2e8f0; stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#475569; stop-opacity:1" />
+        </linearGradient>
+    </defs>
 </svg>

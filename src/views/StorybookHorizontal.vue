@@ -1,30 +1,29 @@
 <template>
-  <div class="h-full">
+  <div class="">
     <SidebarAlt />
-    <span
-      v-if="showAddInterpretationModal"
-      class="fixed inset-0 w-full h-screen flex items-center justify-center"
-    >
-      <AddInterpretationModal
-        :audio_id="audio_ID"
-        @addCreatedInterpretation="addCreatedInterpretation($event)"
-        @closeInterpretationModal="closeInterpretationModal()"
-      />
-    </span>
-    <Navbar />
-    <div class="flex">
-      <PlayerVertical
+    <div class="flex flex-col">
+      <Navbar />
+            <PlayerHorizontal
         :key="playerKey"
         :audio_ID="audio_ID"
         @rerenderPlayer="playerKey++"
       />
+    </div>
+    <div class="flex items-top">
+      <span
+        v-if="showAddInterpretationModal"
+        class="fixed inset-0 w-full h-screen flex items-center justify-center"
+        ><AddInterpretationModal
+          :audio_id="audio_ID"
+          @addCreatedInterpretation="addCreatedInterpretation($event)"
+          @closeInterpretationModal="closeInterpretationModal()"
+      /></span>
+
 
       <!-- given the Vuex store's list of interpretation ID's that the user wants displayed in columns in the browser window, create a column for each one -->
-
       <span
         v-for="interpretation in $store.state.consoles"
         :key="interpretation"
-        class="w-full"
       >
         <!-- tell the column which audio ID we are working with, which interpretations to put in the dropdown menu for viewing, which interpretations are currently being viewed (formerInterpretationsList),
       and the id of the interpretation to be displayed in this column in the browser window.  The SingleInterpretation component can use events
@@ -53,16 +52,16 @@
 <script>
 import Navbar from "@/components/Navbar.vue";
 import SidebarAlt from "@/components/SidebarAlt.vue";
-import PlayerVertical from "@/components/PlayerVertical.vue";
+import PlayerHorizontal from "@/components/PlayerHorizontal.vue";
 import SingleInterpretation from "@/components/SingleInterpretation.vue";
 import AddInterpretationViewer from "@/components/AddInterpretationViewer.vue";
 import AddInterpretationModal from "@/components/AddInterpretationModal.vue";
 
 export default {
-  name: "Storybook",
+  name: "StorybookHorizontal",
   components: {
     Navbar,
-    PlayerVertical,
+    PlayerHorizontal,
     SidebarAlt,
     SingleInterpretation,
     AddInterpretationViewer,

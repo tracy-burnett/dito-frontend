@@ -8,18 +8,13 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     // It's like data, but for your store.
-    user: null,
-    sidebar: true,
-    // nextnextTimestamp: 0, // just for dev, can comment out in production
-    // nextTimestamp: 0,
-    // audioDuration: 0,
-    styleoption: "Viewer",
-    currentTime: "00:00:00",
-    incomingCurrentTime: 0,
-    // playFromTimestamp: 0,
-    audioplayertime: 0,
-    triggerTimestamps: [],
-    idToken: null,
+    user: null, // currently logged-in user
+    sidebar: true, // sidebar displayed or not
+    playerRerender: "", // ID of audio file as it finishes uploading to AWS S3
+    consoles: [], // array of ID's of interpretations for which there should be a viewer column currently displayed in the browser
+    incomingCurrentTime: 0, // Viewer.vue can update this, and when it is updated, Player will start playing audio from this time
+    audioplayertime: 0, // the current time of the audio player
+    idToken: null, // the idToken of the currently logged-in user
 
   },
   getters: {
@@ -44,12 +39,12 @@ export default new Vuex.Store({
       state.idToken = token
     },
 
-    toggleSidebar(state, visibility) {
-      state.sidebar = visibility;
+    ClearIDToken(state) {
+      state.idToken = null
     },
 
-    updateCurrentTime(state, value) {
-      state.currentTime = value
+    toggleSidebar(state, visibility) {
+      state.sidebar = visibility;
     },
 
     updateIncomingCurrentTime(state, value) {
@@ -60,37 +55,29 @@ export default new Vuex.Store({
       state.audioplayertime = audiotime;
     },
 
-    // updatePlayFromTimestamp(state, timestamp) {
-    //   state.playFromTimestamp = timestamp;
-    // },
-
-    addTriggerTimestamp(state, nextTriggerTimestamp) {
-      state.triggerTimestamps.push(nextTriggerTimestamp)
-    },
-    
-    clearTriggerTimestamp(state) {
-      state.triggerTimestamps.length=0
+    addConsolesCount(state, interpretation_id) {
+      state.consoles.push(interpretation_id)
     },
 
-    orderTriggerTimestamp(state) {
-      state.triggerTimestamps.sort((a,b) => a-b)
-      state.triggerTimestamps = [...new Set(state.triggerTimestamps)]
+    deleteConsole(state, interpretation_id) {
+      let index = state.consoles.indexOf(interpretation_id);
+      console.log(state.consoles)
+      console.log(state.index)
+
+      if (index > -1) {
+        state.consoles.splice(index, 1); // 2nd parameter means remove one item only
+      }
+
+      console.log(state.consoles)
     },
 
-    // updateNextTimestamp(state, nextTimestamp) {
-    //   state.nextTimestamp = nextTimestamp
-    // },
+    clearConsoles(state) {
+      state.consoles.length = 0
+    },
 
-    // setAudioDuration(state, duration) {
-    //   state.audioDuration = duration
-    // },
 
-    // updateNextNextTimestamp(state, nextnextTimestamp) { // just for dev, can comment out in production
-    //   state.nextnextTimestamp = nextnextTimestamp
-    // },
-
-    toggleStorybookStyle(state, styleselection) {
-      state.styleoption = styleselection;
+    forcePlayerRerender(state, interpretation_id) {
+      state.playerRerender = interpretation_id
     },
 
   },
@@ -104,18 +91,7 @@ export default new Vuex.Store({
         .then((userCredential) => { return userCredential })
         .then((data) => {
           // onAuthStateChanged listener will handle user assignment
-          // console.log(data)
           context.commit('Login_User', data.user)
-          // console.log(context.state.user)
-          // getIdToken(context.state.user)
-          //   .then((idToken) => {
-          //     // context.commit('SetIdToken', idToken)
-          //     // console.log(context.state.idToken)
-          //   })
-          //   .catch((error) => {
-          //     // An error happened.
-          //     console.log("Oops. " + error.code + ": " + error.message);
-          //   })
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -131,10 +107,10 @@ export default new Vuex.Store({
     Logout_User: (context) => {
 
       signOut(auth)
-        .then(() => {
+        // .then(() => {
           // onAuthStateChanged listener will handle user assignment
-          context.commit('Logout_User')
-        })
+          // context.commit('Logout_User')
+        // })
         .catch((error) => {
           // An error happened.
           console.log("Oops. " + error.code + ": " + error.message);
@@ -150,18 +126,7 @@ export default new Vuex.Store({
         .then((userCredential) => { return userCredential })
         .then((data) => {
           // onAuthStateChanged listener will handle user assignment
-          // console.log(data)
           context.commit('Login_User', data.user)
-          // console.log(context.state.user)
-          // getIdToken(context.state.user)
-          //   .then((idToken) => {
-          //     context.commit('SetIdToken', idToken)
-          //     // console.log(context.state.idToken)
-          //   })
-          //   .catch((error) => {
-          //     // An error happened.
-          //     console.log("Oops. " + error.code + ": " + error.message);
-          //   })
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -172,17 +137,6 @@ export default new Vuex.Store({
 
 
     },
-
-    // clearTriggerTimestamp: (context) => {
-    //   context.commit('clearTriggerTimestamp')
-    //   console.log('store 1')
-    //   console.log(context.triggerTimestamps)
-    //   console.log('store 2')
-    // },
-
-    // toggleStorybookStyle: (context, styleselection) => {
-    //   context.commit('toggleStorybookStyle', styleselection)
-    // }, // oops this is not necessary, please directly call synchronous mutation instead of this.
 
   },
   modules: {

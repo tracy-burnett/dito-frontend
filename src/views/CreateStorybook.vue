@@ -13,9 +13,9 @@
             shadow-md
             rounded-xl
             p-8
-            xl:w-1/5
-            lg:w-1/4
-            md:w-1/3
+            xl:w-2/5
+            lg:w-2/4
+            md:w-2/3
           "
         >
           <h1 class="text-2xl font-bold">Upload Audio File</h1>
@@ -34,6 +34,24 @@
             class="border border-gray-300 rounded w-full px-3 py-1"
             placeholder="Description of Content"
             v-model="description"
+          />
+          <br /><br />
+          <h1 class="text-2xl font-bold">Start First Interpretation</h1>
+          <br />
+          <input
+            class="border border-gray-300 rounded w-full px-3 py-1"
+            placeholder="Title of First Interpretation"
+            v-model="int_title"
+          />
+          <textarea
+            class="border border-gray-300 rounded w-full px-3 py-1"
+            placeholder="Text of First Interpretation"
+            v-model="int_text"
+          />
+          <input
+            class="border border-gray-300 rounded w-full px-3 py-1"
+            placeholder="Language of First Interpretation"
+            v-model="int_language"
           />
           <button
             class="
@@ -76,13 +94,16 @@ export default {
       name: "",
       title: "",
       description: "",
+      int_title: "",
+      int_text: "",
+      int_language: "",
       myArray: null,
       file: null,
     };
   },
   methods: {
     async upload() {
-      //get secure url from server
+      // get secure url from server
       this.file = this.$refs.audioInput.files[0];
       this.name = this.file["name"];
       this.myArray = this.name.split(".");
@@ -91,11 +112,10 @@ export default {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: this.$store.state.idToken,
         },
         body: JSON.stringify({
           ext: this.ext,
-
-          // accessToken: this.$store.state.user.getIdToken()
         }),
       })
         .then((response) => {
@@ -103,14 +123,21 @@ export default {
         })
         .then((data) => {
           console.log("uploading file, please wait");
+          // upload audio to server
           fetch(
             data["url"],
 
             { method: "PUT", body: this.file }
           )
-            .then((response) => console.log(response))
+            .then((response) => {
+              console.log(response);
+
+              this.$store.commit("forcePlayerRerender", data["audio_ID"]);
+              return;
+            })
             .catch((error) => console.error("Error:", error));
           this.name = data["audio_ID"];
+
           return;
         })
         .then(() =>
@@ -129,7 +156,6 @@ export default {
                 title: this.title,
                 description: this.description,
                 // shared_with: [],
-                // id_token: this.$store.state.idToken,
               }),
             })
               .then((response) => {
@@ -141,12 +167,14 @@ export default {
 
               .then(() =>
                 // post request to create new interpretation for this audio
-                {
+                {  
+          this.$router.replace("/");
+        
                   fetch(
                     process.env.VUE_APP_api_URL +
-                      "audio/" +
+                      "interpretations/audio/" +
                       this.name +
-                      "/translations/1/",
+                      "/",
                     {
                       method: "POST",
                       headers: {
@@ -155,16 +183,11 @@ export default {
                         Authorization: this.$store.state.idToken,
                       },
                       body: JSON.stringify({
-                        user: "skysnolimit08",
-                        title: "testtitle",
-                        lid: "1",
-                        text: "Lorem ipsum",
+                        title: this.int_title,
+                        latest_text: this.int_text,
+                        language_name: this.int_language,
+                        spaced_by: null,
                         public: false,
-
-                        // title: this.title,
-                        // description: this.description,
-                        // shared_with: [],
-                        // id_token: this.$store.state.idToken,
                       }),
                     }
                   )
@@ -193,7 +216,6 @@ export default {
           console.error("Error:", error);
         });
     },
-    //       accessToken: this.$store.state.user.getIdToken(),
   },
 };
 </script>

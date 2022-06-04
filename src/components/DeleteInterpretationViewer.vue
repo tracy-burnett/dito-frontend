@@ -1,27 +1,33 @@
 <template>
   <div>
-    <div class="dropdown" style="float: right">
-      <button class="dropbtn">Select Interaction Style</button>
-      <div class="dropdown-content">
-        <a @click="toggleStorybookStyle('Viewer')">Viewing</a>
-        <a @click="toggleStorybookStyle('Editor')">Editing</a>
-        <a @click="toggleStorybookStyle('Tagger')">Tagging</a>
+    <!-- clicking this button removes the interpretation column associated with it -->
+    <div id="destroy" @click="destroy">
+      <div class="h-10 w-10">
+        <img src="@/assets/pauseAudio.svg" /> <!-- needs to be replaced with a more appropriate icon -->
       </div>
     </div>
+    <br />
   </div>
 </template>
 
 <script>
 export default {
-  name: "StorybookStyleMenu",
+  name: "DeleteInterpretationViewer",
   data: () => {
     return {};
   },
-  props: [],
+  mounted() {},
+  props: {
+    
+    // id of the interpretation associated with this delete button
+    interpretation_id: {
+      default: "",
+    },
+  },
   methods: {
-    toggleStorybookStyle(styleselection) {
-      // tell the parent component to load Viewer, Editor, or Tagger, corresponding with what the user has selected in this dropdown menu
-      this.$emit("toggleStorybookStyle", styleselection);
+    destroy() {
+      // tell the parent component to move this interpretation ID from a viewer column back to the dropdown menu of interpretations available to view
+      this.$emit("returnFormerInterpretation", this.interpretation_id);
     },
   },
 };

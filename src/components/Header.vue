@@ -21,5 +21,6 @@ export default {
     background-repeat: no-repeat;
     background-size: 36%;
     background-position: right 3% center;
+    min-width: 42rem;
 }
 </style>

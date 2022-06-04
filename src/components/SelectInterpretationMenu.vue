@@ -1,11 +1,18 @@
 <template>
   <div>
     <div class="dropdown" style="float: right">
-      <button class="dropbtn">Select Interaction Style</button>
+      <button class="dropbtn">Select Interpretation</button>
+
       <div class="dropdown-content">
-        <a @click="toggleStorybookStyle('Viewer')">Viewing</a>
-        <a @click="toggleStorybookStyle('Editor')">Editing</a>
-        <a @click="toggleStorybookStyle('Tagger')">Tagging</a>
+        <!-- for each interpretation in the list of interpretations to show in the Dropdownmenu, create a menu option that displays the language name -->
+        <span
+          v-for="interpretation in interpretationsList"
+          :key="interpretation.id"
+        >
+          <a @click="selectInterpretationMenu(interpretation.id)">{{
+            interpretation.language_name
+          }}</a>
+        </span>
       </div>
     </div>
   </div>
@@ -13,15 +20,22 @@
 
 <script>
 export default {
-  name: "StorybookStyleMenu",
+  name: "SelectInterpretationMenu",
   data: () => {
-    return {};
+    return {}
   },
-  props: [],
+  props: {
+
+    // the list of interpretations available to be selected in the Dropdown menu (does not include the interpretations currently being viewed)
+    interpretationsList: {
+      default: [],
+    },
+  },
+
   methods: {
-    toggleStorybookStyle(styleselection) {
-      // tell the parent component to load Viewer, Editor, or Tagger, corresponding with what the user has selected in this dropdown menu
-      this.$emit("toggleStorybookStyle", styleselection);
+    // tell the parent component that we are swapping the interpretation currently in the viewer with the one the User just selected from the Dropdown menu
+    selectInterpretationMenu(interpretationselection) {
+      this.$emit("changeInterpretationID", interpretationselection);
     },
   },
 };

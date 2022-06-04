@@ -21,7 +21,7 @@ export default {
     Navbar,
     Header,
     CardList,
-    SidebarAlt
+    SidebarAlt,
   },
 };
 </script>

@@ -36,8 +36,10 @@ export default {
         console.log("you are currently signed in");
       } else {
         // User is signed out
-        this.$store.state.user = null;
+        this.$store.commit("Logout_User")
+        this.$store.commit("ClearIDToken")
         console.log("everybody signed out");
+                  // this.$router.replace("/");
       }
     });
   },
