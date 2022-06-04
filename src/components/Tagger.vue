@@ -1,34 +1,40 @@
 <template>
   <div class="flex-auto">
-    Display text here for {{ title }}, in {{ language_name }}.<br /><br />
-    
+    <span class="font-bold border-gray-300 rounded px-3 py-1">{{ title }}</span>
+    in <span class="border-gray-300 rounded px-3 py-1">{{ language_name }}</span
+    ><br />
+
+    <!-- for each character in the array of characters for the text, display it and if the user clicks on it, tag or untag it, depending on whether it has already been tagged in this session or not -->
+    <div class="border-gray-300 rounded w-full h-full mt-12 mb-3 px-3 py-1">
+      <span
+        v-for="character in latest_text_character_array"
+        :key="character.index"
+      >
+        <span v-if="!character.newtag">
+          <span
+            @click="addNewAssociation(character.index)"
+            style="white-space: pre-wrap"
+            >{{ character.value }}</span
+          ></span
+        >
+        <span
+          v-else
+          class="text-green-500 font-extrabold"
+          style="white-space: pre-wrap"
+          @click="removeThisAssociation(character.index)"
+          >{{ character.value }}</span
+        >
+      </span>
+    </div>
+    <br /><br />
 
     <!-- quick and dirty way to undo tags you haven't saved to the database yet -->
     <button @click="clearTimestamps()">CLICK ME to clear new timestamps</button
     ><br />
     <!-- quick and dirty way to purge the database of all tags for this interpretation, mainly used for debugging purposes -->
     <button @click="clearOldTimestamps()">
-      CLICK ME to clear old timestamps</button
-    ><br /><br /><br />
-
-    <!-- for each character in the array of characters for the text, display it and if the user clicks on it, tag or untag it, depending on whether it has already been tagged in this session or not -->
-    <span
-      v-for="character in latest_text_character_array"
-      :key="character.index"
-    >
-      <span v-if="!character.newtag">
-        <span @click="addNewAssociation(character.index)" style="white-space: pre-wrap;">{{
-          character.value
-        }}</span></span
-      >
-      <span
-        v-else
-        class="text-green-500 font-extrabold" style="white-space: pre-wrap;"
-        @click="removeThisAssociation(character.index)"
-        >{{ character.value }}</span
-      >
-    </span>
-
+      CLICK ME to clear old timestamps
+    </button>
     <button
       class="
         bg-indigo-500

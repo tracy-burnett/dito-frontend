@@ -15,10 +15,15 @@ export default new Vuex.Store({
     incomingCurrentTime: 0, // Viewer.vue can update this, and when it is updated, Player will start playing audio from this time
     audioplayertime: 0, // the current time of the audio player
     idToken: null, // the idToken of the currently logged-in user
+    consoleswidth: 0,
+    consolesheight: 0,
 
   },
   getters: {
     // it's like computed properties, but for your store.
+    maxsize(state) {
+      return state.consoleswidth / state.consoles.length / 12 - 3
+    },
   },
   mutations: {
     //Can be tracked by Vue dev tools in (at least Chrome) browser.
@@ -53,6 +58,14 @@ export default new Vuex.Store({
 
     updateAudioTime(state, audiotime) {
       state.audioplayertime = audiotime;
+    },
+
+    updateConsolesWidth(state, newwidth) {
+      state.consoleswidth = newwidth
+    },
+
+    updateConsolesHeight(state, newheight) {
+      state.consolesheight = newheight
     },
 
     addConsolesCount(state, interpretation_id) {
@@ -108,8 +121,8 @@ export default new Vuex.Store({
 
       signOut(auth)
         // .then(() => {
-          // onAuthStateChanged listener will handle user assignment
-          // context.commit('Logout_User')
+        // onAuthStateChanged listener will handle user assignment
+        // context.commit('Logout_User')
         // })
         .catch((error) => {
           // An error happened.

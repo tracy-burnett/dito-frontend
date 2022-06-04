@@ -81,6 +81,13 @@ export default {
   },
   computed: {},
 
+  created() {
+    window.addEventListener("resize", this.myEventHandler);
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.myEventHandler);
+  },
+
   mounted() {
     //fetch the interpretations the logged-in user has access to for this audio file
     const apiUrl =
@@ -104,6 +111,15 @@ export default {
         this.displayInterpretationID(temp_id);
       })
       .catch((error) => console.error("Error:", error));
+
+    this.$store.commit(
+      "updateConsolesWidth",
+      document.documentElement.clientWidth
+    );
+    this.$store.commit(
+      "updateConsolesHeight",
+      document.documentElement.clientHeight
+    );
   },
 
   beforeDestroy() {
@@ -113,6 +129,17 @@ export default {
   },
 
   methods: {
+    myEventHandler(e) {
+      this.$store.commit(
+        "updateConsolesWidth",
+        document.documentElement.clientWidth
+      );
+      this.$store.commit(
+        "updateConsolesHeight",
+        document.documentElement.clientHeight
+      );
+    },
+
     // move an interpretation from a column in the browser window to the dropdown menu
     returnFormerInterpretation(oldInterpretation) {
       // make an array of the ID's of interpretations currently being viewed

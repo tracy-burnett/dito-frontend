@@ -1,8 +1,27 @@
 <template>
   <div class="flex-auto h-full">
-    <input class="font-bold rounded w-full mt-12 mb-3 px-3 py-1" v-model="title" /><br>
-    <input class="rounded w-full mt-12 mb-3 px-3 py-1" v-model="language_name" /><br>
-    <textarea class="border border-gray-300 rounded w-full h-full mt-12 mb-3 px-3 py-1" style="overflow: hidden;" v-model="latest_text" ></textarea>
+    <!-- {{title.length}} -->
+    <!-- {{$store.getters.maxsize}} -->
+    <input
+      class="font-bold border-gray-300 rounded px-3 py-1"
+      v-model="title"
+      :size="titlesize"
+    />
+    in
+    <input
+      class="border-gray-300 rounded h-full px-3 py-1"
+      v-model="language_name"
+      :size="languagesize"
+    />
+    <textarea
+      class="border-gray-300 rounded w-full h-full mt-12 mb-3 px-3 py-1"
+      :rows="latesttextrows"
+      style="overflow: hidden"
+      v-model="latest_text"
+    ></textarea>
+    <!-- {{latest_text.length}}
+{{$store.state.consoleswidth}}
+{{$store.state.consoles.length}} -->
 
     <button
       class="
@@ -36,9 +55,56 @@ export default {
       latest_text: "",
     };
   },
-  computed: {},
-  props: {
+  computed: {
+    numbernewlines() {
+      return this.latest_text.split(/\r\n|\r|\n/).length;
+    },
+    titlesize() {
+      if (
+        this.title.length > 3 &&
+        this.title.length < this.$store.getters.maxsize
+      ) {
+        return this.title.length * 1.13 - 3;
+      } else if (this.title.length >= this.$store.getters.maxsize) {
+        return this.$store.getters.maxsize;
+      } else {
+        return 1;
+      }
+    },
+    languagesize() {
+      if (
+        this.language_name.length > 4 &&
+        this.language_name.length < this.$store.getters.maxsize
+      ) {
+        return this.language_name.length * 1.27 - 4;
+      } else if (this.title.length >= this.$store.getters.maxsize) {
+        return this.$store.getters.maxsize;
+      } else {
+        return 1;
+      }
+    },
+    // maxsize() {
+    //   return this.$store.state.consoleswidth/this.$store.state.consoles.length/12-3
+    // },
+    latesttextrows() {
+      return (
+        ((6 * this.latest_text.length) /
+          (this.$store.state.consoleswidth - 570)) *
+          this.$store.state.consoles.length +
+        this.numbernewlines
+      );
+      // return 20
 
+      // if (this.latest_text.length > 25) {
+      // // return Math.round(this.latest_text.length/this.$refs['edittext'].)
+      // return 6
+      // }
+      // else {
+      //   return 1
+      // }
+    },
+  },
+  props: {
     // ID of associated audio file
     audio_id: {
       default: "",
@@ -51,7 +117,6 @@ export default {
     interpretationStatus: { default: "" },
   },
   methods: {
-
     // edit the text when the user clicks "Save Edits"
     updateText() {
       fetch(
@@ -80,7 +145,6 @@ export default {
         .then((response) => console.log(response))
         .catch((error) => console.error("Error:", error));
     },
-
   },
   mounted() {
     fetch(

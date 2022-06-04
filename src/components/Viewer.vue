@@ -1,23 +1,31 @@
 <template>
   <div class="flex-auto">
-    Display text here for {{ title }}, in {{ language_name }}.<br /><br />
+    <span class="font-bold border-gray-300 rounded px-3 py-1">{{ title }}</span>
+    in <span class="border-gray-300 rounded px-3 py-1">{{ language_name }}</span
+    ><br />
 
     <!-- for each substring that would be independently highlighted, render it as highlighted or not based on running the highlight function on it whenever the current audioplayer time changes.
 also, if the user clicks on the text of that substring, snap the audio player to play the corresponding audio for that substring. -->
-    <span
-      v-for="substring in substringArray"
-      :key="substring.startingcharacter"
-    >
+    <div class="border-gray-300 rounded w-full h-full mt-12 mb-3 px-3 py-1">
       <span
-        v-if="highlight(substring.startingcharacter)"
-        class="text-red-600" style="white-space: pre-wrap;"
-        @click="snapToTimestamp(substring.startingcharacter)"
-        >{{ substring.text }}</span
+        v-for="substring in substringArray"
+        :key="substring.startingcharacter"
       >
-      <span v-else @click="snapToTimestamp(substring.startingcharacter)" style="white-space: pre-wrap;">{{
-        substring.text
-      }}</span>
-    </span>
+        <span
+          v-if="highlight(substring.startingcharacter)"
+          class="text-red-600"
+          style="white-space: pre-wrap"
+          @click="snapToTimestamp(substring.startingcharacter)"
+          >{{ substring.text }}</span
+        >
+        <span
+          v-else
+          @click="snapToTimestamp(substring.startingcharacter)"
+          style="white-space: pre-wrap"
+          >{{ substring.text }}</span
+        >
+      </span>
+    </div>
     <br />
 
     <br />
