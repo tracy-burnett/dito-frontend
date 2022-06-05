@@ -195,18 +195,16 @@ export default {
     this.wavesurfer.on("ready", function () {
       that.totalDuration = that.wavesurfer.getDuration();
       that.endTimeSeconds = that.totalDuration;
-      that.endTime = that.secondsToTime(
-        that.endTimeSeconds
-      );
+      that.endTime = that.secondsToTime(that.endTimeSeconds);
       that.wavesurfer.addRegion({
         start: 0,
         end: that.totalDuration,
         id: "region",
-        loop: true,
+        loop: false,
       });
       that.wavesurfer.enableDragSelection({
         id: "region",
-        loop: true,
+        loop: false,
       });
     });
 
@@ -218,12 +216,8 @@ export default {
       that.endTimeSeconds = Object.values(
         that.wavesurfer.regions.list.region
       )[8];
-      that.startTime = that.secondsToTime(
-        that.startTimeSeconds
-      );
-      that.endTime = that.secondsToTime(
-        that.endTimeSeconds
-      );
+      that.startTime = that.secondsToTime(that.startTimeSeconds);
+      that.endTime = that.secondsToTime(that.endTimeSeconds);
     });
 
     // calculate how much of the audio file has been loaded, so far
@@ -233,15 +227,21 @@ export default {
 
     // whenever the audio is playing, update our data about where we are in the file accordingly, including in the Vuex store
     this.wavesurfer.on("audioprocess", function () {
-      that.currentTimeSeconds =
-        that.wavesurfer.getCurrentTime();
-      that.currentTime = that.secondsToTime(
-        that.currentTimeSeconds
-      );
+      that.currentTimeSeconds = that.wavesurfer.getCurrentTime();
+      that.currentTime = that.secondsToTime(that.currentTimeSeconds);
       that.$store.commit(
         "updateAudioTime",
         Math.round(that.currentTimeSeconds * 100)
       );
+      if (that.currentTimeSeconds >= that.endTimeSeconds) {
+        that.wavesurfer.seekTo(that.startTimeSeconds / that.totalDuration);
+      }
+    });
+
+    this.wavesurfer.on("finish", function () {
+      that.wavesurfer.seekTo(that.startTimeSeconds / that.totalDuration);
+      that.pausePlayer();
+      that.play();
     });
 
     // whenever the audio jumps from one position to another for whatever reason, if the audio is playing but the cursor is now out of bounds of the highlighted region, then pause the player
@@ -255,9 +255,7 @@ export default {
         that.pausePlayer();
       }
       // regardless whether the cursor is dropped inside or outside of the highlighted region, update the data about where we are in the audio file, both within this component and in the Vuex store.
-      that.currentTime = that.secondsToTime(
-        that.currentTimeSeconds
-      );
+      that.currentTime = that.secondsToTime(that.currentTimeSeconds);
       that.$store.commit(
         "updateAudioTime",
         Math.round(that.currentTimeSeconds * 100)
@@ -269,8 +267,8 @@ export default {
     // if we get news that this audio file just completed being uploaded, then rerender this audio player
     shouldRerender(incomingID) {
       if (incomingID == this.audio_ID) {
-      
-      this.$emit("rerenderPlayer");}
+        this.$emit("rerenderPlayer");
+      }
     },
 
     zoom() {
@@ -372,7 +370,7 @@ export default {
         start: this.startTimeNumber,
         end: this.endTimeNumber,
         id: "region",
-        loop: true,
+        loop: false,
       });
       this.startTimeSeconds = this.startTimeNumber; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
       this.endTimeSeconds = this.endTimeNumber; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
