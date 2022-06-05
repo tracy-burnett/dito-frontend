@@ -53,6 +53,13 @@
             v-model="int_language"
             @keyup.enter="upload"
           />
+                    <input
+            class="border border-gray-300 rounded w-full px-3 py-1"
+            placeholder="What character is this language 'spaced' by? (or leave blank)"
+            v-model="int_spacing"
+            maxlength="1"
+            @keyup.enter="upload"
+          />
           <textarea
             class="border border-gray-300 rounded w-full px-3 py-1"
             placeholder="Text of First Interpretation"
@@ -105,6 +112,7 @@ export default {
       int_title: "",
       int_text: "",
       int_language: "",
+      int_spacing: "",
       myArray: null,
       file: null,
     };
@@ -194,7 +202,7 @@ export default {
                         title: this.int_title,
                         latest_text: this.int_text,
                         language_name: this.int_language,
-                        spaced_by: null,
+                        spaced_by: this.int_spacing,
                         public: false,
                       }),
                     }

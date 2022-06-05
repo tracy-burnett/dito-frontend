@@ -41,13 +41,36 @@
       />
       <input
         class="border border-gray-300 rounded w-full px-3 py-1"
-        placeholder="Text of New Interpretation"
-        v-model="int_text"
+        placeholder="What character is this language 'spaced' by? (or leave blank)"
+        v-model="int_spacing"
+        maxlength="1"
       />
-      <input
+            <input
         class="border border-gray-300 rounded w-full px-3 py-1"
         placeholder="Language of New Interpretation"
         v-model="int_language"
+      />
+      <textarea
+        class="
+        form-control
+        block
+        w-full
+        px-3
+        py-1.5
+        text-base
+        font-normal
+        text-gray-700
+        bg-white bg-clip-padding
+        border border-solid border-gray-300
+        rounded
+        transition
+        ease-in-out
+        m-0
+      "
+        placeholder="Text of New Interpretation"
+        v-model="int_text"
+        rows="5"
+        style="overflow-y: scroll"
       />
       <button
         class="
@@ -81,6 +104,7 @@ export default {
       int_title: "",
       int_text: "",
       int_language: "",
+      int_spacing: "",
     };
   },
   props: {
@@ -106,7 +130,7 @@ export default {
             title: this.int_title,
             latest_text: this.int_text,
             language_name: this.int_language,
-            spaced_by: null,
+            spaced_by: this.int_spacing,
             public: false,
           }),
         }

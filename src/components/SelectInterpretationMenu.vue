@@ -9,7 +9,7 @@
           v-for="interpretation in interpretationsList"
           :key="interpretation.id"
         >
-          <a @click="selectInterpretationMenu(interpretation.id)">{{
+          <a @click="selectInterpretationMenu(interpretation.id)">{{interpretation.title}}, in {{
             interpretation.language_name
           }}</a>
         </span>
