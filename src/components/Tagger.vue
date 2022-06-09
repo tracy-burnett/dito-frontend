@@ -3,7 +3,7 @@
     <span class="font-bold border-gray-300 rounded px-3 py-1">{{ title }}</span>
     in <span class="border-gray-300 rounded px-3 py-1">{{ language_name }}</span
     ><br />
-
+    <!-- {{new_associations}} -->
     <!-- for each character in the array of characters for the text, display it and if the user clicks on it, tag or untag it, depending on whether it has already been tagged in this session or not -->
     <div class="border-gray-300 rounded w-full h-full mt-12 mb-3 px-3 py-1">
       <span
@@ -14,7 +14,7 @@
           <span
             @click="addNewAssociation(character.index)"
             style="white-space: pre-wrap"
-            >{{ character.value }}</span
+            >{{ character.value }}{{spaced_by}}</span
           ></span
         >
         <span
@@ -22,7 +22,7 @@
           class="text-green-500 font-extrabold"
           style="white-space: pre-wrap"
           @click="removeThisAssociation(character.index)"
-          >{{ character.value }}</span
+          >{{ character.value }}{{spaced_by}}</span
         >
       </span>
     </div>
@@ -67,6 +67,7 @@ export default {
       latest_text: "",
       latest_text_character_array: [],
       new_associations: {},
+      spaced_by: "",
     };
   },
 
@@ -105,10 +106,11 @@ export default {
         this.title = data.interpretation.title;
         this.language_name = data.interpretation.language_name;
         this.latest_text = data.interpretation.latest_text;
+        this.spaced_by = data.interpretation.spaced_by;
       })
-      // convert the text into an array of single characters
+      // convert the text into an array of single characters or words
       .then(() => {
-        let character_array = this.latest_text.split("");
+        let character_array = this.latest_text.split(this.spaced_by);
         for (let i = 0; i < character_array.length; i++) {
           let sample_object = {};
           sample_object.index = i;
