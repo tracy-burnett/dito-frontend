@@ -1,8 +1,8 @@
 <template>
   <div>
     <!-- clicking this button removes the interpretation column associated with it -->
-    <div id="destroy" @click="destroy">
-      <div class="h-10 w-10">
+    <div id="destroy">
+      <div class="h-10 w-10" @click="destroy">
         <img src="@/assets/pauseAudio.svg" /> <!-- needs to be replaced with a more appropriate icon -->
       </div>
     </div>
