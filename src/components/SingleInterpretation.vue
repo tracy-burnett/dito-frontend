@@ -23,6 +23,7 @@
         :audio_id="audio_id"
         :interpretationStatus="interpretationStatus"
         :interpretation_id="interpretation_id"
+        @permanentlydestroy="permanentlydestroy($event)"
       ></component>
 
       <!-- this component allows the user to remove the entire interpretation column from their browser window -->
@@ -117,6 +118,10 @@ export default {
 
     returnFormerInterpretation(formerinterpretation) {
       this.$emit("returnFormerInterpretation", formerinterpretation);
+    },
+
+        permanentlydestroy(formerinterpretation) {
+      this.$emit("permanentlydestroy", formerinterpretation);
     },
   },
 };

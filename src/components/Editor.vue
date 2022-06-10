@@ -109,6 +109,12 @@ export default {
     interpretationStatus: { default: "" },
   },
   methods: {
+
+    // destroy an interpretation with no text, title, or language name
+    permanentlydelete() {
+      this.$emit("permanentlydestroy", this.interpretation_id);
+    },
+
     // edit the text when the user clicks "Save Edits"
     updateText() {
       this.instructions = this.patienceDiffPlus(
@@ -150,7 +156,14 @@ export default {
           },
         }
       )
-        .then((response) => console.log(response))
+              .then((response) => {
+                return response.json();
+              })
+              .then((response) => {
+                if (response == "interpretation deleted") {
+                  this.permanentlydelete()
+                }
+              })
         .catch((error) => console.error("Error:", error));
 
       this.original_text = this.latest_text;

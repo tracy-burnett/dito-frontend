@@ -36,6 +36,7 @@
           :interpretation_id="interpretation"
           @returnFormerInterpretation="returnFormerInterpretation($event)"
           @displayInterpretationID="displayInterpretationID($event)"
+          @permanentlydestroy="permanentlydestroy($event)"
       /></span>
       <!-- the AddInterpretationViewer component can tell this Storybook component to add a new column for an interpretation that it just created (addCreatedInterpretation),
       or to add a new column for an interpretation that has previously been created (displayInterpretationID). -->
@@ -138,6 +139,25 @@ export default {
         "updateConsolesHeight",
         document.documentElement.clientHeight
       );
+    },
+
+    permanentlydestroy(oldInterpretation) {
+      // make an array of the ID's of interpretations currently being viewed
+      console.log(oldInterpretation);
+      let mappedoldIDsArray = this.formerInterpretationsList.map(
+        (item) => item.id
+      );
+
+      // find the index # of the ID to be returned to the dropdown menu (and removed from the viewer)
+      let indexofold = mappedoldIDsArray.indexOf(oldInterpretation);
+      if (indexofold > -1) {
+
+        // ... and remove it from the list of interpretations currently being viewed
+        this.formerInterpretationsList.splice(indexofold, 1); // 2nd parameter means remove one item only
+      }
+
+      // tell the Vuex store to remove the ID number of the interpretation in question from the list of interpretions that currently need columns in the browser window
+      this.$store.commit("deleteConsole", oldInterpretation);
     },
 
     // move an interpretation from a column in the browser window to the dropdown menu
