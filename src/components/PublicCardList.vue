@@ -27,33 +27,33 @@ export default {
   },
   name: "PublicCardList",
   props: ["title"],
-  watch: {
-    "$store.state.idToken": function () {
-      this.getStorybooks();
-    },
+  // watch: {
+  //   "$store.state.idToken": function () {
+  //     this.getStorybooks();
+  //   },
     
-  },
+  // },
   components: {
     Card,
   },
   mounted() {
-    if (this.$store.state.idToken) {
+    // if (this.$store.state.idToken) {
       this.getStorybooks();
-    }
+    // }
   },
   methods: {
     getStorybooks() {
-      fetch(process.env.VUE_APP_api_URL + "audio/user/", {
+      fetch(process.env.VUE_APP_api_URL + "audio/", {
         method: "GET",
 
         headers: {
           "Content-Type": "application/json",
-          Authorization: this.$store.state.idToken,
+          // Authorization: this.$store.state.idToken,
         },
       })
         .then((response) => response.json()) // json to object
         .then((data) => {
-          this.audioArray = data["audio files"]; // collect the list of audio files that are owned by, or shared with, the logged-in user
+          this.audioArray = data["audio"]; // collect the list of audio files that are owned by, or shared with, the logged-in user
         })
         .catch((error) => console.error("Error:", error));
     },

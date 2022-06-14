@@ -39,7 +39,7 @@
           value="public"
           v-model="checkedFilters"
         />
-        <label for="public"> public</label></span
+        <label for="public"> other</label></span
       >
       <!-- {{audioArray}} -->
 
@@ -120,6 +120,7 @@
           /></div></span
       ><br /><br />
 
+<span v-if="(audioArrayArchive.length > 0) && (checkedFilters.includes('archived'))">
     <h1 class="font-bold text-2xl mt-8 mb-6">Archived Storybooks</h1>
       <br />
       <div class="grid grid-cols-8 px-4 py-2 ml-20">
@@ -131,7 +132,7 @@
         <p>last edited at</p>
         <p>Public?</p>
         <p></p>
-      </div>
+      </div></span>
       <span v-if="checkedFilters.includes('archived')">
         <div v-for="audio in audioArrayArchive" :key="audio.ID">
           <CardRow

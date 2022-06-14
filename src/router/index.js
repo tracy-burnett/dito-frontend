@@ -8,6 +8,7 @@ import StorybookHorizontal from '../views/StorybookHorizontal.vue' // eventually
 import Storybook from '../views/Storybook.vue' // eventually may need to remove this
 import CreateStorybook from '../views/CreateStorybook.vue'
 import Register from '../views/Register.vue';
+import Profile from '../views/Profile.vue'
 
 
 
@@ -54,9 +55,14 @@ const routes = [
     component: () => import('../views/Statement.vue')
   },
   {
-    path: '/user/:id',
+    path: '/user/',
     name: 'User',
     component: User
+  },
+  {
+    path: '/profile/',
+    name: 'Profile',
+    component: Profile
   },
   {
     path: '/storybook/',
