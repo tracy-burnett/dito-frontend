@@ -186,6 +186,9 @@ export default {
                 {  
           this.$router.replace("/");
         
+
+          if (this.name || this.title || this.description) {
+
                   fetch(
                     process.env.VUE_APP_api_URL +
                       "interpretations/audio/" +
@@ -215,7 +218,7 @@ export default {
                     })
                     .catch((error) => {
                       console.error("Error:", error);
-                    });
+                    });}
 
                   return;
                 }

@@ -16,6 +16,7 @@ export default new Vuex.Store({
     audioplayertime: 0, // the current time of the audio player
     idToken: null, // the idToken of the currently logged-in user
     consoleswidth: 0,
+    dashboardRerender: 0,
     consolesheight: 0,
 
   },
@@ -91,6 +92,10 @@ export default new Vuex.Store({
 
     forcePlayerRerender(state, interpretation_id) {
       state.playerRerender = interpretation_id
+    },
+
+    forceDashboardRerender(state) {
+      state.dashboardRerender++
     },
 
   },
