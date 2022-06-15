@@ -24,27 +24,35 @@
             class="border border-gray-300 rounded w-full mt-12 mb-3 px-3 py-1"
             placeholder="Email"
             v-model="email"
-            @keyup.enter="register(email, password)"
+            @keyup.enter="
+              register(email, password, display_name, description, anonymous)
+            "
           />
           <input
             class="border border-gray-300 rounded w-full px-3 py-1"
             placeholder="Blurb"
             v-model="description"
-            @keyup.enter="register(email, password)"
+            @keyup.enter="
+              register(email, password, display_name, description, anonymous)
+            "
           />
           <input
             class="border border-gray-300 rounded w-full px-3 py-1"
             placeholder="Display Name"
             v-model="display_name"
             maxlength="254"
-            @keyup.enter="register(email, password)"
+            @keyup.enter="
+              register(email, password, display_name, description, anonymous)
+            "
           />
           <input
             class="border border-gray-300 rounded w-full px-3 py-1"
             placeholder="Password"
             type="password"
             v-model="password"
-            @keyup.enter="register(email, password)"
+            @keyup.enter="
+              register(email, password, display_name, description, anonymous)
+            "
           />
           <button
             type="submit"
@@ -62,7 +70,9 @@
               hover:bg-indigo-400
               transition-colors
             "
-            @click="register(email, password)"
+            @click="
+              register(email, password, display_name, description, anonymous)
+            "
           >
             Register
           </button>
@@ -115,30 +125,16 @@ export default {
     };
   },
   methods: {
-    register: function (email, password) {
+    register: function (email, password, display_name, description, anonymous) {
       this.$store
-        .dispatch("Register_User", { email, password })
-        .then(() => {
-          fetch(process.env.VUE_APP_api_URL + "user/", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: this.$store.state.idToken,
-            },
-            body: JSON.stringify({
-              display_name: this.display_name,
-              description: this.description,
-              anonymous: this.anonymous,
-            }),
-          })
-            .then((response) => response.json())
-            .then((response) => console.log(response))
-            .catch((error) => console.error("Error:", error))
-
-            .catch(function (error) {
-              console.log("Oops. " + error.code + ": " + error.message);
-            });
+        .dispatch("Register_User", {
+          email,
+          password,
+          display_name,
+          description,
+          anonymous,
         })
+
         .then(() => {
           this.$router.replace("/");
         })

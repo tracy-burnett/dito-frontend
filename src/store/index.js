@@ -17,6 +17,7 @@ export default new Vuex.Store({
     idToken: null, // the idToken of the currently logged-in user
     consoleswidth: 0,
     dashboardRerender: 0,
+    showStorybookModal: false,
     consolesheight: 0,
 
   },
@@ -98,6 +99,15 @@ export default new Vuex.Store({
       state.dashboardRerender++
     },
 
+    
+    showStorybookModal(state) {
+      state.showStorybookModal = true
+    },
+    
+    hideStorybookModal(state) {
+      state.showStorybookModal = false
+    },
+
   },
   actions: {
 
@@ -137,14 +147,35 @@ export default new Vuex.Store({
 
     },
 
-    Register_User: (context, { email, password }) => {
+    Register_User: (context, { email, password, display_name, description, anonymous }) => {
       const register_email = email
       const register_password = password
       return createUserWithEmailAndPassword(auth, register_email, register_password)
         .then((userCredential) => { return userCredential })
-        .then((data) => {
+        // .then((data) => {
           // onAuthStateChanged listener will handle user assignment
-          context.commit('Login_User', data.user)
+          // console.log(data)
+          // context.commit('Login_User', {email, password})
+        // })
+        .then((data) => {
+          fetch(process.env.VUE_APP_api_URL + "user/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: data.user.accessToken,
+            },
+            body: JSON.stringify({
+              display_name: display_name,
+              description: description,
+              anonymous: anonymous,
+              email: email,
+            }),
+          })
+            .then((response) => response.json())
+            .then((response) => console.log(response))
+            .catch(function (error) {
+              console.log("Oops. " + error.code + ": " + error.message);
+            });
         })
         .catch((error) => {
           const errorCode = error.code;

@@ -3,7 +3,7 @@
         <SidebarAlt />
         <Navbar text="dito" />
         <div class="flex items-center">
-              <CardList :title="usernameStorybooks" :key="$store.state.dashboardRerender" />
+          hello
         </div>
   </div>
 </template>

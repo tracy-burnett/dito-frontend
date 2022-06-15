@@ -5,6 +5,7 @@
       <!-- the StorybookStyleMenu component allows the user to choose whether they want to interact with the interpretation via the Viewer, Tagger, or Editor feature -->
       <!-- the user's selection is communicated back to this SingleInterpretation component via the toggleStorybookStyle event -->
       <StorybookStyleMenu
+        :interpretationStatus="interpretationStatus"
         @toggleStorybookStyle="toggleStorybookStylefunction($event)"
       />
       <!-- SelectInterpretationMenu allows the user to swap out the interpretation they are currently viewing for a different one -->
@@ -18,9 +19,12 @@
     <br /><br /><br /><br /><br />
     <div>
       <!-- this component will be Viewer, Tagger, or Editor, depending on the user's selection of "styleoption" via the StorybookStyleMenu -->
+      <!-- {{interpretationStatus}} -->
+      <!-- {{$store.state.user}} -->
       <component
         v-bind:is="styleoption"
         :audio_id="audio_id"
+        :interpretationFull="interpretationFull"
         :interpretationStatus="interpretationStatus"
         :interpretation_id="interpretation_id"
         @permanentlydestroy="permanentlydestroy($event)"
@@ -89,9 +93,10 @@ export default {
 
     // call a function to identify whether the currently logged-in user is a viewer, editor, or owner of the interpretation displayed in this column in the browser
     this.sharingSetting(
-      this.interpretationFull.created_by,
+      this.interpretationFull.created_by.user_ID,
       this.interpretationFull.shared_editors,
-      this.interpretationFull.shared_viewers
+      this.interpretationFull.shared_viewers,
+      this.interpretationFull.public,
     );
   },
   methods: {
@@ -99,14 +104,17 @@ export default {
       this.styleoption = styleselection;
     },
 
-    sharingSetting(owner, editors, viewers) {
+    sharingSetting(owner, editors, viewers, publictf) {
+      if (this.$store.state.user !== null) {
       if (owner == this.$store.state.user.uid) {
         this.interpretationStatus = "owner";
       } else if (editors.includes(this.$store.state.user.uid)) {
         this.interpretationStatus = "editor";
-      } else if (viewers.includes(this.$store.state.user.uid)) {
+      } else if (viewers.includes(this.$store.state.user.uid) || (publictf == true)) {
         this.interpretationStatus = "viewer";
       }
+      }
+      else if (publictf == true) {this.interpretationStatus="viewer"}
     },
 
     // when the user chooses to swap the interpretation they are currently viewing for a different interpretation...

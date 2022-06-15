@@ -1,5 +1,6 @@
 <template>
   <div class="lg:ml-16 mx-5 w-full">
+
     <h1 class="font-bold text-2xl mt-8 mb-6">Active Storybooks</h1>
     <div class="flex justify-around w-full">
       <span>
@@ -8,6 +9,8 @@
           id="owner"
           value="owner"
           v-model="checkedFilters"
+          @change="getStorybooks()"
+
         />
         <label for="owner"> owner</label></span
       >
@@ -18,6 +21,7 @@
           id="editor"
           value="editor"
           v-model="checkedFilters"
+          @change="getStorybooks()"
         />
         <label for="editor"> editor</label></span
       >
@@ -28,6 +32,7 @@
           id="viewer"
           value="viewer"
           v-model="checkedFilters"
+          @change="getStorybooks()"
         />
         <label for="viewer"> viewer</label></span
       >
@@ -38,6 +43,7 @@
           id="public"
           value="public"
           v-model="checkedFilters"
+          @change="getStorybooks()"
         />
         <label for="public"> other</label></span
       >
@@ -49,6 +55,7 @@
           id="archived"
           value="archived"
           v-model="checkedFilters"
+          @change="getStorybooks()"
         />
         <label for="archived"> archived</label></span
       >
@@ -60,9 +67,10 @@
         <p class="font-bold">Title</p>
         <p class="">Description</p>
         <p class="">created by</p>
-        <p>created at</p>
+        <!-- <p>created at</p> -->
         <p>last edited at</p>
         <p>Public?</p>
+        <p>Access</p>
         <p></p>
       </div>
       <!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
@@ -73,11 +81,15 @@
             :description="audio.description"
             :uploader="audio.uploaded_by.display_name"
             :publictf="audio.public"
+            :shared_editors="audio.shared_editors"
+            :shared_viewers="audio.shared_viewers"
+            :picked="picked"
             status="owner"
             :last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
             :title="audio.title"
             :audio_ID="audio.id"
-          />
+          >        <input type="radio" :id = "audio.id" :value="audio.id" v-model="picked" @click="uncheck(audio.id)" />
+        <label :for="audio.id" > more options</label></CardRow>
         </span>
       </span>
       <span v-if="checkedFilters.includes('editor')">
@@ -87,11 +99,14 @@
             :description="audio.description"
             :uploader="audio.uploaded_by.display_name"
             status="editor"
+            :picked="picked"
             :publictf="audio.public"
             :last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
             :title="audio.title"
             :audio_ID="audio.id"
-          />
+          >
+        <input type="radio" :id = "audio.id" :value="audio.id" v-model="picked" @click="uncheck(audio.id)" />
+        <label :for="audio.id" > more options</label></CardRow>
         </div>
       </span>
       <span v-if="checkedFilters.includes('viewer')">
@@ -101,10 +116,12 @@
             :uploader="audio.uploaded_by.display_name"
             :description="audio.description"
             :publictf="audio.public"
+            :picked="picked"
             :last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
             :title="audio.title"
             :audio_ID="audio.id"
-          />
+          >     <input type="radio" :id = "audio.id" :value="audio.id" v-model="picked" @click="uncheck(audio.id)" />
+        <label :for="audio.id" > more options</label></CardRow>
         </div>
       </span>
       <span v-if="checkedFilters.includes('public')">
@@ -113,11 +130,13 @@
             :date="audio.uploaded_at.substring(0, 10) + ' UTC'"
             :description="audio.description"
             :uploader="audio.uploaded_by.display_name"
+            :picked="picked"
             :publictf="audio.public"
             :last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
             :title="audio.title"
             :audio_ID="audio.id"
-          /></div></span
+          >     <div><input type="radio" :id = "audio.id" :value="audio.id" v-model="picked" @click="uncheck(audio.id)" />
+        <label :for="audio.id" > more options</label></div></CardRow></div></span
       ><br /><br />
 
 <span v-if="(audioArrayArchive.length > 0) && (checkedFilters.includes('archived'))">
@@ -128,9 +147,9 @@
         <p class="font-bold">Title</p>
         <p class="">Description</p>
         <p class="">created by</p>
-        <p>created at</p>
+        <!-- <p>created at</p> -->
         <p>last edited at</p>
-        <p>Public?</p>
+        <p></p>
         <p></p>
       </div></span>
       <span v-if="checkedFilters.includes('archived')">
@@ -163,6 +182,8 @@ export default {
       audioArrayViewer: [],
       audioArrayPublic: [],
       audioArrayArchive: [],
+      picked: "",
+      previouslySelected: "",
       checkedFilters: ["owner", "editor", "viewer", "public", "archived"],
     };
   },
@@ -181,7 +202,28 @@ export default {
     }
   },
   methods: {
+
+
+
+    uncheck(id) {
+      if (this.picked == id) {
+        
+      this.previouslySelected = this.picked
+      this.picked=false
+    }},
+
+
     getStorybooks() {
+      this.audioArray = []
+      this.audioArrayOwner = [], // the list of audio files owned by the logged-in user
+      this.audioArrayEditor = [],
+      this.audioArrayViewer = [],
+      this.audioArrayPublic = [],
+      this.audioArrayArchive = [],
+
+
+
+
       fetch(process.env.VUE_APP_api_URL + "audio/user/", {
         method: "GET",
 
@@ -205,13 +247,12 @@ export default {
             ) {
               // console.log("1")
               this.audioArrayOwner.push(element);
-            } else if (
-              element.shared_editors.includes(this.$store.state.user.uid)
+            } else if (element.shared_editors.some(e => e.user_ID === this.$store.state.user.uid)
             ) {
               // console.log("2")
               this.audioArrayEditor.push(element);
             } else if (
-              element.shared_viewers.includes(this.$store.state.user.uid)
+              element.shared_viewers.some(e => e.user_ID === this.$store.state.user.uid)
             ) {
               // console.log("3")
               this.audioArrayViewer.push(element);
