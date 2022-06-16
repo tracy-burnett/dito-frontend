@@ -91,6 +91,7 @@ export default {
       (element) => element.id == this.interpretation_id
     )[0];
 
+
     // call a function to identify whether the currently logged-in user is a viewer, editor, or owner of the interpretation displayed in this column in the browser
     this.sharingSetting(
       this.interpretationFull.created_by.user_ID,
@@ -108,9 +109,9 @@ export default {
       if (this.$store.state.user !== null) {
       if (owner == this.$store.state.user.uid) {
         this.interpretationStatus = "owner";
-      } else if (editors.includes(this.$store.state.user.uid)) {
+      } else if (editors && editors.includes(this.$store.state.user.uid)) {
         this.interpretationStatus = "editor";
-      } else if (viewers.includes(this.$store.state.user.uid) || (publictf == true)) {
+      } else if (viewers && viewers.includes(this.$store.state.user.uid) || (publictf == true)) {
         this.interpretationStatus = "viewer";
       }
       }

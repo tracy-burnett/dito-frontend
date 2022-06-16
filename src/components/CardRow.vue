@@ -60,7 +60,7 @@
         <div v-else></div>
         <div
           v-if="
-            (!archived && dropdown && status == 'owner') || status == 'editor'
+            !archived && dropdown && (status == 'owner' || status == 'editor')
           "
         >
           <textarea
@@ -183,7 +183,9 @@
         v-for="interpretation in interpretationsList"
         :key="interpretation.id"
       >
-        <IntManager :interpretation="interpretation" :audio_ID="audio_ID" />
+        <IntManager :interpretation="interpretation" :audio_ID="audio_ID" 
+        :shared_editors="interpretation.shared_editors"
+        :shared_viewers="interpretation.shared_viewers"/>
       </div>
     </div>
   </div>
@@ -229,10 +231,10 @@ export default {
     },
 
         shared_editors: {
-      default: {},
+      default: [],
     },
 
-    shared_viewers: {default: {}},
+    shared_viewers: {default: []},
 
     last_edited: { default: "" },
 
@@ -264,7 +266,9 @@ export default {
     },
   },
 
-  mounted() {},
+  mounted() {
+    this.getInterpretations()
+  },
 
   methods: {
 
@@ -275,6 +279,9 @@ export default {
       this.$store.commit("showAddViewersModal");
     },
     getInterpretations() {
+      if (this.dropdown) {
+
+
       const apiUrl =
         process.env.VUE_APP_api_URL +
         "interpretations/audio/" +
@@ -297,6 +304,9 @@ export default {
           // console.log(this.interpretationsList)
         })
         .catch((error) => console.error("Error:", error));
+
+      }
+
     },
 
     openstorybook() {

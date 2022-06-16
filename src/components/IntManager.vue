@@ -1,5 +1,31 @@
 <template>
   <div>
+
+
+            <span
+      v-if="$store.state.showIntCollabModal"
+      class="fixed inset-0 w-full h-screen flex items-center justify-center z-10"
+    >
+      <IntCollabModal
+        :interpretation_id="interpretation.id"
+        :audio_id="audio_ID"
+        :status="status"
+        :shared_editors="shared_editors"
+        :shared_viewers="shared_viewers"
+      />
+    </span>
+                <span
+      v-if="$store.state.showIntViewersModal"
+      class="fixed inset-0 w-full h-screen flex items-center justify-center z-10"
+    >
+      <IntViewersModal
+        :interpretation_id="interpretation.id"
+        :audio_id="audio_ID"
+        :status="status"
+        :shared_viewers="shared_viewers"
+      />
+    </span>
+
     <div
       class="relative overflow-hidden transition-colors bg-white border intmanagerrow rounded-xl mr-7"
     >
@@ -11,7 +37,7 @@
         <p v-else>{{ interpretation.language_name }}</p>
         <p>{{ interpretation.created_by.display_name }}</p>
         <p>{{ interpretation.last_edited_at.substring(0, 10) + ' UTC' }}</p>
-        <span v-if="(interpretation.shared_editors.includes($store.state.user.uid)) || (interpretation.created_by.user_ID == $store.state.user.uid)">
+        <span v-if="(shared_editors && interpretation.shared_editors.includes($store.state.user.uid)) || (interpretation.created_by.user_ID == $store.state.user.uid)">
           <input
             type="checkbox"
             id="publictf"
@@ -24,19 +50,25 @@
         </span>
         <span v-else></span>
         <p>
-        {{ status }}
+        {{ status }} access
       </p>
-      <p v-if="status == 'owner access'"><button>Add Editors</button></p>
-      <p v-else-if="status == 'editor access'"><button>Add Viewers</button></p>
-      <p v-else-if="status == 'viewer access' || status == 'public access'"><button>Request to Collaborate</button></p>
+      <p v-if="status == 'owner'"><button @click="showIntCollabModal()">Manage Collaborators</button></p>
+      <p v-else-if="status == 'editor'"><button @click="showIntViewersModal()">Add Viewers</button></p>
+      <!-- <p v-else-if="status == 'viewer' || status == 'public'"><button>Request to Collaborate</button></p> -->
       </div>
     </div>
         </div>
 </template>
 
 <script>
+import IntCollabModal from "@/components/IntCollabModal.vue";
+import IntViewersModal from "@/components/IntViewersModal.vue";
+
 export default {
   name: "IntManager",
+  components: {
+    IntCollabModal,
+    IntViewersModal},
   data: () => {
     return {publictf: false,
     status: ""};
@@ -46,24 +78,38 @@ export default {
       default: {},
     },
     audio_ID: {default: ""},
+
+        shared_editors: {
+      default: [],
+    },
+
+    shared_viewers: {default: []},
   },
 
   mounted() {this.publictf=this.interpretation.public
 
       if (this.interpretation.created_by.user_ID == this.$store.state.user.uid) {
-        this.status = "owner access";
-      } else if (this.interpretation.shared_editors.includes(this.$store.state.user.uid)) {
-        this.status = "editor access";
-      } else if (this.interpretation.shared_viewers.includes(this.$store.state.user.uid)) {
-        this.status = "viewer access";
+        this.status = "owner";
+      } else if (shared_editors && this.interpretation.shared_editors.includes(this.$store.state.user.uid)) {
+        this.status = "editor";
+      } else if (shared_viewers && this.interpretation.shared_viewers.includes(this.$store.state.user.uid)) {
+        this.status = "viewer";
       } else if (this.publictf==true) {
-        this.status = "public access";
+        this.status = "public";
       }
 
 
   },
 
   methods: {
+    
+
+    showIntCollabModal() {
+      this.$store.commit("showIntCollabModal");
+    },
+        showIntViewersModal() {
+      this.$store.commit("showIntViewersModal");
+    },
     // openstorybook() {
     //   this.$router.push({
     //     name: "Storybook",

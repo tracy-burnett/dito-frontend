@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     // It's like data, but for your store.
     user: null, // currently logged-in user
+    selected: "",
     sidebar: false, // sidebar displayed or not
     playerRerender: "", // ID of audio file as it finishes uploading to AWS S3
     consoles: [], // array of ID's of interpretations for which there should be a viewer column currently displayed in the browser
@@ -18,6 +19,8 @@ export default new Vuex.Store({
     dashboardRerender: 0,
     showStorybookModal: false,
     showAddViewersModal: false,
+    showIntCollabModal: false, // thisis shown to ownersofinterpretations when they manage the editors and viewers
+    showIntViewersModal: false, // this is shown to editors of interpretations when they manage the viewers
     consolesheight: 0,
 
   },
@@ -52,6 +55,11 @@ export default new Vuex.Store({
 
     toggleSidebar(state, visibility) {
       state.sidebar = visibility;
+    },
+
+    
+  updateSelected(state, selected) {
+      state.selected = selected
     },
 
     updateIncomingCurrentTime(state, value) {
@@ -116,6 +124,23 @@ export default new Vuex.Store({
     hideAddViewersModal(state) {
       state.showAddViewersModal = false
     },
+
+       
+    showIntCollabModal(state) {
+      state.showIntCollabModal = true
+    },
+    
+    hideIntCollabModal(state) {
+      state.showIntCollabModal = false
+    },
+       
+    showIntViewersModal(state) {
+      state.showIntViewersModal = true
+    },
+    
+    hideIntViewersModal(state) {
+      state.showIntViewersModal = false
+    },
   },
   actions: {
 
@@ -163,31 +188,40 @@ export default new Vuex.Store({
           // console.log(data)
           // context.commit('Login_User', {email, password})
         // })
-        .then((data) => {
-          fetch(process.env.VUE_APP_api_URL + "user/", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: data.user.accessToken,
-            },
-            body: JSON.stringify({
-              display_name: display_name,
-              description: description,
-              anonymous: anonymous,
-              email: email,
-            }),
+        .then(
+          // setTimeout(
+            
+          (data) => {
+            fetch(process.env.VUE_APP_api_URL + "user/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: data.user.accessToken,
+              },
+              body: JSON.stringify({
+                display_name: display_name,
+                description: description,
+                anonymous: anonymous,
+                email: email,
+              }),
+            })
+              .then((response) => response.json())
+              .then((response) => console.log(response))
+              .catch(function (error) {
+                console.log("Oops. " + error.code + ": " + error.message);
+              });
           })
-            .then((response) => response.json())
-            .then((response) => console.log(response))
-            .catch(function (error) {
-              console.log("Oops. " + error.code + ": " + error.message);
-            });
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log("Oops. " + error.code + ": " + error.message);
-        });
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log("Oops. " + error.code + ": " + error.message);
+          }
+          
+          
+            
+            // , 2000)
+          
+        );
 
 
 

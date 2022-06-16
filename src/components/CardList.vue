@@ -84,12 +84,12 @@
             :publictf="audio.public"
             :shared_editors="audio.shared_editors"
             :shared_viewers="audio.shared_viewers"
-            :picked="picked"
+            :picked="selected"
             status="owner"
             :last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
             :title="audio.title"
             :audio_ID="audio.id"
-          >        <input type="radio" :id = "audio.id" :value="audio.id" v-model="picked" @click="uncheck(audio.id)" />
+          >        <input type="radio" :id = "audio.id" :value="audio.id" v-model="selected" @click="uncheck(audio.id)" />
         <label :for="audio.id" > more options</label></CardRow>
         </span>
       </span>
@@ -100,14 +100,14 @@
             :description="audio.description"
             :uploader="audio.uploaded_by.display_name"
             status="editor"
-            :picked="picked"
+            :picked="selected"
             :shared_viewers="audio.shared_viewers"
             :publictf="audio.public"
             :last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
             :title="audio.title"
             :audio_ID="audio.id"
           >
-        <input type="radio" :id = "audio.id" :value="audio.id" v-model="picked" @click="uncheck(audio.id)" />
+        <input type="radio" :id = "audio.id" :value="audio.id" v-model="selected" @click="uncheck(audio.id)" />
         <label :for="audio.id" > more options</label></CardRow>
         </div>
       </span>
@@ -118,11 +118,11 @@
             :uploader="audio.uploaded_by.display_name"
             :description="audio.description"
             :publictf="audio.public"
-            :picked="picked"
+            :picked="selected"
             :last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
             :title="audio.title"
             :audio_ID="audio.id"
-          >     <input type="radio" :id = "audio.id" :value="audio.id" v-model="picked" @click="uncheck(audio.id)" />
+          >     <input type="radio" :id = "audio.id" :value="audio.id" v-model="selected" @click="uncheck(audio.id)" />
         <label :for="audio.id" > more options</label></CardRow>
         </div>
       </span>
@@ -132,12 +132,12 @@
             :date="audio.uploaded_at.substring(0, 10) + ' UTC'"
             :description="audio.description"
             :uploader="audio.uploaded_by.display_name"
-            :picked="picked"
+            :picked="selected"
             :publictf="audio.public"
             :last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
             :title="audio.title"
             :audio_ID="audio.id"
-          >     <div><input type="radio" :id = "audio.id" :value="audio.id" v-model="picked" @click="uncheck(audio.id)" />
+          >     <div><input type="radio" :id = "audio.id" :value="audio.id" v-model="selected" @click="uncheck(audio.id)" />
         <label :for="audio.id" > more options</label></div></CardRow></div></span
       ><br /><br />
 
@@ -184,10 +184,19 @@ export default {
       audioArrayViewer: [],
       audioArrayPublic: [],
       audioArrayArchive: [],
-      picked: "",
-      previouslySelected: "",
       checkedFilters: ["owner", "editor", "viewer", "public", "archived"],
     };
+  },
+computed: {
+    selected: {
+      // getter
+      get() {
+        return this.$store.state.selected // in the store
+      },
+set(selected) {          this.$store.commit(
+      "updateSelected", selected
+    );}
+    }
   },
   name: "CardList",
   watch: {
@@ -208,11 +217,14 @@ export default {
 
 
     uncheck(id) {
-      if (this.picked == id) {
+      // console.log(id)
+      // console.log("was " + this.previouslySelected)
+      // console.log("now is " + this.selected)
+      if (id == this.selected) {
         
-      this.previouslySelected = this.picked
-      this.picked=false
-    }},
+      this.selected=false
+    }
+},
 
 
     getStorybooks() {
