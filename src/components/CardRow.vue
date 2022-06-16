@@ -175,7 +175,7 @@
         </div>
           <p v-if="status == 'owner'"><button @click="showStorybookModal()">Manage Collaborators</button></p>
           <p v-else-if="status == 'editor'"><button @click="showAddViewersModal()">Manage Viewers</button></p>
-          <p v-else-if="status == 'viewer'"><button>Request to Collaborate</button></p>
+          <!-- <p v-else-if="status == 'viewer'"><button>Request to Collaborate</button></p> -->
       </div>
     </div>
     <div v-if="dropdown == true">

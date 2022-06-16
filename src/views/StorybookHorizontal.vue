@@ -1,6 +1,5 @@
 <template>
   <div class="">
-    <SidebarAlt />
     <div class="flex flex-col">
       <Navbar />
             <PlayerHorizontal
@@ -51,7 +50,6 @@
 
 <script>
 import Navbar from "@/components/Navbar.vue";
-import SidebarAlt from "@/components/SidebarAlt.vue";
 import PlayerHorizontal from "@/components/PlayerHorizontal.vue";
 import SingleInterpretation from "@/components/SingleInterpretation.vue";
 import AddInterpretationViewer from "@/components/AddInterpretationViewer.vue";
@@ -62,7 +60,6 @@ export default {
   components: {
     Navbar,
     PlayerHorizontal,
-    SidebarAlt,
     SingleInterpretation,
     AddInterpretationViewer,
     AddInterpretationModal,

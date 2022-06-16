@@ -1,6 +1,5 @@
 <template>
   <div class="h-full">
-    <SidebarAlt />
     <span
       v-if="showAddInterpretationModal"
       class="fixed inset-0 w-full h-screen flex items-center justify-center"
@@ -53,7 +52,6 @@
 
 <script>
 import Navbar from "@/components/Navbar.vue";
-import SidebarAlt from "@/components/SidebarAlt.vue";
 import PlayerVertical from "@/components/PlayerVertical.vue";
 import SingleInterpretation from "@/components/SingleInterpretation.vue";
 import AddInterpretationViewer from "@/components/AddInterpretationViewer.vue";
@@ -64,7 +62,6 @@ export default {
   components: {
     Navbar,
     PlayerVertical,
-    SidebarAlt,
     SingleInterpretation,
     AddInterpretationViewer,
     AddInterpretationModal,

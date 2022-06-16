@@ -1,7 +1,6 @@
 <template>
   <div class="h-full">
-        <SidebarAlt />
-        <Navbar text="dito" />
+        <Navbar />
         <div class="flex items-center">
           hello
         </div>
@@ -13,7 +12,6 @@ import Navbar from "@/components/Navbar.vue";
 import CardList from "@/components/CardList.vue";
 import PlayerHorizontal from "@/components/PlayerHorizontal.vue";
 import PlayerVertical from "@/components/PlayerVertical.vue";
-import SidebarAlt from "@/components/SidebarAlt.vue";
 
 export default {
   name: "User",
@@ -22,7 +20,6 @@ export default {
     CardList,
     PlayerHorizontal,
     PlayerVertical,
-    SidebarAlt
   },
   computed: {
     usernameStorybooks() {

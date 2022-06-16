@@ -1,6 +1,5 @@
 <template>
   <div class="flex-auto">
-    <SidebarAlt />
     <div class="flex-1 flex-col h-full overflow-hidden">
       <Navbar />
       <div class="flex justify-center items-center h-full mt-10">
@@ -105,14 +104,12 @@
 
 <script>
 import Navbar from "@/components/Navbar.vue";
-import SidebarAlt from "@/components/SidebarAlt.vue";
 
 export default {
   name: "Register",
 
   components: {
     Navbar,
-    SidebarAlt,
   },
 
   data() {
