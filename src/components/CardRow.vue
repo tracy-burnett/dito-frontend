@@ -76,7 +76,7 @@
         </div>
         <div
           v-if="
-            (!archived && dropdown && status == 'owner') || status == 'editor'
+            !archived && dropdown && (status == 'owner' || status == 'editor')
           "
         >
           <textarea
@@ -132,7 +132,7 @@
           >
             Save Edits</button
           ><br> -->
-            <button
+            owner access<br><button
               class="
                 bg-indigo-500
                 border border-indigo-400
