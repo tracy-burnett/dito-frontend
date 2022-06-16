@@ -168,10 +168,10 @@
               "
               @click="unarchive()"
             >
-              Restore{{status}}
+              Restore
             </button>
           </div>
-          <div v-else></div>
+          <div v-else>{{status}} access</div>
         </div>
           <p v-if="status == 'owner'"><button @click="showStorybookModal()">Manage Collaborators</button></p>
           <p v-else-if="status == 'editor'"><button @click="showAddViewersModal()">Manage Viewers</button></p>
