@@ -1,15 +1,14 @@
-import Vue from 'vue'
+// import Vue from 'vue'
 import Vuex from 'vuex'
 import { auth } from '../firebase'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, } from "firebase/auth";
 
-Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     // It's like data, but for your store.
     user: null, // currently logged-in user
-    sidebar: true, // sidebar displayed or not
+    sidebar: false, // sidebar displayed or not
     playerRerender: "", // ID of audio file as it finishes uploading to AWS S3
     consoles: [], // array of ID's of interpretations for which there should be a viewer column currently displayed in the browser
     incomingCurrentTime: 0, // Viewer.vue can update this, and when it is updated, Player will start playing audio from this time
@@ -18,6 +17,7 @@ export default new Vuex.Store({
     consoleswidth: 0,
     dashboardRerender: 0,
     showStorybookModal: false,
+    showAddViewersModal: false,
     consolesheight: 0,
 
   },
@@ -108,22 +108,28 @@ export default new Vuex.Store({
       state.showStorybookModal = false
     },
 
+
+    showAddViewersModal(state) {
+      state.showAddViewersModal = true
+    },
+    
+    hideAddViewersModal(state) {
+      state.showAddViewersModal = false
+    },
   },
   actions: {
 
 
     Login_User: (context, { email, password }) => {
-      const email2 = email
-      const password2 = password
-      return signInWithEmailAndPassword(auth, email2, password2)
+      // const email2 = email
+      // const password2 = password
+      return signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => { return userCredential })
         .then((data) => {
           // onAuthStateChanged listener will handle user assignment
           context.commit('Login_User', data.user)
         })
         .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
           console.log("Oops. " + error.code + ": " + error.message);
         });
 

@@ -1,5 +1,5 @@
 <template>
-<div v-if="!showSidebar">
+<div v-if="showSidebar">
   <!--<nav class="lg:hidden py-3 px-6 bg-gray-800">
     <div class="flex items-center justify-between">
       <a class="text-2xl text-white font-semibold" href="#">

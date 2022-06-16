@@ -9,7 +9,16 @@
         :status="status"
         :shared_editors="shared_editors"
         :shared_viewers="shared_viewers"
-        @updateCollaborators="updateCollaborators($event)"
+      />
+    </span>
+                <span
+      v-if="$store.state.showAddViewersModal"
+      class="fixed inset-0 w-full h-screen flex items-center justify-center z-10"
+    >
+      <AddViewersModal
+        :audio_id="audio_ID"
+        :status="status"
+        :shared_viewers="shared_viewers"
       />
     </span>
     <div
@@ -159,13 +168,13 @@
               "
               @click="unarchive()"
             >
-              Restore
+              Restore{{status}}
             </button>
           </div>
           <div v-else></div>
         </div>
           <p v-if="status == 'owner'"><button @click="showStorybookModal()">Manage Collaborators</button></p>
-          <p v-else-if="status == 'editor'"><button>Invite Collaborators</button></p>
+          <p v-else-if="status == 'editor'"><button @click="showAddViewersModal()">Manage Viewers</button></p>
           <p v-else-if="status == 'viewer'"><button>Request to Collaborate</button></p>
       </div>
     </div>
@@ -183,11 +192,13 @@
 <script>
 import IntManager from "@/components/IntManager.vue";
 import StorybookModal from "@/components/StorybookModal.vue";
+import AddViewersModal from "@/components/AddViewersModal.vue";
 
 export default {
   name: "CardRow",
   components: { IntManager,
-    StorybookModal, },
+    StorybookModal,
+    AddViewersModal},
   watch: {
     dropdown: function () {
       this.getInterpretations();
@@ -259,6 +270,9 @@ export default {
 
     showStorybookModal() {
       this.$store.commit("showStorybookModal");
+    },
+        showAddViewersModal() {
+      this.$store.commit("showAddViewersModal");
     },
     getInterpretations() {
       const apiUrl =

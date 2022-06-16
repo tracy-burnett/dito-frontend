@@ -2,6 +2,7 @@
   <div class="lg:ml-16 mx-5 w-full">
 
     <h1 class="font-bold text-2xl mt-8 mb-6">Active Storybooks</h1>
+    
     <div class="flex justify-around w-full">
       <span>
         <input
@@ -100,6 +101,7 @@
             :uploader="audio.uploaded_by.display_name"
             status="editor"
             :picked="picked"
+            :shared_viewers="audio.shared_viewers"
             :publictf="audio.public"
             :last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
             :title="audio.title"
@@ -236,6 +238,7 @@ export default {
         .then(
           (data) => {
             this.audioArray = data["audio files"];
+            // console.log(this.audioArray)
           } // collect the list of audio files that are owned by, or shared with, the logged-in user
         )
         .then((data) => {
