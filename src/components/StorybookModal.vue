@@ -23,10 +23,11 @@
       this storybook.
       <br />
       <input class="w-full px-3 py-1 border border-gray-300 rounded" placeholder="email address" v-model="email" />
-      <input type="radio" value="viewer" v-model="coll_type" />
-      <label> viewer</label>
+  
       <input type="radio" value="editor" v-model="coll_type" />
       <label> editor</label>
+          <input type="radio" value="viewer" v-model="coll_type" />
+      <label> viewer</label>
       <!-- <input
         class="w-full px-3 py-1 border border-gray-300 rounded"
         placeholder="viewer or editor"

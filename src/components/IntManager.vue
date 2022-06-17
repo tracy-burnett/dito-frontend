@@ -1,7 +1,6 @@
 <template>
   <div>
 
-
             <span
       v-if="$store.state.showIntCollabModal == interpretation.id"
       class="fixed inset-0 w-full h-screen flex items-center justify-center z-10"
@@ -37,7 +36,7 @@
         <p v-else>{{ interpretation.language_name }}</p>
         <p>{{ interpretation.created_by.display_name }}</p>
         <p>{{ interpretation.last_edited_at.substring(0, 10) + ' UTC' }}</p>
-        <span v-if="(shared_editors && interpretation.shared_editors.includes($store.state.user.uid)) || (interpretation.created_by.user_ID == $store.state.user.uid)">
+        <span v-if="(shared_editors && shared_editors.map((item) => item.user_ID).includes($store.state.user.uid)) || (interpretation.created_by.user_ID == $store.state.user.uid)">
           <input
             type="checkbox"
             id="publictf"
@@ -90,12 +89,16 @@ export default {
 
       if (this.interpretation.created_by.user_ID == this.$store.state.user.uid) {
         this.status = "owner";
-      } else if (shared_editors && this.interpretation.shared_editors.includes(this.$store.state.user.uid)) {
+        // console.log("owner")
+      } else if (this.shared_editors && this.shared_editors.map((item) => item.user_ID).includes(this.$store.state.user.uid)) {
         this.status = "editor";
-      } else if (shared_viewers && this.interpretation.shared_viewers.includes(this.$store.state.user.uid)) {
+                // console.log("editor")
+      } else if (this.shared_viewers && this.shared_viewers.map((item) => item.user_ID).includes(this.$store.state.user.uid)) {
         this.status = "viewer";
+                // console.log("viewer")
       } else if (this.publictf==true) {
         this.status = "public";
+                // console.log("public")
       }
 
 

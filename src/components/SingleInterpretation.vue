@@ -109,9 +109,9 @@ export default {
       if (this.$store.state.user !== null) {
       if (owner == this.$store.state.user.uid) {
         this.interpretationStatus = "owner";
-      } else if (editors && editors.includes(this.$store.state.user.uid)) {
+      } else if (editors && editors.map((item) => item.user_ID).includes(this.$store.state.user.uid)) {
         this.interpretationStatus = "editor";
-      } else if (viewers && viewers.includes(this.$store.state.user.uid) || (publictf == true)) {
+      } else if (viewers && viewers.map((item) => item.user_ID).includes(this.$store.state.user.uid) || (publictf == true)) {
         this.interpretationStatus = "viewer";
       }
       }
