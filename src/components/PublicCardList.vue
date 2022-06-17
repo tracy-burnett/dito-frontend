@@ -3,7 +3,7 @@
     <h1 class="font-bold text-2xl mt-8 mb-6">{{ title }}</h1>
     <div class="flex items-center">
       <!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
-      <div v-for="audio in audioArray" :key="audio.ID">
+      <div v-for="audio in audioArray" :key="audio.id">
         <Card
           :date="audio.uploaded_at.substring(0, 10) + ' UTC'"
           :uploader="audio.uploaded_by.display_name"

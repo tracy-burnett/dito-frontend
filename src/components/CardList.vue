@@ -158,7 +158,7 @@
         <p></p>
       </div></span>
       <span v-if="checkedFilters.includes('archived')">
-        <div v-for="audio in audioArrayArchive" :key="audio.ID">
+        <div v-for="audio in audioArrayArchive" :key="audio.id">
           <CardRow
             :date="audio.uploaded_at.substring(0, 10) + ' UTC'"
             :description="audio.description"
