@@ -200,7 +200,7 @@ export default {
 	components: { IntManager, StorybookModal, AddViewersModal },
 	watch: {
 		dropdown: function () {
-			this.getInterpretations();
+          this.$store.commit("forceDashboardRerender");
 		},
 	},
 	computed: {
