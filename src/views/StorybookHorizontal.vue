@@ -102,7 +102,7 @@ export default {
       .catch((error) => console.error("Error:", error));
   },
 
-  beforeDestroy() {
+beforeUnmount() {
     this.$store.commit("clearConsoles");
     this.interpretationsList.length = 0;
     this.formerInterpretationsList.length = 0;

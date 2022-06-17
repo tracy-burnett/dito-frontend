@@ -82,7 +82,7 @@ export default {
   created() {
     window.addEventListener("resize", this.myEventHandler);
   },
-  destroyed() {
+  unmounted() {
     window.removeEventListener("resize", this.myEventHandler);
   },
 
@@ -120,7 +120,7 @@ export default {
     );
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.$store.commit("clearConsoles");
     this.interpretationsList.length = 0;
     this.formerInterpretationsList.length = 0;

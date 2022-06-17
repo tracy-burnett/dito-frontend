@@ -39,16 +39,16 @@
         placeholder="Title of New Interpretation"
         v-model="int_title"
       />
+            <input
+        class="border border-gray-300 rounded w-full px-3 py-1"
+        placeholder="Language of New Interpretation"
+        v-model="int_language"
+      />
       <input
         class="border border-gray-300 rounded w-full px-3 py-1"
         placeholder="What character is this language 'spaced' by? (or leave blank)"
         v-model="int_spacing"
         maxlength="1"
-      />
-            <input
-        class="border border-gray-300 rounded w-full px-3 py-1"
-        placeholder="Language of New Interpretation"
-        v-model="int_language"
       />
       <textarea
         class="

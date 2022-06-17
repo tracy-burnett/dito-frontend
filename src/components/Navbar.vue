@@ -1,7 +1,7 @@
 <template>
 	<div v-if="$store.state.sidebar">
   <!-- <Teleport to="body"> -->
-    <div id="closesidebar" class="w-full h-full z-40 fixed" @click.self="closeSidebar()">hello</div>
+    <div id="closesidebar" class="w-full h-full z-40 fixed" @click="closeSidebar()">hello</div>
     <!-- </Teleport> -->
 			<SidebarAlt />
 	</div>
