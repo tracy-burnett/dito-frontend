@@ -63,7 +63,6 @@
             class="border border-gray-300 rounded w-full px-3 py-1"
             placeholder="Text of First Interpretation"
             v-model="int_text"
-            @keyup.enter="upload"
             style="overflow:hidden;"
             oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
           />
