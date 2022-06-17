@@ -18,9 +18,9 @@ export default new Vuex.Store({
     consoleswidth: 0,
     dashboardRerender: 0,
     showStorybookModal: "",
-    showAddViewersModal: false,
-    showIntCollabModal: false, // thisis shown to ownersofinterpretations when they manage the editors and viewers
-    showIntViewersModal: false, // this is shown to editors of interpretations when they manage the viewers
+    showAddViewersModal: "",
+    showIntCollabModal: "", // thisis shown to ownersofinterpretations when they manage the editors and viewers
+    showIntViewersModal: "", // this is shown to editors of interpretations when they manage the viewers
     consolesheight: 0,
 
   },
@@ -117,29 +117,29 @@ export default new Vuex.Store({
     },
 
 
-    showAddViewersModal(state) {
-      state.showAddViewersModal = true
+    showAddViewersModal(state, audio_id) {
+      state.showAddViewersModal = audio_id
     },
     
     hideAddViewersModal(state) {
-      state.showAddViewersModal = false
+      state.showAddViewersModal = null
     },
 
        
-    showIntCollabModal(state) {
-      state.showIntCollabModal = true
+    showIntCollabModal(state, int_id) {
+      state.showIntCollabModal = int_id
     },
     
     hideIntCollabModal(state) {
-      state.showIntCollabModal = false
+      state.showIntCollabModal = null
     },
        
-    showIntViewersModal(state) {
-      state.showIntViewersModal = true
+    showIntViewersModal(state, int_id) {
+      state.showIntViewersModal = int_id
     },
     
     hideIntViewersModal(state) {
-      state.showIntViewersModal = false
+      state.showIntViewersModal = null
     },
   },
   actions: {

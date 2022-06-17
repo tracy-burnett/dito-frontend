@@ -12,7 +12,7 @@
 			/>
 		</span>
 		<span
-			v-if="$store.state.showAddViewersModal"
+			v-if="$store.state.showAddViewersModal == audio_ID"
 			class="fixed inset-0 w-full h-screen flex items-center justify-center z-10"
 		>
 			<AddViewersModal
@@ -170,7 +170,7 @@
 					<div v-else>{{status}} access</div>
 				</div>
 				<p v-if="status == 'owner'"><button @click="showStorybookModal(audio_ID)">Manage Collaborators</button></p>
-				<p v-else-if="status == 'editor'"><button @click="showAddViewersModal()">Manage Viewers</button></p>
+				<p v-else-if="status == 'editor'"><button @click="showAddViewersModal(audio_ID)">Manage Viewers</button></p>
 				<!-- <p v-else-if="status == 'viewer'"><button>Request to Collaborate</button></p> -->
 			</div>
 		</div>
@@ -268,7 +268,7 @@ export default {
 			this.$store.commit("showStorybookModal", this.audio_ID);
 		},
 		showAddViewersModal() {
-			this.$store.commit("showAddViewersModal");
+			this.$store.commit("showAddViewersModal", this.audio_ID);
 		},
 		getInterpretations() {
 			if (this.dropdown) {

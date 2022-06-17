@@ -3,7 +3,7 @@
 
 
             <span
-      v-if="$store.state.showIntCollabModal"
+      v-if="$store.state.showIntCollabModal == interpretation.id"
       class="fixed inset-0 w-full h-screen flex items-center justify-center z-10"
     >
       <IntCollabModal
@@ -15,7 +15,7 @@
       />
     </span>
                 <span
-      v-if="$store.state.showIntViewersModal"
+      v-if="$store.state.showIntViewersModal == interpretation.id"
       class="fixed inset-0 w-full h-screen flex items-center justify-center z-10"
     >
       <IntViewersModal
@@ -52,8 +52,8 @@
         <p>
         {{ status }} access
       </p>
-      <p v-if="status == 'owner'"><button @click="showIntCollabModal()">Manage Collaborators</button></p>
-      <p v-else-if="status == 'editor'"><button @click="showIntViewersModal()">Add Viewers</button></p>
+      <p v-if="status == 'owner'"><button @click="showIntCollabModal(interpretation.id)">Manage Collaborators</button></p>
+      <p v-else-if="status == 'editor'"><button @click="showIntViewersModal(interpretation.id)">Add Viewers</button></p>
       <!-- <p v-else-if="status == 'viewer' || status == 'public'"><button>Request to Collaborate</button></p> -->
       </div>
     </div>
@@ -104,11 +104,11 @@ export default {
   methods: {
     
 
-    showIntCollabModal() {
-      this.$store.commit("showIntCollabModal");
+    showIntCollabModal(int_id) {
+      this.$store.commit("showIntCollabModal", int_id);
     },
-        showIntViewersModal() {
-      this.$store.commit("showIntViewersModal");
+        showIntViewersModal(int_id) {
+      this.$store.commit("showIntViewersModal", int_id);
     },
     // openstorybook() {
     //   this.$router.push({
