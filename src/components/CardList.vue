@@ -76,7 +76,7 @@
       </div>
       <!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
       <span v-if="checkedFilters.includes('owner')">
-        <span v-for="audio in audioArrayOwner" :key="audio.ID">
+        <span v-for="audio in audioArrayOwner" :key="audio.id">
           <CardRow
             :date="audio.uploaded_at.substring(0, 10) + ' UTC'"
             :description="audio.description"
@@ -85,6 +85,7 @@
             :shared_editors="audio.shared_editors"
             :shared_viewers="audio.shared_viewers"
             :picked="selected"
+            :archived="audio.archived"
             status="owner"
             :last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
             :title="audio.title"
@@ -94,7 +95,7 @@
         </span>
       </span>
       <span v-if="checkedFilters.includes('editor')">
-        <div v-for="audio in audioArrayEditor" :key="audio.ID">
+        <div v-for="audio in audioArrayEditor" :key="audio.id">
           <CardRow
             :date="audio.uploaded_at.substring(0, 10) + ' UTC'"
             :description="audio.description"
@@ -112,7 +113,7 @@
         </div>
       </span>
       <span v-if="checkedFilters.includes('viewer')">
-        <div v-for="audio in audioArrayViewer" :key="audio.ID">
+        <div v-for="audio in audioArrayViewer" :key="audio.id">
           <CardRow
             :date="audio.uploaded_at.substring(0, 10) + ' UTC'"
             :uploader="audio.uploaded_by.display_name"
@@ -127,7 +128,7 @@
         </div>
       </span>
       <span v-if="checkedFilters.includes('public')">
-        <div v-for="audio in audioArrayPublic" :key="audio.ID">
+        <div v-for="audio in audioArrayPublic" :key="audio.id">
           <CardRow
             :date="audio.uploaded_at.substring(0, 10) + ' UTC'"
             :description="audio.description"

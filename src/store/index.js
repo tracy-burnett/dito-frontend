@@ -17,7 +17,7 @@ export default new Vuex.Store({
     idToken: null, // the idToken of the currently logged-in user
     consoleswidth: 0,
     dashboardRerender: 0,
-    showStorybookModal: false,
+    showStorybookModal: "",
     showAddViewersModal: false,
     showIntCollabModal: false, // thisis shown to ownersofinterpretations when they manage the editors and viewers
     showIntViewersModal: false, // this is shown to editors of interpretations when they manage the viewers
@@ -108,12 +108,12 @@ export default new Vuex.Store({
     },
 
     
-    showStorybookModal(state) {
-      state.showStorybookModal = true
+    showStorybookModal(state, audio_id) {
+      state.showStorybookModal = audio_id
     },
     
     hideStorybookModal(state) {
-      state.showStorybookModal = false
+      state.showStorybookModal = null
     },
 
 
