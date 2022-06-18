@@ -58,8 +58,8 @@ export default new Vuex.Store({
       state.sidebar = visibility;
     },
 
-    
-  updateSelected(state, selected) {
+
+    updateSelected(state, selected) {
       state.selected = selected
     },
 
@@ -108,11 +108,11 @@ export default new Vuex.Store({
       state.dashboardRerender++
     },
 
-    
+
     showStorybookModal(state, audio_id) {
       state.showStorybookModal = audio_id
     },
-    
+
     hideStorybookModal(state) {
       state.showStorybookModal = null
     },
@@ -121,29 +121,29 @@ export default new Vuex.Store({
     showAddViewersModal(state, audio_id) {
       state.showAddViewersModal = audio_id
     },
-    
+
     hideAddViewersModal(state) {
       state.showAddViewersModal = null
     },
 
-       
+
     showIntCollabModal(state, int_id) {
       state.showIntCollabModal = int_id
     },
-    
+
     hideIntCollabModal(state) {
       state.showIntCollabModal = null
     },
-       
+
     showIntViewersModal(state, int_id) {
       state.showIntViewersModal = int_id
     },
-    
+
     hideIntViewersModal(state) {
       state.showIntViewersModal = null
     },
 
-    
+
     updatescrollposition(state, scrollpos) {
       state.cardlistscrollposition = scrollpos
     },
@@ -190,13 +190,13 @@ export default new Vuex.Store({
       return createUserWithEmailAndPassword(auth, register_email, register_password)
         .then((userCredential) => { return userCredential })
         // .then((data) => {
-          // onAuthStateChanged listener will handle user assignment
-          // console.log(data)
-          // context.commit('Login_User', {email, password})
+        // onAuthStateChanged listener will handle user assignment
+        // console.log(data)
+        // context.commit('Login_User', {email, password})
         // })
         .then(
           // setTimeout(
-            
+
           (data) => {
             fetch(process.env.VUE_APP_api_URL + "user/", {
               method: "POST",
@@ -217,16 +217,16 @@ export default new Vuex.Store({
                 console.log("Oops. " + error.code + ": " + error.message);
               });
           })
-          .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log("Oops. " + error.code + ": " + error.message);
-          }
-          
-          
-            
-            // , 2000)
-          
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log("Oops. " + error.code + ": " + error.message);
+        }
+
+
+
+          // , 2000)
+
         );
 
 
