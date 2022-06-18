@@ -1,0 +1,250 @@
+<template>
+  <div class="flex flex-col items-center justify-center flex-1 flex-auto h-full mt-10 overflow-hidden backdrop"
+    @click.self="closeModal()">
+    <div
+      class="flex flex-col items-center p-8 bg-white border border-gray-300 shadow-md rounded-xl xl:w-2/5 lg:w-2/4 md:w-2/3">
+      <button class="mx-4 my-2 text-xl text-gray-500" @click.prevent="closeModal()">
+        ×
+      </button>
+      <h1 class="text-2xl font-bold">Collaborators</h1>
+      <br />
+      <div v-if="shared_editors.length > 0">
+        <h3>Editors</h3>
+        <div v-for="editor in shared_editors" :key="editor.user_ID">{{ editor.display_name }}<button
+            @click="remove_editor(editor.email)">Remove</button></div>
+      </div>
+      <div v-if="shared_viewers.length > 0">
+        <h3>Viewers</h3>
+        <div v-for="viewer in shared_viewers" :key="viewer.user_ID">{{ viewer.display_name }}<button
+            @click="remove_viewer(viewer.email)">Remove</button></div>
+      </div>
+
+      Enter the email address of the Dito account to invite to collaborate on
+      this interpretation.
+      <br />
+      <input class="w-full px-3 py-1 border border-gray-300 rounded" placeholder="email address" v-model="email" />
+          <input type="radio" value="editor" v-model="coll_type" />
+      <label> editor</label>
+      <input type="radio" value="viewer" v-model="coll_type" />
+      <label> viewer</label>
+  
+      <!-- <input
+        class="w-full px-3 py-1 border border-gray-300 rounded"
+        placeholder="viewer or editor"
+        v-model="coll_type"
+      /> -->
+      <!--
+            <input
+        class="w-full px-3 py-1 border border-gray-300 rounded"
+        placeholder="Language of New Interpretation"
+        v-model="int_language"
+      />
+      <textarea
+        class="
+        form-control
+        block
+        w-full
+        px-3
+        py-1.5
+        text-base
+        font-normal
+        text-gray-700
+        bg-white bg-clip-padding
+        border border-solid border-gray-300
+        rounded
+        transition
+        ease-in-out
+        m-0
+      "
+        placeholder="Text of New Interpretation"
+        v-model="int_text"
+        rows="5"
+        style="overflow-y: scroll"
+      /> -->
+      <button
+        class="w-full px-3 py-2 mt-16 text-sm font-medium text-white transition-colors bg-indigo-500 border border-indigo-400 rounded hover:bg-indigo-400"
+        @click="update">
+        Update Collaborators
+      </button>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "IntCollabModal",
+  components: {},
+  computed: {
+    // the beginning of the highlighted region as manually typed in by the user, in seconds
+    new_viewer() {
+      if (this.coll_type == "viewer") {
+        return this.email
+      }
+      else { return null }
+    },
+    new_editor() {
+      if (this.coll_type == "editor") {
+        return this.email
+      }
+      else { return null }
+    },
+
+  },
+  data() {
+    return {
+      email: "",
+      coll_type: "",
+      //   int_language: "",
+      //   int_spacing: "",
+    };
+  },
+  props: {
+    shared_editors: {
+      default: [],
+    },
+
+    shared_viewers: { default: [] },
+    audio_id: {
+      default: "",
+    },
+
+
+    interpretation_id: {
+      default: "",
+    },
+
+    status: {
+      default: "",
+    },
+  },
+  methods: {
+    remove_editor(editor) {
+      fetch(
+        process.env.VUE_APP_api_URL +
+        "interpretations/" +
+        this.interpretation_id +
+        "/audio/" +
+        this.audio_id +
+        "/" +
+        this.status +
+        "/",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+
+            Authorization: this.$store.state.idToken,
+          },
+          body: JSON.stringify({
+            // url: "coverimage.jpg",
+            // title: this.title,
+            // description: this.description,
+            // public: this.publictf,
+            remove_editor: editor,
+          }),
+        }
+      )
+        .then((response) => {
+          return response.json();
+        })
+
+        .then((response) => {
+          this.$store.commit("forceDashboardRerender");
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    },
+
+    remove_viewer(viewer) {
+      fetch(
+        process.env.VUE_APP_api_URL +
+        "interpretations/" +
+        this.interpretation_id +
+        "/audio/" +
+        this.audio_id +
+        "/" +
+        this.status +
+        "/",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+
+            Authorization: this.$store.state.idToken,
+          },
+          body: JSON.stringify({
+            // url: "coverimage.jpg",
+            // title: this.title,
+            // description: this.description,
+            // public: this.publictf,
+            remove_viewer: viewer,
+          }),
+        }
+      )
+        .then((response) => {
+          return response.json();
+        })
+
+        .then((response) => {
+          this.$store.commit("forceDashboardRerender");
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    },
+
+    update() {
+      fetch(
+        process.env.VUE_APP_api_URL +
+        "interpretations/" +
+        this.interpretation_id +
+        "/audio/" +
+        this.audio_id +
+        "/" +
+        this.status +
+        "/",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+
+            Authorization: this.$store.state.idToken,
+          },
+          body: JSON.stringify({
+            // url: "coverimage.jpg",
+            // title: this.title,
+            // description: this.description,
+            // public: this.publictf,
+            shared_editor: this.new_editor,
+            shared_viewer: this.new_viewer,
+          }),
+        }
+      )
+        .then((response) => {
+          return response.json();
+        })
+
+        .then((response) => {
+          this.$store.commit("forceDashboardRerender");
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    },
+
+    closeModal() {
+      this.$store.commit("hideIntCollabModal");
+    },
+  },
+};
+</script>
+
+<style scoped>
+.backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+</style>

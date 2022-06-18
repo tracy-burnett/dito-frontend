@@ -1,5 +1,5 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+// import Vue from 'vue'
+import { createWebHistory, createRouter } from "vue-router";
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import About from '../views/About.vue'
@@ -8,10 +8,11 @@ import StorybookHorizontal from '../views/StorybookHorizontal.vue' // eventually
 import Storybook from '../views/Storybook.vue' // eventually may need to remove this
 import CreateStorybook from '../views/CreateStorybook.vue'
 import Register from '../views/Register.vue';
+import Profile from '../views/Profile.vue'
 
 
 
-Vue.use(VueRouter)
+// Vue.use(VueRouter)
 
 
 
@@ -54,9 +55,14 @@ const routes = [
     component: () => import('../views/Statement.vue')
   },
   {
-    path: '/user/:id',
+    path: '/user/',
     name: 'User',
     component: User
+  },
+  {
+    path: '/profile/',
+    name: 'Profile',
+    component: Profile
   },
   {
     path: '/storybook/',
@@ -71,10 +77,9 @@ const routes = [
   }
 ]
 
-const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes
+const router = new createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes,
 })
 
 export default router

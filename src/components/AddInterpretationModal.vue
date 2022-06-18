@@ -39,16 +39,16 @@
         placeholder="Title of New Interpretation"
         v-model="int_title"
       />
+            <input
+        class="border border-gray-300 rounded w-full px-3 py-1"
+        placeholder="Language of New Interpretation"
+        v-model="int_language"
+      />
       <input
         class="border border-gray-300 rounded w-full px-3 py-1"
         placeholder="What character is this language 'spaced' by? (or leave blank)"
         v-model="int_spacing"
         maxlength="1"
-      />
-            <input
-        class="border border-gray-300 rounded w-full px-3 py-1"
-        placeholder="Language of New Interpretation"
-        v-model="int_language"
       />
       <textarea
         class="
@@ -139,7 +139,7 @@ export default {
           return response.json();
         })
         .then((response) => {
-          console.log(response.interpretation);
+          // console.log(response.interpretation);
           // if the interpretation was created successfully, then tell the parent component to add it to the list of interpretations potentially displayed in the dropdown menu, and tell the Vuex store that we need to add another column to the main screen for viewing the new interpretation
           this.$emit("addCreatedInterpretation", response.interpretation);
           this.$store.commit("addConsolesCount", response.interpretation.id);

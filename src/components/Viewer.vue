@@ -55,15 +55,18 @@ export default {
       default: "",
     },
     interpretation_id: { default: "" },
-    interpretationStatus: { default: "" }, // describes whether the currently logged-in user is a viewer, editor, or owner of the interpretation being viewed
+    interpretationFull: { default: {} }, // describes whether the currently logged-in user is a viewer, editor, or owner of the interpretation being viewed
   },
   watch: {
-    interpretationStatus: function () {
+    interpretationFull: function () {
+      this.fetchNewInterpretation();
+    },
+        interpretationStatus: function () {
       this.fetchNewInterpretation();
     },
   },
   mounted() {
-    if (this.interpretationStatus) {
+    if (this.interpretationFull) {
       this.fetchNewInterpretation();
     }
   },
@@ -71,33 +74,39 @@ export default {
   methods: {
     // access the interpretation that needs to be displayed
     fetchNewInterpretation() {
-      const apiUrl =
-        process.env.VUE_APP_api_URL +
-        "interpretations/" +
-        this.interpretation_id +
-        "/audio/" +
-        this.audio_id +
-        "/" +
-        this.interpretationStatus +
-        "/";
-      fetch(apiUrl, {
-        method: "GET",
+// console.log(this.interpretationFull)
 
-        headers: {
-          "Content-Type": "application/json",
+          this.title = this.interpretationFull.title;
+          this.language_name = this.interpretationFull.language_name;
+          this.latest_text = this.interpretationFull.latest_text;
 
-          Authorization: this.$store.state.idToken,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          this.title = data.interpretation.title;
-          this.language_name = data.interpretation.language_name;
-          this.latest_text = data.interpretation.latest_text;
-        })
+      // const apiUrl =
+      //   process.env.VUE_APP_api_URL +
+      //   "interpretations/" +
+      //   this.interpretation_id +
+      //   "/audio/" +
+      //   this.audio_id +
+      //   "/" +
+      //   this.interpretationStatus +
+      //   "/";
+      // fetch(apiUrl, {
+      //   method: "GET",
+
+      //   headers: {
+      //     "Content-Type": "application/json",
+
+      //     Authorization: this.$store.state.idToken,
+      //   },
+      // })
+      //   .then((response) => response.json())
+      //   .then((data) => {
+      //     this.title = data.interpretation.title;
+      //     this.language_name = data.interpretation.language_name;
+      //     this.latest_text = data.interpretation.latest_text;
+      //   })
 
         // access the information about what to highlight, and when, for the interpretation that is to be displayed
-        .then(() => {
+        // .then(() => {
           fetch(
             process.env.VUE_APP_api_URL +
               "content/" +
@@ -122,9 +131,9 @@ export default {
               this.latest_text_slices(); // split up the displayed text into substrings to be highlighted whenever necessary
             })
             .catch((error) => console.error("Error:", error));
-        })
+        // })
 
-        .catch((error) => console.error("Error:", error));
+        // .catch((error) => console.error("Error:", error));
     },
 
     parsed_associations: function () {

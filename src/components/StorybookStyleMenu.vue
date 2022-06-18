@@ -4,8 +4,9 @@
       <button class="dropbtn">Select Interaction Style</button>
       <div class="dropdown-content">
         <a @click="toggleStorybookStyle('Viewer')">Viewing</a>
-        <a @click="toggleStorybookStyle('Editor')">Editing</a>
-        <a @click="toggleStorybookStyle('Tagger')">Tagging</a>
+        
+        <a v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'" @click="toggleStorybookStyle('Editor')">Editing</a>
+        <a v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'" @click="toggleStorybookStyle('Tagger')">Tagging</a>
       </div>
     </div>
   </div>
@@ -17,7 +18,10 @@ export default {
   data: () => {
     return {};
   },
-  props: [],
+  props: {
+    interpretationStatus: {
+      default: "viewer",
+    },},
   methods: {
     toggleStorybookStyle(styleselection) {
       // tell the parent component to load Viewer, Editor, or Tagger, corresponding with what the user has selected in this dropdown menu
