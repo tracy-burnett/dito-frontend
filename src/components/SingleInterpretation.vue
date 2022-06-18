@@ -24,7 +24,6 @@
       <component
         v-bind:is="styleoption"
         :audio_id="audio_id"
-        :interpretationFull="interpretationFull"
         :interpretationStatus="interpretationStatus"
         :interpretation_id="interpretation_id"
         @permanentlydestroy="permanentlydestroy($event)"

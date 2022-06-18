@@ -129,7 +129,8 @@ export default {
 	// watch these variables to see if they change.  if they do, then call the corresponding functions.
 	watch: {
 		"$store.state.incomingCurrentTime": function () {
-			this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
+			if (this.$store.state.incomingCurrentTime >= 0 && this.$store.state.incomingCurrentTime <= 1) {
+			this.seekTimestampfunction(this.$store.state.incomingCurrentTime);}
 		},
 		"$store.state.playerRerender": function () {
 			this.shouldRerender(this.$store.state.playerRerender);

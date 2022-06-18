@@ -1,18 +1,16 @@
 <template>
   <div>
     <!-- this is a button for creating a new Interpretation and having it displayed in its own column -->
-    <div id="create" @click="show">
+    <div id="create" @click="show" style="cursor:pointer">
       <div class="h-10 w-10">
-        <img src="@/assets/menu-bars.svg" />
-        <!-- change this icon to something more appropriate -->
-      </div>
+        <img src="@/assets/add-new.svg" />
+      </div> Create New Interpretation
     </div>
     <!-- this is a button for adding another column that shows an Interpretation that you have access to but aren't yet viewing -->
-    <div id="add" @click="add">
+    <div v-show="this.interpretationsList[0]" id="add" @click="add" style="cursor:pointer">
       <div class="h-10 w-10">
-        <img src="@/assets/playAudio.svg" />
-        <!-- change this icon to something more appropriate -->
-      </div>
+        <img src="@/assets/add-existing.svg" />
+      </div> Add Another Console
     </div>
     <br />
   </div>
