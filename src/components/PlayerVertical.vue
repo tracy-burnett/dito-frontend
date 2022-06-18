@@ -141,8 +141,7 @@ export default {
 			this.wavesurfer.setPlaybackRate(this.playbackspeed)
 		},
 		"$store.state.incomingCurrentTime": function () {
-			if (this.$store.state.incomingCurrentTime >= 0 && this.$store.state.incomingCurrentTime <= 1) {
-			this.seekTimestampfunction(this.$store.state.incomingCurrentTime);}
+			this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
 		},
 		"$store.state.playerRerender": function () {
 			this.shouldRerender(this.$store.state.playerRerender);
@@ -392,8 +391,9 @@ export default {
 
 		// when the user clicks in the "Viewer" component, it starts playing the audio player from this timestamp and updates the HH:MM:SS display of current time accordingly
 		seekTimestampfunction(timestamp) {
+			if (this.totalDuration > 0) {
 			this.wavesurfer.seekTo(timestamp / this.totalDuration);
-			this.currentTime = this.secondsToTime(timestamp);
+			this.currentTime = this.secondsToTime(timestamp);}
 		},
 
 		// when the user submits a new manual input of HH:MM:SS current time, the cursor moves accordingly and the change is also communicated to the Vuex store
