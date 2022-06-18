@@ -1,4 +1,13 @@
 <template>
+<div class="flex flex-col">
+	<!-- playback speed slider -->
+	<div class="flex justify-center text-xs">
+		set playback speed
+	</div>
+	<div>
+	      <input id="slider" v-model="playbackspeed" type="range" min="0" max="2" step=".25" style="width: 100%" />
+	</div>
+	<div class="flex justify-center">{{playbackspeed}}</div>
 	<!-- audio player body -->
 	<div class="container rounded-xl shadow-xl">
 		<!-- top-most time entry box (for start of view window) -->
@@ -56,15 +65,13 @@
 			@wheel.prevent="getzoomnumber($event)"
 		>
 			<span
-				class="flex flex-col justify-center"
-				v-if="loadingpercent > 0"
+				class="flex flex-col justify-center pl-6"
+				v-if="loadingpercent > 0 && loadingpercent < 100"
 			>
-				<span class="loading" v-if="loadingpercent < 100">
 					audio {{ loadingpercent }}% loaded
-				</span>
 			</span>
 			<span 
-				class="flex flex-col justify-center" v-else>please be patient while your audio file is uploaded to the server</span>
+				class="flex flex-col justify-center pl-4" v-else-if="loadingpercent==0">please be patient while your audio file is uploaded to the server</span>
 		</div>
 
 		<!-- bottom-most time entry box (for end of view window) -->
@@ -95,6 +102,7 @@
 			</button>
 		</div>
 	</div>
+</div>
 </template>
 
 <script>
@@ -112,6 +120,7 @@ export default {
 	// declare the variables and default values that this component will need
 	data: () => {
 		return {
+			playbackspeed: 1,
 			loadingpercent: 0,
 			zoomnumber: 1,
 			startTime: "00:00:00", // the beginning of the highlighted region as calculated by wavesurfer OR manually input by the user, in HH:MM:SS
@@ -128,6 +137,9 @@ export default {
 
 	// watch these variables to see if they change.  if they do, then call the corresponding functions.
 	watch: {
+		"playbackspeed": function() {
+			this.wavesurfer.setPlaybackRate(this.playbackspeed)
+		},
 		"$store.state.incomingCurrentTime": function () {
 			if (this.$store.state.incomingCurrentTime >= 0 && this.$store.state.incomingCurrentTime <= 1) {
 			this.seekTimestampfunction(this.$store.state.incomingCurrentTime);}
@@ -173,6 +185,10 @@ export default {
 		},
 	},
 
+	unmounted() {
+		this.wavesurfer.destroy()
+	},
+
 	mounted() {
 		//get secure url from server
 		const apiUrl = process.env.VUE_APP_api_URL + "s3/presignedgeturl";
@@ -202,7 +218,7 @@ export default {
 		// https://wavesurfer-js.org
 		this.wavesurfer = WaveSurfer.create({
 			container: this.$refs.waveform,
-			backend: "WebAudio",
+			backend: "MediaElement",
 			waveColor: "#94a3b8",
 			cursorColor: "red",
 			progressColor: "#475569",
@@ -221,7 +237,7 @@ export default {
 		const that = this;
 
 		// When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
-		this.wavesurfer.on("ready", function () {
+		this.wavesurfer.on("waveform-ready", function () {
 			that.totalDuration = that.wavesurfer.getDuration();
 			that.endTimeSeconds = that.totalDuration;
 			that.endTime = that.secondsToTime(that.endTimeSeconds);
@@ -459,10 +475,10 @@ export default {
 	/* margin-right: 10px; */
 }
 
-.loading {
+/* .loading { */
 	/* display: flex; */
-	margin-left: -100%;
-}
+	/* margin-left: 15%; */
+/* } */
 
 .play {
 	/* width: "50px"; */
