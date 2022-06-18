@@ -187,6 +187,7 @@ export default {
       audioArrayViewer: [],
       audioArrayPublic: [],
       audioArrayArchive: [],
+      lastknownscrollposition: 0,
       checkedFilters: ["owner", "editor", "viewer", "public", "archived"],
     };
   },
@@ -284,10 +285,34 @@ set(selected) {          this.$store.commit(
               this.audioArrayArchive.push(element);
             }
           });
+this.$nextTick(function () {
+// console.log(this.$store.state.cardlistscrollposition)
+window.scrollTo(0, this.$store.state.cardlistscrollposition*14.3)
+    window.addEventListener("scroll", this.myEventHandler);
+})
+
+
+
         })
         .catch((error) => console.error("Error:", error));
     },
+
+myEventHandler() {this.lastknownscrollposition = window.scrollY;
+
+    this.$store.commit(
+      "updatescrollposition",
+      this.lastknownscrollposition
+    );
+    
+    },
+
+
   },
+
+  unmounted() {
+    window.removeEventListener("scroll", this.myEventHandler);
+  },
+
 };
 </script>
 

@@ -22,6 +22,7 @@ export default new Vuex.Store({
     showIntCollabModal: "", // thisis shown to ownersofinterpretations when they manage the editors and viewers
     showIntViewersModal: "", // this is shown to editors of interpretations when they manage the viewers
     consolesheight: 0,
+    cardlistscrollposition: 0,
 
   },
   getters: {
@@ -140,6 +141,11 @@ export default new Vuex.Store({
     
     hideIntViewersModal(state) {
       state.showIntViewersModal = null
+    },
+
+    
+    updatescrollposition(state, scrollpos) {
+      state.cardlistscrollposition = scrollpos
     },
   },
   actions: {
