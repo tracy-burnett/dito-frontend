@@ -3,7 +3,9 @@
     <span class="font-bold border-gray-300 rounded px-3 py-1">{{ title }}</span>
     in <span class="border-gray-300 rounded px-3 py-1">{{ language_name }}</span
     ><br />
-
+{{associations}}
+{{parsedAssociations}}
+{{substringArray}}
     <!-- for each substring that would be independently highlighted, render it as highlighted or not based on running the highlight function on it whenever the current audioplayer time changes.
 also, if the user clicks on the text of that substring, snap the audio player to play the corresponding audio for that substring. -->
     <div class="border-gray-300 rounded w-full h-full mt-12 mb-3 px-3 py-1">

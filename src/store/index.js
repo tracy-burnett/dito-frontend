@@ -85,14 +85,14 @@ export default new Vuex.Store({
 
     deleteConsole(state, interpretation_id) {
       let index = state.consoles.indexOf(interpretation_id);
-      console.log(state.consoles)
-      console.log(state.index)
+      // console.log(state.consoles)
+      // console.log(state.index)
 
       if (index > -1) {
         state.consoles.splice(index, 1); // 2nd parameter means remove one item only
       }
 
-      console.log(state.consoles)
+      // console.log(state.consoles)
     },
 
     clearConsoles(state) {

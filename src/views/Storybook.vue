@@ -141,7 +141,7 @@ export default {
 
 		permanentlydestroy(oldInterpretation) {
 			// make an array of the ID's of interpretations currently being viewed
-			console.log(oldInterpretation);
+			// console.log(oldInterpretation);
 			let mappedoldIDsArray = this.formerInterpretationsList.map(
 				(item) => item.id
 			);
@@ -160,7 +160,7 @@ export default {
 		// move an interpretation from a column in the browser window to the dropdown menu
 		returnFormerInterpretation(oldInterpretation) {
 			// make an array of the ID's of interpretations currently being viewed
-			console.log(oldInterpretation);
+			// console.log(oldInterpretation);
 			let mappedoldIDsArray = this.formerInterpretationsList.map(
 				(item) => item.id
 			);
@@ -201,6 +201,7 @@ export default {
 		// add a whole interpretation object (which was emitted by the child component that just created it and also created a new column for it) to the list of interpretations that are being viewed in the browser window
 		addCreatedInterpretation(interpretation) {
 			this.formerInterpretationsList.push(interpretation);
+          this.$store.commit("addConsolesCount", interpretation.id);
 		},
 		toggleInterpretationModal() {
 			this.showAddInterpretationModal = !this.showAddInterpretationModal;

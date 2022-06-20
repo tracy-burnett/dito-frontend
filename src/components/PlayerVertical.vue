@@ -121,6 +121,7 @@ export default {
 	data: () => {
 		return {
 			playbackspeed: 1,
+			isLoaded: false,
 			loadingpercent: 0,
 			zoomnumber: 1,
 			startTime: "00:00:00", // the beginning of the highlighted region as calculated by wavesurfer OR manually input by the user, in HH:MM:SS
@@ -237,6 +238,7 @@ export default {
 
 		// When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
 		this.wavesurfer.on("waveform-ready", function () {
+			that.isLoaded=true
 			that.totalDuration = that.wavesurfer.getDuration();
 			that.endTimeSeconds = that.totalDuration;
 			that.endTime = that.secondsToTime(that.endTimeSeconds);
@@ -277,7 +279,7 @@ export default {
 				"updateAudioTime",
 				Math.round(that.currentTimeSeconds * 100)
 			);
-			if (that.currentTimeSeconds >= that.endTimeSeconds) {
+			if (that.currentTimeSeconds >= that.endTimeSeconds && that.isLoaded==true) {
 				that.wavesurfer.seekTo(that.startTimeSeconds / that.totalDuration);
 			}
 		});
