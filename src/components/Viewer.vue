@@ -3,7 +3,9 @@
     <span class="font-bold border-gray-300 rounded px-3 py-1">{{ title }}</span>
     in <span class="border-gray-300 rounded px-3 py-1">{{ language_name }}</span
     ><br />
-
+<!-- {{associations}} -->
+<!-- {{parsedAssociations}} -->
+<!-- {{substringArray}} -->
     <!-- for each substring that would be independently highlighted, render it as highlighted or not based on running the highlight function on it whenever the current audioplayer time changes.
 also, if the user clicks on the text of that substring, snap the audio player to play the corresponding audio for that substring. -->
     <div class="border-gray-300 rounded w-full h-full mt-12 mb-3 px-3 py-1">
@@ -161,8 +163,16 @@ export default {
       this.relevantCharacters.sort((a, b) => a - b);
       this.relevantCharacters = [...new Set(this.relevantCharacters)];
       this.substringArray = [];
+
+      let firstslice = {};
+      this.endslice = this.relevantCharacters[0];
+      firstslice.text = this.latest_text.substring(0,this.endslice);
+      firstslice.startingcharacter = 0
+      this.substringArray.push(firstslice);
+
+
       this.i = 0;
-      while (this.i + 2 < this.relevantCharacters.length) {
+      while (this.i + 1 < this.relevantCharacters.length) {
         let slice = {};
         this.startslice = this.relevantCharacters[this.i];
         this.endslice = this.relevantCharacters[this.i + 1];
