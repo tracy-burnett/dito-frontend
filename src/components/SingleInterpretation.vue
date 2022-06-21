@@ -3,45 +3,58 @@
 		<!-- this SingleInterpretation component represents what is viewable in a single interpretation column of an open storybook -->
 		<div>
 			<!--highlight more/less slider -->
-<div  class="h-16" v-if="styleoption==='Viewer'">
-			<div class="flex justify-center text-xs">
-				highlight less / highlight more
+			<div
+				class="h-16"
+				v-if="styleoption==='Viewer'"
+			>
+				<div class="flex justify-center text-xs">
+					highlight less / highlight more
+				</div>
+				<div>
+					<input
+						id="timestepslider"
+						v-model="timestep"
+						type="range"
+						min="50"
+						max="10000"
+						step="50"
+						style="width: 100%"
+					/>
+				</div>
 			</div>
-			<div>
-				<input
-					id="timestepslider"
-					v-model="timestep"
-					type="range"
-					min="50"
-					max="10000"
-					step="50"
-					style="width: 100%"
-				/>
+			<div
+				class="h-16"
+				v-else-if="styleoption==='Editor'"
+			>
+				<!-- this is where should allow user to choose other punctuating characters or strings to always be their own word and not accidentally joining two other words -->
+				<button @click="saveEditsincrease()">
+					SAVE EDITS
+				</button>
 			</div>
-</div>
-<div  class="h-16" v-else-if="styleoption==='Editor'">
-<!-- this is where should allow user to choose other punctuating characters or strings to always be their own word and not accidentally joining two other words -->
+			<div
+				class="h-16"
+				v-else-if="styleoption==='Tagger'"
+			>
+				<!-- quick and dirty way to undo tags you haven't saved to the database yet -->
+				<button @click="clearTimestamps()">CLICK ME to clear new timestamps</button><br />
+				<!-- quick and dirty way to purge the database of all tags for this interpretation, mainly used for debugging purposes -->
+				<button @click="clearOldTimestamps()">
+					CLICK ME to clear old timestamps
+				</button><br />
+				<button @click="updateAssociationsfunc()">
+					SAVE TAGS
+				</button>
 
-</div>
-<div  class="h-16" v-else-if="styleoption==='Tagger'">
-    <!-- quick and dirty way to undo tags you haven't saved to the database yet -->
-    <button @click="clearTimestamps()">CLICK ME to clear new timestamps</button
-    ><br />
-    <!-- quick and dirty way to purge the database of all tags for this interpretation, mainly used for debugging purposes -->
-    <button @click="clearOldTimestamps()">
-      CLICK ME to clear old timestamps
-    </button>
-
-</div>
-change font size<br>
-				<input
-					id="fontsizeslider"
-					v-model="fontsize"
-					type="range"
-					min="8"
-					max="50"
-					step=".5"
-				/>
+			</div>
+			change font size<br>
+			<input
+				id="fontsizeslider"
+				v-model="fontsize"
+				type="range"
+				min="8"
+				max="50"
+				step=".5"
+			/>
 			<!-- the StorybookStyleMenu component allows the user to choose whether they want to interact with the interpretation via the Viewer, Tagger, or Editor feature -->
 			<!-- the user's selection is communicated back to this SingleInterpretation component via the toggleStorybookStyle event -->
 			<StorybookStyleMenu
@@ -65,9 +78,11 @@ change font size<br>
 				v-bind:is="styleoption"
 				:audio_id="audio_id"
 				:timestep="timestep"
-        :fontsize="fontsize"
-        :clearTimestampsvar="clearTimestampsvar"
-        :clearOldTimestampsvar="clearOldTimestampsvar"
+				:fontsize="fontsize"
+				:clearTimestampsvar="clearTimestampsvar"
+				:updateAssociations="updateAssociations"
+				:clearOldTimestampsvar="clearOldTimestampsvar"
+				:saveEditscounter="saveEditscounter"
 				:interpretationStatus="interpretationStatus"
 				:interpretation_id="interpretation_id"
 				@permanentlydestroy="permanentlydestroy($event)"
@@ -104,9 +119,11 @@ export default {
 	data: () => {
 		return {
 			timestep: 500,
-      fontsize: 16,
-      clearTimestampsvar: 0,
-      clearOldTimestampsvar: 0,
+			fontsize: 16,
+			updateAssociations: 0,
+			clearTimestampsvar: 0,
+			saveEditscounter: 0,
+			clearOldTimestampsvar: 0,
 			interpretationStatus: "", // this remembers whether the currently logged-in user is a viewer, editor, or owner of the currently-displayed interpretation
 			styleoption: "Viewer", // this can be Viewer, Editor, or Tagger, depending on how the user is currently interacting with the displayed interpretation
 			interpretationFull: {}, // this contains all of the information about the currently displayed interpretation
@@ -147,8 +164,18 @@ export default {
 		);
 	},
 	methods: {
-    clearTimestamps(){this.clearTimestampsvar++},
-    clearOldTimestamps(){this.clearOldTimestampsvar++},
+		clearTimestamps() {
+			this.clearTimestampsvar++;
+		},
+		clearOldTimestamps() {
+			this.clearOldTimestampsvar++;
+		},
+		saveEditsincrease() {
+			this.saveEditscounter++;
+		},
+				updateAssociationsfunc() {
+			this.updateAssociations++;
+		},
 		toggleStorybookStylefunction(styleselection) {
 			this.styleoption = styleselection;
 		},

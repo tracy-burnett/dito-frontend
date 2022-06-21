@@ -23,25 +23,6 @@
 {{$store.state.consoleswidth}}
 {{$store.state.consoles.length}} -->
 
-    <button
-      class="
-        bg-indigo-500
-        border border-indigo-400
-        w-full
-        text-sm
-        px-3
-        py-2
-        mt-16
-        rounded
-        font-medium
-        text-white
-        hover:bg-indigo-400
-        transition-colors
-      "
-      @click="updateText()"
-    >
-      Save Edits
-    </button>
   </div>
 </template>
 
@@ -101,6 +82,9 @@ export default {
     audio_id: {
       default: "",
     },
+        saveEditscounter: {
+      default: 0,
+    },
     
     fontsize: {default: 12},
 
@@ -110,6 +94,11 @@ export default {
     // whether the interpretation is owned "owner", editable "editor", or only viewable "viewer" by the logged-in user
     interpretationStatus: { default: "" },
   },
+  	watch: {
+		saveEditscounter: function () {
+			this.updateText()
+		},
+    },
   methods: {
 
     // destroy an interpretation with no text, title, or language name
