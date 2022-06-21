@@ -41,6 +41,7 @@ export default {
     return {
       language_name: "",
       title: "",
+      timestep: 500,
       relevantCharacters: [], // character indices in the text where highlighting might need to begin or end
       parsedAssociations: [], // array of objects that each indicates which range of characters should be highlighted within a given range of milliseconds
       substringArray: [], // array of objects that each includes a substring of the displayed text, with the index of the substring's starting character
@@ -105,7 +106,7 @@ export default {
               "content/" +
               this.audio_id +
               "/" +
-              this.interpretation_id,
+              this.interpretation_id + "/" + this.timestep + "/",
             {
               method: "GET",
               headers: {
