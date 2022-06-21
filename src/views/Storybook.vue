@@ -2,7 +2,7 @@
 	<div class="h-full">
 		<span
 			v-if="showAddInterpretationModal"
-			class="fixed inset-0 w-full h-screen flex items-center justify-center"
+			class="fixed inset-0 w-full h-screen flex items-center justify-center z-40"
 		>
 			<AddInterpretationModal
 				:audio_id="audio_ID"
