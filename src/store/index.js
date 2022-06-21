@@ -64,7 +64,12 @@ export default new Vuex.Store({
     },
 
     updateIncomingCurrentTime(state, value) {
-      state.incomingCurrentTime = value
+      if (value <= 0) {
+        
+      state.incomingCurrentTime = 0
+      }
+      else{
+      state.incomingCurrentTime = value}
     },
 
     updateAudioTime(state, audiotime) {

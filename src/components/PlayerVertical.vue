@@ -7,7 +7,7 @@
 	<div>
 	      <input id="slider" v-model="playbackspeed" type="range" min=".5" max="1.5" step=".10" style="width: 100%" />
 	</div>
-	<div class="flex justify-center">{{playbackspeed}}</div>
+	<div class="flex justify-center text-sm">{{playbackspeed}}</div>
 	<!-- audio player body -->
 	<div class="container rounded-xl shadow-xl">
 		<!-- top-most time entry box (for start of view window) -->

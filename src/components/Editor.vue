@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-auto h-full">
+  <div class="flex-auto h-full" :style="{ 'font-size': fontsize + 'px' }">
     <!-- {{title.length}} -->
     <!-- {{$store.getters.maxsize}} -->
     <input
@@ -101,6 +101,8 @@ export default {
     audio_id: {
       default: "",
     },
+    
+    fontsize: {default: 12},
 
     // ID of interpretation displayed in this Editor
     interpretation_id: { default: "" },

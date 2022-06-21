@@ -1,8 +1,11 @@
 <template>
-  <div class="flex-auto">
+
+  <div class="flex-auto" :style="{ 'font-size': fontsize + 'px' }">
+
     <span class="font-bold border-gray-300 rounded px-3 py-1">{{ title }}</span>
     in <span class="border-gray-300 rounded px-3 py-1">{{ language_name }}</span
-    ><br />
+    >
+
 <!-- {{associations}} -->
 <!-- {{parsedAssociations}} -->
 <!-- {{substringArray}} -->
@@ -28,6 +31,7 @@ also, if the user clicks on the text of that substring, snap the audio player to
         >
       </span>
     </div>
+
     <br />
 
     <br />
@@ -41,7 +45,6 @@ export default {
     return {
       language_name: "",
       title: "",
-      timestep: 500,
       relevantCharacters: [], // character indices in the text where highlighting might need to begin or end
       parsedAssociations: [], // array of objects that each indicates which range of characters should be highlighted within a given range of milliseconds
       substringArray: [], // array of objects that each includes a substring of the displayed text, with the index of the substring's starting character
@@ -57,6 +60,8 @@ export default {
     audio_id: {
       default: "",
     },
+    timestep: {default: 500},
+    fontsize: {default: 12},
     interpretation_id: { default: "" },
     interpretationStatus: { default: "" }, // describes whether the currently logged-in user is a viewer, editor, or owner of the interpretation being viewed
   },
@@ -64,6 +69,9 @@ export default {
     interpretationStatus: function () {
       this.fetchNewInterpretation();
     },
+    		"timestep": function() {
+			this.fetchNewInterpretation()
+		},
   },
   mounted() {
     if (this.interpretationStatus) {
@@ -161,6 +169,7 @@ export default {
     latest_text_slices() {
       this.relevantCharacters.length = 0;
       this.assignRelevantCharacters();
+      if (this.relevantCharacters.length>0) {
       this.relevantCharacters.sort((a, b) => a - b);
       this.relevantCharacters = [...new Set(this.relevantCharacters)];
       this.substringArray = [];
@@ -170,7 +179,6 @@ export default {
       firstslice.text = this.latest_text.substring(0,this.endslice);
       firstslice.startingcharacter = 0
       this.substringArray.push(firstslice);
-
 
       this.i = 0;
       while (this.i + 1 < this.relevantCharacters.length) {
@@ -187,6 +195,12 @@ export default {
       finalslice.text = this.latest_text.substring(this.startslice);
       finalslice.startingcharacter = this.startslice;
       this.substringArray.push(finalslice);
+      }
+      else {
+        let slice={}
+        slice.text=this.latest_text
+        slice.startingcharacter=0
+        this.substringArray.push(slice)}
     },
 
     // this is a helper function that helps decide at which character indices to break the text into substrings
@@ -234,7 +248,8 @@ export default {
       potentialSnapArray.sort((a, b) => a - b);
       let playFromTimestamp =
         potentialSnapArray[potentialSnapArray.length - 1] / 100;
-      this.$store.commit("updateIncomingCurrentTime", playFromTimestamp);
+      if (playFromTimestamp) {
+      this.$store.commit("updateIncomingCurrentTime", playFromTimestamp);}
       potentialSnapArray.length = 0;
     },
   },

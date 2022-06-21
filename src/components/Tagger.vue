@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-auto">
+  <div class="flex-auto" :style="{ 'font-size': fontsize + 'px' }">
     <span class="font-bold border-gray-300 rounded px-3 py-1">{{ title }}</span>
     in <span class="border-gray-300 rounded px-3 py-1">{{ language_name }}</span
     ><br />
@@ -28,13 +28,7 @@
     </div>
     <br /><br />
 
-    <!-- quick and dirty way to undo tags you haven't saved to the database yet -->
-    <button @click="clearTimestamps()">CLICK ME to clear new timestamps</button
-    ><br />
-    <!-- quick and dirty way to purge the database of all tags for this interpretation, mainly used for debugging purposes -->
-    <button @click="clearOldTimestamps()">
-      CLICK ME to clear old timestamps
-    </button>
+
     <button
       class="
         bg-indigo-500
@@ -70,9 +64,21 @@ export default {
       spaced_by: "",
     };
   },
-
+	watch: {
+		"clearTimestampsvar": function() {
+			this.clearTimestamps()
+		},		"clearOldTimestampsvar": function() {
+			this.clearOldTimestamps()
+		},},
   props: {
-    audio_id: {
+    clearTimestampsvar: {
+      default: 0,
+    },
+    fontsize: {default: 12},
+    clearOldTimestampsvar: {
+      default: 0,
+    },
+        audio_id: {
       default: "",
     },
     interpretation_id: { default: "" },
