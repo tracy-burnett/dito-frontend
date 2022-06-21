@@ -9,7 +9,6 @@
       justify-center
       items-center
       mt-10
-      z-40
     "
     @click.self="closeModal()"
   >
