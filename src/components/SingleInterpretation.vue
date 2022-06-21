@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<!-- this SingleInterpretation component represents what is viewable in a single interpretation column of an open storybook -->
-		<div>
+		<div class="z-10">
 			<!--highlight more/less slider -->
 <div  class="h-16" v-if="styleoption==='Viewer'">
 			<div class="flex justify-center text-xs">
