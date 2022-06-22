@@ -38,7 +38,6 @@
               px-3
               pt-1.5
 			  pb-1.5
-			  mb-1
               rounded
               font-medium
               text-gray-100
@@ -56,7 +55,6 @@
             text-sm
             px-3
 			pt-1.5
-			mb-1.5
 			pb-1.5
             rounded
             font-medium
