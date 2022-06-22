@@ -24,7 +24,7 @@
 						</g>
 					</switch>
 				</svg>
-				&nbsp; dito: dialect interpretions & translations (online)
+				&nbsp; dito: dialect interpretations & translations (online)
 			</div>
 		</router-link>
 
