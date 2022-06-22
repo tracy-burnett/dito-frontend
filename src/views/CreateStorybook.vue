@@ -195,9 +195,9 @@ export default {
 												},
 												body: JSON.stringify({
 													title: this.int_title,
-													latest_text: this.int_text,
+													latest_text: this.int_text.normalize('NFC'),
 													language_name: this.int_language,
-													spaced_by: this.int_spacing,
+													spaced_by: this.int_spacing.normalize('NFC'),
 													public: false,
 												}),
 											}

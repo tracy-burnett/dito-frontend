@@ -5,7 +5,7 @@
 		set playback speed
 	</div>
 	<div>
-	      <input id="slider" v-model="playbackspeed" type="range" min=".5" max="1.5" step=".10" style="width: 100%" />
+	      <input id="slider" v-model="playbackspeed" type="range" min=".4" max="1.5" step=".10" style="width: 100%" />
 	</div>
 	<div class="flex justify-center text-sm">{{playbackspeed}}</div>
 	<!-- audio player body -->
