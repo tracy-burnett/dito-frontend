@@ -1,13 +1,14 @@
 <template>
-<div class="flex flex-col">
+<div class="flex flex-col" style="position:fixed;top:16;">
 	<!-- playback speed slider -->
-	<div class="flex justify-center text-xs">
-		set playback speed
+		<div class="flex justify-center text-xs">
+		playback speed {{playbackspeed}}
 	</div>
 	<div>
-	      <input id="slider" v-model="playbackspeed" type="range" min=".4" max="1.5" step=".10" style="width: 100%" />
+	      <input id="slider" v-model="playbackspeed" type="range" min=".2" max="1.5" step=".10" style="width: 100%" />
 	</div>
-	<div class="flex justify-center text-sm">{{playbackspeed}}</div>
+
+	<!-- <div class="flex justify-center text-xs">{{playbackspeed}}</div> -->
 	<!-- audio player body -->
 	<div class="container rounded-xl shadow-xl">
 		<!-- top-most time entry box (for start of view window) -->

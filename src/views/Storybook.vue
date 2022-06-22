@@ -16,7 +16,7 @@
 				:key="playerKey"
 				:audio_ID="audio_ID"
 				@rerenderPlayer="playerKey++"
-			/>
+			/></div><div class="flex ml-32">
 
 			<!-- given the Vuex store's list of interpretation ID's that the user wants displayed in columns in the browser window, create a column for each one -->
 

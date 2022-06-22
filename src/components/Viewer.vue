@@ -1,7 +1,6 @@
 <template>
-
   <div class="flex-auto" :style="{ 'font-size': fontsize + 'px' }">
-
+<div>
     <span class="font-bold border-gray-300 rounded px-3 py-1">{{ title }}</span>
     in <span class="border-gray-300 rounded px-3 py-1">{{ language_name }}</span
     >
@@ -35,7 +34,7 @@ also, if the user clicks on the text of that substring, snap the audio player to
     <br />
 
     <br />
-  </div>
+  </div></div>
 </template>
 
 <script>

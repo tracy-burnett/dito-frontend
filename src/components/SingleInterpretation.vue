@@ -1,14 +1,61 @@
 <template>
-	<div>
+	<div class="h-full">
 		<!-- this SingleInterpretation component represents what is viewable in a single interpretation column of an open storybook -->
-		<div>
+
+
+					<div
+			class="flex flex-rows-1 flex-wrap justify-around sticky top-12 z-20" style="background: white"
+		>
+
+			<!-- this component allows the user to remove the entire interpretation column from their browser window -->
+
+
+			
+
+			<!-- SelectInterpretationMenu allows the user to swap out the interpretation they are currently viewing for a different one -->
+			<!-- this SingleInterpretation component tells the SelectInterpretationMenu component what interpretations to place in its Dropdown menu via interpretationsList -->
+			<!-- the user's selection of a new interpretation is communicated back to this SingleInterpretation component via the changeInterpretationID event -->
+			<div>
+				<SelectInterpretationMenu
+					:interpretationsList="interpretationsList"
+					@changeInterpretationID="changeInterpretationIDfunction($event)"
+				/>
+			</div>
+						<!-- the StorybookStyleMenu component allows the user to choose whether they want to interact with the interpretation via the Viewer, Tagger, or Editor feature -->
+			<!-- the user's selection is communicated back to this SingleInterpretation component via the toggleStorybookStyle event -->
+			<div>
+				<StorybookStyleMenu
+					:interpretationStatus="interpretationStatus"
+					@toggleStorybookStyle="toggleStorybookStylefunction($event)"
+				/>
+			</div>
+						<div>
+				<DeleteInterpretationViewer
+					:interpretation_id="interpretation_id"
+					@returnFormerInterpretation="returnFormerInterpretation($event)"
+				/>
+			</div></div>					<div
+			class="flex flex-rows-1 flex-wrap justify-around sticky top-24 z-10" style="background: white"
+		>
+<!-- <div class="w-40"></div> -->
+
+			<div>
+				change font size<br>
+				<input
+					id="fontsizeslider"
+					v-model="fontsize"
+					type="range"
+					min="8"
+					max="50"
+					step=".5"
+				/>
+			</div>
+
+
 			<!--highlight more/less slider -->
-			<div
-				class="h-16"
-				v-if="styleoption==='Viewer'"
-			>
-				<div class="flex justify-center text-xs">
-					highlight less / highlight more
+			<div v-if="styleoption==='Viewer'">
+				<div class="flex">
+					highlight less / more
 				</div>
 				<div>
 					<input
@@ -18,59 +65,39 @@
 						min="50"
 						max="10000"
 						step="50"
-						style="width: 100%"
 					/>
 				</div>
 			</div>
 			<div
-				class="h-16"
 				v-else-if="styleoption==='Editor'"
 			>
 				<!-- this is where should allow user to choose other punctuating characters or strings to always be their own word and not accidentally joining two other words -->
-				<button @click="saveEditsincrease()">
-					SAVE EDITS
+				<button class="dropbtn bg-slate-600" @click="saveEditsincrease()">
+					Save
 				</button>
 			</div>
+
 			<div
-				class="h-16"
-				v-else-if="styleoption==='Tagger'"
+				v-if="styleoption==='Tagger'"
 			>
 				<!-- quick and dirty way to undo tags you haven't saved to the database yet -->
-				<button @click="clearTimestamps()">CLICK ME to clear new timestamps</button><br />
-				<!-- quick and dirty way to purge the database of all tags for this interpretation, mainly used for debugging purposes -->
-				<button @click="clearOldTimestamps()">
-					CLICK ME to clear old timestamps
-				</button><br />
-				<button @click="updateAssociationsfunc()">
-					SAVE TAGS
-				</button>
-
+				<button class="dropbtn bg-slate-600" @click="clearTimestamps()">Clear New</button>
 			</div>
-			change font size<br>
-			<input
-				id="fontsizeslider"
-				v-model="fontsize"
-				type="range"
-				min="8"
-				max="50"
-				step=".5"
-			/>
-			<!-- the StorybookStyleMenu component allows the user to choose whether they want to interact with the interpretation via the Viewer, Tagger, or Editor feature -->
-			<!-- the user's selection is communicated back to this SingleInterpretation component via the toggleStorybookStyle event -->
-			<StorybookStyleMenu
-				:interpretationStatus="interpretationStatus"
-				@toggleStorybookStyle="toggleStorybookStylefunction($event)"
-			/>
-			<!-- SelectInterpretationMenu allows the user to swap out the interpretation they are currently viewing for a different one -->
-			<!-- this SingleInterpretation component tells the SelectInterpretationMenu component what interpretations to place in its Dropdown menu via interpretationsList -->
-			<!-- the user's selection of a new interpretation is communicated back to this SingleInterpretation component via the changeInterpretationID event -->
-			<SelectInterpretationMenu
-				:interpretationsList="interpretationsList"
-				@changeInterpretationID="changeInterpretationIDfunction($event)"
-			/>
+			<!-- quick and dirty way to purge the database of all tags for this interpretation, mainly used for debugging purposes -->
+			<div
+				v-if="styleoption==='Tagger'"
+			><button  class="dropbtn bg-slate-600" @click="clearOldTimestamps()">
+					Clear Old
+				</button></div>
+						<div
+				v-if="styleoption==='Tagger'"
+			><button class="dropbtn bg-slate-600" @click="updateAssociationsfunc()">
+					Save
+				</button></div>
 		</div>
+			
 		<br /><br /><br /><br /><br />
-		<div>
+		<div class="sticky top-40">
 			<!-- this component will be Viewer, Tagger, or Editor, depending on the user's selection of "styleoption" via the StorybookStyleMenu -->
 			<!-- {{interpretationStatus}} -->
 			<!-- {{$store.state.user}} -->
@@ -86,13 +113,11 @@
 				:interpretationStatus="interpretationStatus"
 				:interpretation_id="interpretation_id"
 				@permanentlydestroy="permanentlydestroy($event)"
-			></component>
+			>
+			
+			
+			</component>
 
-			<!-- this component allows the user to remove the entire interpretation column from their browser window -->
-			<DeleteInterpretationViewer
-				:interpretation_id="interpretation_id"
-				@returnFormerInterpretation="returnFormerInterpretation($event)"
-			/>
 		</div>
 	</div>
 </template>
@@ -173,7 +198,7 @@ export default {
 		saveEditsincrease() {
 			this.saveEditscounter++;
 		},
-				updateAssociationsfunc() {
+		updateAssociationsfunc() {
 			this.updateAssociations++;
 		},
 		toggleStorybookStylefunction(styleselection) {
@@ -223,9 +248,9 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .dropbtn {
-	background-color: #7833ff;
+	/* background-color: #7833ff; */
 	border: none;
 	color: white;
 	padding: 10px 20px;
@@ -260,7 +285,7 @@ export default {
 }
 
 .buttonplus {
-	background-color: #7833ff;
+	/* background-color: #7833ff; */
 	border: none;
 	color: white;
 	padding: 9px 12px;
@@ -285,8 +310,8 @@ export default {
 .dropdown:hover .dropdown-content {
 	display: block;
 }
-.dropdown:hover .dropbtn {
-	background-color: #7833ff;
-}
+/* .dropdown:hover .dropbtn { */
+	/* background-color: #7833ff; */
+/* } */
 </style>
 

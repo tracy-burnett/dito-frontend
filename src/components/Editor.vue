@@ -1,4 +1,5 @@
 <template>
+<slot></slot>
   <div class="flex-auto h-full" :style="{ 'font-size': fontsize + 'px' }">
     <!-- {{title.length}} -->
     <!-- {{$store.getters.maxsize}} -->

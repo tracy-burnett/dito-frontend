@@ -6,7 +6,7 @@
 			<SidebarAlt />
 	</div>
 
-	<div class="bar flex justify-between items-center bg-gray-900 px-5 py-3">
+	<div class="bar flex justify-between items-center bg-gray-900 px-5 py-1 sticky top-0 z-10">
 		<router-link
 			class="text-xl text-gray-100 font-semibold"
 			to="/"

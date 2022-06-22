@@ -1,13 +1,12 @@
 <template>
-  <div>
+  
     <!-- clicking this button removes the interpretation column associated with it -->
     <div id="destroy">
-      <div class="h-10 w-10" @click="destroy">
-        <img src="@/assets/pauseAudio.svg" /> <!-- needs to be replaced with a more appropriate icon -->
+      <button class="dropbtn bg-slate-600" @click="destroy">
+      Close</button>
+        <!-- <img src="@/assets/pauseAudio.svg" />-->
       </div>
-    </div>
-    <br />
-  </div>
+    
 </template>
 
 <script>
@@ -35,7 +34,7 @@ export default {
 
 <style scoped>
 .dropbtn {
-  background-color: #7833ff;
+  /* background-color: #7833ff; */
   border: none;
   color: white;
   padding: 10px 20px;

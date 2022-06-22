@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="dropdown" style="float: right">
-      <button class="dropbtn">Select Interaction Style</button>
+      <button class="dropbtn bg-slate-600">Interaction</button>
       <div class="dropdown-content">
         <a @click="toggleStorybookStyle('Viewer')">Viewing</a>
         
@@ -33,7 +33,7 @@ export default {
 
 <style scoped>
 .dropbtn {
-  background-color: #7833ff;
+  /* background-color: #7833ff; */
   border: none;
   color: white;
   padding: 10px 20px;
@@ -68,7 +68,7 @@ export default {
 }
 
 .buttonplus {
-  background-color: #7833ff;
+  /* background-color: #7833ff; */
   border: none;
   color: white;
   padding: 9px 12px;
@@ -93,8 +93,8 @@ export default {
 .dropdown:hover .dropdown-content {
   display: block;
 }
-.dropdown:hover .dropbtn {
-  background-color: #7833ff;
-}
+/* .dropdown:hover .dropbtn { */
+  /* background-color: #7833ff; */
+/* } */
 </style>
 
