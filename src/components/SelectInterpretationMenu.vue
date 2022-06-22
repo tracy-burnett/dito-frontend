@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="dropdown" style="float: right">
-      <button class="dropbtn bg-slate-600">Interpretation</button>
+      <button class="dropbtn bg-indigo-700">Interpretation</button>
 
       <div class="dropdown-content">
         <!-- for each interpretation in the list of interpretations to show in the Dropdownmenu, create a menu option that displays the language name -->

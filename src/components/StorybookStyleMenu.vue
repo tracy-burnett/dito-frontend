@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="dropdown" style="float: right">
-      <button class="dropbtn bg-slate-600">Interaction</button>
+      <button class="dropbtn bg-indigo-700">Interaction</button>
       <div class="dropdown-content">
         <a @click="toggleStorybookStyle('Viewer')">Viewing</a>
         

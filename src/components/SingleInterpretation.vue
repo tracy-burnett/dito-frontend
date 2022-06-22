@@ -2,15 +2,12 @@
 	<div class="h-full">
 		<!-- this SingleInterpretation component represents what is viewable in a single interpretation column of an open storybook -->
 
-
-					<div
-			class="flex flex-rows-1 flex-wrap justify-around sticky top-12 z-20" style="background: white"
+		<div
+			class="flex flex-rows-1 flex-wrap justify-around sticky top-12 z-20"
+			style="background: white"
 		>
 
 			<!-- this component allows the user to remove the entire interpretation column from their browser window -->
-
-
-			
 
 			<!-- SelectInterpretationMenu allows the user to swap out the interpretation they are currently viewing for a different one -->
 			<!-- this SingleInterpretation component tells the SelectInterpretationMenu component what interpretations to place in its Dropdown menu via interpretationsList -->
@@ -21,7 +18,7 @@
 					@changeInterpretationID="changeInterpretationIDfunction($event)"
 				/>
 			</div>
-						<!-- the StorybookStyleMenu component allows the user to choose whether they want to interact with the interpretation via the Viewer, Tagger, or Editor feature -->
+			<!-- the StorybookStyleMenu component allows the user to choose whether they want to interact with the interpretation via the Viewer, Tagger, or Editor feature -->
 			<!-- the user's selection is communicated back to this SingleInterpretation component via the toggleStorybookStyle event -->
 			<div>
 				<StorybookStyleMenu
@@ -29,15 +26,18 @@
 					@toggleStorybookStyle="toggleStorybookStylefunction($event)"
 				/>
 			</div>
-						<div>
+			<div>
 				<DeleteInterpretationViewer
 					:interpretation_id="interpretation_id"
 					@returnFormerInterpretation="returnFormerInterpretation($event)"
 				/>
-			</div></div>					<div
-			class="flex flex-rows-1 flex-wrap justify-around sticky top-24 z-10" style="background: white"
+			</div>
+		</div>
+		<div
+			class="flex flex-rows-1 flex-wrap justify-around sticky top-24 z-10"
+			style="background: white"
 		>
-<!-- <div class="w-40"></div> -->
+			<!-- <div class="w-40"></div> -->
 
 			<div>
 				change font size<br>
@@ -50,7 +50,6 @@
 					step=".5"
 				/>
 			</div>
-
 
 			<!--highlight more/less slider -->
 			<div v-if="styleoption==='Viewer'">
@@ -68,35 +67,37 @@
 					/>
 				</div>
 			</div>
-			<div
-				v-else-if="styleoption==='Editor'"
-			>
+			<div v-else-if="styleoption==='Editor'">
 				<!-- this is where should allow user to choose other punctuating characters or strings to always be their own word and not accidentally joining two other words -->
-				<button class="dropbtn bg-slate-600" @click="saveEditsincrease()">
+				<button
+					class="dropbtn bg-indigo-700"
+					@click="saveEditsincrease()"
+				>
 					Save
 				</button>
 			</div>
 
-			<div
-				v-if="styleoption==='Tagger'"
-			>
+			<div v-if="styleoption==='Tagger'">
 				<!-- quick and dirty way to undo tags you haven't saved to the database yet -->
-				<button class="dropbtn bg-slate-600" @click="clearTimestamps()">Clear New</button>
+				<button
+					class="dropbtn bg-indigo-700"
+					@click="clearTimestamps()"
+				>Clear New</button>
 			</div>
 			<!-- quick and dirty way to purge the database of all tags for this interpretation, mainly used for debugging purposes -->
-			<div
-				v-if="styleoption==='Tagger'"
-			><button  class="dropbtn bg-slate-600" @click="clearOldTimestamps()">
+			<div v-if="styleoption==='Tagger'"><button
+					class="dropbtn bg-indigo-700"
+					@click="clearOldTimestamps()"
+				>
 					Clear Old
 				</button></div>
-						<div
-				v-if="styleoption==='Tagger'"
-			><button class="dropbtn bg-slate-600" @click="updateAssociationsfunc()">
+			<div v-if="styleoption==='Tagger'"><button
+					class="dropbtn bg-indigo-700"
+					@click="updateAssociationsfunc()"
+				>
 					Save
 				</button></div>
 		</div>
-			
-		<br /><br /><br /><br /><br />
 		<div class="sticky top-40">
 			<!-- this component will be Viewer, Tagger, or Editor, depending on the user's selection of "styleoption" via the StorybookStyleMenu -->
 			<!-- {{interpretationStatus}} -->
@@ -114,8 +115,7 @@
 				:interpretation_id="interpretation_id"
 				@permanentlydestroy="permanentlydestroy($event)"
 			>
-			
-			
+
 			</component>
 
 		</div>
@@ -311,7 +311,7 @@ export default {
 	display: block;
 }
 /* .dropdown:hover .dropbtn { */
-	/* background-color: #7833ff; */
+/* background-color: #7833ff; */
 /* } */
 </style>
 

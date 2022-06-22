@@ -1,5 +1,4 @@
 <template>
-<slot></slot>
 	<div
 		class="flex-auto"
 		:style="{ 'font-size': fontsize + 'px' }"

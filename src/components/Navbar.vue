@@ -28,7 +28,7 @@
 			</div>
 		</router-link>
 
-		<div class="flex">
+		<div class="flex items-center">
 			<div v-if="LoginLogoutButton">
 				<button
 					@click="signoutuser()"
@@ -36,7 +36,9 @@
               bg-blue-700
               text-sm
               px-3
-              py-2
+              pt-2
+			  pb-2
+			  mb-1
               rounded
               font-medium
               text-gray-100
@@ -53,7 +55,9 @@
             bg-blue-700
             text-sm
             px-3
-            py-2
+			pt-2
+			mb-1
+			pb-2
             rounded
             font-medium
             text-gray-100
