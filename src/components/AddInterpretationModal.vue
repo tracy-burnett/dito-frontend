@@ -127,9 +127,9 @@ export default {
             Authorization: this.$store.state.idToken,
           },
           body: JSON.stringify({
-            title: this.int_title,
+            title: this.int_title.normalize('NFC'),
             latest_text: this.int_text.normalize('NFC'),
-            language_name: this.int_language,
+            language_name: this.int_language.normalize('NFC'),
             spaced_by: this.int_spacing.normalize('NFC'),
             public: false,
           }),

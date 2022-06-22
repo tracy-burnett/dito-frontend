@@ -169,7 +169,7 @@ export default {
 				{
 					method: "POST",
 					body: JSON.stringify({
-						text: this.latest_text, // Pass in a string that meets a minimum character count and includes all the new tags you want to save
+						text: this.latest_text.normalize('NFC'), // Pass in a string that meets a minimum character count and includes all the new tags you want to save
 						associations: this.new_associations, // Pass in the list of the new tags
 					}),
 

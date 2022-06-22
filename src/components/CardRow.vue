@@ -393,8 +393,8 @@ export default {
 					},
 					body: JSON.stringify({
 						// url: "coverimage.jpg",
-						title: this.title,
-						description: this.description,
+						title: this.title.normalize('NFC'),
+						description: this.description.normalize('NFC'),
 						public: this.publictf,
 						// shared_with: [],
 					}),

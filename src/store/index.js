@@ -210,8 +210,8 @@ export default new Vuex.Store({
                 Authorization: data.user.accessToken,
               },
               body: JSON.stringify({
-                display_name: display_name,
-                description: description,
+                display_name: display_name.normalize('NFC'),
+                description: description.normalize('NFC'),
                 anonymous: anonymous,
                 email: email,
               }),

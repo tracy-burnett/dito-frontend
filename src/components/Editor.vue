@@ -136,8 +136,8 @@ export default {
           method: "PATCH",
           body: JSON.stringify({
             latest_text: this.latest_text.normalize('NFC'),
-            title: this.title,
-            language_name: this.language_name,
+            title: this.title.normalize('NFC'),
+            language_name: this.language_name.normalize('NFC'),
             instructions: this.instructions,
           }),
           headers: {
