@@ -78,7 +78,7 @@ export default {
 }
 
 .buttonplus {
-  background-color: #7833ff;
+  /* background-color: #7833ff; */
   border: none;
   color: white;
   padding: 9px 12px;
@@ -103,8 +103,8 @@ export default {
 .dropdown:hover .dropdown-content {
   display: block;
 }
-.dropdown:hover .dropbtn {
-  background-color: #7833ff;
-}
+/* .dropdown:hover .dropbtn { */
+  /* background-color: #7833ff; */
+/* } */
 </style>
 

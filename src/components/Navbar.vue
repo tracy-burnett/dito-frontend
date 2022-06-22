@@ -36,8 +36,8 @@
               bg-blue-700
               text-sm
               px-3
-              pt-2
-			  pb-2
+              pt-1.5
+			  pb-1.5
 			  mb-1
               rounded
               font-medium
@@ -55,9 +55,9 @@
             bg-blue-700
             text-sm
             px-3
-			pt-2
-			mb-1
-			pb-2
+			pt-1.5
+			mb-1.5
+			pb-1.5
             rounded
             font-medium
             text-gray-100
