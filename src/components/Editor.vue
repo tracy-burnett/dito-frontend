@@ -111,7 +111,7 @@ export default {
     updateText() {
       this.instructions = this.patienceDiffPlus(
         this.original_text.split(this.spaced_by),
-        this.latest_text.split(this.spaced_by)
+        this.latest_text.normalize('NFC').split(this.spaced_by)
       );
       
       for (let i = this.instructions.lines.length - 1; i >= 0; i--) {

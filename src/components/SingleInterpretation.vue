@@ -98,7 +98,7 @@
 					Save
 				</button></div>
 		</div>
-		<div class="sticky top-40">
+		<div>
 			<!-- this component will be Viewer, Tagger, or Editor, depending on the user's selection of "styleoption" via the StorybookStyleMenu -->
 			<!-- {{interpretationStatus}} -->
 			<!-- {{$store.state.user}} -->

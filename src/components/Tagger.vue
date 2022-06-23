@@ -158,7 +158,7 @@ export default {
 			//     associations: this.new_associations, // Pass in the list of the new tags
 			//   })
 			// );
-
+// console.log(this.new_associations)
 			// send new tags to the database
 			fetch(
 				process.env.VUE_APP_api_URL +
