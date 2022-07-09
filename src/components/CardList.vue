@@ -230,7 +230,7 @@ export default {
 			audioArrayPublic: [],
 			audioArrayArchive: [],
 			lastknownscrollposition: 0,
-			checkedFilters: ["owner", "editor", "viewer", "public", "archived"],
+			checkedFilters: ["owner", "editor", "viewer", "public"],
 		};
 	},
 	computed: {
