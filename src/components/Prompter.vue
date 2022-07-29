@@ -10,10 +10,12 @@
 		in <span class="border-gray-300 rounded px-3 py-1">{{ language_name }}</span><br />
         <!-- {{associationGaps}}
 		{{associations}}
-		{{usableGaps}}<br>
 		{{new_associations}} -->
         <!-- {{scribingclean}} -->
-        <!-- {{relevantGap}} -->
+		{{usableGaps}}<br>
+        {{relevantGap}}<br>
+        {{contentEndingIndex - 5 + relevantGap.startTime+parseInt(scribingclean)}}<br>
+if this is greater than        {{$store.state.audioDuration/10}} then the last gap should get deleted from usableGaps
 		<!-- {{associationGaps}} -->
 		<!-- {{usablePeaksData}}<br> -->
 		<!-- {{usablePeaksData2}} -->
@@ -232,7 +234,7 @@ if (this.$store.state.audioDuration < this.scribing) {return this.$store.state.a
 			// console.log("sensitivity " + this.sensitivity);
 			this.contentEndingIndex = 0;
 			this.contentStartingIndex = 0;
-			if (this.$store.state.audioDuration > 0 && this.usableGaps.length>0) {
+			if (this.$store.state.audioDuration > 0 && this.usableGaps.length>0 && (parseInt(this.usableGaps[0].startTime) + 100 < this.$store.state.audioDuration/10)) {
 				this.relevantGap.startTime = parseInt(this.usableGaps[0].startTime); // should be in hundredths of a second
 				// console.log(this.relevantGap.startTime)
 				this.relevantGap.endTime = parseInt(this.usableGaps[0].startTime) + parseInt(this.scribingclean)+100; // should be in hundredths of a second               // FLAG TIME DECISION
@@ -377,7 +379,7 @@ if (this.$store.state.audioDuration < this.scribing) {return this.$store.state.a
 					this.usableGaps[0].endTime -
 						(this.contentEndingIndex - 5 + this.relevantGap.startTime) <
 					this.scribingclean               // FLAG TIME DECISION
-				) {
+                ) {
 					this.usableGaps.shift();
 				}
 				if (this.contentEndingIndex > this.contentStartingIndex + 50) {
