@@ -1,8 +1,6 @@
 <template>
 <div class="flex flex-col" style="position:fixed;top:16;">
-{{currentTimeSeconds}}
-{{endTimeSeconds}}
-{{isLoaded}}
+
 	<!-- playback speed slider -->
 		<div class="flex justify-center text-xs">
 		playback speed {{playbackspeed}}
