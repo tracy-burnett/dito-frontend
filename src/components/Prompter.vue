@@ -12,8 +12,8 @@
 		{{associations}}
 		{{usableGaps}}<br>
 		{{new_associations}} -->
-        {{scribingclean}}
-        {{relevantGap}}
+        <!-- {{scribingclean}} -->
+        <!-- {{relevantGap}} -->
 		<!-- {{associationGaps}} -->
 		<!-- {{usablePeaksData}}<br> -->
 		<!-- {{usablePeaksData2}} -->
@@ -115,7 +115,7 @@ if (this.$store.state.audioDuration < this.scribing) {return this.$store.state.a
             if (this.allowSubmit==false || this.new_text == ""){
 			this.newPromptsfunc();}
 		},
-		"$store.state.audioDuration": function () {
+		"$store.state.peaksData": function () {
             // console.log("watched detected in Prompter")
 			this.findGaps(); // populates "this.usableGaps"
 		},
@@ -232,7 +232,7 @@ if (this.$store.state.audioDuration < this.scribing) {return this.$store.state.a
 			// console.log("sensitivity " + this.sensitivity);
 			this.contentEndingIndex = 0;
 			this.contentStartingIndex = 0;
-			if (this.$store.state.audioDuration > 0) {
+			if (this.$store.state.audioDuration > 0 && this.usableGaps.length>0) {
 				this.relevantGap.startTime = parseInt(this.usableGaps[0].startTime); // should be in hundredths of a second
 				// console.log(this.relevantGap.startTime)
 				this.relevantGap.endTime = parseInt(this.usableGaps[0].startTime) + parseInt(this.scribingclean)+100; // should be in hundredths of a second               // FLAG TIME DECISION
