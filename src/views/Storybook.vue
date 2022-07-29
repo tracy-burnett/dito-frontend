@@ -178,6 +178,11 @@ export default {
 
 			// tell the Vuex store to remove the ID number of the interpretation in question from the list of interpretions that currently need columns in the browser window
 			this.$store.commit("deleteConsole", oldInterpretation);
+			if (this.$store.state.prompterID==oldInterpretation) {
+									this.$store.commit(
+						"removePrompterID"
+					);
+			}
 		},
 
 		displayInterpretationID(newID) {

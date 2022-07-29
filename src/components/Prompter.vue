@@ -12,10 +12,8 @@
 		{{associations}}
 		{{new_associations}} -->
         <!-- {{scribingclean}} -->
-		{{usableGaps}}<br>
-        {{relevantGap}}<br>
-        {{contentEndingIndex - 5 + relevantGap.startTime+parseInt(scribingclean)}}<br>
-if this is greater than        {{$store.state.audioDuration/10}} then the last gap should get deleted from usableGaps
+		<!-- {{usableGaps}}<br> -->
+        <!-- {{relevantGap}}<br> -->
 		<!-- {{associationGaps}} -->
 		<!-- {{usablePeaksData}}<br> -->
 		<!-- {{usablePeaksData2}} -->

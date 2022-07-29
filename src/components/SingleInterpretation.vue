@@ -6,7 +6,8 @@
 			class="flex flex-rows-1 flex-wrap justify-around sticky top-12 z-20"
 			style="background: white"
 		>
-
+		<!-- {{styleoption}}<br> -->
+<!-- {{$store.state.prompterID}}hi -->
 			<!-- this component allows the user to remove the entire interpretation column from their browser window -->
 
 			<!-- SelectInterpretationMenu allows the user to swap out the interpretation they are currently viewing for a different one -->
@@ -243,6 +244,15 @@ export default {
 		},
 		toggleStorybookStylefunction(styleselection) {
 			this.styleoption = styleselection;
+			if (this.styleoption=='Prompter') {
+									this.$store.commit(
+						"updatePrompterID",
+						this.interpretation_id
+					);
+			}
+			else if (this.styleoption !='Prompter' && this.$store.state.prompterID==this.interpretation_id) {
+				this.$store.commit("removePrompterID")
+			}
 		},
 
 		sharingSetting(owner, editors, viewers, publictf) {

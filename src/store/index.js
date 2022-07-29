@@ -16,6 +16,7 @@ export default new Vuex.Store({
     audioplayertime: 0, // the current time of the audio player
     idToken: null, // the idToken of the currently logged-in user
     consoleswidth: 0,
+    prompterID: null, // the id of the interpretation currently using Prompter (there can only be one at a time)
     peaksData: [],
     regionRerender: 0,
     dashboardRerender: 0,
@@ -91,6 +92,13 @@ export default new Vuex.Store({
 
     updateConsolesWidth(state, newwidth) {
       state.consoleswidth = newwidth
+    },
+    updatePrompterID(state, id) {
+      state.prompterID = id
+    },
+
+    removePrompterID(state) {
+      state.prompterID = null
     },
 
     updateConsolesHeight(state, newheight) {
