@@ -16,12 +16,17 @@ export default new Vuex.Store({
     audioplayertime: 0, // the current time of the audio player
     idToken: null, // the idToken of the currently logged-in user
     consoleswidth: 0,
+    peaksData: [],
+    regionRerender: 0,
     dashboardRerender: 0,
+    startTimePrompter: 0, // in s with hundredth of a second precision
+    endTimePrompter: 0, // in s with hundredth of a second precision
     showStorybookModal: "",
     showAddViewersModal: "",
-    showIntCollabModal: "", // thisis shown to ownersofinterpretations when they manage the editors and viewers
+    showIntCollabModal: "", // this is shown to ownersofinterpretations when they manage the editors and viewers
     showIntViewersModal: "", // this is shown to editors of interpretations when they manage the viewers
     consolesheight: 0,
+    audioDuration: 0,
     cardlistscrollposition: 0,
 
   },
@@ -76,6 +81,14 @@ export default new Vuex.Store({
       state.audioplayertime = audiotime;
     },
 
+    updateStartTimePrompter(state, starttimeprompter) {
+      state.startTimePrompter = starttimeprompter;
+    },
+
+    updateEndTimePrompter(state, endtimeprompter) {
+      state.endTimePrompter = endtimeprompter;
+    },
+
     updateConsolesWidth(state, newwidth) {
       state.consoleswidth = newwidth
     },
@@ -86,6 +99,11 @@ export default new Vuex.Store({
 
     addConsolesCount(state, interpretation_id) {
       state.consoles.push(interpretation_id)
+    },
+
+    updateAudioDuration(state, duration) {
+      console.log("updated in store")
+      state.audioDuration = duration
     },
 
     deleteConsole(state, interpretation_id) {
@@ -113,6 +131,10 @@ export default new Vuex.Store({
       state.dashboardRerender++
     },
 
+    forceRegionRerender(state) {
+      state.regionRerender++
+    },
+
 
     showStorybookModal(state, audio_id) {
       state.showStorybookModal = audio_id
@@ -131,6 +153,13 @@ export default new Vuex.Store({
       state.showAddViewersModal = null
     },
 
+    updatePeaksData(state, peaks) {
+      state.peaksData = peaks
+    },
+
+    removePeaksData(state) {
+      state.peaksData = []
+    },
 
     showIntCollabModal(state, int_id) {
       state.showIntCollabModal = int_id

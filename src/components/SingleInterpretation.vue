@@ -67,7 +67,34 @@
 					/>
 				</div>
 			</div>
-			<div v-else-if="styleoption==='Editor'">
+
+			<div v-if="styleoption==='Prompter'">
+				<!--FLAG-->
+				<div class="flex">
+					scribe less / more
+				</div>
+				<div>
+					<input
+						id="scribingslider"
+						v-model="scribing"
+						type="range"
+						min="100"
+						max="2000"
+						step="50"
+					/>
+				</div>
+
+			</div>
+
+			<div v-if="styleoption==='Prompter'">
+				<button
+					class="dropbtn bg-indigo-700"
+					@click="newPrompt()"
+				>
+					New Prompt
+				</button>
+			</div>
+			<div v-if="styleoption==='Editor'">
 				<!-- this is where should allow user to choose other punctuating characters or strings to always be their own word and not accidentally joining two other words -->
 				<button
 					class="dropbtn bg-indigo-700"
@@ -106,11 +133,13 @@
 				v-bind:is="styleoption"
 				:audio_id="audio_id"
 				:timestep="timestep"
+				:scribing="scribing"
 				:fontsize="fontsize"
 				:clearTimestampsvar="clearTimestampsvar"
 				:updateAssociations="updateAssociations"
 				:clearOldTimestampsvar="clearOldTimestampsvar"
 				:saveEditscounter="saveEditscounter"
+				:newPromptscounter="newPromptscounter"
 				:interpretationStatus="interpretationStatus"
 				:interpretation_id="interpretation_id"
 				@permanentlydestroy="permanentlydestroy($event)"
@@ -126,6 +155,7 @@
 import Viewer from "@/components/Viewer.vue";
 import Editor from "@/components/Editor.vue";
 import Tagger from "@/components/Tagger.vue";
+import Prompter from "@/components/Prompter.vue";
 import StorybookStyleMenu from "@/components/StorybookStyleMenu.vue";
 import SelectInterpretationMenu from "@/components/SelectInterpretationMenu.vue";
 import DeleteInterpretationViewer from "@/components/DeleteInterpretationViewer.vue";
@@ -136,6 +166,7 @@ export default {
 		Editor,
 		Viewer,
 		Tagger,
+		Prompter,
 		StorybookStyleMenu,
 		SelectInterpretationMenu,
 		DeleteInterpretationViewer,
@@ -144,9 +175,12 @@ export default {
 	data: () => {
 		return {
 			timestep: 500,
+			scribing: 200,
 			fontsize: 16,
 			updateAssociations: 0,
 			clearTimestampsvar: 0,
+			newPromptscounter: 0,
+			// submitcounter: 0,
 			saveEditscounter: 0,
 			clearOldTimestampsvar: 0,
 			interpretationStatus: "", // this remembers whether the currently logged-in user is a viewer, editor, or owner of the currently-displayed interpretation
@@ -197,6 +231,12 @@ export default {
 		},
 		saveEditsincrease() {
 			this.saveEditscounter++;
+		},
+		// 		submitincrease() {
+		// 	this.submitcounter++;
+		// },
+		newPrompt() {
+			this.newPromptscounter++;
 		},
 		updateAssociationsfunc() {
 			this.updateAssociations++;

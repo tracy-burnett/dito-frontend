@@ -7,6 +7,7 @@
         
         <a v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'" @click="toggleStorybookStyle('Editor')">Editing</a>
         <a v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'" @click="toggleStorybookStyle('Tagger')">Tagging</a>
+        <a v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'" @click="toggleStorybookStyle('Prompter')">Scribing</a>
       </div>
     </div>
   </div>

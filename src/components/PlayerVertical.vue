@@ -1,5 +1,6 @@
 <template>
 <div class="flex flex-col" style="position:fixed;top:16;">
+
 	<!-- playback speed slider -->
 		<div class="flex justify-center text-xs">
 		playback speed {{playbackspeed}}
@@ -124,6 +125,7 @@ export default {
 			playbackspeed: 1,
 			isLoaded: false,
 			loadingpercent: 0,
+			// peaksData: [],
 			zoomnumber: 1,
 			startTime: "00:00:00", // the beginning of the highlighted region as calculated by wavesurfer OR manually input by the user, in HH:MM:SS
 			currentTime: "00:00:00", // wherever the audio is currently playing as calculated by wavesurfer OR manually input by the user, in HH:MM:SS
@@ -148,10 +150,42 @@ export default {
 		"$store.state.playerRerender": function () {
 			this.shouldRerender(this.$store.state.playerRerender);
 		},
+				"$store.state.regionRerender": function () {
+					// console.log(this.$store.state.startTimePrompter)
+					// console.log(this.$store.state.endTimePrompter)
+					this.startTime=this.secondsToTime(Math.round(this.$store.state.startTimePrompter))
+					this.endTime=this.secondsToTime(Math.round(this.$store.state.endTimePrompter))
+					// console.log(this.startTimeNumber)
+					// console.log(this.endTimeNumber)
+			this.updateRegionFromPrompter();
+		},
 	},
 
 	// these are variables whose values are dynamically updated when necessary.
 	computed: {
+
+		 // the beginning of the highlighted region as edited by Prompter, in HH:MM:SS
+		// startTimePrompter: {
+		// 	// getter
+			// get() {
+			// 	return this.$store.state.startTimePrompter; // in the store
+			// },
+			// set(startTimePrompter) {
+			// 	this.$store.commit("updateStartTimePrompter", startTimePrompter);
+			// },
+		// },
+
+		 // the end of the highlighted region as edited by Prompter, in HH:MM:SS
+		// endTimePrompter: {
+		// 	// getter
+		// 	get() {
+		// 		return this.$store.state.endTimePrompter; // in the store
+		// 	},
+			// set(endTimePrompter) {
+			// 	this.$store.commit("updateEndTimePrompter", endTimePrompter);
+			// },
+		// },
+
 		// the beginning of the highlighted region as manually typed in by the user, in seconds
 		startTimeNumber() {
 			let startTimeArray = this.startTime.split(":");
@@ -192,6 +226,8 @@ export default {
 
 	mounted() {
 		//get secure url from server
+		this.$store.commit("updateAudioDuration", 0);
+		this.$store.commit("removePeaksData");
 		const apiUrl = process.env.VUE_APP_api_URL + "s3/presignedgeturl";
 		fetch(apiUrl, {
 			method: "POST",
@@ -223,10 +259,11 @@ export default {
 			waveColor: "#94a3b8",
 			cursorColor: "red",
 			progressColor: "#475569",
-			barWidth: 2,
-			//  barHeight: 1,
+			// barWidth: 2,
+			 barHeight: 4,
+			 normalize: true,
 			hideScrollbar: true,
-			barRadius: 3,
+			// barRadius: 3,
 			vertical: true,
 			plugins: [
 				WaveSurfer.regions.create({
@@ -241,6 +278,10 @@ export default {
 		this.wavesurfer.on("waveform-ready", function () {
 			that.isLoaded=true
 			that.totalDuration = that.wavesurfer.getDuration();
+			that.$store.commit(
+				"updateAudioDuration",
+				that.totalDuration*1000
+			);
 			that.endTimeSeconds = that.totalDuration;
 			that.endTime = that.secondsToTime(that.endTimeSeconds);
 			that.wavesurfer.addRegion({
@@ -253,6 +294,13 @@ export default {
 				id: "region",
 				loop: false,
 			});
+			
+			 // length of output array/2, accuracy (irrelevant), don't popup a new window, start at 0,
+			that.wavesurfer.exportPCM(that.totalDuration/2*100,10000,true,0).then(function(result)
+			{that.$store.commit(
+				"updatePeaksData",
+				result
+			)})
 		});
 
 		// whenever the highlighted region or either of its bounds is dragged, update our data about where the region begins and ends accordingly
@@ -409,6 +457,8 @@ export default {
 			this.wavesurfer.clearRegions();
 			this.startTime = "00:00:00";
 			this.endTime = this.secondsToTime(this.totalDuration);
+			this.startTimeSeconds = this.startTimeNumber; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
+			this.endTimeSeconds = this.endTimeNumber; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
 		},
 
 		// change the highlighted region based on manual HH:MM:SS inputs of start and end times by the user
@@ -423,6 +473,20 @@ export default {
 			this.startTimeSeconds = this.startTimeNumber; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
 			this.endTimeSeconds = this.endTimeNumber; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
 		},
+
+				// change the highlighted region based on manual HH:MM:SS inputs of start and end times by the user
+		updateRegionFromPrompter() {
+			this.wavesurfer.clearRegions();
+			this.wavesurfer.addRegion({
+				start: this.$store.state.startTimePrompter,
+				end: this.$store.state.endTimePrompter,
+				id: "region",
+				loop: false,
+			});
+			this.startTimeSeconds = this.$store.state.startTimePrompter; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
+			this.endTimeSeconds = this.$store.state.endTimePrompter; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
+			if (!this.playing) {this.play()}
+},
 	},
 };
 </script>

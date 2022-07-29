@@ -30,6 +30,7 @@
 <script>
 export default {
   name: "Editor",
+  inheritAttrs: false,
   data: () => {
     return {
       language_name: "",

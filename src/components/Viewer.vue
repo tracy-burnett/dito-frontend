@@ -41,6 +41,7 @@ also, if the user clicks on the text of that substring, snap the audio player to
 <script>
 export default {
 	name: "Viewer",
+	inheritAttrs: false,
 	data: () => {
 		return {
 			language_name: "",
