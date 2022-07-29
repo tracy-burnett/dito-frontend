@@ -78,7 +78,7 @@
 						id="scribingslider"
 						v-model="scribing"
 						type="range"
-						min="100"
+						min="200"
 						max="2000"
 						step="50"
 					/>

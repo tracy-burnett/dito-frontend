@@ -1,6 +1,8 @@
 <template>
 <div class="flex flex-col" style="position:fixed;top:16;">
-
+{{currentTimeSeconds}}
+{{endTimeSeconds}}
+{{isLoaded}}
 	<!-- playback speed slider -->
 		<div class="flex justify-center text-xs">
 		playback speed {{playbackspeed}}
@@ -486,6 +488,8 @@ export default {
 			this.startTimeSeconds = this.$store.state.startTimePrompter; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
 			this.endTimeSeconds = this.$store.state.endTimePrompter; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
 			if (!this.playing) {this.play()}
+			else if (this.playing) {this.play()
+			this.play()}
 },
 	},
 };

@@ -12,6 +12,8 @@
 		{{associations}}
 		{{usableGaps}}<br>
 		{{new_associations}} -->
+        {{scribingclean}}
+        {{relevantGap}}
 		<!-- {{associationGaps}} -->
 		<!-- {{usablePeaksData}}<br> -->
 		<!-- {{usablePeaksData2}} -->
@@ -50,6 +52,7 @@ export default {
 			associationGaps: [],
 			usableGaps: [],
 			relevantGap: {},
+            // scribing: 200,
 			allowSubmit: false,
 			usablePeaksData: [],
 			// usablePeaksData2: [],
@@ -61,6 +64,9 @@ export default {
 		};
 	},
 	computed: {
+        		scribingclean() {
+if (this.$store.state.audioDuration < this.scribing) {return this.$store.state.audioDuration} else {return this.scribing}
+		},
 		numbernewlines() {
 			return this.latest_text.split(/\r\n|\r|\n/).length;
 		},
@@ -102,14 +108,11 @@ export default {
 		// 		this.updateText();
 		// 	}
 		// },
-        scribing: function () {
-this.findGaps()
-		},
 		newPromptscounter: function () {
-            if (this.allowSubmit == true) { // this.newpromptsfunc will be called if submit is successful inside updatetext()
+            if (this.allowSubmit == true && this.new_text != "") { // this.newpromptsfunc will be called if submit is successful inside updatetext()
 				this.updateText();
 			}
-            if (this.allowSubmit==false){
+            if (this.allowSubmit==false || this.new_text == ""){
 			this.newPromptsfunc();}
 		},
 		"$store.state.audioDuration": function () {
@@ -119,8 +122,9 @@ this.findGaps()
 	},
 	methods: {
 		findGaps: function () {
-            // console.log("find gaps begun")
+            console.log("find gaps begun")
 			if (this.$store.state.audioDuration > 0) {
+                console.log("inside first if")
 				this.associationGaps.length = 0;
 				if (Object.keys(this.associations).length > 0) {
 					//all bounded gaps
@@ -196,7 +200,7 @@ this.findGaps()
 
 					this.associationGaps.forEach((element) => {
 						if (
-							element.endTime - element.startTime > this.scribing &&      // FLAG TIME DECISION
+							element.endTime - element.startTime > 200 &&      // FLAG TIME DECISION
 							(element.startCharacter == element.endCharacter ||
 								element.endCharacter == null)
 						) {
@@ -213,9 +217,13 @@ this.findGaps()
 					associationsObject.endCharacter = null;
                     this.associationGaps.push(associationsObject);
 
-                    if (associationsObject.endTime-associationsObject.startTime>this.scribing) {    // FLAG TIME DECISION
+                    if (associationsObject.endTime-associationsObject.startTime>200) {    // FLAG TIME DECISION
 					this.usableGaps.push(this.associationGaps[0]);}
                 }
+                console.log(this.associationGaps)
+        console.log(this.usableGaps)
+        console.log("find gaps completed")
+
                 this.newPromptsfunc()
 			}
 		},
@@ -227,7 +235,7 @@ this.findGaps()
 			if (this.$store.state.audioDuration > 0) {
 				this.relevantGap.startTime = parseInt(this.usableGaps[0].startTime); // should be in hundredths of a second
 				// console.log(this.relevantGap.startTime)
-				this.relevantGap.endTime = parseInt(this.usableGaps[0].startTime) + (this.scribing+100); // should be in hundredths of a second               // FLAG TIME DECISION
+				this.relevantGap.endTime = parseInt(this.usableGaps[0].startTime) + parseInt(this.scribingclean)+100; // should be in hundredths of a second               // FLAG TIME DECISION
 				// console.log(this.relevantGap.endTime)
 				this.relevantGap.startCharacter = parseInt(
 					this.usableGaps[0].startCharacter
@@ -358,7 +366,7 @@ this.findGaps()
 				if (
 					this.usableGaps[0].endTime -
 						(this.contentEndingIndex + this.relevantGap.startTime - 5) >=
-					this.scribing               // FLAG TIME DECISION
+					this.scribingclean               // FLAG TIME DECISION
 				) {
 					// console.log(this.contentEndingIndex - 5 + this.relevantGap.startTime);
 					// console.log("set new times");
@@ -368,7 +376,7 @@ this.findGaps()
 				} else if (
 					this.usableGaps[0].endTime -
 						(this.contentEndingIndex - 5 + this.relevantGap.startTime) <
-					this.scribing               // FLAG TIME DECISION
+					this.scribingclean               // FLAG TIME DECISION
 				) {
 					this.usableGaps.shift();
 				}
@@ -897,7 +905,7 @@ this.findGaps()
 						"/" +
 						this.interpretation_id +
 						"/" +
-						this.scribing +               // FLAG TIME DECISION
+						200 +               // FLAG TIME DECISION
 						"/", // timestep is 200 hundredths of seconds
 					{
 						method: "GET",
