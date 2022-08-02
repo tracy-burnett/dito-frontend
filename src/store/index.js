@@ -83,10 +83,12 @@ export default new Vuex.Store({
     },
 
     updateStartTimePrompter(state, starttimeprompter) {
+      // console.log("start time updated")
       state.startTimePrompter = starttimeprompter;
     },
 
     updateEndTimePrompter(state, endtimeprompter) {
+      // console.log("end time updated")
       state.endTimePrompter = endtimeprompter;
     },
 
@@ -110,7 +112,7 @@ export default new Vuex.Store({
     },
 
     updateAudioDuration(state, duration) {
-      console.log("updated in store")
+      // console.log("updated in store")
       state.audioDuration = duration
     },
 

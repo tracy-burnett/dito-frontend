@@ -8,12 +8,16 @@
 	>
 		<span class="font-bold border-gray-300 rounded px-3 py-1">{{ title }}</span>
 		in <span class="border-gray-300 rounded px-3 py-1">{{ language_name }}</span><br />
-        <!-- {{associationGaps}}
-		{{associations}}
-		{{new_associations}} -->
-        <!-- {{scribingclean}} -->
-		<!-- {{usableGaps}}<br> -->
-        <!-- {{relevantGap}}<br> -->
+		<!-- {{associationGaps}}
+-->
+		<!-- {{new_associations}}  -->
+		<!-- {{scribingclean}} -->	
+			{{associations}}<br>
+		{{$store.state.startTimePrompter*100}}<br>
+		{{$store.state.endTimePrompter*100}}<br>
+		{{usableGaps}}<br>
+		{{relevantGap}}<br>
+		{{allowSubmit}}
 		<!-- {{associationGaps}} -->
 		<!-- {{usablePeaksData}}<br> -->
 		<!-- {{usablePeaksData2}} -->
@@ -28,6 +32,8 @@
 			placeholder="enter new text here"
 			v-model="new_text"
 		></textarea>
+		<div v-if="allowSubmit==true">this text will be submitted when a new prompt is generated</div>
+		<div v-else-if="allowSubmit==false">this text WILL NOT be submitted when a new prompt is generated</div>
 		<!-- {{latest_text.length}}
 {{$store.state.consoleswidth}}
 {{$store.state.consoles.length}} -->
@@ -52,7 +58,7 @@ export default {
 			associationGaps: [],
 			usableGaps: [],
 			relevantGap: {},
-            // scribing: 200,
+			// scribing: 200,
 			allowSubmit: false,
 			usablePeaksData: [],
 			// usablePeaksData2: [],
@@ -64,8 +70,12 @@ export default {
 		};
 	},
 	computed: {
-        		scribingclean() {
-if (this.$store.state.audioDuration < this.scribing) {return this.$store.state.audioDuration} else {return this.scribing}
+		scribingclean() {
+			if (this.$store.state.audioDuration < this.scribing) {
+				return this.$store.state.audioDuration;
+			} else {
+				return this.scribing;
+			}
 		},
 		numbernewlines() {
 			return this.latest_text.split(/\r\n|\r|\n/).length;
@@ -84,7 +94,7 @@ if (this.$store.state.audioDuration < this.scribing) {return this.$store.state.a
 		audio_id: {
 			default: "",
 		},
-        		scribing: {
+		scribing: {
 			default: 200,
 		},
 		newPromptscounter: {
@@ -109,22 +119,48 @@ if (this.$store.state.audioDuration < this.scribing) {return this.$store.state.a
 		// 	}
 		// },
 		newPromptscounter: function () {
-            if (this.allowSubmit == true && this.new_text != "") { // this.newpromptsfunc will be called if submit is successful inside updatetext()
+			if (this.allowSubmit == true && this.new_text != "") {
+				// this.newpromptsfunc will be called if submit is successful inside updatetext()
 				this.updateText();
 			}
-            if (this.allowSubmit==false || this.new_text == ""){
-			this.newPromptsfunc();}
+			if (this.allowSubmit == false || this.new_text == "") {
+				this.newPromptsfunc();
+			}
 		},
 		"$store.state.peaksData": function () {
-            // console.log("watched detected in Prompter")
+			// console.log("watched detected in Prompter")
 			this.findGaps(); // populates "this.usableGaps"
+		},
+		"$store.state.startTimePrompter": function () {
+			if (
+				!(
+					this.$store.state.startTimePrompter*100 >= this.relevantGap.startTime &&
+					this.$store.state.endTimePrompter*100 <= this.usableGaps[0].endTime
+				)
+			) {
+				this.allowSubmit = false;
+			} else {
+				this.allowSubmit = true;
+			}
+		},
+		"$store.state.endTimePrompter": function () {
+			if (
+				!(
+					this.$store.state.startTimePrompter*100 >= this.relevantGap.startTime &&
+					this.$store.state.endTimePrompter*100 <= this.usableGaps[0].endTime
+				)
+			) {
+				this.allowSubmit = false;
+			} else {
+				this.allowSubmit = true;
+			}
 		},
 	},
 	methods: {
 		findGaps: function () {
-            console.log("find gaps begun")
+			// console.log("find gaps begun")
 			if (this.$store.state.audioDuration > 0) {
-                console.log("inside first if")
+				// console.log("inside first if")
 				this.associationGaps.length = 0;
 				if (Object.keys(this.associations).length > 0) {
 					//all bounded gaps
@@ -200,31 +236,32 @@ if (this.$store.state.audioDuration < this.scribing) {return this.$store.state.a
 
 					this.associationGaps.forEach((element) => {
 						if (
-							element.endTime - element.startTime > 200 &&      // FLAG TIME DECISION
+							element.endTime - element.startTime > 200 && // FLAG TIME DECISION
 							(element.startCharacter == element.endCharacter ||
 								element.endCharacter == null)
 						) {
 							this.usableGaps.push(element);
 						}
 					});
-				}
-                else {
+				} else {
 					let associationsObject = {};
 					associationsObject.startTime = 0;
 					associationsObject.endTime = this.$store.state.audioDuration;
 
 					associationsObject.startCharacter = 0;
 					associationsObject.endCharacter = null;
-                    this.associationGaps.push(associationsObject);
+					this.associationGaps.push(associationsObject);
 
-                    if (associationsObject.endTime-associationsObject.startTime>200) {    // FLAG TIME DECISION
-					this.usableGaps.push(this.associationGaps[0]);}
-                }
-                console.log(this.associationGaps)
-        console.log(this.usableGaps)
-        console.log("find gaps completed")
+					if (associationsObject.endTime - associationsObject.startTime > 200) {
+						// FLAG TIME DECISION
+						this.usableGaps.push(this.associationGaps[0]);
+					}
+				}
+				//         console.log(this.associationGaps)
+				// console.log(this.usableGaps)
+				// console.log("find gaps completed")
 
-                this.newPromptsfunc()
+				this.newPromptsfunc();
 			}
 		},
 
@@ -232,10 +269,18 @@ if (this.$store.state.audioDuration < this.scribing) {return this.$store.state.a
 			// console.log("sensitivity " + this.sensitivity);
 			this.contentEndingIndex = 0;
 			this.contentStartingIndex = 0;
-			if (this.$store.state.audioDuration > 0 && this.usableGaps.length>0 && (parseInt(this.usableGaps[0].startTime) + 100 < this.$store.state.audioDuration/10)) {
+			if (
+				this.$store.state.audioDuration > 0 &&
+				this.usableGaps.length > 0 &&
+				parseInt(this.usableGaps[0].startTime) + 100 <
+					this.$store.state.audioDuration / 10
+			) {
 				this.relevantGap.startTime = parseInt(this.usableGaps[0].startTime); // should be in hundredths of a second
 				// console.log(this.relevantGap.startTime)
-				this.relevantGap.endTime = parseInt(this.usableGaps[0].startTime) + parseInt(this.scribingclean)+100; // should be in hundredths of a second               // FLAG TIME DECISION
+				this.relevantGap.endTime =
+					parseInt(this.usableGaps[0].startTime) +
+					parseInt(this.scribingclean) +
+					100; // should be in hundredths of a second               // FLAG TIME DECISION
 				// console.log(this.relevantGap.endTime)
 				this.relevantGap.startCharacter = parseInt(
 					this.usableGaps[0].startCharacter
@@ -366,7 +411,7 @@ if (this.$store.state.audioDuration < this.scribing) {return this.$store.state.a
 				if (
 					this.usableGaps[0].endTime -
 						(this.contentEndingIndex + this.relevantGap.startTime - 5) >=
-					this.scribingclean               // FLAG TIME DECISION
+					this.scribingclean // FLAG TIME DECISION
 				) {
 					// console.log(this.contentEndingIndex - 5 + this.relevantGap.startTime);
 					// console.log("set new times");
@@ -376,8 +421,8 @@ if (this.$store.state.audioDuration < this.scribing) {return this.$store.state.a
 				} else if (
 					this.usableGaps[0].endTime -
 						(this.contentEndingIndex - 5 + this.relevantGap.startTime) <
-					this.scribingclean               // FLAG TIME DECISION
-                ) {
+					this.scribingclean // FLAG TIME DECISION
+				) {
 					this.usableGaps.shift();
 				}
 				if (this.contentEndingIndex > this.contentStartingIndex + 50) {
@@ -393,6 +438,23 @@ if (this.$store.state.audioDuration < this.scribing) {return this.$store.state.a
 						(this.contentEndingIndex + this.relevantGap.startTime) / 100
 					);
 					this.$store.commit("forceRegionRerender");
+					console.log("original text: " + this.original_text)
+					console.log("original text length: " + this.original_text.length)
+					console.log(this.relevantGap)
+					// decide how to populate new_text (the text box) when the prompt is first generated
+					if (Number.isNaN(this.relevantGap.endCharacter) == false) // if the gap ends at other text
+					{console.log("in if")
+						this.new_text = this.original_text.substring(this.relevantGap.startCharacter+1, this.relevantGap.endCharacter)}
+					else {console.log("in else") // if the gap doesn't have a concrete end, is just null
+						this.new_text = this.original_text.substring(this.relevantGap.startCharacter+1)}
+						console.log("NEW TEXT " + this.new_text)
+					if (this.new_text[0] == "\n") {
+						this.relevantGap.startCharacter+=1
+						this.new_text = this.new_text.substring(1)
+						this.usableGaps[0].startCharacter+=1
+					}
+											console.log("NEW TEXT " + this.new_text)
+
 				} else {
 					this.sensitivity += 0.1;
 					this.newPromptsfunc();
@@ -413,34 +475,53 @@ if (this.$store.state.audioDuration < this.scribing) {return this.$store.state.a
 
 		// edit the text when the user clicks "Save Edits"
 		updateText() {
-            
-			// console.log(this.original_text);
-			// console.log(this.original_text.length);
-			// console.log(this.relevantGap.startCharacter);
-			// console.log(this.new_text);
-			// console.log(this.new_text.length);
+			console.log(this.original_text);
+			console.log(this.original_text.length);
+			console.log(this.relevantGap.startCharacter);
+			console.log(this.new_text);
+			console.log(this.new_text.length);
 
-			this.latest_text =
+
+// decide what the new full text should be--where exactly to insert new_text (the user input) into it.
+					if (Number.isNaN(this.relevantGap.endCharacter) == false) // if the gap does have an ending
+					{			this.latest_text =
 				this.original_text.substring(0, this.relevantGap.startCharacter + 1) +
 				"\n" +
 				this.new_text +
 				"\n" +
-				this.original_text.substring(this.relevantGap.startCharacter + 1);
-			// console.log(this.latest_text);
+				this.original_text.substring(this.relevantGap.endCharacter);
+				}
+					else {			this.latest_text = // if endcharacter is not a number (it would be null, in this case)
+				this.original_text.substring(0, this.relevantGap.startCharacter + 1) +
+				"\n" +
+				this.new_text +
+				"\n" +
+				this.original_text.substring(this.relevantGap.startCharacter+1);
+				}
 
-			// console.log(this.latest_text.length)
+
+
+			console.log(this.latest_text);
+
+			console.log(this.latest_text.length)
 
 			let textLengthDifference =
 				this.latest_text.length - this.original_text.length;
+for(let prop in this.new_associations) {delete this.new_associations[prop]}
 
-            for (let l=1; l < textLengthDifference-1; l++) {
-			this.new_associations[this.relevantGap.startCharacter+l]=(this.relevantGap.endTime+this.relevantGap.startTime)/2}
+			for (let l = 1; l < textLengthDifference; l++) {
+				this.new_associations[this.relevantGap.startCharacter + l] =
+					((this.$store.state.startTimePrompter +
+						this.$store.state.endTimePrompter) *
+						100) /
+					2;
+			}
 
 			this.instructions = this.patienceDiffPlus(
 				this.original_text.split(this.spaced_by),
 				this.latest_text.normalize("NFC").split(this.spaced_by)
 			);
-
+			console.log("associations: " + JSON.stringify(this.new_associations));
 			for (let i = this.instructions.lines.length - 1; i >= 0; i--) {
 				if (
 					this.instructions.lines[i].aIndex == this.instructions.lines[i].bIndex
@@ -488,7 +569,6 @@ if (this.$store.state.audioDuration < this.scribing) {return this.$store.state.a
 						}); //increase every startcharacter and endcharacter
 						this.newPromptsfunc();
 
-                this.new_text=""
 						//add in the association for the new phrase.
 						fetch(
 							process.env.VUE_APP_api_URL +
@@ -518,8 +598,11 @@ if (this.$store.state.audioDuration < this.scribing) {return this.$store.state.a
 					return;
 				})
 				.catch((error) => console.error("Error:", error));
-
+console.log("original text: " + this.original_text)
+console.log(this.original_text.length)
 			this.original_text = this.latest_text;
+			console.log("original text: " + this.original_text)
+			console.log(this.original_text.length)
 		},
 
 		/**
@@ -905,7 +988,7 @@ if (this.$store.state.audioDuration < this.scribing) {return this.$store.state.a
 						"/" +
 						this.interpretation_id +
 						"/" +
-						200 +               // FLAG TIME DECISION
+						200 + // FLAG TIME DECISION
 						"/", // timestep is 200 hundredths of seconds
 					{
 						method: "GET",
