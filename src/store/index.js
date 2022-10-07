@@ -29,6 +29,7 @@ export default new Vuex.Store({
     consolesheight: 0,
     audioDuration: 0,
     cardlistscrollposition: 0,
+    triggerNewText: 0, // audio player uses this to tell prompter to generate new text into the text box for the new audio range
 
   },
   getters: {
@@ -85,6 +86,11 @@ export default new Vuex.Store({
     updateStartTimePrompter(state, starttimeprompter) {
       // console.log("start time updated")
       state.startTimePrompter = starttimeprompter;
+    },
+
+    forceTriggerNewText(state) {
+      // console.log("start time updated")
+      state.triggerNewText++
     },
 
     updateEndTimePrompter(state, endtimeprompter) {

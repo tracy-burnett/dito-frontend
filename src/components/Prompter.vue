@@ -11,8 +11,8 @@
 		<!-- {{associationGaps}}
 -->
 		<!-- {{new_associations}}  -->
-		<!-- {{scribingclean}} -->	
-			{{associations}}<br>
+		<!-- {{scribingclean}} -->
+		{{associations}}<br>
 		{{$store.state.startTimePrompter*100}}<br>
 		{{$store.state.endTimePrompter*100}}<br>
 		{{usableGaps}}<br>
@@ -134,8 +134,9 @@ export default {
 		"$store.state.startTimePrompter": function () {
 			if (
 				!(
-					this.$store.state.startTimePrompter*100 >= this.relevantGap.startTime &&
-					this.$store.state.endTimePrompter*100 <= this.usableGaps[0].endTime
+					this.$store.state.startTimePrompter * 100 >=
+						this.relevantGap.startTime &&
+					this.$store.state.endTimePrompter * 100 <= this.usableGaps[0].endTime
 				)
 			) {
 				this.allowSubmit = false;
@@ -146,14 +147,18 @@ export default {
 		"$store.state.endTimePrompter": function () {
 			if (
 				!(
-					this.$store.state.startTimePrompter*100 >= this.relevantGap.startTime &&
-					this.$store.state.endTimePrompter*100 <= this.usableGaps[0].endTime
+					this.$store.state.startTimePrompter * 100 >=
+						this.relevantGap.startTime &&
+					this.$store.state.endTimePrompter * 100 <= this.usableGaps[0].endTime
 				)
 			) {
 				this.allowSubmit = false;
 			} else {
 				this.allowSubmit = true;
 			}
+		},
+		"$store.state.triggerNewText": function () {
+			this.verifyNewText();
 		},
 	},
 	methods: {
@@ -438,23 +443,32 @@ export default {
 						(this.contentEndingIndex + this.relevantGap.startTime) / 100
 					);
 					this.$store.commit("forceRegionRerender");
-					console.log("original text: " + this.original_text)
-					console.log("original text length: " + this.original_text.length)
-					console.log(this.relevantGap)
+					// console.log("original text: " + this.original_text)
+					// console.log("original text length: " + this.original_text.length)
+					// console.log(this.relevantGap)
 					// decide how to populate new_text (the text box) when the prompt is first generated
-					if (Number.isNaN(this.relevantGap.endCharacter) == false) // if the gap ends at other text
-					{console.log("in if")
-						this.new_text = this.original_text.substring(this.relevantGap.startCharacter+1, this.relevantGap.endCharacter)}
-					else {console.log("in else") // if the gap doesn't have a concrete end, is just null
-						this.new_text = this.original_text.substring(this.relevantGap.startCharacter+1)}
-						console.log("NEW TEXT " + this.new_text)
-					if (this.new_text[0] == "\n") {
-						this.relevantGap.startCharacter+=1
-						this.new_text = this.new_text.substring(1)
-						this.usableGaps[0].startCharacter+=1
+					if (Number.isNaN(this.relevantGap.endCharacter) == false) {
+						// if the gap ends at other text
+						// console.log("in if")
+						this.new_text = this.original_text.substring(
+							this.relevantGap.startCharacter + 1,
+							this.relevantGap.endCharacter
+						);
+					} else {
+						// if the gap doesn't have a concrete end, is just null
+						this.new_text = this.original_text.substring(
+							this.relevantGap.startCharacter + 1
+						);
 					}
-											console.log("NEW TEXT " + this.new_text)
-
+					if (this.new_text[0] == "\n") {
+					console.log("NEW TEXT before adjustment: " + this.new_text)
+					console.log("start character before adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
+						this.relevantGap.startCharacter += 2;
+						this.new_text = this.new_text.substring(2);
+						this.usableGaps[0].startCharacter += 2;
+					console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
+					console.log("NEW TEXT after adjustment: " + this.new_text)
+					}
 				} else {
 					this.sensitivity += 0.1;
 					this.newPromptsfunc();
@@ -473,43 +487,72 @@ export default {
 			return date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
 		},
 
+		verifyNewText() {
+			console.log("in verify new text function in prompter");
+			// decide how to populate new_text (the text box) after region is changed in audio player
+			if (Number.isNaN(this.relevantGap.endCharacter) == false) {
+				// if the gap ends at other text
+				console.log("in if");
+				this.new_text = this.original_text.substring(
+					this.relevantGap.startCharacter + 1,
+					this.relevantGap.endCharacter
+				);
+			} else {
+				console.log("in else"); // if the gap doesn't have a concrete end, is just null
+				this.new_text = this.original_text.substring(
+					this.relevantGap.startCharacter + 1
+				);
+			}
+			console.log("NEW TEXT " + this.new_text);
+			if (this.new_text[0] == "\n") {
+				console.log("in second if");
+				this.relevantGap.startCharacter += 2;
+				this.new_text = this.new_text.substring(2);
+				this.usableGaps[0].startCharacter += 2;
+			}
+			console.log(
+				"NEW TEXT after editing region in audio player: " + this.new_text
+			);
+		},
+
 		// edit the text when the user clicks "Save Edits"
 		updateText() {
-			console.log(this.original_text);
-			console.log(this.original_text.length);
-			console.log(this.relevantGap.startCharacter);
-			console.log(this.new_text);
-			console.log(this.new_text.length);
+			// console.log(this.original_text);
+			console.log("original text length: " + this.original_text.length);
+			// console.log(this.relevantGap.startCharacter);
+			// console.log(this.new_text);
+			console.log("new text length: " + this.new_text.length);
 
+			// decide what the new full text should be--where exactly to insert new_text (the user input) into it.
+			if (Number.isNaN(this.relevantGap.endCharacter) == false) {
+				// if the gap does have an ending
+				this.latest_text =
+					this.original_text.substring(0, this.relevantGap.startCharacter + 1) +
+					"\n" +
+					this.new_text +
+					"\n" +
+					this.original_text.substring(this.relevantGap.endCharacter);
+			} else {
+				this.latest_text = // if endcharacter is not a number (it would be null, in this case)
+					this.original_text.substring(0, this.relevantGap.startCharacter + 1) +
+					"\n" +
+					this.new_text +
+					"\n" +
+					this.original_text.substring(this.relevantGap.startCharacter + 1);
+			}
 
-// decide what the new full text should be--where exactly to insert new_text (the user input) into it.
-					if (Number.isNaN(this.relevantGap.endCharacter) == false) // if the gap does have an ending
-					{			this.latest_text =
-				this.original_text.substring(0, this.relevantGap.startCharacter + 1) +
-				"\n" +
-				this.new_text +
-				"\n" +
-				this.original_text.substring(this.relevantGap.endCharacter);
-				}
-					else {			this.latest_text = // if endcharacter is not a number (it would be null, in this case)
-				this.original_text.substring(0, this.relevantGap.startCharacter + 1) +
-				"\n" +
-				this.new_text +
-				"\n" +
-				this.original_text.substring(this.relevantGap.startCharacter+1);
-				}
+			// console.log(this.latest_text);
 
-
-
-			console.log(this.latest_text);
-
-			console.log(this.latest_text.length)
+			// console.log(this.latest_text.length)
 
 			let textLengthDifference =
 				this.latest_text.length - this.original_text.length;
-for(let prop in this.new_associations) {delete this.new_associations[prop]}
-
-			for (let l = 1; l < textLengthDifference; l++) {
+			for (let prop in this.new_associations) {
+				delete this.new_associations[prop];
+			}
+			// console.log(this.$store.state.startTimePrompter)
+			// console.log(this.$store.state.endTimePrompter)
+			for (let l = 1; l < textLengthDifference - 1; l++) {
 				this.new_associations[this.relevantGap.startCharacter + l] =
 					((this.$store.state.startTimePrompter +
 						this.$store.state.endTimePrompter) *
@@ -591,18 +634,18 @@ for(let prop in this.new_associations) {delete this.new_associations[prop]}
 							}
 						)
 							.then((response) => response)
-							.then((data) => console.log(data))
+							// .then((data) => console.log(data))
 							.catch((error) => console.error("Error:", error));
 					}
 
 					return;
 				})
 				.catch((error) => console.error("Error:", error));
-console.log("original text: " + this.original_text)
-console.log(this.original_text.length)
+			// console.log("original text: " + this.original_text)
+			// console.log(this.original_text.length)
 			this.original_text = this.latest_text;
-			console.log("original text: " + this.original_text)
-			console.log(this.original_text.length)
+			// console.log("original text: " + this.original_text)
+			// console.log(this.original_text.length)
 		},
 
 		/**

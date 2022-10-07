@@ -301,11 +301,11 @@ export default {
 			that.wavesurfer.addRegion({
 				start: 0,
 				end: that.totalDuration,
-				id: "region",
+				id: "initialregion",
 				loop: false,
 			});
 			that.wavesurfer.enableDragSelection({
-				id: "region",
+				id: "initialregion",
 				loop: false,
 			});
 
@@ -319,15 +319,16 @@ export default {
 
 		// whenever the highlighted region or either of its bounds is dragged, update our data about where the region begins and ends accordingly
 		this.wavesurfer.on("region-update-end", (region, event) => {
-			console.log(region)
+			// console.log(region)
 			that.startTimeSeconds = region.start
 			that.endTimeSeconds = region.end
-			console.log(that.startTimeSeconds)
-			console.log(that.endTimeSeconds)
+			// console.log(that.startTimeSeconds)
+			// console.log(that.endTimeSeconds)
 			// that.startTime = that.secondsToTime(that.startTimeSeconds);
 			// that.endTime = that.secondsToTime(that.endTimeSeconds);
 			that.$store.commit("updateStartTimePrompter", that.startTimeSeconds);
 			that.$store.commit("updateEndTimePrompter", that.endTimeSeconds);
+			that.$store.commit("forceTriggerNewText");
 
 			that.startTime = that.secondsToTime(
 				Math.round(that.$store.state.startTimePrompter)
@@ -338,17 +339,21 @@ export default {
 		});
 
 		this.wavesurfer.on("region-created", (region, event) => {
-			console.log(region);
+			// console.log(region);
 			if (that.updatingFromPrompter == false) {
+				console.log("creating region, not from prompter")
 				that.startTimeSeconds = region.start
 				that.endTimeSeconds = region.end
-				console.log(that.startTimeSeconds)
-				console.log(that.endTimeSeconds)
+				// console.log(that.startTimeSeconds)
+				// console.log(that.endTimeSeconds)
 				// that.startTime = that.secondsToTime(that.startTimeSeconds);
 				// that.endTime = that.secondsToTime(that.endTimeSeconds);
 				that.$store.commit("updateStartTimePrompter", that.startTimeSeconds);
 				that.$store.commit("updateEndTimePrompter", that.endTimeSeconds);
+				if (region.id != "initialregion") {
+			that.$store.commit("forceTriggerNewText")}
 			} else if (that.updatingFromPrompter == true) {
+				console.log("creating region from prompter")
 				that.startTimeSeconds = that.$store.state.startTimePrompter;
 				that.endTimeSeconds = that.$store.state.endTimePrompter;
 				that.updatingFromPrompter = false;
@@ -501,12 +506,12 @@ export default {
 
 		// clear the highlighted region and reset the HH:MM:SS displays of start and end time accordingly
 		clearallregions() {
-			console.log("in clear regions")
+			// console.log("in clear regions")
 			this.wavesurfer.clearRegions();
-			console.log(this.updatingFromPrompter);
+			// console.log(this.updatingFromPrompter);
 			this.startTime = "00:00:00";
 			this.endTime = this.secondsToTime(this.totalDuration);
-			console.log("end time: " + this.endTime)
+			// console.log("end time: " + this.endTime)
 			this.startTimeSeconds = 0; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
 			this.endTimeSeconds = this.totalDuration; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here			this.$store.commit(
 			this.$store.commit("updateStartTimePrompter", 0);
@@ -516,7 +521,7 @@ export default {
 		// change the highlighted region based on manual HH:MM:SS inputs of start and end times by the user
 		updateRegion() {
 			this.wavesurfer.clearRegions();
-			console.log("end time: " + this.endTime)
+			// console.log("end time: " + this.endTime)
 			this.wavesurfer.addRegion({
 				start: this.startTimeNumber,
 				end: this.endTimeNumber,
