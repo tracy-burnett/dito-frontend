@@ -2,7 +2,7 @@
   <div class="flex-auto">
     <div class="flex flex-col">
       <Navbar />
-      <Header title="Dito" image ="src/assets/ditologo.jpg" body="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec semper orci in pellentesque condimentum. Pellentesque eu sem ornare, commodo urna vitae, tempus felis. Aenean sit amet magna sed sapien pharetra tempus eu a sem. Duis eget est egestas mi sollicitudin mattis. Maecenas placerat nulla nec dui posuere varius. Donec ultricies nulla at velit aliquet ornare. Donec pharetra tempor auctor. Maecenas ultrices ante commodo mi egestas, nec dictum nibh tincidunt." />
+      <Header title="Dito" image ="src/assets/ditologo.jpg" body="A platform for developing useful teaching tools for language exchange and typing practice between Khroskyabs and English." />
       <PublicCardList title="Browse Public Storybooks" />
     </div>
   </div>
