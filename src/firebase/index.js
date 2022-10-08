@@ -7,12 +7,12 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBU2lZ_qxl2M4SZ_BE12-_f2BqdoUAHdmk",
-  authDomain: "ditolive-5e611.firebaseapp.com",
-  projectId: "ditolive-5e611",
-  storageBucket: "ditolive-5e611.appspot.com",
-  messagingSenderId: "516008746184",
-  appId: "1:516008746184:web:79204bf20868c8864659fd"
+  apiKey: process.env.VUE_APP_FIREBASE_FRONTEND_API_KEY,
+  authDomain: process.env.VUE_APP_FIREBASE_FRONTEND_AUTH_DOMAIN,
+  projectId: process.env.VUE_APP_FIREBASE_FRONTEND_PROJECTID,
+  storageBucket: process.env.VUE_APP_FIREBASE_FRONTEND_STORAGE_BUCKET,
+  messagingSenderId: process.env.VUE_APP_FIREBASE_FRONTEND_MESSAGINGSENDERID,
+  appId: process.env.VUE_APP_FIREBASE_FRONTEND_APPID
 };
 
 const app = initializeApp(firebaseConfig)
