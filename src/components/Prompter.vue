@@ -6,18 +6,28 @@
 		class="flex-auto"
 		:style="{ 'font-size': fontsize + 'px' }"
 	>
-		<span class="font-bold border-gray-300 rounded px-3 py-1">{{ title }}</span>
-		in <span class="border-gray-300 rounded px-3 py-1">{{ language_name }}</span><br />
+		<span class="px-3 py-1 font-bold border-gray-300 rounded">{{ title }}</span>
+		in <span class="px-3 py-1 border-gray-300 rounded">{{ language_name }}</span><br />
 		<!-- {{associationGaps}}
 -->
 		<!-- {{new_associations}}  -->
 		<!-- {{scribingclean}} -->
-		{{associations}}<br>
-		{{$store.state.startTimePrompter*100}}<br>
-		{{$store.state.endTimePrompter*100}}<br>
+		associations: {{associations}}<br>
+		<!-- {{$store.state.startTimePrompter*100}}<br>
+		{{$store.state.endTimePrompter*100}}<br> -->
 		{{usableGaps}}<br>
 		{{relevantGap}}<br>
-		{{allowSubmit}}
+		{{allowSubmit}}<br>
+		<!-- {{sensitivity}}<br> -->
+		<!-- {{$store.state.peaksData}}<br> -->
+		<!-- {{$store.state.peaksData.map((e) => Math.round(e * 1000) / 10)
+					.map((e) => {
+						if (Math.abs(e) > this.sensitivity) {
+							return 1;
+						} else {
+							return 0;
+						}
+					})}} -->
 		<!-- {{associationGaps}} -->
 		<!-- {{usablePeaksData}}<br> -->
 		<!-- {{usablePeaksData2}} -->
@@ -26,7 +36,7 @@
 		<!-- {{newPromptscounter}} -->
 		<!-- {{$store.state.audioDuration}} -->
 		<textarea
-			class="border-gray-300 rounded w-full h-full mt-12 mb-3 px-3 py-1"
+			class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded"
 			:rows="latesttextrows"
 			style="overflow: hidden"
 			placeholder="enter new text here"
@@ -64,7 +74,7 @@ export default {
 			// usablePeaksData2: [],
 			contentStartingIndex: null,
 			contentEndingIndex: null,
-			sensitivity: 0.1, // .3
+			sensitivity: 0.05, // .3
 			// consecutiveZerosArray: [],
 			// zerosCount: 0,
 		};
@@ -274,6 +284,7 @@ export default {
 			// console.log("sensitivity " + this.sensitivity);
 			this.contentEndingIndex = 0;
 			this.contentStartingIndex = 0;
+			// console.log(this.usableGaps[0].startTime)
 			if (
 				this.$store.state.audioDuration > 0 &&
 				this.usableGaps.length > 0 &&
@@ -414,12 +425,12 @@ export default {
 				// 	});
 
 				if (
-					this.usableGaps[0].endTime -
+					(this.usableGaps[0].endTime -
 						(this.contentEndingIndex + this.relevantGap.startTime - 5) >=
 					this.scribingclean // FLAG TIME DECISION
-				) {
+				) && (this.contentEndingIndex >= 5)) {
 					// console.log(this.contentEndingIndex - 5 + this.relevantGap.startTime);
-					// console.log("set new times");
+
 					this.usableGaps[0].startTime =
 						this.contentEndingIndex - 5 + this.relevantGap.startTime; // should be in hundredths of a second
 					// console.log(this.usableGaps[0].startTime);
@@ -470,8 +481,25 @@ export default {
 					console.log("NEW TEXT after adjustment: " + this.new_text)
 					}
 				} else {
-					this.sensitivity += 0.1;
-					this.newPromptsfunc();
+					if (this.sensitivity > 50) {
+
+						//dump the first few seconds because they're all silence
+
+
+
+							this.sensitivity=.05
+
+							this.newPromptsfunc()
+
+
+
+
+
+
+
+					} else {
+					this.sensitivity += 0.05;
+					this.newPromptsfunc();}
 				}
 				// console.log(this.relevantGap.startTime)
 
@@ -993,6 +1021,11 @@ export default {
 			return difference;
 		},
 	},
+
+	unmounted() {
+		this.$store.commit("removePrompterID")
+	},
+
 	mounted() {
 		fetch(
 			process.env.VUE_APP_api_URL +
