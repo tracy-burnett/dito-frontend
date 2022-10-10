@@ -471,13 +471,26 @@ export default {
 							this.relevantGap.startCharacter + 1
 						);
 					}
-					if (this.new_text[0] == "\n") {
-					console.log("NEW TEXT before adjustment: " + this.new_text)
-					console.log("start character before adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
+					if (this.new_text[0] == this.spaced_by) {
+						//if there is a carriage return at the beginning of the relevant text segment and it is not the only character, then skip it
+					// console.log("NEW TEXT before adjustment: " + this.new_text)
+					// console.log("new text length: " + this.new_text.length)
+					// console.log("start character before adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
 						this.relevantGap.startCharacter += 2;
 						this.new_text = this.new_text.substring(2);
 						this.usableGaps[0].startCharacter += 2;
-					console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
+					// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
+					console.log("NEW TEXT after adjustment: " + this.new_text)
+					}
+					if (this.new_text[this.new_text.length-1] == this.spaced_by) {
+						//if there is a carriage return at the end of the relevant text segment and it is not the only character, then roll back from it
+					// console.log("NEW TEXT before adjustment: " + this.new_text)
+					// console.log("new text length: " + this.new_text.length)
+					// console.log("start character before adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
+						this.relevantGap.endCharacter -= 1;
+						this.new_text = this.new_text.substring(0,this.new_text.length-2);
+						this.usableGaps[0].endCharacter -= 1;
+					// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
 					console.log("NEW TEXT after adjustment: " + this.new_text)
 					}
 				} else {
@@ -516,28 +529,38 @@ export default {
 		},
 
 		verifyNewText() {
-			console.log("in verify new text function in prompter");
+			// console.log("in verify new text function in prompter");
 			// decide how to populate new_text (the text box) after region is changed in audio player
 			if (Number.isNaN(this.relevantGap.endCharacter) == false) {
 				// if the gap ends at other text
-				console.log("in if");
+				// console.log("in if");
 				this.new_text = this.original_text.substring(
 					this.relevantGap.startCharacter + 1,
 					this.relevantGap.endCharacter
 				);
 			} else {
-				console.log("in else"); // if the gap doesn't have a concrete end, is just null
+				// console.log("in else"); // if the gap doesn't have a concrete end, is just null
 				this.new_text = this.original_text.substring(
 					this.relevantGap.startCharacter + 1
 				);
 			}
-			console.log("NEW TEXT " + this.new_text);
-			if (this.new_text[0] == "\n") {
-				console.log("in second if");
+			// console.log("NEW TEXT " + this.new_text);
+			if (this.new_text[0] == this.spaced_by) {
+				// console.log("in second if");
 				this.relevantGap.startCharacter += 2;
 				this.new_text = this.new_text.substring(2);
 				this.usableGaps[0].startCharacter += 2;
 			}
+
+
+
+					if (this.new_text[this.new_text.length-1] == this.spaced_by) {
+						this.relevantGap.endCharacter -= 1;
+						this.new_text = this.new_text.substring(0,this.new_text.length-2);
+						this.usableGaps[0].endCharacter -= 1;
+					}
+
+
 			console.log(
 				"NEW TEXT after editing region in audio player: " + this.new_text
 			);
@@ -546,26 +569,26 @@ export default {
 		// edit the text when the user clicks "Save Edits"
 		updateText() {
 			// console.log(this.original_text);
-			console.log("original text length: " + this.original_text.length);
+			// console.log("original text length: " + this.original_text.length);
 			// console.log(this.relevantGap.startCharacter);
 			// console.log(this.new_text);
-			console.log("new text length: " + this.new_text.length);
+			// console.log("new text length: " + this.new_text.length);
 
 			// decide what the new full text should be--where exactly to insert new_text (the user input) into it.
 			if (Number.isNaN(this.relevantGap.endCharacter) == false) {
 				// if the gap does have an ending
 				this.latest_text =
 					this.original_text.substring(0, this.relevantGap.startCharacter + 1) +
-					"\n" +
+					this.spaced_by +
 					this.new_text +
-					"\n" +
+					this.spaced_by +
 					this.original_text.substring(this.relevantGap.endCharacter);
 			} else {
 				this.latest_text = // if endcharacter is not a number (it would be null, in this case)
 					this.original_text.substring(0, this.relevantGap.startCharacter + 1) +
-					"\n" +
+					this.spaced_by +
 					this.new_text +
-					"\n" +
+					this.spaced_by +
 					this.original_text.substring(this.relevantGap.startCharacter + 1);
 			}
 
@@ -580,14 +603,18 @@ export default {
 			}
 			// console.log(this.$store.state.startTimePrompter)
 			// console.log(this.$store.state.endTimePrompter)
+
+
 			for (let l = 1; l < textLengthDifference - 1; l++) {
-				this.new_associations[this.relevantGap.startCharacter + l] =
+				this.new_associations[this.relevantGap.startCharacter + l] =   
 					((this.$store.state.startTimePrompter +
 						this.$store.state.endTimePrompter) *
 						100) /
 					2;
 			}
 
+			console.log("total original text: " + this.original_text)
+			console.log("total new text: " + this.latest_text)
 			this.instructions = this.patienceDiffPlus(
 				this.original_text.split(this.spaced_by),
 				this.latest_text.normalize("NFC").split(this.spaced_by)
@@ -598,9 +625,11 @@ export default {
 					this.instructions.lines[i].aIndex == this.instructions.lines[i].bIndex
 				) {
 					this.instructions.lines.splice(i, 1);
-				}
-			}
-			// console.log(this.instructions);
+				}	}
+				for (let i = this.instructions.lines.length - 1; i >= 0; i--) {
+				console.log("instruction " + i + ": " + JSON.stringify(this.instructions.lines[i]))}
+		
+			// console.log("instructions: " + this.instructions);
 
 			fetch(
 				process.env.VUE_APP_api_URL +
