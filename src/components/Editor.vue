@@ -4,18 +4,18 @@
     <!-- {{title.length}} -->
     <!-- {{$store.getters.maxsize}} -->
     <input
-      class="font-bold border-gray-300 rounded px-3 py-1"
+      class="px-3 py-1 font-bold border-gray-300 rounded"
       v-model="title"
       :size="titlesize"
     />
     in
     <input
-      class="border-gray-300 rounded h-full px-3 py-1"
+      class="h-full px-3 py-1 border-gray-300 rounded"
       v-model="language_name"
       :size="languagesize"
     />
     <textarea
-      class="border-gray-300 rounded w-full h-full mt-12 mb-3 px-3 py-1"
+      class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded"
       :rows="latesttextrows"
       style="overflow: hidden"
       v-model="latest_text"
@@ -122,7 +122,7 @@ export default {
           this.instructions.lines.splice(i, 1);
         }
       }
-      // console.log(this.instructions);
+      console.log(JSON.stringify(this.instructions));
       
 
       fetch(

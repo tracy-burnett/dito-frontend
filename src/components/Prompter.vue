@@ -471,7 +471,7 @@ export default {
 							this.relevantGap.startCharacter + 1
 						);
 					}
-					if (this.new_text[0] == this.spaced_by) {
+					if (this.new_text[0] == "\n") {
 						//if there is a carriage return at the beginning of the relevant text segment and it is not the only character, then skip it
 					// console.log("NEW TEXT before adjustment: " + this.new_text)
 					// console.log("new text length: " + this.new_text.length)
@@ -482,7 +482,7 @@ export default {
 					// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
 					console.log("NEW TEXT after adjustment: " + this.new_text)
 					}
-					if (this.new_text[this.new_text.length-1] == this.spaced_by) {
+					if (this.new_text[this.new_text.length-1] == "\n") {
 						//if there is a carriage return at the end of the relevant text segment and it is not the only character, then roll back from it
 					// console.log("NEW TEXT before adjustment: " + this.new_text)
 					// console.log("new text length: " + this.new_text.length)
@@ -545,7 +545,7 @@ export default {
 				);
 			}
 			// console.log("NEW TEXT " + this.new_text);
-			if (this.new_text[0] == this.spaced_by) {
+			if (this.new_text[0] == "\n") {
 				// console.log("in second if");
 				this.relevantGap.startCharacter += 2;
 				this.new_text = this.new_text.substring(2);
@@ -554,7 +554,7 @@ export default {
 
 
 
-					if (this.new_text[this.new_text.length-1] == this.spaced_by) {
+					if (this.new_text[this.new_text.length-1] == "\n") {
 						this.relevantGap.endCharacter -= 1;
 						this.new_text = this.new_text.substring(0,this.new_text.length-2);
 						this.usableGaps[0].endCharacter -= 1;
@@ -579,16 +579,16 @@ export default {
 				// if the gap does have an ending
 				this.latest_text =
 					this.original_text.substring(0, this.relevantGap.startCharacter + 1) +
-					this.spaced_by +
+					"\n" +
 					this.new_text +
-					this.spaced_by +
+					"\n" +
 					this.original_text.substring(this.relevantGap.endCharacter);
 			} else {
 				this.latest_text = // if endcharacter is not a number (it would be null, in this case)
 					this.original_text.substring(0, this.relevantGap.startCharacter + 1) +
-					this.spaced_by +
+					"\n" +
 					this.new_text +
-					this.spaced_by +
+					"\n" +
 					this.original_text.substring(this.relevantGap.startCharacter + 1);
 			}
 
@@ -625,9 +625,10 @@ export default {
 					this.instructions.lines[i].aIndex == this.instructions.lines[i].bIndex
 				) {
 					this.instructions.lines.splice(i, 1);
-				}	}
-				for (let i = this.instructions.lines.length - 1; i >= 0; i--) {
-				console.log("instruction " + i + ": " + JSON.stringify(this.instructions.lines[i]))}
+				}	
+
+			}
+			console.log(JSON.stringify(this.instructions))
 		
 			// console.log("instructions: " + this.instructions);
 
