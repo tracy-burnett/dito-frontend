@@ -3,7 +3,7 @@
 		<!-- this SingleInterpretation component represents what is viewable in a single interpretation column of an open storybook -->
 
 		<div
-			class="flex flex-rows-1 flex-wrap justify-around sticky top-12 z-20"
+			class="sticky z-20 flex flex-wrap justify-around flex-rows-1 top-12"
 			style="background: white"
 		>
 		<!-- {{styleoption}}<br> -->
@@ -35,7 +35,7 @@
 			</div>
 		</div>
 		<div
-			class="flex flex-rows-1 flex-wrap justify-around sticky top-24 z-10"
+			class="sticky z-10 flex flex-wrap justify-around flex-rows-1 top-24"
 			style="background: white"
 		>
 			<!-- <div class="w-40"></div> -->
@@ -89,7 +89,7 @@
 
 			<div v-if="styleoption==='Prompter'">
 				<button
-					class="dropbtn bg-indigo-700"
+					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
 					@click="newPrompt()"
 				>
 					New Prompt
@@ -98,7 +98,7 @@
 			<div v-if="styleoption==='Editor'">
 				<!-- this is where should allow user to choose other punctuating characters or strings to always be their own word and not accidentally joining two other words -->
 				<button
-					class="dropbtn bg-indigo-700"
+					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
 					@click="saveEditsincrease()"
 				>
 					Save
@@ -108,19 +108,19 @@
 			<div v-if="styleoption==='Tagger'">
 				<!-- quick and dirty way to undo tags you haven't saved to the database yet -->
 				<button
-					class="dropbtn bg-indigo-700"
+					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
 					@click="clearTimestamps()"
 				>Clear New</button>
 			</div>
 			<!-- quick and dirty way to purge the database of all tags for this interpretation, mainly used for debugging purposes -->
 			<div v-if="styleoption==='Tagger'"><button
-					class="dropbtn bg-indigo-700"
+					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
 					@click="clearOldTimestamps()"
 				>
 					Clear Old
 				</button></div>
 			<div v-if="styleoption==='Tagger'"><button
-					class="dropbtn bg-indigo-700"
+					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
 					@click="updateAssociationsfunc()"
 				>
 					Save

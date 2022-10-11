@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="dropdown" style="float: right">
-      <button class="bg-indigo-700 dropbtn">Interaction</button>
+      <button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn">Interaction</button>
       <div class="dropdown-content">
         <a @click="toggleStorybookStyle('Viewer')">Viewing</a>
         
