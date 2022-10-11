@@ -30,7 +30,7 @@
 			<div class="grid items-center grid-cols-8 px-4 py-2 ml-20">
 				<div v-if="!archived">
 					<button
-						class="w-1/2 px-3 py-2 text-sm font-medium text-white transition-colors border rounded border-cyan-600 bg-cyan-700 hover:bg-cyan-600"
+						class="w-1/2 px-3 py-2 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 						@click="openstorybook()"
 					>
 						View
@@ -96,7 +96,7 @@
             Save Edits</button
           ><br> -->
 						owner access<br><button
-							class="w-2/3 px-3 py-2 text-sm font-medium text-white transition-colors border rounded border-cyan-600 bg-cyan-700 hover:bg-cyan-600"
+							class="w-2/3 px-3 py-2 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 							@click="archive()"
 						>
 							Archive
@@ -104,7 +104,7 @@
 					</div>
 					<div v-else-if="archived && status == 'owner'">
 						<button
-							class="w-1/2 px-3 py-2 text-sm font-medium text-white transition-colors border rounded bg-cyan-700 border-cyan-600 hover:bg-cyan-600"
+							class="w-1/2 px-3 py-2 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 							@click="unarchive()"
 						>
 							Restore
