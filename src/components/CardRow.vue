@@ -80,7 +80,7 @@
 					<span v-if="publictf"> yes</span>
 					<span v-else> no</span>
 				</span>
-
+ 
 				<span v-else>
 					<span v-if="publictf"> yes</span>
 					<span v-else> no</span></span>
