@@ -63,6 +63,7 @@ export default {
 			latest_text: "",
 			original_text: "",
 			spaced_by: "",
+			manuallyDraggedEndTimeMemory: 0,
 			new_associations: {},
 			associations: null,
 			associationGaps: [],
@@ -432,7 +433,7 @@ export default {
 					// console.log(this.contentEndingIndex - 5 + this.relevantGap.startTime);
 
 					this.usableGaps[0].startTime =
-						this.contentEndingIndex - 5 + this.relevantGap.startTime; // should be in hundredths of a second
+						Math.max(this.manuallyDraggedEndTimeMemory*100, this.contentEndingIndex - 5 + this.relevantGap.startTime); // should be in hundredths of a second
 					// console.log(this.usableGaps[0].startTime);
 				} else if (
 					this.usableGaps[0].endTime -
@@ -604,6 +605,7 @@ export default {
 			// console.log(this.$store.state.startTimePrompter)
 			// console.log(this.$store.state.endTimePrompter)
 
+			this.manuallyDraggedEndTimeMemory = this.$store.state.endTimePrompter
 
 			for (let l = 1; l < textLengthDifference - 1; l++) {
 				this.new_associations[this.relevantGap.startCharacter + l] =   
