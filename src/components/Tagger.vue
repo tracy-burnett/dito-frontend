@@ -5,7 +5,7 @@
 	>
 		<span class="font-bold border-gray-300 rounded px-3 py-1">{{ title }}</span>
 		in <span class="border-gray-300 rounded px-3 py-1">{{ language_name }}</span><br />
-		<!-- {{new_associations}} -->
+		{{new_associations}}
 		<!-- for each character in the array of characters for the text, display it and if the user clicks on it, tag or untag it, depending on whether it has already been tagged in this session or not -->
 		<div class="border-gray-300 rounded w-full h-full mt-12 mb-3 px-3 py-1">
 			<span
@@ -34,6 +34,7 @@
 <script>
 export default {
 	name: "Tagger",
+	inheritAttrs: false,
 	data: () => {
 		return {
 			language_name: "",

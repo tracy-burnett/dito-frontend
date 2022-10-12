@@ -2,7 +2,7 @@
   <div class="flex-auto">
     <div class="flex flex-col">
       <Navbar />
-      <Header title="Dito" image ="src/assets/ditologo.jpg" body="A platform for developing useful teaching tools for language exchange and typing practice between Khroskyabs and English." />
+      <Header title="Dito" image ="src/assets/ditologo.jpg" body="A platform for developing useful teaching tools for language exchange, listening comprehension, reading comprehension, and typing practice." />
       <PublicCardList title="Browse Public Storybooks" />
     </div>
   </div>
@@ -11,7 +11,6 @@
 <script>
 import Navbar from "@/components/Navbar.vue";
 import Header from "@/components/Header.vue";
-import CardList from "@/components/CardList.vue";
 import PublicCardList from "@/components/PublicCardList.vue";
 
 export default {
@@ -20,7 +19,6 @@ export default {
     Navbar,
     Header,
     PublicCardList,
-    CardList,
   },
 };
 </script>

@@ -62,7 +62,7 @@
         style="overflow-y: scroll"
       /> -->
       <button
-        class="w-full px-3 py-2 mt-16 text-sm font-medium text-white transition-colors bg-indigo-500 border border-indigo-400 rounded hover:bg-indigo-400"
+        class="w-full px-3 py-2 mt-16 text-sm font-medium text-white transition-colors border rounded border-cyan-600 bg-cyan-700 hover:bg-cyan-600"
         @click="update">
         Update Collaborators
       </button>

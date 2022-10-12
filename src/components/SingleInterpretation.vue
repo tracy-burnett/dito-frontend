@@ -3,10 +3,11 @@
 		<!-- this SingleInterpretation component represents what is viewable in a single interpretation column of an open storybook -->
 
 		<div
-			class="flex flex-rows-1 flex-wrap justify-around sticky top-12 z-20"
+			class="sticky z-20 flex flex-wrap justify-around flex-rows-1 top-12"
 			style="background: white"
 		>
-
+		<!-- {{styleoption}}<br> -->
+<!-- {{$store.state.prompterID}}hi -->
 			<!-- this component allows the user to remove the entire interpretation column from their browser window -->
 
 			<!-- SelectInterpretationMenu allows the user to swap out the interpretation they are currently viewing for a different one -->
@@ -34,7 +35,7 @@
 			</div>
 		</div>
 		<div
-			class="flex flex-rows-1 flex-wrap justify-around sticky top-24 z-10"
+			class="sticky z-10 flex flex-wrap justify-around flex-rows-1 top-24"
 			style="background: white"
 		>
 			<!-- <div class="w-40"></div> -->
@@ -67,10 +68,37 @@
 					/>
 				</div>
 			</div>
-			<div v-else-if="styleoption==='Editor'">
+
+			<div v-if="styleoption==='Prompter'">
+				<!--FLAG-->
+				<div class="flex">
+					scribe less / more
+				</div>
+				<div>
+					<input
+						id="scribingslider"
+						v-model="scribing"
+						type="range"
+						min="200"
+						max="2000"
+						step="50"
+					/>
+				</div>
+
+			</div>
+
+			<div v-if="styleoption==='Prompter'">
+				<button
+					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
+					@click="newPrompt()"
+				>
+					New Prompt
+				</button>
+			</div>
+			<div v-if="styleoption==='Editor'">
 				<!-- this is where should allow user to choose other punctuating characters or strings to always be their own word and not accidentally joining two other words -->
 				<button
-					class="dropbtn bg-indigo-700"
+					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
 					@click="saveEditsincrease()"
 				>
 					Save
@@ -80,19 +108,19 @@
 			<div v-if="styleoption==='Tagger'">
 				<!-- quick and dirty way to undo tags you haven't saved to the database yet -->
 				<button
-					class="dropbtn bg-indigo-700"
+					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
 					@click="clearTimestamps()"
 				>Clear New</button>
 			</div>
 			<!-- quick and dirty way to purge the database of all tags for this interpretation, mainly used for debugging purposes -->
 			<div v-if="styleoption==='Tagger'"><button
-					class="dropbtn bg-indigo-700"
+					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
 					@click="clearOldTimestamps()"
 				>
 					Clear Old
 				</button></div>
 			<div v-if="styleoption==='Tagger'"><button
-					class="dropbtn bg-indigo-700"
+					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
 					@click="updateAssociationsfunc()"
 				>
 					Save
@@ -106,11 +134,13 @@
 				v-bind:is="styleoption"
 				:audio_id="audio_id"
 				:timestep="timestep"
+				:scribing="scribing"
 				:fontsize="fontsize"
 				:clearTimestampsvar="clearTimestampsvar"
 				:updateAssociations="updateAssociations"
 				:clearOldTimestampsvar="clearOldTimestampsvar"
 				:saveEditscounter="saveEditscounter"
+				:newPromptscounter="newPromptscounter"
 				:interpretationStatus="interpretationStatus"
 				:interpretation_id="interpretation_id"
 				@permanentlydestroy="permanentlydestroy($event)"
@@ -126,6 +156,7 @@
 import Viewer from "@/components/Viewer.vue";
 import Editor from "@/components/Editor.vue";
 import Tagger from "@/components/Tagger.vue";
+import Prompter from "@/components/Prompter.vue";
 import StorybookStyleMenu from "@/components/StorybookStyleMenu.vue";
 import SelectInterpretationMenu from "@/components/SelectInterpretationMenu.vue";
 import DeleteInterpretationViewer from "@/components/DeleteInterpretationViewer.vue";
@@ -136,6 +167,7 @@ export default {
 		Editor,
 		Viewer,
 		Tagger,
+		Prompter,
 		StorybookStyleMenu,
 		SelectInterpretationMenu,
 		DeleteInterpretationViewer,
@@ -144,9 +176,12 @@ export default {
 	data: () => {
 		return {
 			timestep: 500,
+			scribing: 200,
 			fontsize: 16,
 			updateAssociations: 0,
 			clearTimestampsvar: 0,
+			newPromptscounter: 0,
+			// submitcounter: 0,
 			saveEditscounter: 0,
 			clearOldTimestampsvar: 0,
 			interpretationStatus: "", // this remembers whether the currently logged-in user is a viewer, editor, or owner of the currently-displayed interpretation
@@ -198,11 +233,26 @@ export default {
 		saveEditsincrease() {
 			this.saveEditscounter++;
 		},
+		// 		submitincrease() {
+		// 	this.submitcounter++;
+		// },
+		newPrompt() {
+			this.newPromptscounter++;
+		},
 		updateAssociationsfunc() {
 			this.updateAssociations++;
 		},
 		toggleStorybookStylefunction(styleselection) {
 			this.styleoption = styleselection;
+			if (this.styleoption=='Prompter') {
+									this.$store.commit(
+						"updatePrompterID",
+						this.interpretation_id
+					);
+			}
+			else if (this.styleoption !='Prompter' && this.$store.state.prompterID==this.interpretation_id) {
+				this.$store.commit("removePrompterID")
+			}
 		},
 
 		sharingSetting(owner, editors, viewers, publictf) {

@@ -1,12 +1,13 @@
 <template>
   <div>
     <div class="dropdown" style="float: right">
-      <button class="dropbtn bg-indigo-700">Interaction</button>
+      <button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn">Interaction</button>
       <div class="dropdown-content">
         <a @click="toggleStorybookStyle('Viewer')">Viewing</a>
         
         <a v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'" @click="toggleStorybookStyle('Editor')">Editing</a>
         <a v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'" @click="toggleStorybookStyle('Tagger')">Tagging</a>
+        <a v-if="$store.state.prompterID == null && (interpretationStatus == 'owner' || interpretationStatus == 'editor')" @click="toggleStorybookStyle('Prompter')">Scribing</a>
       </div>
     </div>
   </div>

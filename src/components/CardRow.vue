@@ -2,7 +2,7 @@
 	<div>
 		<span
 			v-if="$store.state.showStorybookModal == audio_ID"
-			class="fixed inset-0 w-full h-screen flex items-center justify-center z-10"
+			class="fixed inset-0 z-10 flex items-center justify-center w-full h-screen"
 		>
 			<StorybookModal
 				:audio_id="audio_ID"
@@ -13,7 +13,7 @@
 		</span>
 		<span
 			v-if="$store.state.showAddViewersModal == audio_ID"
-			class="fixed inset-0 w-full h-screen flex items-center justify-center z-10"
+			class="fixed inset-0 z-10 flex items-center justify-center w-full h-screen"
 		>
 			<AddViewersModal
 				:audio_id="audio_ID"
@@ -22,36 +22,15 @@
 			/>
 		</span>
 		<div
-			class="
-        cardrow
-        bg-white
-        overflow-hidden
-        rounded-xl
-        relative
-        border
-        mr-7
-        transition-colors
-      "
+			class="relative overflow-hidden transition-colors bg-white border cardrow rounded-xl mr-7"
 			:class="{ editing: dropdown, notediting: !dropdown }"
 		>
 			<slot></slot>
-			<!-- <img class="h-1/2 w-full" :src="image" alt="Sunset in the mountains" /> -->
-			<div class="grid grid-cols-8 ml-20 px-4 py-2 items-center">
+			<!-- <img class="w-full h-1/2" :src="image" alt="Sunset in the mountains" /> -->
+			<div class="grid items-center grid-cols-8 px-4 py-2 ml-20">
 				<div v-if="!archived">
 					<button
-						class="
-              bg-indigo-500
-              border border-indigo-400
-              w-1/2
-              text-sm
-              px-3
-              py-2
-              rounded
-              font-medium
-              text-white
-              hover:bg-indigo-400
-              transition-colors
-            "
+						class="w-1/2 px-3 py-2 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 						@click="openstorybook()"
 					>
 						View
@@ -62,7 +41,7 @@
             !archived && dropdown && (status == 'owner' || status == 'editor')
           ">
 					<textarea
-						class="font-bold border-gray-300 rounded w-full"
+						class="w-full font-bold border-gray-300 rounded"
 						rows="3"
 						style="overflow: hidden"
 						v-model="title"
@@ -76,7 +55,7 @@
             !archived && dropdown && (status == 'owner' || status == 'editor')
           ">
 					<textarea
-						class="border-gray-300 rounded w-full"
+						class="w-full border-gray-300 rounded"
 						rows="3"
 						style="overflow: hidden"
 						v-model="description"
@@ -101,7 +80,7 @@
 					<span v-if="publictf"> yes</span>
 					<span v-else> no</span>
 				</span>
-
+ 
 				<span v-else>
 					<span v-if="publictf"> yes</span>
 					<span v-else> no</span></span>
@@ -111,37 +90,13 @@
 				<div>
 					<div v-if="!archived && status == 'owner'">
 						<!-- <button
-            class="
-              bg-indigo-500
-              border border-indigo-400
-              w-2/3
-              text-sm
-              px-3
-              py-2
-              rounded
-              font-medium
-              text-white
-              hover:bg-indigo-400
-              transition-colors
-            "
+            class="w-2/3 px-3 py-2 text-sm font-medium text-white transition-colors bg-indigo-500 border border-indigo-400 rounded hover:bg-indigo-400"
             @click="savechanges()"
           >
             Save Edits</button
           ><br> -->
 						owner access<br><button
-							class="
-                bg-indigo-500
-                border border-indigo-400
-                w-2/3
-                text-sm
-                px-3
-                py-2
-                rounded
-                font-medium
-                text-white
-                hover:bg-indigo-400
-                transition-colors
-              "
+							class="w-2/3 px-3 py-2 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 							@click="archive()"
 						>
 							Archive
@@ -149,19 +104,7 @@
 					</div>
 					<div v-else-if="archived && status == 'owner'">
 						<button
-							class="
-                bg-indigo-500
-                border border-indigo-400
-                w-1/2
-                text-sm
-                px-3
-                py-2
-                rounded
-                font-medium
-                text-white
-                hover:bg-indigo-400
-                transition-colors
-              "
+							class="w-1/2 px-3 py-2 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 							@click="unarchive()"
 						>
 							Restore

@@ -2,7 +2,7 @@
 	<div class="h-full">
 		<span
 			v-if="showAddInterpretationModal"
-			class="fixed inset-0 w-full h-screen flex items-center justify-center z-40"
+			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
 		>
 			<AddInterpretationModal
 				:audio_id="audio_ID"
@@ -178,6 +178,11 @@ export default {
 
 			// tell the Vuex store to remove the ID number of the interpretation in question from the list of interpretions that currently need columns in the browser window
 			this.$store.commit("deleteConsole", oldInterpretation);
+			if (this.$store.state.prompterID==oldInterpretation) {
+									this.$store.commit(
+						"removePrompterID"
+					);
+			}
 		},
 
 		displayInterpretationID(newID) {

@@ -1,109 +1,123 @@
 <template>
-<div class="flex flex-col" style="position:fixed;top:16;">
-	<!-- playback speed slider -->
-		<div class="flex justify-center text-xs">
-		playback speed {{playbackspeed}}
-	</div>
-	<div>
-	      <input id="slider" v-model="playbackspeed" type="range" min=".2" max="1.5" step=".10" style="width: 100%" />
-	</div>
+	<div
+		class="flex flex-col"
+		style="position:fixed;top:16;"
+	>
 
-	<!-- <div class="flex justify-center text-xs">{{playbackspeed}}</div> -->
-	<!-- audio player body -->
-	<div class="container rounded-xl shadow-xl">
-		<!-- top-most time entry box (for start of view window) -->
-		<div
-			id="start"
-			ref="start"
-			class="start"
-		>
+		<!-- playback speed slider -->
+		<div class="flex justify-center text-xs">
+			playback speed {{playbackspeed}}
+		</div>
+		<div>
 			<input
-				type="string"
-				v-model="startTime"
-				pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
-				@keyup.enter="updateRegion()"
+				id="slider"
+				v-model="playbackspeed"
+				type="range"
+				min=".2"
+				max="1.5"
+				step=".10"
+				style="width: 100%"
 			/>
 		</div>
 
-		<!-- play button -->
-		<button
-			id="play"
-			@click="play"
-			class="play"
-		>
-			<div class="h-10 w-10">
-				<img
-					v-if="playing"
-					src="@/assets/pauseAudio.svg"
-				/>
-				<img
-					v-else
-					src="@/assets/playAudio.svg"
+		<!-- <div class="flex justify-center text-xs">{{playbackspeed}}</div> -->
+		<!-- audio player body -->
+		<div class="container rounded-xl shadow-xl">
+			<!-- top-most time entry box (for start of view window) -->
+			<div
+				id="start"
+				ref="start"
+				class="start"
+			>
+				<input
+					type="string"
+					v-model="startTime"
+					pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
+					@keyup.enter="updateRegion()"
 				/>
 			</div>
-		</button>
 
-		<!-- middle time entry box (for current time) -->
-		<div
-			id="current"
-			ref="current"
-			class="current"
-		>
-			<input
-				type="string"
-				v-model="currentTime"
-				pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
-				@click="pausePlayer()"
-				@keyup.enter="seekfunction()"
-			/>
-		</div>
-
-		<!-- waveform display -->
-		<div
-			id="waveform"
-			ref="waveform"
-			class="flex waveform"
-			@wheel.prevent="getzoomnumber($event)"
-		>
-			<span
-				class="flex flex-col justify-center pl-6"
-				v-if="loadingpercent > 0 && loadingpercent < 100"
-			>
-					audio {{ loadingpercent }}% loaded
-			</span>
-			<span 
-				class="flex flex-col justify-center pl-4" v-else-if="loadingpercent==0">please be patient while your audio file is uploaded to the server</span>
-		</div>
-
-		<!-- bottom-most time entry box (for end of view window) -->
-		<div
-			id="end"
-			ref="end"
-			class="end"
-		>
-			<input
-				type="string"
-				v-model="endTime"
-				pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
-				@keyup.enter="updateRegion()"
-			/>
-		</div>
-
-		<!-- clear highlight button -->
-		<div
-			id="end"
-			ref="end"
-			class="end"
-		>
+			<!-- play button -->
 			<button
-				class="clear rounded-full"
-				@click="clearallregions()"
+				id="play"
+				@click="play"
+				class="play"
 			>
-				Clear Highlight
+				<div class="h-10 w-10">
+					<img
+						v-if="playing"
+						src="@/assets/pauseAudio.svg"
+					/>
+					<img
+						v-else
+						src="@/assets/playAudio.svg"
+					/>
+				</div>
 			</button>
+
+			<!-- middle time entry box (for current time) -->
+			<div
+				id="current"
+				ref="current"
+				class="current"
+			>
+				<input
+					type="string"
+					v-model="currentTime"
+					pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
+					@click="pausePlayer()"
+					@keyup.enter="seekfunction()"
+				/>
+			</div>
+
+			<!-- waveform display -->
+			<div
+				id="waveform"
+				ref="waveform"
+				class="flex waveform"
+				@wheel.prevent="getzoomnumber($event)"
+			>
+				<span
+					class="flex flex-col justify-center pl-6"
+					v-if="loadingpercent > 0 && loadingpercent < 100"
+				>
+					audio {{ loadingpercent }}% loaded
+				</span>
+				<span
+					class="flex flex-col justify-center pl-4"
+					v-else-if="loadingpercent==0"
+				>please be patient while your audio file is uploaded to the server</span>
+			</div>
+
+			<!-- bottom-most time entry box (for end of view window) -->
+			<div
+				id="end"
+				ref="end"
+				class="end"
+			>
+				<input
+					type="string"
+					v-model="endTime"
+					pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
+					@keyup.enter="updateRegion()"
+				/>
+			</div>
+
+			<!-- clear highlight button -->
+			<div
+				id="end"
+				ref="end"
+				class="end"
+			>
+				<button
+					class="clear rounded-full"
+					@click="clearallregions()"
+				>
+					Clear Highlight
+				</button>
+			</div>
 		</div>
 	</div>
-</div>
 </template>
 
 <script>
@@ -124,6 +138,7 @@ export default {
 			playbackspeed: 1,
 			isLoaded: false,
 			loadingpercent: 0,
+			// peaksData: [],
 			zoomnumber: 1,
 			startTime: "00:00:00", // the beginning of the highlighted region as calculated by wavesurfer OR manually input by the user, in HH:MM:SS
 			currentTime: "00:00:00", // wherever the audio is currently playing as calculated by wavesurfer OR manually input by the user, in HH:MM:SS
@@ -134,13 +149,14 @@ export default {
 			totalDuration: 0, // the total length of the audio, in seconds
 			playing: false,
 			audioURL: "",
+			updatingFromPrompter: false
 		};
 	},
 
 	// watch these variables to see if they change.  if they do, then call the corresponding functions.
 	watch: {
-		"playbackspeed": function() {
-			this.wavesurfer.setPlaybackRate(this.playbackspeed)
+		playbackspeed: function () {
+			this.wavesurfer.setPlaybackRate(this.playbackspeed);
 		},
 		"$store.state.incomingCurrentTime": function () {
 			this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
@@ -148,10 +164,45 @@ export default {
 		"$store.state.playerRerender": function () {
 			this.shouldRerender(this.$store.state.playerRerender);
 		},
+		"$store.state.regionRerender": function () {
+			// console.log(this.$store.state.startTimePrompter)
+			// console.log(this.$store.state.endTimePrompter)
+			this.startTime = this.secondsToTime(
+				Math.round(this.$store.state.startTimePrompter)
+			);
+			this.endTime = this.secondsToTime(
+				Math.round(this.$store.state.endTimePrompter)
+			);
+			// console.log(this.startTimeNumber)
+			// console.log(this.endTimeNumber)
+			this.updateRegionFromPrompter();
+		},
 	},
 
 	// these are variables whose values are dynamically updated when necessary.
 	computed: {
+		// the beginning of the highlighted region as edited by Prompter, in HH:MM:SS
+		// startTimePrompter: {
+		// 	// getter
+		// get() {
+		// 	return this.$store.state.startTimePrompter; // in the store
+		// },
+		// set(startTimePrompter) {
+		// 	this.$store.commit("updateStartTimePrompter", startTimePrompter);
+		// },
+		// },
+
+		// the end of the highlighted region as edited by Prompter, in HH:MM:SS
+		// endTimePrompter: {
+		// 	// getter
+		// 	get() {
+		// 		return this.$store.state.endTimePrompter; // in the store
+		// 	},
+		// set(endTimePrompter) {
+		// 	this.$store.commit("updateEndTimePrompter", endTimePrompter);
+		// },
+		// },
+
 		// the beginning of the highlighted region as manually typed in by the user, in seconds
 		startTimeNumber() {
 			let startTimeArray = this.startTime.split(":");
@@ -187,11 +238,13 @@ export default {
 	},
 
 	unmounted() {
-		this.wavesurfer.destroy()
+		this.wavesurfer.destroy();
 	},
 
 	mounted() {
 		//get secure url from server
+		this.$store.commit("updateAudioDuration", 0);
+		this.$store.commit("removePeaksData");
 		const apiUrl = process.env.VUE_APP_api_URL + "s3/presignedgeturl";
 		fetch(apiUrl, {
 			method: "POST",
@@ -223,10 +276,11 @@ export default {
 			waveColor: "#94a3b8",
 			cursorColor: "red",
 			progressColor: "#475569",
-			barWidth: 2,
-			//  barHeight: 1,
+			// barWidth: 2,
+			barHeight: 4,
+			normalize: true,
 			hideScrollbar: true,
-			barRadius: 3,
+			// barRadius: 3,
 			vertical: true,
 			plugins: [
 				WaveSurfer.regions.create({
@@ -239,32 +293,74 @@ export default {
 
 		// When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
 		this.wavesurfer.on("waveform-ready", function () {
-			that.isLoaded=true
+			that.isLoaded = true;
 			that.totalDuration = that.wavesurfer.getDuration();
+			that.$store.commit("updateAudioDuration", that.totalDuration * 1000);
 			that.endTimeSeconds = that.totalDuration;
 			that.endTime = that.secondsToTime(that.endTimeSeconds);
 			that.wavesurfer.addRegion({
 				start: 0,
 				end: that.totalDuration,
-				id: "region",
+				id: "initialregion",
 				loop: false,
 			});
 			that.wavesurfer.enableDragSelection({
-				id: "region",
+				id: "initialregion",
 				loop: false,
 			});
+
+			// length of output array/2, accuracy (irrelevant), don't popup a new window, start at 0,
+			that.wavesurfer
+				.exportPCM((that.totalDuration / 2) * 100, 10000, true, 0)
+				.then(function (result) {
+					that.$store.commit("updatePeaksData", result);
+				});
 		});
 
 		// whenever the highlighted region or either of its bounds is dragged, update our data about where the region begins and ends accordingly
-		this.wavesurfer.on("region-update-end", function () {
-			that.startTimeSeconds = Object.values(
-				that.wavesurfer.regions.list.region
-			)[7];
-			that.endTimeSeconds = Object.values(
-				that.wavesurfer.regions.list.region
-			)[8];
-			that.startTime = that.secondsToTime(that.startTimeSeconds);
-			that.endTime = that.secondsToTime(that.endTimeSeconds);
+		this.wavesurfer.on("region-update-end", (region, event) => {
+			// console.log(region)
+			that.startTimeSeconds = region.start
+			that.endTimeSeconds = region.end
+			// console.log(that.startTimeSeconds)
+			// console.log(that.endTimeSeconds)
+			// that.startTime = that.secondsToTime(that.startTimeSeconds);
+			// that.endTime = that.secondsToTime(that.endTimeSeconds);
+			that.$store.commit("updateStartTimePrompter", that.startTimeSeconds);
+			that.$store.commit("updateEndTimePrompter", that.endTimeSeconds);
+			that.$store.commit("forceTriggerNewText");
+
+			that.startTime = that.secondsToTime(
+				Math.round(that.$store.state.startTimePrompter)
+			);
+			that.endTime = that.secondsToTime(
+				Math.round(that.$store.state.endTimePrompter)
+			);
+		});
+
+		this.wavesurfer.on("region-created", (region, event) => {
+			// console.log(region);
+			if (that.updatingFromPrompter == false) {
+				console.log("creating region, not from prompter")
+				that.startTimeSeconds = region.start
+				that.endTimeSeconds = region.end
+				// console.log(that.startTimeSeconds)
+				// console.log(that.endTimeSeconds)
+				// that.startTime = that.secondsToTime(that.startTimeSeconds);
+				// that.endTime = that.secondsToTime(that.endTimeSeconds);
+				that.$store.commit("updateStartTimePrompter", that.startTimeSeconds);
+				that.$store.commit("updateEndTimePrompter", that.endTimeSeconds);
+				if (region.id != "initialregion") {
+			that.$store.commit("forceTriggerNewText")}
+			} else if (that.updatingFromPrompter == true) {
+				console.log("creating region from prompter")
+				that.startTimeSeconds = that.$store.state.startTimePrompter;
+				that.endTimeSeconds = that.$store.state.endTimePrompter;
+				that.updatingFromPrompter = false;
+			}
+
+			// that.startTime=that.secondsToTime(Math.round(that.$store.state.startTimePrompter))
+			// that.endTime=that.secondsToTime(Math.round(that.$store.state.endTimePrompter))
 		});
 
 		// calculate how much of the audio file has been loaded, so far
@@ -280,7 +376,10 @@ export default {
 				"updateAudioTime",
 				Math.round(that.currentTimeSeconds * 100)
 			);
-			if (that.currentTimeSeconds >= that.endTimeSeconds && that.isLoaded==true) {
+			if (
+				that.currentTimeSeconds >= that.endTimeSeconds &&
+				that.isLoaded == true
+			) {
 				that.wavesurfer.seekTo(that.startTimeSeconds / that.totalDuration);
 			}
 		});
@@ -395,8 +494,9 @@ export default {
 		// when the user clicks in the "Viewer" component, it starts playing the audio player from this timestamp and updates the HH:MM:SS display of current time accordingly
 		seekTimestampfunction(timestamp) {
 			if (this.totalDuration > 0) {
-			this.wavesurfer.seekTo(timestamp / this.totalDuration);
-			this.currentTime = this.secondsToTime(timestamp);}
+				this.wavesurfer.seekTo(timestamp / this.totalDuration);
+				this.currentTime = this.secondsToTime(timestamp);
+			}
 		},
 
 		// when the user submits a new manual input of HH:MM:SS current time, the cursor moves accordingly and the change is also communicated to the Vuex store
@@ -406,22 +506,64 @@ export default {
 
 		// clear the highlighted region and reset the HH:MM:SS displays of start and end time accordingly
 		clearallregions() {
+			// console.log("in clear regions")
 			this.wavesurfer.clearRegions();
+			// console.log(this.updatingFromPrompter);
 			this.startTime = "00:00:00";
 			this.endTime = this.secondsToTime(this.totalDuration);
+			// console.log("end time: " + this.endTime)
+			this.startTimeSeconds = 0; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
+			this.endTimeSeconds = this.totalDuration; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here			this.$store.commit(
+			this.$store.commit("updateStartTimePrompter", 0);
+			this.$store.commit("updateEndTimePrompter", this.totalDuration);
 		},
 
 		// change the highlighted region based on manual HH:MM:SS inputs of start and end times by the user
 		updateRegion() {
 			this.wavesurfer.clearRegions();
+			// console.log("end time: " + this.endTime)
 			this.wavesurfer.addRegion({
 				start: this.startTimeNumber,
 				end: this.endTimeNumber,
 				id: "region",
 				loop: false,
 			});
-			this.startTimeSeconds = this.startTimeNumber; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
-			this.endTimeSeconds = this.endTimeNumber; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
+			// this.startTimeSeconds = this.startTimeNumber; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
+			// this.endTimeSeconds = this.endTimeNumber; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
+			// this.$store.commit(
+			// 	"updateStartTimePrompter",
+			// 	this.startTimeSeconds
+			// );
+			// this.$store.commit(
+			// 	"updateEndTimePrompter",
+			// 	this.endTimeSeconds
+			// );
+		},
+
+		// change the highlighted region based on manual HH:MM:SS inputs of start and end times by the user
+		updateRegionFromPrompter() {
+			this.wavesurfer.clearRegions();
+			this.updatingFromPrompter = true;
+			this.wavesurfer.addRegion({
+				start: this.$store.state.startTimePrompter,
+				end: this.$store.state.endTimePrompter,
+				id: "region",
+				loop: false,
+			});
+			this.startTime = this.secondsToTime(
+				Math.round(this.$store.state.startTimePrompter)
+			);
+			this.endTime = this.secondsToTime(
+				Math.round(this.$store.state.endTimePrompter)
+			);
+			// this.startTimeSeconds = this.$store.state.startTimePrompter; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
+			// this.endTimeSeconds = this.$store.state.endTimePrompter; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
+			if (!this.playing) {
+				this.play();
+			} else if (this.playing) {
+				this.play();
+				this.play();
+			}
 		},
 	},
 };
@@ -479,8 +621,8 @@ export default {
 }
 
 /* .loading { */
-	/* display: flex; */
-	/* margin-left: 15%; */
+/* display: flex; */
+/* margin-left: 15%; */
 /* } */
 
 .play {

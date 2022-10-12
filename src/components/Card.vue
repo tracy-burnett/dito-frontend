@@ -1,47 +1,22 @@
 <template>
   <div
     @click="openstorybook()"
-    class="
-      card
-      bg-white
-      overflow-hidden
-      rounded-xl
-      relative
-      shadow-lg
-      border
-      cursor-pointer
-      mr-7
-      mb-8
-      hover:border-indigo-500
-      transition-colors
-    "
+    class="relative mb-8 overflow-hidden transition-colors bg-white border shadow-lg cursor-pointer  card rounded-xl mr-7 hover:border-cyan-600"
   >
-    <img class="h-1/2 w-full" :src="image" alt="Sunset in the mountains" />
+    <img class="w-full h-1/2" :src="image" alt="Sunset in the mountains" />
     <div class="px-4 py-2">
-      <div class="font-bold text-xl mt-1 mb-2">{{ title }}</div>
-      <p class="text-gray-400 text-xs mb-3">
+      <div class="mt-1 mb-2 text-xl font-bold">{{ title }}</div>
+      <p class="mb-3 text-xs text-gray-400">
         {{ description }}
       </p>
-      <label class="text-gray-400 text-xs"
+      <label class="text-xs text-gray-400"
         >Created by {{ uploader }} on {{ date }}</label
       >
     </div>
     <div
-      class="
-        flex
-        justify-center
-        items-center
-        bg-sky-700
-        absolute
-        h-14
-        w-14
-        rounded-full
-        play
-        shadow-lg
-        mr-4
-      "
+      class="absolute flex items-center justify-center mr-4 rounded-full shadow-lg  bg-sky-700 h-14 w-14 play"
     >
-      <img class="text-white h-8 w-8 ml-1" src="@/assets/play.svg" />
+      <img class="w-8 h-8 ml-1 text-white" src="@/assets/play.svg" />
     </div>
   </div>
 </template>

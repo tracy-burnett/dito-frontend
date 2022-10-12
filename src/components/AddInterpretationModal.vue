@@ -1,33 +1,13 @@
 <template>
   <div
-    class="
-      backdrop
-      flex-auto flex-1 flex-col
-      h-full
-      overflow-hidden
-      flex
-      justify-center
-      items-center
-      mt-10
-    "
+    class="flex flex-col items-center justify-center flex-1 flex-auto h-full mt-10 overflow-hidden  backdrop"
     @click.self="closeModal()"
   >
     <div
-      class="
-        flex flex-col
-        items-center
-        border border-gray-300
-        bg-white
-        shadow-md
-        rounded-xl
-        p-8
-        xl:w-2/5
-        lg:w-2/4
-        md:w-2/3
-      "
+      class="flex flex-col items-center p-8 bg-white border border-gray-300 shadow-md  rounded-xl xl:w-2/5 lg:w-2/4 md:w-2/3"
     >
     <button
-        class="text-xl text-gray-500 my-2 mx-4"
+        class="mx-4 my-2 text-xl text-gray-500"
         @click.prevent="closeModal()"
       >
         ×
@@ -35,17 +15,17 @@
       <h1 class="text-2xl font-bold">Start New Interpretation</h1>
       <br />
       <input
-        class="border border-gray-300 rounded w-full px-3 py-1"
+        class="w-full px-3 py-1 border border-gray-300 rounded"
         placeholder="Title of New Interpretation"
         v-model="int_title"
       />
             <input
-        class="border border-gray-300 rounded w-full px-3 py-1"
+        class="w-full px-3 py-1 border border-gray-300 rounded"
         placeholder="Language of New Interpretation"
         v-model="int_language"
       />
       <input
-        class="border border-gray-300 rounded w-full px-3 py-1"
+        class="w-full px-3 py-1 border border-gray-300 rounded"
         placeholder="What character is this language 'spaced' by? (or leave blank)"
         v-model="int_spacing"
         maxlength="1"
@@ -73,20 +53,7 @@
         style="overflow-y: scroll"
       />
       <button
-        class="
-          bg-indigo-500
-          border border-indigo-400
-          w-full
-          text-sm
-          px-3
-          py-2
-          mt-16
-          rounded
-          font-medium
-          text-white
-          hover:bg-indigo-400
-          transition-colors
-        "
+        class="w-full px-3 py-2 mt-16 text-sm font-medium text-white transition-colors border rounded  bg-cyan-700 border-cyan-600 hover:bg-cyan-600"
         @click="create"
       >
         Create Interpretation

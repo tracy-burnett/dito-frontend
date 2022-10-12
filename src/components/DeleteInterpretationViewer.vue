@@ -2,7 +2,7 @@
   
     <!-- clicking this button removes the interpretation column associated with it -->
     <div id="destroy">
-      <button class="dropbtn bg-indigo-700" @click="destroy">
+      <button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn" @click="destroy">
       Close</button>
         <!-- <img src="@/assets/pauseAudio.svg" />-->
       </div>

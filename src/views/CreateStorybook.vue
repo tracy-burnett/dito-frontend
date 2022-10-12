@@ -1,36 +1,25 @@
 <template>
 	<div class="flex-auto">
-		<div class="flex-1 flex-col h-full overflow-hidden">
+		<div class="flex-col flex-1 h-full overflow-hidden">
 			<Navbar />
-			<div class="flex justify-center items-center h-full mt-10">
-				<div class="
-            flex flex-col
-            items-center
-            border border-gray-300
-            bg-white
-            shadow-md
-            rounded-xl
-            p-8
-            xl:w-2/5
-            lg:w-2/4
-            md:w-2/3
-          ">
+			<div class="flex items-center justify-center h-full mt-10">
+				<div class="flex flex-col items-center p-8 bg-white border border-gray-300 shadow-md rounded-xl xl:w-2/5 lg:w-2/4 md:w-2/3">
 					<h1 class="text-2xl font-bold">Upload Audio File</h1>
 					<input
-						class="border border-gray-300 rounded w-full mt-12 mb-3 px-3 py-1"
+						class="w-full px-3 py-1 mt-12 mb-3 border border-gray-300 rounded"
 						type="file"
 						accept="audio/*"
 						ref="audioInput"
 						@keyup.enter="upload"
 					/>
 					<input
-						class="border border-gray-300 rounded w-full px-3 py-1"
+						class="w-full px-3 py-1 border border-gray-300 rounded"
 						placeholder="Storybook/Audio Title"
 						v-model="title"
 						@keyup.enter="upload"
 					/>
 					<input
-						class="border border-gray-300 rounded w-full px-3 py-1"
+						class="w-full px-3 py-1 border border-gray-300 rounded"
 						placeholder="Description of Content"
 						v-model="description"
 						@keyup.enter="upload"
@@ -39,46 +28,33 @@
 					<h1 class="text-2xl font-bold">Start First Interpretation</h1>
 					<br />
 					<input
-						class="border border-gray-300 rounded w-full px-3 py-1"
+						class="w-full px-3 py-1 border border-gray-300 rounded"
 						placeholder="Title of First Interpretation"
 						v-model="int_title"
 						@keyup.enter="upload"
 					/>
 					<input
-						class="border border-gray-300 rounded w-full px-3 py-1"
+						class="w-full px-3 py-1 border border-gray-300 rounded"
 						placeholder="Language of First Interpretation"
 						v-model="int_language"
 						@keyup.enter="upload"
 					/>
 					<input
-						class="border border-gray-300 rounded w-full px-3 py-1"
+						class="w-full px-3 py-1 border border-gray-300 rounded"
 						placeholder="What character is this language 'spaced' by? (or leave blank)"
 						v-model="int_spacing"
 						maxlength="1"
 						@keyup.enter="upload"
 					/>
 					<textarea
-						class="border border-gray-300 rounded w-full px-3 py-1"
+						class="w-full px-3 py-1 border border-gray-300 rounded"
 						placeholder="Text of First Interpretation"
 						v-model="int_text"
 						style="overflow:hidden;"
 						oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
 					/>
 					<button
-						class="
-              bg-indigo-500
-              border border-indigo-400
-              w-full
-              text-sm
-              px-3
-              py-2
-              mt-16
-              rounded
-              font-medium
-              text-white
-              hover:bg-indigo-400
-              transition-colors
-            "
+						class="w-full px-3 py-2 mt-16 text-sm font-medium text-white transition-colors border rounded border-sky-600 bg-sky-700 hover:bg-sky-600"
 						@click="upload"
 					>
 						Upload
@@ -162,7 +138,7 @@ export default {
 							},
 							body: JSON.stringify({
 								id: this.name.normalize('NFC'),
-								url: "coverimage.jpg",
+								// url: process.env.VUE_APP_SUBDOMAIN_URL,
 								title: this.title.normalize('NFC'),
 								description: this.description.normalize('NFC'),
 								// shared_with: [],
