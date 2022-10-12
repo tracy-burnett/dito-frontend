@@ -142,7 +142,7 @@ export default {
 								title: this.title.normalize('NFC'),
 								description: this.description.normalize('NFC'),
 								// shared_with: [],
-							}),
+							}), 
 						})
 							.then((response) => {
 								return response.json();
