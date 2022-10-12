@@ -138,7 +138,7 @@ export default {
 							},
 							body: JSON.stringify({
 								id: this.name.normalize('NFC'),
-								url: process.env.VUE_APP_SUBDOMAIN_URL,
+								// url: process.env.VUE_APP_SUBDOMAIN_URL,
 								title: this.title.normalize('NFC'),
 								description: this.description.normalize('NFC'),
 								// shared_with: [],
