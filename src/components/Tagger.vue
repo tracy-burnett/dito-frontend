@@ -3,11 +3,11 @@
 		class="flex-auto"
 		:style="{ 'font-size': fontsize + 'px' }"
 	>
-		<span class="font-bold border-gray-300 rounded px-3 py-1">{{ title }}</span>
-		in <span class="border-gray-300 rounded px-3 py-1">{{ language_name }}</span><br />
-		{{new_associations}}
+		<span class="px-3 py-1 font-bold border-gray-300 rounded">{{ title }}</span>
+		in <span class="px-3 py-1 border-gray-300 rounded">{{ language_name }}</span><br />
+		<!-- {{new_associations}} -->
 		<!-- for each character in the array of characters for the text, display it and if the user clicks on it, tag or untag it, depending on whether it has already been tagged in this session or not -->
-		<div class="border-gray-300 rounded w-full h-full mt-12 mb-3 px-3 py-1">
+		<div class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded">
 			<span
 				v-for="character in latest_text_character_array"
 				:key="character.index"
@@ -19,7 +19,7 @@
 					>{{ character.value }}{{spaced_by}}</span></span>
 				<span
 					v-else
-					class="text-green-500 font-extrabold"
+					class="font-extrabold text-green-500"
 					style="white-space: pre-wrap"
 					@click="removeThisAssociation(character.index)"
 				>{{ character.value }}{{spaced_by}}</span>
@@ -77,6 +77,8 @@ export default {
 
 	mounted() {
 		// get the text
+
+
 		fetch(
 			process.env.VUE_APP_api_URL +
 				"interpretations/" +
@@ -105,7 +107,9 @@ export default {
 			})
 			// convert the text into an array of single characters or words
 			.then(() => {
-				let character_array = this.latest_text.split(this.spaced_by);
+				
+		let regexwithspacedby = new RegExp(`${this.escapeRegex(this.spaced_by)}|\n`);
+				let character_array = this.latest_text.split(regexwithspacedby);
 				for (let i = 0; i < character_array.length; i++) {
 					let sample_object = {};
 					sample_object.index = i;
@@ -117,6 +121,11 @@ export default {
 			.catch((error) => console.error("Error:", error));
 	},
 	methods: {
+
+		escapeRegex: function (string) {
+    		return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+		},
+
 		clearTimestamps() {
 			this.new_associations = {};
 			// console.log(JSON.stringify(this.new_associations));
