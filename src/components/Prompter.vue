@@ -641,8 +641,6 @@ export default {
 			}
 
 
-			console.log(JSON.stringify(this.instructions))
-		
 
 
 			this.manuallyDraggedEndTimeMemory = this.$store.state.endTimePrompter
@@ -650,7 +648,8 @@ export default {
 
 			if (this.spaced_by != "") {
 				this.instructions.lines.forEach(element => {
-				console.log(element['bIndex'])
+				// console.log(element['bIndex'])
+				console.log(element)
 					if (element['bIndex'] >= 0) {
 					this.new_associations[element['bIndex']] = ((this.$store.state.startTimePrompter +
 						this.$store.state.endTimePrompter) *
@@ -710,7 +709,7 @@ export default {
 						}); //increase every startcharacter and endcharacter
 						this.newPromptsfunc();
 						
-						console.log(this.latest_text)
+						// console.log(this.latest_text)
 						console.log("TROUBLESHOOTING TODAY" + JSON.stringify(this.new_associations))
 						//add in the association for the new phrase.
 						fetch(
