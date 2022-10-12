@@ -173,6 +173,12 @@ export default {
 		},
 	},
 	methods: {
+
+
+		escapeRegex: function (string) {
+    		return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+		},
+
 		findGaps: function () {
 			// console.log("find gaps begun")
 			if (this.$store.state.audioDuration > 0) {
@@ -481,7 +487,7 @@ export default {
 						this.new_text = this.new_text.substring(2);
 						this.usableGaps[0].startCharacter += 2;
 					// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
-					console.log("NEW TEXT after adjustment: " + this.new_text)
+					// console.log("NEW TEXT after adjustment: " + this.new_text)
 					}
 					if (this.new_text[this.new_text.length-1] == "\n") {
 						//if there is a carriage return at the end of the relevant text segment and it is not the only character, then roll back from it
@@ -492,7 +498,7 @@ export default {
 						this.new_text = this.new_text.substring(0,this.new_text.length-2);
 						this.usableGaps[0].endCharacter -= 1;
 					// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
-					console.log("NEW TEXT after adjustment: " + this.new_text)
+					// console.log("NEW TEXT after adjustment: " + this.new_text)
 					}
 				} else {
 					if (this.sensitivity > 50) {
@@ -562,9 +568,9 @@ export default {
 					}
 
 
-			console.log(
-				"NEW TEXT after editing region in audio player: " + this.new_text
-			);
+			// console.log(
+			// 	"NEW TEXT after editing region in audio player: " + this.new_text
+			// );
 		},
 
 		// edit the text when the user clicks "Save Edits"
@@ -604,24 +610,27 @@ export default {
 			}
 			// console.log(this.$store.state.startTimePrompter)
 			// console.log(this.$store.state.endTimePrompter)
+			
+			let regexwithspacedby = new RegExp(`${this.escapeRegex(this.spaced_by)}|\n`);
 
-			this.manuallyDraggedEndTimeMemory = this.$store.state.endTimePrompter
 
-			for (let l = 1; l < textLengthDifference - 1; l++) {
-				this.new_associations[this.relevantGap.startCharacter + l] =   
-					((this.$store.state.startTimePrompter +
-						this.$store.state.endTimePrompter) *
-						100) /
-					2;
-			}
 
-			console.log("total original text: " + this.original_text)
-			console.log("total new text: " + this.latest_text)
+			// console.log("spaced by" + this.spaced_by + ".")
+			// console.log("total original text: " + this.original_text)
+			// console.log("total new text: " + this.latest_text)
+
+			// let origtextclean=
+			// if (origtextclean[0]==this.spaced_by) {origtextclean.shift}
+			// let latesttextclean=
+			// if (latesttextclean[0]==this.spaced_by) {latesttextclean.shift}
+
 			this.instructions = this.patienceDiffPlus(
-				this.original_text.split(this.spaced_by),
-				this.latest_text.normalize("NFC").split(this.spaced_by)
+				this.original_text.split(regexwithspacedby), this.latest_text.normalize("NFC").split(regexwithspacedby)
 			);
-			console.log("associations: " + JSON.stringify(this.new_associations));
+
+
+
+			// console.log("associations: " + JSON.stringify(this.new_associations));
 			for (let i = this.instructions.lines.length - 1; i >= 0; i--) {
 				if (
 					this.instructions.lines[i].aIndex == this.instructions.lines[i].bIndex
@@ -630,8 +639,37 @@ export default {
 				}	
 
 			}
+
+
 			console.log(JSON.stringify(this.instructions))
 		
+
+
+			this.manuallyDraggedEndTimeMemory = this.$store.state.endTimePrompter
+
+
+			if (this.spaced_by != "") {
+				this.instructions.lines.forEach(element => {
+				console.log(element['bIndex'])
+					if (element['bIndex'] >= 0) {
+					this.new_associations[element['bIndex']] = ((this.$store.state.startTimePrompter +
+						this.$store.state.endTimePrompter) *
+						100) /
+					2;
+				}})
+
+			}
+			else if (this.spaced_by=="") {
+				for (let l = 1; l < textLengthDifference - 1; l++) {
+				this.new_associations[this.relevantGap.startCharacter + l] =   
+					((this.$store.state.startTimePrompter +
+						this.$store.state.endTimePrompter) *
+						100) /
+					2;
+			}
+			}
+
+
 			// console.log("instructions: " + this.instructions);
 
 			fetch(
@@ -671,7 +709,9 @@ export default {
 							return;
 						}); //increase every startcharacter and endcharacter
 						this.newPromptsfunc();
-
+						
+						console.log(this.latest_text)
+						console.log("TROUBLESHOOTING TODAY" + JSON.stringify(this.new_associations))
 						//add in the association for the new phrase.
 						fetch(
 							process.env.VUE_APP_api_URL +
