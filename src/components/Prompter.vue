@@ -12,12 +12,12 @@
 -->
 		<!-- {{new_associations}}  -->
 		<!-- {{scribingclean}} -->
-		associations: {{associations}}<br>
+		<!-- associations: {{associations}}<br> -->
 		<!-- {{$store.state.startTimePrompter*100}}<br>
 		{{$store.state.endTimePrompter*100}}<br> -->
-		{{usableGaps}}<br>
-		{{relevantGap}}<br>
-		{{allowSubmit}}<br>
+		<!-- {{usableGaps}}<br> -->
+		<!-- {{relevantGap}}<br> -->
+		<!-- {{allowSubmit}}<br> -->
 		<!-- {{sensitivity}}<br> -->
 		<!-- {{$store.state.peaksData}}<br> -->
 		<!-- {{$store.state.peaksData.map((e) => Math.round(e * 1000) / 10)
