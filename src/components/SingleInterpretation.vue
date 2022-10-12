@@ -63,7 +63,7 @@
 						v-model="timestep"
 						type="range"
 						min="50"
-						max="10000"
+						max="2500"
 						step="50"
 					/>
 				</div>

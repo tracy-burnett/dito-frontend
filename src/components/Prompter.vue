@@ -41,6 +41,7 @@
 			style="overflow: hidden"
 			placeholder="enter new text here"
 			v-model="new_text"
+			ref="promptertextarea"
 		></textarea>
 		<div v-if="allowSubmit==true">this text will be submitted when a new prompt is generated</div>
 		<div v-else-if="allowSubmit==false">this text WILL NOT be submitted when a new prompt is generated</div>
@@ -438,9 +439,15 @@ export default {
 				) && (this.contentEndingIndex >= 5)) {
 					// console.log(this.contentEndingIndex - 5 + this.relevantGap.startTime);
 
+					// console.log("manual: " + this.manuallyDraggedEndTimeMemory*100)
+					// console.log("prompter calculated: " + (this.contentEndingIndex - 5 + this.relevantGap.startTime))
+					if (this.manuallyDraggedEndTimeMemory > 0) {
 					this.usableGaps[0].startTime =
-						Math.max(this.manuallyDraggedEndTimeMemory*100, this.contentEndingIndex - 5 + this.relevantGap.startTime); // should be in hundredths of a second
-					// console.log(this.usableGaps[0].startTime);
+						this.manuallyDraggedEndTimeMemory*100; // should be in hundredths of a second
+					// console.log("chosen: " + this.usableGaps[0].startTime);
+					this.manuallyDraggedEndTimeMemory = 0
+					}
+					else {this.usableGaps[0].startTime = this.contentEndingIndex - 5 + this.relevantGap.startTime}
 				} else if (
 					this.usableGaps[0].endTime -
 						(this.contentEndingIndex - 5 + this.relevantGap.startTime) <
@@ -525,6 +532,7 @@ export default {
 
 				// this.sensitivity=.1
 				this.allowSubmit = true;
+				this.$refs.promptertextarea.focus()
 			}
 		},
 
