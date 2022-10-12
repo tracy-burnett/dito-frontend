@@ -11,7 +11,6 @@
 <script>
 import Navbar from "@/components/Navbar.vue";
 import Header from "@/components/Header.vue";
-import CardList from "@/components/CardList.vue";
 import PublicCardList from "@/components/PublicCardList.vue";
 
 export default {
@@ -20,7 +19,6 @@ export default {
     Navbar,
     Header,
     PublicCardList,
-    CardList,
   },
 };
 </script>

@@ -132,7 +132,6 @@ export default {
       }
 
       this.instructions.lines.forEach(element => console.log(JSON.stringify(element)))
-      // console.log(JSON.stringify(this.instructions));
       
 
       fetch(

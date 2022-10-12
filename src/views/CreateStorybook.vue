@@ -138,7 +138,7 @@ export default {
 							},
 							body: JSON.stringify({
 								id: this.name.normalize('NFC'),
-								url: "coverimage.jpg",
+								url: process.env.BASE_URL,
 								title: this.title.normalize('NFC'),
 								description: this.description.normalize('NFC'),
 								// shared_with: [],
