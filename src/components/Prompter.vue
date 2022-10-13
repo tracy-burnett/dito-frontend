@@ -494,14 +494,16 @@ export default {
 						// if the gap ends at other text
 						// console.log("in if")
 						this.new_text = this.original_text.substring(
-							this.relevantGap.startCharacter + 1,
+							this.relevantGap.startCharacter,
 							this.relevantGap.endCharacter
 						);
+							// console.log(this.new_text + " -- and then some other text")
 					} else {
 						// if the gap doesn't have a concrete end, is just null
 						this.new_text = this.original_text.substring(
-							this.relevantGap.startCharacter + 1
+							this.relevantGap.startCharacter
 						);
+							// console.log(this.new_text + " -- and then no other text")
 					}
 					if (this.new_text[0] == "\n") {
 						//if there is a carriage return at the beginning of the relevant text segment and it is not the only character, then skip it
@@ -513,6 +515,7 @@ export default {
 						this.usableGaps[0].startCharacter += 2;
 					// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
 					// console.log("NEW TEXT after adjustment: " + this.new_text)
+					// console.log("after chopping the beginning: " + this.new_text)
 					}
 					if (this.new_text[this.new_text.length-1] == "\n") {
 						//if there is a carriage return at the end of the relevant text segment and it is not the only character, then roll back from it
@@ -524,6 +527,7 @@ export default {
 						this.usableGaps[0].endCharacter -= 1;
 					// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
 					// console.log("NEW TEXT after adjustment: " + this.new_text)
+					// console.log("after chopping the end: " + this.new_text)
 					}
 				} else {
 					if (this.sensitivity > 50) {
@@ -736,7 +740,7 @@ export default {
 						this.newPromptsfunc();
 						
 						// console.log(this.latest_text)
-						console.log("TROUBLESHOOTING TODAY" + JSON.stringify(this.new_associations))
+						// console.log("TROUBLESHOOTING TODAY" + JSON.stringify(this.new_associations))
 						//add in the association for the new phrase.
 						fetch(
 							process.env.VUE_APP_api_URL +
