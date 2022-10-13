@@ -674,13 +674,14 @@ export default {
 
 
 			// this.manuallyDraggedEndTimeMemory = this.$store.state.endTimePrompter
-
+			let instructionsmapped = this.instructions.lines.map((item) => item.bIndex)
+			// console.log(instructionsmapped)
 
 			if (this.spaced_by != "") {
 				this.instructions.lines.forEach(element => {
 				// console.log(element['bIndex'])
 				// console.log(element)
-					if (element['bIndex'] >= 0) {
+					if (element['bIndex'] >= 0 && element['line'] != regexwithspacedby) {
 					this.new_associations[element['bIndex']] = ((this.$store.state.startTimePrompter +
 						this.$store.state.endTimePrompter) *
 						100) /
@@ -690,12 +691,20 @@ export default {
 			}
 			else if (this.spaced_by=="") {
 				for (let l = 1; l < textLengthDifference - 1; l++) {
+					// console.log(l)
+					// console.log(this.relevantGap.startCharacter)
+					let indexofchar = instructionsmapped.indexOf(this.relevantGap.startCharacter+l)
+					// console.log(indexofchar)
+// console.log(this.instructions.lines[indexofchar])
+
+					if (this.instructions.lines[indexofchar]['line'] != "\n"){
 				this.new_associations[this.relevantGap.startCharacter + l] =   
 					((this.$store.state.startTimePrompter +
 						this.$store.state.endTimePrompter) *
 						100) /
 					2;
 			}
+}
 			}
 
 
