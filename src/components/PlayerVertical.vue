@@ -22,7 +22,7 @@
 
 		<!-- <div class="flex justify-center text-xs">{{playbackspeed}}</div> -->
 		<!-- audio player body -->
-		<div class="container rounded-xl shadow-xl">
+		<div class="container shadow-xl rounded-xl">
 			<!-- top-most time entry box (for start of view window) -->
 			<div
 				id="start"
@@ -43,7 +43,7 @@
 				@click="play"
 				class="play"
 			>
-				<div class="h-10 w-10">
+				<div class="w-10 h-10">
 					<img
 						v-if="playing"
 						src="@/assets/pauseAudio.svg"
@@ -110,7 +110,7 @@
 				class="end"
 			>
 				<button
-					class="clear rounded-full"
+					class="rounded-full clear"
 					@click="clearallregions()"
 				>
 					Clear Highlight

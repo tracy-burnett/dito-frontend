@@ -13,10 +13,12 @@
 		<!-- {{new_associations}}  -->
 		<!-- {{scribingclean}} -->
 		<!-- associations: {{associations}}<br> -->
-		<!-- {{$store.state.startTimePrompter*100}}<br>
-		{{$store.state.endTimePrompter*100}}<br> -->
-		<!-- {{usableGaps}}<br> -->
-		<!-- {{relevantGap}}<br> -->
+		<!-- {{$store.state.startTimePrompter*100}}<br> -->
+		<!-- {{manuallyDraggedEndTimeMemory}}<br>
+		{{$store.state.endTimePrompter*100}}<br>
+		{{usableGaps}}<br>
+		{{$store.state.audioDuration}}<br>
+		{{relevantGap}}<br> -->
 		<!-- {{allowSubmit}}<br> -->
 		<!-- {{sensitivity}}<br> -->
 		<!-- {{$store.state.peaksData}}<br> -->
@@ -168,6 +170,12 @@ export default {
 			} else {
 				this.allowSubmit = true;
 			}
+			if (this.$store.state.endTimePrompter * 100 < this.usableGaps[0].startTime){
+				this.usableGaps[0].startTime = this.$store.state.endTimePrompter*100
+			}
+			else if (this.$store.state.endTimePrompter * 100 > this.usableGaps[0].startTime + 5) {
+				this.usableGaps[0].startTime = this.$store.state.endTimePrompter*100 - 5
+			}
 		},
 		"$store.state.triggerNewText": function () {
 			this.verifyNewText();
@@ -292,6 +300,8 @@ export default {
 			// console.log("sensitivity " + this.sensitivity);
 			this.contentEndingIndex = 0;
 			this.contentStartingIndex = 0;
+			
+
 			// console.log(this.usableGaps[0].startTime)
 			if (
 				this.$store.state.audioDuration > 0 &&
@@ -299,8 +309,11 @@ export default {
 				parseInt(this.usableGaps[0].startTime) + 100 <
 					this.$store.state.audioDuration / 10
 			) {
+// console.log(this.usableGaps[0].startTime + "usable")
+
 				this.relevantGap.startTime = parseInt(this.usableGaps[0].startTime); // should be in hundredths of a second
 				// console.log(this.relevantGap.startTime)
+// console.log(this.relevantGap.startTime + "relevant")
 				this.relevantGap.endTime =
 					parseInt(this.usableGaps[0].startTime) +
 					parseInt(this.scribingclean) +
@@ -435,19 +448,22 @@ export default {
 				if (
 					(this.usableGaps[0].endTime -
 						(this.contentEndingIndex + this.relevantGap.startTime - 5) >=
-					this.scribingclean // FLAG TIME DECISION
+					this.scribingclean // FLAG TIME DECISION fyi when the user sets this value too low it can prevent them from annotating some parts of the audio because it ignores them because if it is sensitive enough to detect them then the gap is too big for the user to annotate based on the length of phrase that they say they prefer to annotate.
 				) && (this.contentEndingIndex >= 5)) {
 					// console.log(this.contentEndingIndex - 5 + this.relevantGap.startTime);
 
 					// console.log("manual: " + this.manuallyDraggedEndTimeMemory*100)
 					// console.log("prompter calculated: " + (this.contentEndingIndex - 5 + this.relevantGap.startTime))
-					if (this.manuallyDraggedEndTimeMemory > 0) {
-					this.usableGaps[0].startTime =
-						this.manuallyDraggedEndTimeMemory*100; // should be in hundredths of a second
-					// console.log("chosen: " + this.usableGaps[0].startTime);
-					this.manuallyDraggedEndTimeMemory = 0
-					}
-					else {this.usableGaps[0].startTime = this.contentEndingIndex - 5 + this.relevantGap.startTime}
+					// if (this.manuallyDraggedEndTimeMemory > 0) {
+					// 	console.log("yes manually dragged worked")
+					// this.usableGaps[0].startTime =
+					// 	this.manuallyDraggedEndTimeMemory*100; // should be in hundredths of a second
+					// // console.log("chosen: " + this.usableGaps[0].startTime);
+					// }
+					// else {
+						// console.log("no manually dragged did not work")
+						this.usableGaps[0].startTime = this.contentEndingIndex - 5 + this.relevantGap.startTime
+					// }
 				} else if (
 					this.usableGaps[0].endTime -
 						(this.contentEndingIndex - 5 + this.relevantGap.startTime) <
@@ -459,6 +475,7 @@ export default {
 					// console.log(this.contentStartingIndex + this.relevantGap.startTime);
 					// console.log(this.contentEndingIndex + this.relevantGap.startTime);
 					// console.log(this.usablePeaksData)
+				// this.manuallyDraggedEndTimeMemory = 0
 					this.$store.commit(
 						"updateStartTimePrompter",
 						(this.contentStartingIndex + this.relevantGap.startTime) / 100
@@ -467,6 +484,7 @@ export default {
 						"updateEndTimePrompter",
 						(this.contentEndingIndex + this.relevantGap.startTime) / 100
 					);
+					
 					this.$store.commit("forceRegionRerender");
 					// console.log("original text: " + this.original_text)
 					// console.log("original text length: " + this.original_text.length)
@@ -651,13 +669,13 @@ export default {
 
 
 
-			this.manuallyDraggedEndTimeMemory = this.$store.state.endTimePrompter
+			// this.manuallyDraggedEndTimeMemory = this.$store.state.endTimePrompter
 
 
 			if (this.spaced_by != "") {
 				this.instructions.lines.forEach(element => {
 				// console.log(element['bIndex'])
-				console.log(element)
+				// console.log(element)
 					if (element['bIndex'] >= 0) {
 					this.new_associations[element['bIndex']] = ((this.$store.state.startTimePrompter +
 						this.$store.state.endTimePrompter) *
@@ -677,7 +695,7 @@ export default {
 			}
 
 
-			// console.log("instructions: " + this.instructions);
+			// this.instructions.lines.forEach(element => console.log(element))
 
 			fetch(
 				process.env.VUE_APP_api_URL +
