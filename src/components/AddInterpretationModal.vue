@@ -1,10 +1,10 @@
 <template>
   <div
-    class="flex flex-col items-center justify-center flex-1 flex-auto h-full mt-10 overflow-hidden  backdrop"
+    class="flex flex-col items-center justify-center flex-1 flex-auto h-full mt-10 overflow-hidden backdrop"
     @click.self="closeModal()"
   >
     <div
-      class="flex flex-col items-center p-8 bg-white border border-gray-300 shadow-md  rounded-xl xl:w-2/5 lg:w-2/4 md:w-2/3"
+      class="flex flex-col items-center p-8 bg-white border border-gray-300 shadow-md rounded-xl xl:w-2/5 lg:w-2/4 md:w-2/3"
     >
     <button
         class="mx-4 my-2 text-xl text-gray-500"
@@ -53,7 +53,7 @@
         style="overflow-y: scroll"
       />
       <button
-        class="w-full px-3 py-2 mt-16 text-sm font-medium text-white transition-colors border rounded  bg-cyan-700 border-cyan-600 hover:bg-cyan-600"
+        class="w-full px-3 py-2 mt-16 text-sm font-medium text-white transition-colors border rounded bg-cyan-700 border-cyan-600 hover:bg-cyan-600"
         @click="create"
       >
         Create Interpretation
@@ -81,6 +81,9 @@ export default {
   },
   methods: {
     create() {
+
+      if (this.int_title != "" || this.int_text != "" || this.int_language != "") {
+
       fetch(
         process.env.VUE_APP_api_URL +
           "interpretations/audio/" +
@@ -113,7 +116,7 @@ export default {
         })
         .catch((error) => {
           console.error("Error:", error);
-        });
+        });}
     },
 
     closeModal() {
