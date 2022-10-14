@@ -12,7 +12,11 @@
 				v-for="character in latest_text_character_array"
 				:key="character.index"
 			>
-				<span v-if="!character.newtag">
+				<span v-if="character.value=='\n'">
+					<span
+						style="white-space: pre-wrap"
+					>{{ character.value }}</span></span>
+				<span v-else-if="!character.newtag">
 					<span
 						@click="addNewAssociation(character.index)"
 						style="white-space: pre-wrap"
@@ -108,8 +112,14 @@ export default {
 			// convert the text into an array of single characters or words
 			.then(() => {
 				
-		let regexwithspacedby = new RegExp(`${this.escapeRegex(this.spaced_by)}|\n`);
+		let regexwithspacedby = new RegExp(`${this.escapeRegex(this.spaced_by)}|(\n)`);
 				let character_array = this.latest_text.split(regexwithspacedby);
+
+				for (let j = character_array.length; j > 0; j--) {
+					if (character_array[j] === undefined || character_array[j] == "") {character_array.splice(j, 1)} // second parameter being 1 means remove 1 element only
+				}
+				console.log(character_array)
+
 				for (let i = 0; i < character_array.length; i++) {
 					let sample_object = {};
 					sample_object.index = i;
