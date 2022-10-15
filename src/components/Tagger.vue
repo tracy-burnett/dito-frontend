@@ -115,7 +115,7 @@ export default {
 		let regexwithspacedby = new RegExp(`${this.escapeRegex(this.spaced_by)}|(\n)`);
 				let character_array = this.latest_text.split(regexwithspacedby);
 
-				for (let j = character_array.length; j > 0; j--) {
+				for (let j = character_array.length; j >= 0; j--) {
 					if (character_array[j] === undefined || character_array[j] == "") {character_array.splice(j, 1)} // second parameter being 1 means remove 1 element only
 				}
 				console.log(character_array)
