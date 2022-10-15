@@ -115,12 +115,23 @@ export default {
     // edit the text when the user clicks "Save Edits"
     updateText() {
 
-      let regexwithspacedby = new RegExp(`${this.escapeRegex(this.spaced_by)}|\n`);
+      let regexwithspacedby = new RegExp(`${this.escapeRegex(this.spaced_by)}|(\n)`);
 
+let original_text_cleaned =         this.original_text.split(regexwithspacedby) // not cleaned yet, but about to be
+let latest_text_cleaned =         this.latest_text.normalize('NFC').split(regexwithspacedby) // not cleaned yet, but about to be
+
+for (let j = original_text_cleaned.length; j >= 0; j--) {
+		if (original_text_cleaned[j] === undefined || original_text_cleaned[j] == "") {original_text_cleaned.splice(j, 1)} // second parameter being 1 means remove 1 element only
+	}
+  for (let j = latest_text_cleaned.length; j >= 0; j--) {
+		if (latest_text_cleaned[j] === undefined || latest_text_cleaned[j] == "") {latest_text_cleaned.splice(j, 1)} // second parameter being 1 means remove 1 element only
+	}
+
+  console.log(original_text_cleaned)
+  console.log(latest_text_cleaned)
 
       this.instructions = this.patienceDiffPlus(
-        this.original_text.split(regexwithspacedby),
-        this.latest_text.normalize('NFC').split(regexwithspacedby)
+original_text_cleaned, latest_text_cleaned
       );
       
       for (let i = this.instructions.lines.length - 1; i >= 0; i--) {
