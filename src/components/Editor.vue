@@ -127,8 +127,8 @@ for (let j = original_text_cleaned.length; j >= 0; j--) {
 		if (latest_text_cleaned[j] === undefined || latest_text_cleaned[j] == "") {latest_text_cleaned.splice(j, 1)} // second parameter being 1 means remove 1 element only
 	}
 
-  console.log(original_text_cleaned)
-  console.log(latest_text_cleaned)
+  // console.log(original_text_cleaned)
+  // console.log(latest_text_cleaned)
 
       this.instructions = this.patienceDiffPlus(
 original_text_cleaned, latest_text_cleaned
