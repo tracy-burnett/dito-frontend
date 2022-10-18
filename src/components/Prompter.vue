@@ -17,8 +17,8 @@
 		<!-- {{manuallyDraggedEndTimeMemory}}<br>
 		{{$store.state.endTimePrompter*100}}<br>
 		{{usableGaps}}<br>
-		{{$store.state.audioDuration}}<br>
-		{{relevantGap}}<br> -->
+		{{$store.state.audioDuration}}<br> -->
+		{{relevantGap}}<br>
 		<!-- {{allowSubmit}}<br> -->
 		<!-- {{sensitivity}}<br> -->
 		<!-- {{$store.state.peaksData}}<br> -->
@@ -170,11 +170,17 @@ export default {
 			} else {
 				this.allowSubmit = true;
 			}
-			if (this.$store.state.endTimePrompter * 100 < this.usableGaps[0].startTime){
-				this.usableGaps[0].startTime = this.$store.state.endTimePrompter*100
-			}
-			else if (this.$store.state.endTimePrompter * 100 > this.usableGaps[0].startTime + 5) {
-				this.usableGaps[0].startTime = this.$store.state.endTimePrompter*100 - 5
+			if (
+				this.$store.state.endTimePrompter * 100 <
+				this.usableGaps[0].startTime
+			) {
+				this.usableGaps[0].startTime = this.$store.state.endTimePrompter * 100;
+			} else if (
+				this.$store.state.endTimePrompter * 100 >
+				this.usableGaps[0].startTime + 5
+			) {
+				this.usableGaps[0].startTime =
+					this.$store.state.endTimePrompter * 100 - 5;
 			}
 		},
 		"$store.state.triggerNewText": function () {
@@ -182,10 +188,8 @@ export default {
 		},
 	},
 	methods: {
-
-
 		escapeRegex: function (string) {
-    		return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+			return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 		},
 
 		findGaps: function () {
@@ -300,24 +304,25 @@ export default {
 			// console.log("sensitivity " + this.sensitivity);
 			this.contentEndingIndex = 0;
 			this.contentStartingIndex = 0;
-			
 
 			// console.log(this.usableGaps[0].startTime)
+
+			//if the audio player has loaded, and the gaps have been identified, and ???
 			if (
 				this.$store.state.audioDuration > 0 &&
 				this.usableGaps.length > 0 &&
 				parseInt(this.usableGaps[0].startTime) + 100 <
 					this.$store.state.audioDuration / 10
 			) {
-// console.log(this.usableGaps[0].startTime + "usable")
-
+				// console.log(this.usableGaps[0].startTime + "usable")
+				// a little gap to work with to generate this prompt
 				this.relevantGap.startTime = parseInt(this.usableGaps[0].startTime); // should be in hundredths of a second
 				// console.log(this.relevantGap.startTime)
-// console.log(this.relevantGap.startTime + "relevant")
+				// console.log(this.relevantGap.startTime + "relevant")
 				this.relevantGap.endTime =
 					parseInt(this.usableGaps[0].startTime) +
 					parseInt(this.scribingclean) +
-					100; // should be in hundredths of a second               // FLAG TIME DECISION
+					100; // should be in hundredths of a second               // FLAG ARBITRARY TIME DECISION
 				// console.log(this.relevantGap.endTime)
 				this.relevantGap.startCharacter = parseInt(
 					this.usableGaps[0].startCharacter
@@ -326,6 +331,7 @@ export default {
 					this.usableGaps[0].endCharacter
 				);
 				// this.usablePeaksData=[1 , 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0]
+				// get information about the waveform for the little gap we are currently working with and map it to 1's and 0's depending on a preset sensitivity level
 				this.usablePeaksData = this.$store.state.peaksData
 					.slice(this.relevantGap.startTime, this.relevantGap.endTime)
 					.map((e) => Math.round(e * 1000) / 10)
@@ -336,6 +342,8 @@ export default {
 							return 0;
 						}
 					});
+				
+				// find the largest set of content within the currently selected portion of audio that has a silence-ish gap on either side
 				let greenlight = false;
 				let priorvalue = null;
 				for (let i = 0; i < this.usablePeaksData.length; i++) {
@@ -445,11 +453,15 @@ export default {
 				// 		}
 				// 	});
 
+
+
+				// if there's still a lot of time left in usable portion of audio we are currently working with, like a lot meaning enough that there could be another relevant segment in it, then keep considering it... otherwise, move to the next portion
 				if (
-					(this.usableGaps[0].endTime -
+					this.usableGaps[0].endTime -
 						(this.contentEndingIndex + this.relevantGap.startTime - 5) >=
-					this.scribingclean // FLAG TIME DECISION fyi when the user sets this value too low it can prevent them from annotating some parts of the audio because it ignores them because if it is sensitive enough to detect them then the gap is too big for the user to annotate based on the length of phrase that they say they prefer to annotate.
-				) && (this.contentEndingIndex >= 5)) {
+						this.scribingclean && // FLAG TIME DECISION fyi when the user sets this value too low it can prevent them from annotating some parts of the audio because it ignores them because if it is sensitive enough to detect them then the gap is too big for the user to annotate based on the length of phrase that they say they prefer to annotate.
+					this.contentEndingIndex >= 5
+				) {
 					// console.log(this.contentEndingIndex - 5 + this.relevantGap.startTime);
 
 					// console.log("manual: " + this.manuallyDraggedEndTimeMemory*100)
@@ -461,8 +473,9 @@ export default {
 					// // console.log("chosen: " + this.usableGaps[0].startTime);
 					// }
 					// else {
-						// console.log("no manually dragged did not work")
-						this.usableGaps[0].startTime = this.contentEndingIndex - 5 + this.relevantGap.startTime
+					// console.log("no manually dragged did not work")
+					this.usableGaps[0].startTime =
+						this.contentEndingIndex - 5 + this.relevantGap.startTime;
 					// }
 				} else if (
 					this.usableGaps[0].endTime -
@@ -471,11 +484,14 @@ export default {
 				) {
 					this.usableGaps.shift();
 				}
+
+
+				//if the portion we decided to highlight is big enough, then highlight it; otherwise, play around with the sensitivity, then run this algorithm again
 				if (this.contentEndingIndex > this.contentStartingIndex + 50) {
 					// console.log(this.contentStartingIndex + this.relevantGap.startTime);
 					// console.log(this.contentEndingIndex + this.relevantGap.startTime);
 					// console.log(this.usablePeaksData)
-				// this.manuallyDraggedEndTimeMemory = 0
+					// this.manuallyDraggedEndTimeMemory = 0
 					this.$store.commit(
 						"updateStartTimePrompter",
 						(this.contentStartingIndex + this.relevantGap.startTime) / 100
@@ -484,11 +500,13 @@ export default {
 						"updateEndTimePrompter",
 						(this.contentEndingIndex + this.relevantGap.startTime) / 100
 					);
-					
+
 					this.$store.commit("forceRegionRerender");
 					// console.log("original text: " + this.original_text)
 					// console.log("original text length: " + this.original_text.length)
 					// console.log(this.relevantGap)
+
+					
 					// decide how to populate new_text (the text box) when the prompt is first generated
 					if (Number.isNaN(this.relevantGap.endCharacter) == false) {
 						// if the gap ends at other text
@@ -497,64 +515,65 @@ export default {
 							this.relevantGap.startCharacter,
 							this.relevantGap.endCharacter
 						);
-							// console.log(this.new_text + " -- and then some other text")
+						// console.log(this.new_text + " -- and then some other text")
 					} else {
 						// if the gap doesn't have a concrete end, is just null
-						this.new_text = this.original_text.substring(
-							this.relevantGap.startCharacter
-						);
-							// console.log(this.new_text + " -- and then no other text")
+
+						if (this.relevantGap.startCharacter > 0) {
+							this.new_text = this.original_text.substring(
+								this.relevantGap.startCharacter + 1
+							);
+						} else if (this.relevantGap.startCharacter == 0) {
+							this.new_text = this.original_text.substring(
+								this.relevantGap.startCharacter
+							);
+						}
+						// console.log(this.new_text + " -- and then no other text")
 					}
 					if (this.new_text[0] == "\n") {
-						//if there is a carriage return at the beginning of the relevant text segment and it is not the only character, then skip it
-					// console.log("NEW TEXT before adjustment: " + this.new_text)
-					// console.log("new text length: " + this.new_text.length)
-					// console.log("start character before adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
-						this.relevantGap.startCharacter += 2;
-						this.new_text = this.new_text.substring(2);
-						this.usableGaps[0].startCharacter += 2;
-					// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
-					// console.log("NEW TEXT after adjustment: " + this.new_text)
-					// console.log("after chopping the beginning: " + this.new_text)
+						//if there is a carriage return at the beginning of the relevant text segment, then skip it [but why skip 2?]
+						// console.log("NEW TEXT before adjustment: " + this.new_text)
+						// console.log("new text length: " + this.new_text.length)
+						// console.log("start character before adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
+						this.relevantGap.startCharacter += 1;
+						this.new_text = this.new_text.substring(1);
+						this.usableGaps[0].startCharacter += 1;
+						// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
+						// console.log("NEW TEXT after adjustment: " + this.new_text)
+						// console.log("after chopping the beginning: " + this.new_text)
 					}
-					if (this.new_text[this.new_text.length-1] == "\n") {
+					if (this.new_text[this.new_text.length - 1] == "\n") {
 						//if there is a carriage return at the end of the relevant text segment and it is not the only character, then roll back from it
-					// console.log("NEW TEXT before adjustment: " + this.new_text)
-					// console.log("new text length: " + this.new_text.length)
-					// console.log("start character before adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
+						// console.log("NEW TEXT before adjustment: " + this.new_text)
+						// console.log("new text length: " + this.new_text.length)
+						// console.log("start character before adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
 						this.relevantGap.endCharacter -= 1;
-						this.new_text = this.new_text.substring(0,this.new_text.length-2);
+						this.new_text = this.new_text.substring(
+							0,
+							this.new_text.length - 2
+						);
 						this.usableGaps[0].endCharacter -= 1;
-					// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
-					// console.log("NEW TEXT after adjustment: " + this.new_text)
-					// console.log("after chopping the end: " + this.new_text)
+						// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
+						// console.log("NEW TEXT after adjustment: " + this.new_text)
+						// console.log("after chopping the end: " + this.new_text)
 					}
 				} else {
 					if (this.sensitivity > 50) {
-
 						//dump the first few seconds because they're all silence
 
+						this.sensitivity = 0.05;
 
-
-							this.sensitivity=.05
-
-							this.newPromptsfunc()
-
-
-
-
-
-
-
+						this.newPromptsfunc();
 					} else {
-					this.sensitivity += 0.05;
-					this.newPromptsfunc();}
+						this.sensitivity += 0.05;
+						this.newPromptsfunc();
+					}
 				}
 				// console.log(this.relevantGap.startTime)
 
 				// this.sensitivity=.1
 				this.allowSubmit = true;
-				this.$refs.promptertextarea.focus()
+				this.$refs.promptertextarea.focus();
 			}
 		},
 
@@ -568,36 +587,55 @@ export default {
 		verifyNewText() {
 			// console.log("in verify new text function in prompter");
 			// decide how to populate new_text (the text box) after region is changed in audio player
-			if (Number.isNaN(this.relevantGap.endCharacter) == false) {
-				// if the gap ends at other text
-				// console.log("in if");
-				this.new_text = this.original_text.substring(
-					this.relevantGap.startCharacter + 1,
-					this.relevantGap.endCharacter
-				);
-			} else {
-				// console.log("in else"); // if the gap doesn't have a concrete end, is just null
-				this.new_text = this.original_text.substring(
-					this.relevantGap.startCharacter + 1
-				);
-			}
-			// console.log("NEW TEXT " + this.new_text);
-			if (this.new_text[0] == "\n") {
-				// console.log("in second if");
-				this.relevantGap.startCharacter += 2;
-				this.new_text = this.new_text.substring(2);
-				this.usableGaps[0].startCharacter += 2;
-			}
+					if (Number.isNaN(this.relevantGap.endCharacter) == false) {
+						// if the gap ends at other text
+						// console.log("in if")
+						this.new_text = this.original_text.substring(
+							this.relevantGap.startCharacter,
+							this.relevantGap.endCharacter
+						);
+						// console.log(this.new_text + " -- and then some other text")
+					} else {
+						// if the gap doesn't have a concrete end, is just null
 
-
-
-					if (this.new_text[this.new_text.length-1] == "\n") {
-						this.relevantGap.endCharacter -= 1;
-						this.new_text = this.new_text.substring(0,this.new_text.length-2);
-						this.usableGaps[0].endCharacter -= 1;
+						if (this.relevantGap.startCharacter > 0) {
+							this.new_text = this.original_text.substring(
+								this.relevantGap.startCharacter + 1
+							);
+						} else if (this.relevantGap.startCharacter == 0) {
+							this.new_text = this.original_text.substring(
+								this.relevantGap.startCharacter
+							);
+						}
+						// console.log(this.new_text + " -- and then no other text")
 					}
-
-
+					if (this.new_text[0] == "\n") {
+						//if there is a carriage return at the beginning of the relevant text segment, then skip it [but why skip 2?]
+						// console.log("NEW TEXT before adjustment: " + this.new_text)
+						// console.log("new text length: " + this.new_text.length)
+						// console.log("start character before adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
+						this.relevantGap.startCharacter += 1;
+						this.new_text = this.new_text.substring(1);
+						this.usableGaps[0].startCharacter += 1;
+						// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
+						// console.log("NEW TEXT after adjustment: " + this.new_text)
+						// console.log("after chopping the beginning: " + this.new_text)
+					}
+					if (this.new_text[this.new_text.length - 1] == "\n") {
+						//if there is a carriage return at the end of the relevant text segment and it is not the only character, then roll back from it
+						// console.log("NEW TEXT before adjustment: " + this.new_text)
+						// console.log("new text length: " + this.new_text.length)
+						// console.log("start character before adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
+						this.relevantGap.endCharacter -= 1;
+						this.new_text = this.new_text.substring(
+							0,
+							this.new_text.length - 2
+						);
+						this.usableGaps[0].endCharacter -= 1;
+						// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
+						// console.log("NEW TEXT after adjustment: " + this.new_text)
+						// console.log("after chopping the end: " + this.new_text)
+					}
 			// console.log(
 			// 	"NEW TEXT after editing region in audio player: " + this.new_text
 			// );
@@ -640,10 +678,10 @@ export default {
 			}
 			// console.log(this.$store.state.startTimePrompter)
 			// console.log(this.$store.state.endTimePrompter)
-			
-			let regexwithspacedby = new RegExp(`${this.escapeRegex(this.spaced_by)}|\n`);
 
-
+			let regexwithspacedby = new RegExp(
+				`${this.escapeRegex(this.spaced_by)}|\n`
+			);
 
 			// console.log("spaced by" + this.spaced_by + ".")
 			// console.log("total original text: " + this.original_text)
@@ -655,10 +693,9 @@ export default {
 			// if (latesttextclean[0]==this.spaced_by) {latesttextclean.shift}
 
 			this.instructions = this.patienceDiffPlus(
-				this.original_text.split(regexwithspacedby), this.latest_text.normalize("NFC").split(regexwithspacedby)
+				this.original_text.split(regexwithspacedby),
+				this.latest_text.normalize("NFC").split(regexwithspacedby)
 			);
-
-
 
 			// console.log("associations: " + JSON.stringify(this.new_associations));
 			for (let i = this.instructions.lines.length - 1; i >= 0; i--) {
@@ -666,49 +703,48 @@ export default {
 					this.instructions.lines[i].aIndex == this.instructions.lines[i].bIndex
 				) {
 					this.instructions.lines.splice(i, 1);
-				}	
-
+				}
 			}
 
-
-
-
 			// this.manuallyDraggedEndTimeMemory = this.$store.state.endTimePrompter
-			let instructionsmapped = this.instructions.lines.map((item) => item.bIndex)
+			let instructionsmapped = this.instructions.lines.map(
+				(item) => item.bIndex
+			);
 			// console.log(instructionsmapped)
 
 			if (this.spaced_by != "") {
-				this.instructions.lines.forEach(element => {
-				// console.log(element['bIndex'])
-				// console.log(element)
-					if (element['bIndex'] >= 0 && element['line'] != regexwithspacedby) {
-					this.new_associations[element['bIndex']] = ((this.$store.state.startTimePrompter +
-						this.$store.state.endTimePrompter) *
-						100) /
-					2;
-				}})
-
-			}
-			else if (this.spaced_by=="") {
+				this.instructions.lines.forEach((element) => {
+					// console.log(element['bIndex'])
+					// console.log(element)
+					if (element["bIndex"] >= 0 && element["line"] != regexwithspacedby) {
+						this.new_associations[element["bIndex"]] =
+							((this.$store.state.startTimePrompter +
+								this.$store.state.endTimePrompter) *
+								100) /
+							2;
+					}
+				});
+			} else if (this.spaced_by == "") {
 				for (let l = 1; l < textLengthDifference - 1; l++) {
 					// console.log(l)
 					// console.log(this.relevantGap.startCharacter)
-					let indexofchar = instructionsmapped.indexOf(this.relevantGap.startCharacter+l)
+					let indexofchar = instructionsmapped.indexOf(
+						this.relevantGap.startCharacter + l
+					);
 					// console.log(indexofchar)
-// console.log(this.instructions.lines[indexofchar])
+					// console.log(this.instructions.lines[indexofchar])
 
-					if (this.instructions.lines[indexofchar]['line'] != "\n"){
-				this.new_associations[this.relevantGap.startCharacter + l] =   
-					((this.$store.state.startTimePrompter +
-						this.$store.state.endTimePrompter) *
-						100) /
-					2;
+					if (this.instructions.lines[indexofchar]["line"] != "\n") {
+						this.new_associations[this.relevantGap.startCharacter + l] =
+							((this.$store.state.startTimePrompter +
+								this.$store.state.endTimePrompter) *
+								100) /
+							2;
+					}
+				}
 			}
-}
-			}
 
-
-			// this.instructions.lines.forEach(element => console.log(element))
+			this.instructions.lines.forEach((element) => console.log(element));
 
 			fetch(
 				process.env.VUE_APP_api_URL +
@@ -747,7 +783,7 @@ export default {
 							return;
 						}); //increase every startcharacter and endcharacter
 						this.newPromptsfunc();
-						
+
 						// console.log(this.latest_text)
 						// console.log("TROUBLESHOOTING TODAY" + JSON.stringify(this.new_associations))
 						//add in the association for the new phrase.
@@ -786,465 +822,388 @@ export default {
 			// console.log(this.original_text.length)
 		},
 
-
-		
-
-/**
- * program: "patienceDiff" algorithm implemented in javascript.
- * author: Jonathan Trent
- * version: 2.0
- *
- * use:  patienceDiff( aLines[], bLines[], diffPlusFlag )
- *
- * where:
- *      aLines[] contains the original text lines.
- *      bLines[] contains the new text lines.
- *      diffPlusFlag if true, returns additional arrays with the subset of lines that were
- *          either deleted or inserted.  These additional arrays are used by patienceDiffPlus.
- *
- * returns an object with the following properties:
- *      lines[] with properties of:
- *          line containing the line of text from aLines or bLines.
- *          aIndex referencing the index in aLines[].
- *          bIndex referencing the index in bLines[].
- *              (Note:  The line is text from either aLines or bLines, with aIndex and bIndex
- *               referencing the original index. If aIndex === -1 then the line is new from bLines,
- *               and if bIndex === -1 then the line is old from aLines.)
- *      lineCountDeleted is the number of lines from aLines[] not appearing in bLines[].
- *      lineCountInserted is the number of lines from bLines[] not appearing in aLines[].
- *      lineCountMoved is 0. (Only set when using patienceDiffPlus.)
- *
- */
-
- patienceDiff( aLines, bLines, diffPlusFlag ) {
-
-//
-// findUnique finds all unique values in arr[lo..hi], inclusive.  This
-// function is used in preparation for determining the longest common
-// subsequence.  Specifically, it first reduces the array range in question
-// to unique values.
-//
-// Returns an ordered Map, with the arr[i] value as the Map key and the
-// array index i as the Map value.
-//
-
-function findUnique( arr, lo, hi ) {
-
-	const lineMap = new Map();
-
-	for ( let i = lo; i <= hi; i ++ ) {
-
-		let line = arr[ i ];
-  
-		if ( lineMap.has( line ) ) {
-
-			lineMap.get( line ).count ++;
-			lineMap.get( line ).index = i;
-
-		} else {
-
-			lineMap.set( line, {
-				count: 1,
-				index: i
-			} );
-
-		}
-
-	}
-
-	lineMap.forEach( ( val, key, map ) => {
-
-		if ( val.count !== 1 ) {
-
-			map.delete( key );
-
-		} else {
-
-			map.set( key, val.index );
-
-		}
-
-	} );
-
-	return lineMap;
-
-}
-
-//
-// uniqueCommon finds all the unique common entries between aArray[aLo..aHi]
-// and bArray[bLo..bHi], inclusive.  This function uses findUnique to pare
-// down the aArray and bArray ranges first, before then walking the comparison
-// between the two arrays.
-//
-// Returns an ordered Map, with the Map key as the common line between aArray
-// and bArray, with the Map value as an object containing the array indexes of
-// the matching unique lines.
-//
-
-function uniqueCommon( aArray, aLo, aHi, bArray, bLo, bHi ) {
-
-	const ma = findUnique( aArray, aLo, aHi );
-	const mb = findUnique( bArray, bLo, bHi );
-
-	ma.forEach( ( val, key, map ) => {
-
-		if ( mb.has( key ) ) {
-
-			map.set( key, {
-				indexA: val,
-				indexB: mb.get( key )
-			} );
-
-		} else {
-
-			map.delete( key );
-
-		}
-
-	} );
-
-	return ma;
-
-}
-
-//
-// longestCommonSubsequence takes an ordered Map from the function uniqueCommon
-// and determines the Longest Common Subsequence (LCS).
-//
-// Returns an ordered array of objects containing the array indexes of the
-// matching lines for a LCS.
-//
-
-function longestCommonSubsequence( abMap ) {
-
-	const ja = [];
-
-	// First, walk the list creating the jagged array.
-
-	abMap.forEach( ( val, key, map ) => {
-
-		let i = 0;
-  
-		while ( ja[ i ] && ja[ i ][ ja[ i ].length - 1 ].indexB < val.indexB ) {
-
-			i ++;
-
-		}
-
-		if ( ! ja[ i ] ) {
-
-			ja[ i ] = [];
-
-		}
-
-		if ( 0 < i ) {
-
-			val.prev = ja[ i - 1 ][ ja[ i - 1 ].length - 1 ];
-
-		}
-
-		ja[ i ].push( val );
-
-	} );
-
-	// Now, pull out the longest common subsequence.
-
-	let lcs = [];
-
-	if ( 0 < ja.length ) {
-
-		let n = ja.length - 1;
-		lcs = [ ja[ n ][ ja[ n ].length - 1 ] ];
-  
-		while ( lcs[ lcs.length - 1 ].prev ) {
-
-			lcs.push( lcs[ lcs.length - 1 ].prev );
-
-		}
-
-	}
-
-	return lcs.reverse();
-
-}
-
-// "result" is the array used to accumulate the aLines that are deleted, the
-// lines that are shared between aLines and bLines, and the bLines that were
-// inserted.
-
-const result = [];
-let deleted = 0;
-let inserted = 0;
-
-// aMove and bMove will contain the lines that don't match, and will be returned
-// for possible searching of lines that moved.
-
-const aMove = [];
-const aMoveIndex = [];
-const bMove = [];
-const bMoveIndex = [];
-
-//
-// addToResult simply pushes the latest value onto the "result" array.  This
-// array captures the diff of the line, aIndex, and bIndex from the aLines
-// and bLines array.
-//
-
-function addToResult( aIndex, bIndex ) {
-
-	if ( bIndex < 0 ) {
-
-		aMove.push( aLines[ aIndex ] );
-		aMoveIndex.push( result.length );
-		deleted ++;
-
-	} else if ( aIndex < 0 ) {
-
-		bMove.push( bLines[ bIndex ] );
-		bMoveIndex.push( result.length );
-		inserted ++;
-
-	}
-
-	result.push( {
-		line: 0 <= aIndex ? aLines[ aIndex ] : bLines[ bIndex ],
-		aIndex: aIndex,
-		bIndex: bIndex,
-	} );
-
-}
-
-//
-// addSubMatch handles the lines between a pair of entries in the LCS.  Thus,
-// this function might recursively call recurseLCS to further match the lines
-// between aLines and bLines.
-//
-
-function addSubMatch( aLo, aHi, bLo, bHi ) {
-
-	// Match any lines at the beginning of aLines and bLines.
-
-	while ( aLo <= aHi && bLo <= bHi && aLines[ aLo ] === bLines[ bLo ] ) {
-
-		addToResult( aLo ++, bLo ++ );
-
-	}
-
-	// Match any lines at the end of aLines and bLines, but don't place them
-	// in the "result" array just yet, as the lines between these matches at
-	// the beginning and the end need to be analyzed first.
-
-	let aHiTemp = aHi;
-
-	while ( aLo <= aHi && bLo <= bHi && aLines[ aHi ] === bLines[ bHi ] ) {
-
-		aHi --;
-		bHi --;
-
-	}
-
-	// Now, check to determine with the remaining lines in the subsequence
-	// whether there are any unique common lines between aLines and bLines.
-	//
-	// If not, add the subsequence to the result (all aLines having been
-	// deleted, and all bLines having been inserted).
-	//
-	// If there are unique common lines between aLines and bLines, then let's
-	// recursively perform the patience diff on the subsequence.
-
-	const uniqueCommonMap = uniqueCommon( aLines, aLo, aHi, bLines, bLo, bHi );
-
-	if ( uniqueCommonMap.size === 0 ) {
-
-		while ( aLo <= aHi ) {
-
-			addToResult( aLo ++, - 1 );
-
-		}
-
-		while ( bLo <= bHi ) {
-
-			addToResult( - 1, bLo ++ );
-
-		}
-
-	} else {
-
-		recurseLCS( aLo, aHi, bLo, bHi, uniqueCommonMap );
-
-	}
-
-	// Finally, let's add the matches at the end to the result.
-
-	while ( aHi < aHiTemp ) {
-
-		addToResult( ++ aHi, ++ bHi );
-
-	}
-
-}
-
-//
-// recurseLCS finds the longest common subsequence (LCS) between the arrays
-// aLines[aLo..aHi] and bLines[bLo..bHi] inclusive.  Then for each subsequence
-// recursively performs another LCS search (via addSubMatch), until there are
-// none found, at which point the subsequence is dumped to the result.
-//
-
-function recurseLCS( aLo, aHi, bLo, bHi, uniqueCommonMap ) {
-
-	const x = longestCommonSubsequence( uniqueCommonMap || uniqueCommon( aLines, aLo, aHi, bLines, bLo, bHi ) );
-
-	if ( x.length === 0 ) {
-
-		addSubMatch( aLo, aHi, bLo, bHi );
-
-	} else {
-
-		if ( aLo < x[ 0 ].indexA || bLo < x[ 0 ].indexB ) {
-
-			addSubMatch( aLo, x[ 0 ].indexA - 1, bLo, x[ 0 ].indexB - 1 );
-
-		}
-
-		let i;
-		for ( i = 0; i < x.length - 1; i ++ ) {
-
-			addSubMatch( x[ i ].indexA, x[ i + 1 ].indexA - 1, x[ i ].indexB,	x[ i + 1 ].indexB - 1 );
-
-		}
-
-		if ( x[ i ].indexA <= aHi || x[ i ].indexB <= bHi ) {
-
-			addSubMatch( x[ i ].indexA, aHi, x[ i ].indexB, bHi );
-
-		}
-
-	}
-
-}
-
-recurseLCS( 0, aLines.length - 1, 0, bLines.length - 1 );
-
-if ( diffPlusFlag ) {
-
-	return {
-		lines: result,
-		lineCountDeleted: deleted,
-		lineCountInserted: inserted,
-		lineCountMoved: 0,
-		aMove: aMove,
-		aMoveIndex: aMoveIndex,
-		bMove: bMove,
-		bMoveIndex: bMoveIndex,
-	};
-
-}
-
-return {
-	lines: result,
-	lineCountDeleted: deleted,
-	lineCountInserted: inserted,
-	lineCountMoved: 0,
-};
-
-},
-
-/**
-* program: "patienceDiffPlus" algorithm implemented in javascript.
-* author: Jonathan Trent
-* version: 2.0
-*
-* use:  patienceDiffPlus( aLines[], bLines[] )
-*
-* where:
-*      aLines[] contains the original text lines.
-*      bLines[] contains the new text lines.
-*
-* returns an object with the following properties:
-*      lines[] with properties of:
-*          line containing the line of text from aLines or bLines.
-*          aIndex referencing the index in aLine[].
-*          bIndex referencing the index in bLines[].
-*              (Note:  The line is text from either aLines or bLines, with aIndex and bIndex
-*               referencing the original index. If aIndex === -1 then the line is new from bLines,
-*               and if bIndex === -1 then the line is old from aLines.)
-*          moved is true if the line was moved from elsewhere in aLines[] or bLines[].
-*      lineCountDeleted is the number of lines from aLines[] not appearing in bLines[].
-*      lineCountInserted is the number of lines from bLines[] not appearing in aLines[].
-*      lineCountMoved is the number of lines that moved.
-*
-*/
-
-patienceDiffPlus( aLines, bLines ) {
-
-const difference = this.patienceDiff( aLines, bLines, true );
-
-let aMoveNext = difference.aMove;
-let aMoveIndexNext = difference.aMoveIndex;
-let bMoveNext = difference.bMove;
-let bMoveIndexNext = difference.bMoveIndex;
-
-delete difference.aMove;
-delete difference.aMoveIndex;
-delete difference.bMove;
-delete difference.bMoveIndex;
-
-let lastLineCountMoved;
-
-do {
-
-	let aMove = aMoveNext;
-	let aMoveIndex = aMoveIndexNext;
-	let bMove = bMoveNext;
-	let bMoveIndex = bMoveIndexNext;
-
-	aMoveNext = [];
-	aMoveIndexNext = [];
-	bMoveNext = [];
-	bMoveIndexNext = [];
-
-	let subDiff = this.patienceDiff( aMove, bMove );
-
-	lastLineCountMoved = difference.lineCountMoved;
-
-	subDiff.lines.forEach( ( v, i ) => {
-
-		if ( 0 <= v.aIndex && 0 <= v.bIndex ) {
-
-			difference.lines[ aMoveIndex[ v.aIndex ] ].moved = true;
-			difference.lines[ bMoveIndex[ v.bIndex ] ].aIndex = aMoveIndex[ v.aIndex ];
-			difference.lines[ bMoveIndex[ v.bIndex ] ].moved = true;
-			difference.lineCountInserted --;
-			difference.lineCountDeleted --;
-			difference.lineCountMoved ++;
-
-		} else if ( v.bIndex < 0 ) {
-
-			aMoveNext.push( aMove[ v.aIndex ] );
-			aMoveIndexNext.push( aMoveIndex[ v.aIndex ] );
-
-		} else {
-
-			bMoveNext.push( bMove[ v.bIndex ] );
-			bMoveIndexNext.push( bMoveIndex[ v.bIndex ] );
-
-		}
-
-	} );
-
-} while ( 0 < difference.lineCountMoved - lastLineCountMoved );
-
-return difference;
-
-},
-
-
-
+		/**
+		 * program: "patienceDiff" algorithm implemented in javascript.
+		 * author: Jonathan Trent
+		 * version: 2.0
+		 *
+		 * use:  patienceDiff( aLines[], bLines[], diffPlusFlag )
+		 *
+		 * where:
+		 *      aLines[] contains the original text lines.
+		 *      bLines[] contains the new text lines.
+		 *      diffPlusFlag if true, returns additional arrays with the subset of lines that were
+		 *          either deleted or inserted.  These additional arrays are used by patienceDiffPlus.
+		 *
+		 * returns an object with the following properties:
+		 *      lines[] with properties of:
+		 *          line containing the line of text from aLines or bLines.
+		 *          aIndex referencing the index in aLines[].
+		 *          bIndex referencing the index in bLines[].
+		 *              (Note:  The line is text from either aLines or bLines, with aIndex and bIndex
+		 *               referencing the original index. If aIndex === -1 then the line is new from bLines,
+		 *               and if bIndex === -1 then the line is old from aLines.)
+		 *      lineCountDeleted is the number of lines from aLines[] not appearing in bLines[].
+		 *      lineCountInserted is the number of lines from bLines[] not appearing in aLines[].
+		 *      lineCountMoved is 0. (Only set when using patienceDiffPlus.)
+		 *
+		 */
+
+		patienceDiff(aLines, bLines, diffPlusFlag) {
+			//
+			// findUnique finds all unique values in arr[lo..hi], inclusive.  This
+			// function is used in preparation for determining the longest common
+			// subsequence.  Specifically, it first reduces the array range in question
+			// to unique values.
+			//
+			// Returns an ordered Map, with the arr[i] value as the Map key and the
+			// array index i as the Map value.
+			//
+
+			function findUnique(arr, lo, hi) {
+				const lineMap = new Map();
+
+				for (let i = lo; i <= hi; i++) {
+					let line = arr[i];
+
+					if (lineMap.has(line)) {
+						lineMap.get(line).count++;
+						lineMap.get(line).index = i;
+					} else {
+						lineMap.set(line, {
+							count: 1,
+							index: i,
+						});
+					}
+				}
+
+				lineMap.forEach((val, key, map) => {
+					if (val.count !== 1) {
+						map.delete(key);
+					} else {
+						map.set(key, val.index);
+					}
+				});
+
+				return lineMap;
+			}
+
+			//
+			// uniqueCommon finds all the unique common entries between aArray[aLo..aHi]
+			// and bArray[bLo..bHi], inclusive.  This function uses findUnique to pare
+			// down the aArray and bArray ranges first, before then walking the comparison
+			// between the two arrays.
+			//
+			// Returns an ordered Map, with the Map key as the common line between aArray
+			// and bArray, with the Map value as an object containing the array indexes of
+			// the matching unique lines.
+			//
+
+			function uniqueCommon(aArray, aLo, aHi, bArray, bLo, bHi) {
+				const ma = findUnique(aArray, aLo, aHi);
+				const mb = findUnique(bArray, bLo, bHi);
+
+				ma.forEach((val, key, map) => {
+					if (mb.has(key)) {
+						map.set(key, {
+							indexA: val,
+							indexB: mb.get(key),
+						});
+					} else {
+						map.delete(key);
+					}
+				});
+
+				return ma;
+			}
+
+			//
+			// longestCommonSubsequence takes an ordered Map from the function uniqueCommon
+			// and determines the Longest Common Subsequence (LCS).
+			//
+			// Returns an ordered array of objects containing the array indexes of the
+			// matching lines for a LCS.
+			//
+
+			function longestCommonSubsequence(abMap) {
+				const ja = [];
+
+				// First, walk the list creating the jagged array.
+
+				abMap.forEach((val, key, map) => {
+					let i = 0;
+
+					while (ja[i] && ja[i][ja[i].length - 1].indexB < val.indexB) {
+						i++;
+					}
+
+					if (!ja[i]) {
+						ja[i] = [];
+					}
+
+					if (0 < i) {
+						val.prev = ja[i - 1][ja[i - 1].length - 1];
+					}
+
+					ja[i].push(val);
+				});
+
+				// Now, pull out the longest common subsequence.
+
+				let lcs = [];
+
+				if (0 < ja.length) {
+					let n = ja.length - 1;
+					lcs = [ja[n][ja[n].length - 1]];
+
+					while (lcs[lcs.length - 1].prev) {
+						lcs.push(lcs[lcs.length - 1].prev);
+					}
+				}
+
+				return lcs.reverse();
+			}
+
+			// "result" is the array used to accumulate the aLines that are deleted, the
+			// lines that are shared between aLines and bLines, and the bLines that were
+			// inserted.
+
+			const result = [];
+			let deleted = 0;
+			let inserted = 0;
+
+			// aMove and bMove will contain the lines that don't match, and will be returned
+			// for possible searching of lines that moved.
+
+			const aMove = [];
+			const aMoveIndex = [];
+			const bMove = [];
+			const bMoveIndex = [];
+
+			//
+			// addToResult simply pushes the latest value onto the "result" array.  This
+			// array captures the diff of the line, aIndex, and bIndex from the aLines
+			// and bLines array.
+			//
+
+			function addToResult(aIndex, bIndex) {
+				if (bIndex < 0) {
+					aMove.push(aLines[aIndex]);
+					aMoveIndex.push(result.length);
+					deleted++;
+				} else if (aIndex < 0) {
+					bMove.push(bLines[bIndex]);
+					bMoveIndex.push(result.length);
+					inserted++;
+				}
+
+				result.push({
+					line: 0 <= aIndex ? aLines[aIndex] : bLines[bIndex],
+					aIndex: aIndex,
+					bIndex: bIndex,
+				});
+			}
+
+			//
+			// addSubMatch handles the lines between a pair of entries in the LCS.  Thus,
+			// this function might recursively call recurseLCS to further match the lines
+			// between aLines and bLines.
+			//
+
+			function addSubMatch(aLo, aHi, bLo, bHi) {
+				// Match any lines at the beginning of aLines and bLines.
+
+				while (aLo <= aHi && bLo <= bHi && aLines[aLo] === bLines[bLo]) {
+					addToResult(aLo++, bLo++);
+				}
+
+				// Match any lines at the end of aLines and bLines, but don't place them
+				// in the "result" array just yet, as the lines between these matches at
+				// the beginning and the end need to be analyzed first.
+
+				let aHiTemp = aHi;
+
+				while (aLo <= aHi && bLo <= bHi && aLines[aHi] === bLines[bHi]) {
+					aHi--;
+					bHi--;
+				}
+
+				// Now, check to determine with the remaining lines in the subsequence
+				// whether there are any unique common lines between aLines and bLines.
+				//
+				// If not, add the subsequence to the result (all aLines having been
+				// deleted, and all bLines having been inserted).
+				//
+				// If there are unique common lines between aLines and bLines, then let's
+				// recursively perform the patience diff on the subsequence.
+
+				const uniqueCommonMap = uniqueCommon(
+					aLines,
+					aLo,
+					aHi,
+					bLines,
+					bLo,
+					bHi
+				);
+
+				if (uniqueCommonMap.size === 0) {
+					while (aLo <= aHi) {
+						addToResult(aLo++, -1);
+					}
+
+					while (bLo <= bHi) {
+						addToResult(-1, bLo++);
+					}
+				} else {
+					recurseLCS(aLo, aHi, bLo, bHi, uniqueCommonMap);
+				}
+
+				// Finally, let's add the matches at the end to the result.
+
+				while (aHi < aHiTemp) {
+					addToResult(++aHi, ++bHi);
+				}
+			}
+
+			//
+			// recurseLCS finds the longest common subsequence (LCS) between the arrays
+			// aLines[aLo..aHi] and bLines[bLo..bHi] inclusive.  Then for each subsequence
+			// recursively performs another LCS search (via addSubMatch), until there are
+			// none found, at which point the subsequence is dumped to the result.
+			//
+
+			function recurseLCS(aLo, aHi, bLo, bHi, uniqueCommonMap) {
+				const x = longestCommonSubsequence(
+					uniqueCommonMap || uniqueCommon(aLines, aLo, aHi, bLines, bLo, bHi)
+				);
+
+				if (x.length === 0) {
+					addSubMatch(aLo, aHi, bLo, bHi);
+				} else {
+					if (aLo < x[0].indexA || bLo < x[0].indexB) {
+						addSubMatch(aLo, x[0].indexA - 1, bLo, x[0].indexB - 1);
+					}
+
+					let i;
+					for (i = 0; i < x.length - 1; i++) {
+						addSubMatch(
+							x[i].indexA,
+							x[i + 1].indexA - 1,
+							x[i].indexB,
+							x[i + 1].indexB - 1
+						);
+					}
+
+					if (x[i].indexA <= aHi || x[i].indexB <= bHi) {
+						addSubMatch(x[i].indexA, aHi, x[i].indexB, bHi);
+					}
+				}
+			}
+
+			recurseLCS(0, aLines.length - 1, 0, bLines.length - 1);
+
+			if (diffPlusFlag) {
+				return {
+					lines: result,
+					lineCountDeleted: deleted,
+					lineCountInserted: inserted,
+					lineCountMoved: 0,
+					aMove: aMove,
+					aMoveIndex: aMoveIndex,
+					bMove: bMove,
+					bMoveIndex: bMoveIndex,
+				};
+			}
+
+			return {
+				lines: result,
+				lineCountDeleted: deleted,
+				lineCountInserted: inserted,
+				lineCountMoved: 0,
+			};
+		},
+
+		/**
+		 * program: "patienceDiffPlus" algorithm implemented in javascript.
+		 * author: Jonathan Trent
+		 * version: 2.0
+		 *
+		 * use:  patienceDiffPlus( aLines[], bLines[] )
+		 *
+		 * where:
+		 *      aLines[] contains the original text lines.
+		 *      bLines[] contains the new text lines.
+		 *
+		 * returns an object with the following properties:
+		 *      lines[] with properties of:
+		 *          line containing the line of text from aLines or bLines.
+		 *          aIndex referencing the index in aLine[].
+		 *          bIndex referencing the index in bLines[].
+		 *              (Note:  The line is text from either aLines or bLines, with aIndex and bIndex
+		 *               referencing the original index. If aIndex === -1 then the line is new from bLines,
+		 *               and if bIndex === -1 then the line is old from aLines.)
+		 *          moved is true if the line was moved from elsewhere in aLines[] or bLines[].
+		 *      lineCountDeleted is the number of lines from aLines[] not appearing in bLines[].
+		 *      lineCountInserted is the number of lines from bLines[] not appearing in aLines[].
+		 *      lineCountMoved is the number of lines that moved.
+		 *
+		 */
+
+		patienceDiffPlus(aLines, bLines) {
+			const difference = this.patienceDiff(aLines, bLines, true);
+
+			let aMoveNext = difference.aMove;
+			let aMoveIndexNext = difference.aMoveIndex;
+			let bMoveNext = difference.bMove;
+			let bMoveIndexNext = difference.bMoveIndex;
+
+			delete difference.aMove;
+			delete difference.aMoveIndex;
+			delete difference.bMove;
+			delete difference.bMoveIndex;
+
+			let lastLineCountMoved;
+
+			do {
+				let aMove = aMoveNext;
+				let aMoveIndex = aMoveIndexNext;
+				let bMove = bMoveNext;
+				let bMoveIndex = bMoveIndexNext;
+
+				aMoveNext = [];
+				aMoveIndexNext = [];
+				bMoveNext = [];
+				bMoveIndexNext = [];
+
+				let subDiff = this.patienceDiff(aMove, bMove);
+
+				lastLineCountMoved = difference.lineCountMoved;
+
+				subDiff.lines.forEach((v, i) => {
+					if (0 <= v.aIndex && 0 <= v.bIndex) {
+						difference.lines[aMoveIndex[v.aIndex]].moved = true;
+						difference.lines[bMoveIndex[v.bIndex]].aIndex =
+							aMoveIndex[v.aIndex];
+						difference.lines[bMoveIndex[v.bIndex]].moved = true;
+						difference.lineCountInserted--;
+						difference.lineCountDeleted--;
+						difference.lineCountMoved++;
+					} else if (v.bIndex < 0) {
+						aMoveNext.push(aMove[v.aIndex]);
+						aMoveIndexNext.push(aMoveIndex[v.aIndex]);
+					} else {
+						bMoveNext.push(bMove[v.bIndex]);
+						bMoveIndexNext.push(bMoveIndex[v.bIndex]);
+					}
+				});
+			} while (0 < difference.lineCountMoved - lastLineCountMoved);
+
+			return difference;
+		},
 	},
 
 	unmounted() {
-		this.$store.commit("removePrompterID")
+		this.$store.commit("removePrompterID");
 	},
 
 	mounted() {
