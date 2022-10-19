@@ -136,7 +136,7 @@ export default {
 				return split_text
 			} else if (this.spaced_by.length == 0) {
 				let strung_together = split_text.join("");
-				console.log(strung_together);
+				// console.log(strung_together);
 				return strung_together;
 			}
 		},
@@ -223,20 +223,19 @@ export default {
 			// if (
 			// 	this.$store.state.endTimePrompter * 100 <
 			// 	this.usableGaps[0].startTime
-			// ) {console.log("this is the thing changing starttime erroneously")
+			// ) {
 			// 	this.usableGaps[0].startTime = this.$store.state.endTimePrompter * 100;
 			// } else
 			if (
 				this.$store.state.endTimePrompter * 100 >
 				this.usableGaps[0].startTime + 5
 			) {
-				console.log("this is the other thing changing starttime erroneously");
 				this.usableGaps[0].startTime =
 					this.$store.state.endTimePrompter * 100 - 5;
 			}
 		},
 		"$store.state.triggerNewText": function () {
-			console.log("new text triggered");
+			// console.log("new text triggered");
 			this.new_text = "";
 		},
 	},
@@ -356,7 +355,7 @@ export default {
 							// 	element.endCharacter == null)
 						) {
 							// console.log("in first if")
-							console.log(element.endTime - element.startTime);
+							// console.log(element.endTime - element.startTime);
 							this.usableGaps.push(element);
 						}
 					});
@@ -551,10 +550,10 @@ export default {
 					// console.log("manual: " + this.manuallyDraggedEndTimeMemory*100)
 					// console.log("prompter calculated: " + (this.contentEndingIndex - 5 + this.relevantGap.startTime))
 					// if (this.manuallyDraggedEndTimeMemory > 0) {
-					console.log(
-						"changing start time to the end of current gap: " +
-							this.usableGaps[0].startTime
-					);
+					// console.log(
+					// 	"changing start time to the end of current gap: " +
+					// 		this.usableGaps[0].startTime
+					// );
 					// this.usableGaps[0].startTime =
 					// 	this.manuallyDraggedEndTimeMemory*100; // should be in hundredths of a second
 					// // console.log("chosen: " + this.usableGaps[0].startTime);
@@ -564,22 +563,22 @@ export default {
 					this.usableGaps[0].startTime =
 						this.contentEndingIndex - 5 + this.relevantGap.startTime;
 					// }
-					console.log(
-						"changing start time to the end of current gap: " +
-							this.usableGaps[0].startTime
-					);
+					// console.log(
+					// 	"changing start time to the end of current gap: " +
+					// 		this.usableGaps[0].startTime
+					// );
 				} else if (
 					this.usableGaps[0].endTime -
 						(this.contentEndingIndex - 5 + this.relevantGap.startTime) <
 					this.scribingclean // FLAG TIME DECISION
 				) {
-					console.log(
-						this.usableGaps[0].endTime -
-							(this.contentEndingIndex - 5 + this.relevantGap.startTime) +
-							" is less than " +
-							this.scribingclean
-					);
-					console.log("moving to next gap");
+					// console.log(
+					// 	this.usableGaps[0].endTime -
+					// 		(this.contentEndingIndex - 5 + this.relevantGap.startTime) +
+					// 		" is less than " +
+					// 		this.scribingclean
+					// );
+					// console.log("moving to next gap");
 					this.usableGaps.shift();
 				}
 
@@ -754,19 +753,19 @@ export default {
 					this.original_text[this.relevantGap.endCharacter - 2] == "\n" &&
 					this.original_text[this.relevantGap.endCharacter - 1] == "\n"
 				) {
-					console.log("following two carriage returns; no need to add one")
+					// console.log("following two carriage returns; no need to add one")
 					temp_latesttext = temp_latesttext + this.new_text;
 				} else if (
 					this.original_text[this.relevantGap.endCharacter - 2] != "\n" &&
 					this.original_text[this.relevantGap.endCharacter - 1] == "\n"
 				) {
-					console.log("following a single carriage return; need to add one")
+					// console.log("following a single carriage return; need to add one")
 					temp_latesttext = temp_latesttext + "\n" + this.new_text;
 				} else if (
 					this.original_text[this.relevantGap.endCharacter - 2] != "\n" &&
 					this.original_text[this.relevantGap.endCharacter - 1] != "\n"
 				) {
-					console.log("following no carriage returns; need to add two")
+					// console.log("following no carriage returns; need to add two")
 					temp_latesttext = temp_latesttext + "\n" + "\n" + this.new_text;
 				}
 
@@ -774,7 +773,7 @@ export default {
 					this.original_text[this.relevantGap.endCharacter] == "\n" &&
 					this.original_text[this.relevantGap.endCharacter + 1] == "\n"
 				) {
-					console.log("precedeing two carriage returns; no need to add any")
+					// console.log("precedeing two carriage returns; no need to add any")
 					temp_latesttext =
 						temp_latesttext +
 						this.original_text.substring(this.relevantGap.endCharacter);
@@ -783,7 +782,7 @@ export default {
 					this.original_text[this.relevantGap.endCharacter] == "\n" &&
 					this.original_text[this.relevantGap.endCharacter + 1] != "\n"
 				) {
-					console.log("preceding one carriage return; need to add one")
+					// console.log("preceding one carriage return; need to add one")
 					temp_latesttext =
 						temp_latesttext + "\n" +
 						this.original_text.substring(this.relevantGap.endCharacter);
@@ -792,7 +791,7 @@ export default {
 					this.original_text[this.relevantGap.endCharacter] != "\n" &&
 					this.original_text[this.relevantGap.endCharacter + 1] != "\n"
 				) {
-					console.log("preceding no carriage returns; need to add two")
+					// console.log("preceding no carriage returns; need to add two")
 					temp_latesttext =
 						temp_latesttext + "\n" + "\n" +
 						this.original_text.substring(this.relevantGap.endCharacter);
@@ -958,15 +957,15 @@ export default {
 			} else if (this.spaced_by == "") {
 				//if gap ends in other text
 				if (Number.isNaN(this.relevantGap.endCharacter) == false) {
-					console.log("gold");
+					// console.log("gold");
 					for (let l = 0; l < textLengthDifference - 1; l++) {
-						console.log(l);
-						console.log(this.relevantGap.endCharacter + l);
+						// console.log(l);
+						// console.log(this.relevantGap.endCharacter + l);
 						let indexofchar = instructionsmapped.indexOf(
 							this.relevantGap.endCharacter + l
 						);
 						// console.log(indexofchar)
-						console.log(this.instructions.lines[indexofchar]);
+						// console.log(this.instructions.lines[indexofchar]);
 
 						if (this.instructions.lines[indexofchar]["line"] != "\n") {
 							this.new_associations[this.relevantGap.endCharacter + l] =
@@ -980,15 +979,15 @@ export default {
 
 				// if no text following the "gap"
 				else if (Number.isNaN(this.relevantGap.endCharacter) == true) {
-					console.log("silver");
+					// console.log("silver");
 					for (let l = 1; l < textLengthDifference; l++) {
-						console.log(l);
-						console.log(this.original_text.length - 1 + l);
+						// console.log(l);
+						// console.log(this.original_text.length - 1 + l);
 						let indexofchar = instructionsmapped.indexOf(
 							this.original_text.length - 1 + l
 						);
 						// console.log(indexofchar)
-						console.log(this.instructions.lines[indexofchar]);
+						// console.log(this.instructions.lines[indexofchar]);
 
 						if (this.instructions.lines[indexofchar]["line"] != "\n") {
 							this.new_associations[this.original_text.length - 1 + l] =
@@ -1040,9 +1039,9 @@ export default {
 						this.newPromptsfunc();
 
 						// console.log(this.latest_text)
-						console.log(
-							"TROUBLESHOOTING TODAY" + JSON.stringify(this.new_associations)
-						);
+						// console.log(
+						// 	"TROUBLESHOOTING TODAY" + JSON.stringify(this.new_associations)
+						// );
 						//add in the association for the new phrase.
 						fetch(
 							process.env.VUE_APP_api_URL +
@@ -1072,11 +1071,11 @@ export default {
 					return;
 				})
 				.catch((error) => console.error("Error:", error));
-			console.log("original text: " + this.original_text);
-			console.log(this.original_text.length);
+			// console.log("original text: " + this.original_text);
+			// console.log(this.original_text.length);
 			this.original_text = this.latest_text;
-			console.log("original text: " + this.original_text);
-			console.log(this.original_text.length);
+			// console.log("original text: " + this.original_text);
+			// console.log(this.original_text.length);
 		},
 
 		/**
