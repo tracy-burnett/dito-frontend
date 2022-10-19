@@ -12,13 +12,16 @@
 -->
 		<!-- {{new_associations}}  -->
 		<!-- {{scribingclean}} -->
-		<!-- associations: {{associations}}<br> -->
+		<!-- associations: {{associations}}<br>
+		association gaps: {{associationGaps}}<br> -->
 		<!-- {{$store.state.startTimePrompter*100}}<br> -->
-		<!-- {{manuallyDraggedEndTimeMemory}}<br>
-		{{$store.state.endTimePrompter*100}}<br>
-		{{usableGaps}}<br>
-		{{$store.state.audioDuration}}<br> -->
-		{{relevantGap}}<br>
+		<!-- {{manuallyDraggedEndTimeMemory}}<br> -->
+		<!-- {{$store.state.endTimePrompter*100}}<br> -->
+		<!-- {{usableGaps}}<br> -->
+		<!-- {{$store.state.audioDuration}}<br> -->
+		<!-- {{relevantGap}}<br> -->
+		<!-- {{original_text}}<br> -->
+		<!-- {{original_text_cleaned}} -->
 		<!-- {{allowSubmit}}<br> -->
 		<!-- {{sensitivity}}<br> -->
 		<!-- {{$store.state.peaksData}}<br> -->
@@ -91,6 +94,53 @@ export default {
 				return this.scribing;
 			}
 		},
+
+		regexwithspacedby() {
+			return new RegExp(`${this.escapeRegex(this.spaced_by)}|(\n)`);
+		},
+
+		original_text_cleaned() {
+			// console.log(this.original_text);
+			let split_text = this.original_text.split(this.regexwithspacedby);
+			// console.log(split_text);
+			// console.log(split_text.length + "length");
+
+			for (let j = split_text.length; j >= 0; j--) {
+				// console.log("hit");
+				if (split_text[j] === undefined || split_text[j] == "") {
+					split_text.splice(j, 1);
+				} // second parameter being 1 means remove 1 element only
+			}
+
+			if (this.spaced_by.length > 0) {
+				return split_text
+			} else if (this.spaced_by.length == 0) {
+				let strung_together = split_text.join("");
+				// console.log(strung_together);
+				return strung_together;
+			}
+		},
+
+		latest_text_cleaned() {
+			let split_text = this.latest_text
+				.normalize("NFC")
+				.split(this.regexwithspacedby);
+
+			for (let j = split_text.length; j >= 0; j--) {
+				if (split_text[j] === undefined || split_text[j] == "") {
+					split_text.splice(j, 1);
+				} // second parameter being 1 means remove 1 element only
+			}
+
+			if (this.spaced_by.length > 0) {
+				return split_text
+			} else if (this.spaced_by.length == 0) {
+				let strung_together = split_text.join("");
+				// console.log(strung_together);
+				return strung_together;
+			}
+		},
+
 		numbernewlines() {
 			return this.latest_text.split(/\r\n|\r|\n/).length;
 		},
@@ -170,12 +220,13 @@ export default {
 			} else {
 				this.allowSubmit = true;
 			}
+			// if (
+			// 	this.$store.state.endTimePrompter * 100 <
+			// 	this.usableGaps[0].startTime
+			// ) {
+			// 	this.usableGaps[0].startTime = this.$store.state.endTimePrompter * 100;
+			// } else
 			if (
-				this.$store.state.endTimePrompter * 100 <
-				this.usableGaps[0].startTime
-			) {
-				this.usableGaps[0].startTime = this.$store.state.endTimePrompter * 100;
-			} else if (
 				this.$store.state.endTimePrompter * 100 >
 				this.usableGaps[0].startTime + 5
 			) {
@@ -184,7 +235,8 @@ export default {
 			}
 		},
 		"$store.state.triggerNewText": function () {
-			this.verifyNewText();
+			// console.log("new text triggered");
+			this.new_text = "";
 		},
 	},
 	methods: {
@@ -198,11 +250,37 @@ export default {
 				// console.log("inside first if")
 				this.associationGaps.length = 0;
 				if (Object.keys(this.associations).length > 0) {
+					//start
+					let startTime = 0;
+					let endTime = Object.keys(this.associations)[0].split("-")[0];
+
+					let intervalsCount = Object.values(this.associations)[0].length;
+
+					//all character intervals to be highlighted
+					let endCharacterArray = [];
+					for (let j = 0; j < intervalsCount; j++) {
+						//get largest character number from association i to be the startChar for the gap
+						endCharacterArray.push(
+							Object.values(this.associations)[0][j].split("-")[0]
+						);
+					}
+					let endCharacter = endCharacterArray.reduce(function (a, b) {
+						return Math.min(a, b);
+					}, Infinity);
+
+					let associationsObject = {};
+					associationsObject.startTime = startTime;
+					associationsObject.endTime = endTime;
+
+					associationsObject.startCharacter = 0;
+					associationsObject.endCharacter = endCharacter;
+					this.associationGaps.push(associationsObject);
+
 					//all bounded gaps
 					for (let i = 0; i < Object.keys(this.associations).length - 1; i++) {
-						let startTime = Object.keys(this.associations)[i].split("-")[1];
-						let endTime = Object.keys(this.associations)[i + 1].split("-")[0];
-						let intervalsCount = Object.values(this.associations)[i].length;
+						startTime = Object.keys(this.associations)[i].split("-")[1];
+						endTime = Object.keys(this.associations)[i + 1].split("-")[0];
+						intervalsCount = Object.values(this.associations)[i].length;
 
 						//all character intervals to be highlighted
 						let startCharacterArray = [];
@@ -216,7 +294,7 @@ export default {
 							return Math.max(a, b);
 						}, -Infinity);
 
-						let endCharacterArray = [];
+						endCharacterArray = [];
 						for (let j = 0; j < intervalsCount; j++) {
 							//get smallest character number from association i+1 to be the endChar for the gap
 							endCharacterArray.push(
@@ -224,11 +302,11 @@ export default {
 							);
 						}
 						// console.log(endCharacterArray);
-						let endCharacter = endCharacterArray.reduce(function (a, b) {
+						endCharacter = endCharacterArray.reduce(function (a, b) {
 							return Math.min(a, b);
 						}, Infinity);
 
-						let associationsObject = {};
+						associationsObject = {};
 						associationsObject.startTime = startTime;
 						associationsObject.endTime = endTime;
 						associationsObject.startCharacter = startCharacter;
@@ -238,12 +316,12 @@ export default {
 					}
 
 					//final
-					let startTime = Object.keys(this.associations)[
+					startTime = Object.keys(this.associations)[
 						Object.keys(this.associations).length - 1
 					].split("-")[1];
-					let endTime = this.$store.state.audioDuration;
+					endTime = this.$store.state.audioDuration;
 
-					let intervalsCount = Object.values(this.associations)[
+					intervalsCount = Object.values(this.associations)[
 						Object.keys(this.associations).length - 1
 					].length;
 
@@ -261,7 +339,7 @@ export default {
 						return Math.max(a, b);
 					}, -Infinity);
 
-					let associationsObject = {};
+					associationsObject = {};
 					associationsObject.startTime = startTime;
 					associationsObject.endTime = endTime;
 
@@ -271,10 +349,13 @@ export default {
 
 					this.associationGaps.forEach((element) => {
 						if (
-							element.endTime - element.startTime > 200 && // FLAG TIME DECISION
-							(element.startCharacter == element.endCharacter ||
-								element.endCharacter == null)
+							element.endTime - element.startTime >
+							200 // FLAG TIME DECISION
+							// && (element.startCharacter == element.endCharacter ||
+							// 	element.endCharacter == null)
 						) {
+							// console.log("in first if")
+							// console.log(element.endTime - element.startTime);
 							this.usableGaps.push(element);
 						}
 					});
@@ -301,6 +382,7 @@ export default {
 		},
 
 		newPromptsfunc() {
+			this.new_text = "";
 			// console.log("sensitivity " + this.sensitivity);
 			this.contentEndingIndex = 0;
 			this.contentStartingIndex = 0;
@@ -310,19 +392,22 @@ export default {
 			//if the audio player has loaded, and the gaps have been identified, and ???
 			if (
 				this.$store.state.audioDuration > 0 &&
-				this.usableGaps.length > 0 &&
-				parseInt(this.usableGaps[0].startTime) + 100 <
-					this.$store.state.audioDuration / 10
+				this.usableGaps.length > 0
+				// &&
+				// parseInt(this.usableGaps[0].startTime) + 100 <
+				// 	this.$store.state.audioDuration / 10
 			) {
 				// console.log(this.usableGaps[0].startTime + "usable")
 				// a little gap to work with to generate this prompt
 				this.relevantGap.startTime = parseInt(this.usableGaps[0].startTime); // should be in hundredths of a second
 				// console.log(this.relevantGap.startTime)
 				// console.log(this.relevantGap.startTime + "relevant")
-				this.relevantGap.endTime =
+				this.relevantGap.endTime = Math.min(
 					parseInt(this.usableGaps[0].startTime) +
-					parseInt(this.scribingclean) +
-					100; // should be in hundredths of a second               // FLAG ARBITRARY TIME DECISION
+						parseInt(this.scribingclean) +
+						100,
+					parseInt(this.usableGaps[0].endTime)
+				); // should be in hundredths of a second               // FLAG ARBITRARY TIME DECISION
 				// console.log(this.relevantGap.endTime)
 				this.relevantGap.startCharacter = parseInt(
 					this.usableGaps[0].startCharacter
@@ -342,7 +427,7 @@ export default {
 							return 0;
 						}
 					});
-				
+
 				// find the largest set of content within the currently selected portion of audio that has a silence-ish gap on either side
 				let greenlight = false;
 				let priorvalue = null;
@@ -453,8 +538,6 @@ export default {
 				// 		}
 				// 	});
 
-
-
 				// if there's still a lot of time left in usable portion of audio we are currently working with, like a lot meaning enough that there could be another relevant segment in it, then keep considering it... otherwise, move to the next portion
 				if (
 					this.usableGaps[0].endTime -
@@ -467,7 +550,10 @@ export default {
 					// console.log("manual: " + this.manuallyDraggedEndTimeMemory*100)
 					// console.log("prompter calculated: " + (this.contentEndingIndex - 5 + this.relevantGap.startTime))
 					// if (this.manuallyDraggedEndTimeMemory > 0) {
-					// 	console.log("yes manually dragged worked")
+					// console.log(
+					// 	"changing start time to the end of current gap: " +
+					// 		this.usableGaps[0].startTime
+					// );
 					// this.usableGaps[0].startTime =
 					// 	this.manuallyDraggedEndTimeMemory*100; // should be in hundredths of a second
 					// // console.log("chosen: " + this.usableGaps[0].startTime);
@@ -477,14 +563,24 @@ export default {
 					this.usableGaps[0].startTime =
 						this.contentEndingIndex - 5 + this.relevantGap.startTime;
 					// }
+					// console.log(
+					// 	"changing start time to the end of current gap: " +
+					// 		this.usableGaps[0].startTime
+					// );
 				} else if (
 					this.usableGaps[0].endTime -
 						(this.contentEndingIndex - 5 + this.relevantGap.startTime) <
 					this.scribingclean // FLAG TIME DECISION
 				) {
+					// console.log(
+					// 	this.usableGaps[0].endTime -
+					// 		(this.contentEndingIndex - 5 + this.relevantGap.startTime) +
+					// 		" is less than " +
+					// 		this.scribingclean
+					// );
+					// console.log("moving to next gap");
 					this.usableGaps.shift();
 				}
-
 
 				//if the portion we decided to highlight is big enough, then highlight it; otherwise, play around with the sensitivity, then run this algorithm again
 				if (this.contentEndingIndex > this.contentStartingIndex + 50) {
@@ -506,57 +602,56 @@ export default {
 					// console.log("original text length: " + this.original_text.length)
 					// console.log(this.relevantGap)
 
-					
 					// decide how to populate new_text (the text box) when the prompt is first generated
-					if (Number.isNaN(this.relevantGap.endCharacter) == false) {
-						// if the gap ends at other text
-						// console.log("in if")
-						this.new_text = this.original_text.substring(
-							this.relevantGap.startCharacter,
-							this.relevantGap.endCharacter
-						);
-						// console.log(this.new_text + " -- and then some other text")
-					} else {
-						// if the gap doesn't have a concrete end, is just null
+					// if (Number.isNaN(this.relevantGap.endCharacter) == false) {
+					// 	// if the gap ends at other text
+					// 	// console.log("in if")
+					// 	this.new_text = this.original_text.substring(
+					// 		this.relevantGap.startCharacter,
+					// 		this.relevantGap.endCharacter
+					// 	);
+					// 	// console.log(this.new_text + " -- and then some other text")
+					// } else {
+					// 	// if the gap doesn't have a concrete end, is just null
 
-						if (this.relevantGap.startCharacter > 0) {
-							this.new_text = this.original_text.substring(
-								this.relevantGap.startCharacter + 1
-							);
-						} else if (this.relevantGap.startCharacter == 0) {
-							this.new_text = this.original_text.substring(
-								this.relevantGap.startCharacter
-							);
-						}
-						// console.log(this.new_text + " -- and then no other text")
-					}
-					if (this.new_text[0] == "\n") {
-						//if there is a carriage return at the beginning of the relevant text segment, then skip it [but why skip 2?]
-						// console.log("NEW TEXT before adjustment: " + this.new_text)
-						// console.log("new text length: " + this.new_text.length)
-						// console.log("start character before adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
-						this.relevantGap.startCharacter += 1;
-						this.new_text = this.new_text.substring(1);
-						this.usableGaps[0].startCharacter += 1;
-						// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
-						// console.log("NEW TEXT after adjustment: " + this.new_text)
-						// console.log("after chopping the beginning: " + this.new_text)
-					}
-					if (this.new_text[this.new_text.length - 1] == "\n") {
-						//if there is a carriage return at the end of the relevant text segment and it is not the only character, then roll back from it
-						// console.log("NEW TEXT before adjustment: " + this.new_text)
-						// console.log("new text length: " + this.new_text.length)
-						// console.log("start character before adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
-						this.relevantGap.endCharacter -= 1;
-						this.new_text = this.new_text.substring(
-							0,
-							this.new_text.length - 2
-						);
-						this.usableGaps[0].endCharacter -= 1;
-						// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
-						// console.log("NEW TEXT after adjustment: " + this.new_text)
-						// console.log("after chopping the end: " + this.new_text)
-					}
+					// 	if (this.relevantGap.startCharacter > 0) {
+					// 		this.new_text = this.original_text.substring(
+					// 			this.relevantGap.startCharacter + 1
+					// 		);
+					// 	} else if (this.relevantGap.startCharacter == 0) {
+					// 		this.new_text = this.original_text.substring(
+					// 			this.relevantGap.startCharacter
+					// 		);
+					// 	}
+					// 	// console.log(this.new_text + " -- and then no other text")
+					// }
+					// if (this.new_text[0] == "\n") {
+					// 	//if there is a carriage return at the beginning of the relevant text segment, then skip it [but why skip 2?]
+					// 	// console.log("NEW TEXT before adjustment: " + this.new_text)
+					// 	// console.log("new text length: " + this.new_text.length)
+					// 	// console.log("start character before adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
+					// 	this.relevantGap.startCharacter += 1;
+					// 	this.new_text = this.new_text.substring(1);
+					// 	this.usableGaps[0].startCharacter += 1;
+					// 	// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
+					// 	// console.log("NEW TEXT after adjustment: " + this.new_text)
+					// 	// console.log("after chopping the beginning: " + this.new_text)
+					// }
+					// if (this.new_text[this.new_text.length - 1] == "\n") {
+					// 	//if there is a carriage return at the end of the relevant text segment and it is not the only character, then roll back from it
+					// 	// console.log("NEW TEXT before adjustment: " + this.new_text)
+					// 	// console.log("new text length: " + this.new_text.length)
+					// 	// console.log("start character before adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
+					// 	this.relevantGap.endCharacter -= 1;
+					// 	this.new_text = this.new_text.substring(
+					// 		0,
+					// 		this.new_text.length - 2
+					// 	);
+					// 	this.usableGaps[0].endCharacter -= 1;
+					// 	// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
+					// 	// console.log("NEW TEXT after adjustment: " + this.new_text)
+					// 	// console.log("after chopping the end: " + this.new_text)
+					// }
 				} else {
 					if (this.sensitivity > 50) {
 						//dump the first few seconds because they're all silence
@@ -584,62 +679,59 @@ export default {
 			return date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
 		},
 
-		verifyNewText() {
-			// console.log("in verify new text function in prompter");
-			// decide how to populate new_text (the text box) after region is changed in audio player
-					if (Number.isNaN(this.relevantGap.endCharacter) == false) {
-						// if the gap ends at other text
-						// console.log("in if")
-						this.new_text = this.original_text.substring(
-							this.relevantGap.startCharacter,
-							this.relevantGap.endCharacter
-						);
-						// console.log(this.new_text + " -- and then some other text")
-					} else {
-						// if the gap doesn't have a concrete end, is just null
+		// verifyNewText() {
+		// 	// console.log("in verify new text function in prompter");
+		// 	// decide how to populate new_text (the text box) after region is changed in audio player
+		// 	if (Number.isNaN(this.relevantGap.endCharacter) == false) {
+		// 		// if the gap ends at other text
+		// 		// console.log("in if")
+		// 		this.new_text = this.original_text.substring(
+		// 			this.relevantGap.startCharacter,
+		// 			this.relevantGap.endCharacter
+		// 		);
+		// 		// console.log(this.new_text + " -- and then some other text")
+		// 	} else {
+		// 		// if the gap doesn't have a concrete end, is just null
 
-						if (this.relevantGap.startCharacter > 0) {
-							this.new_text = this.original_text.substring(
-								this.relevantGap.startCharacter + 1
-							);
-						} else if (this.relevantGap.startCharacter == 0) {
-							this.new_text = this.original_text.substring(
-								this.relevantGap.startCharacter
-							);
-						}
-						// console.log(this.new_text + " -- and then no other text")
-					}
-					if (this.new_text[0] == "\n") {
-						//if there is a carriage return at the beginning of the relevant text segment, then skip it [but why skip 2?]
-						// console.log("NEW TEXT before adjustment: " + this.new_text)
-						// console.log("new text length: " + this.new_text.length)
-						// console.log("start character before adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
-						this.relevantGap.startCharacter += 1;
-						this.new_text = this.new_text.substring(1);
-						this.usableGaps[0].startCharacter += 1;
-						// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
-						// console.log("NEW TEXT after adjustment: " + this.new_text)
-						// console.log("after chopping the beginning: " + this.new_text)
-					}
-					if (this.new_text[this.new_text.length - 1] == "\n") {
-						//if there is a carriage return at the end of the relevant text segment and it is not the only character, then roll back from it
-						// console.log("NEW TEXT before adjustment: " + this.new_text)
-						// console.log("new text length: " + this.new_text.length)
-						// console.log("start character before adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
-						this.relevantGap.endCharacter -= 1;
-						this.new_text = this.new_text.substring(
-							0,
-							this.new_text.length - 2
-						);
-						this.usableGaps[0].endCharacter -= 1;
-						// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
-						// console.log("NEW TEXT after adjustment: " + this.new_text)
-						// console.log("after chopping the end: " + this.new_text)
-					}
-			// console.log(
-			// 	"NEW TEXT after editing region in audio player: " + this.new_text
-			// );
-		},
+		// 		if (this.relevantGap.startCharacter > 0) {
+		// 			this.new_text = this.original_text.substring(
+		// 				this.relevantGap.startCharacter + 1
+		// 			);
+		// 		} else if (this.relevantGap.startCharacter == 0) {
+		// 			this.new_text = this.original_text.substring(
+		// 				this.relevantGap.startCharacter
+		// 			);
+		// 		}
+		// 		// console.log(this.new_text + " -- and then no other text")
+		// 	}
+		// 	if (this.new_text[0] == "\n") {
+		// 		//if there is a carriage return at the beginning of the relevant text segment, then skip it [but why skip 2?]
+		// 		// console.log("NEW TEXT before adjustment: " + this.new_text)
+		// 		// console.log("new text length: " + this.new_text.length)
+		// 		// console.log("start character before adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
+		// 		this.relevantGap.startCharacter += 1;
+		// 		this.new_text = this.new_text.substring(1);
+		// 		this.usableGaps[0].startCharacter += 1;
+		// 		// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
+		// 		// console.log("NEW TEXT after adjustment: " + this.new_text)
+		// 		// console.log("after chopping the beginning: " + this.new_text)
+		// 	}
+		// 	if (this.new_text[this.new_text.length - 1] == "\n") {
+		// 		//if there is a carriage return at the end of the relevant text segment and it is not the only character, then roll back from it
+		// 		// console.log("NEW TEXT before adjustment: " + this.new_text)
+		// 		// console.log("new text length: " + this.new_text.length)
+		// 		// console.log("start character before adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
+		// 		this.relevantGap.endCharacter -= 1;
+		// 		this.new_text = this.new_text.substring(0, this.new_text.length - 2);
+		// 		this.usableGaps[0].endCharacter -= 1;
+		// 		// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
+		// 		// console.log("NEW TEXT after adjustment: " + this.new_text)
+		// 		// console.log("after chopping the end: " + this.new_text)
+		// 	}
+		// 	// console.log(
+		// 	// 	"NEW TEXT after editing region in audio player: " + this.new_text
+		// 	// );
+		// },
 
 		// edit the text when the user clicks "Save Edits"
 		updateText() {
@@ -649,52 +741,188 @@ export default {
 			// console.log(this.new_text);
 			// console.log("new text length: " + this.new_text.length);
 
-			// decide what the new full text should be--where exactly to insert new_text (the user input) into it.
+			// decide what the new full text should be--where exactly to insert new_text (the user input) into it, and how the carriage returns should be around it.
+
 			if (Number.isNaN(this.relevantGap.endCharacter) == false) {
-				// if the gap does have an ending
-				this.latest_text =
-					this.original_text.substring(0, this.relevantGap.startCharacter + 1) +
-					"\n" +
-					this.new_text +
-					"\n" +
-					this.original_text.substring(this.relevantGap.endCharacter);
-			} else {
-				this.latest_text = // if endcharacter is not a number (it would be null, in this case)
-					this.original_text.substring(0, this.relevantGap.startCharacter + 1) +
-					"\n" +
-					this.new_text +
-					"\n" +
-					this.original_text.substring(this.relevantGap.startCharacter + 1);
+				//if the gap does have an ending
+				let temp_latesttext = this.original_text.substring(
+					0,
+					this.relevantGap.endCharacter
+				);
+				if (
+					this.original_text[this.relevantGap.endCharacter - 2] == "\n" &&
+					this.original_text[this.relevantGap.endCharacter - 1] == "\n"
+				) {
+					// console.log("following two carriage returns; no need to add one")
+					temp_latesttext = temp_latesttext + this.new_text;
+				} else if (
+					this.original_text[this.relevantGap.endCharacter - 2] != "\n" &&
+					this.original_text[this.relevantGap.endCharacter - 1] == "\n"
+				) {
+					// console.log("following a single carriage return; need to add one")
+					temp_latesttext = temp_latesttext + "\n" + this.new_text;
+				} else if (
+					this.original_text[this.relevantGap.endCharacter - 2] != "\n" &&
+					this.original_text[this.relevantGap.endCharacter - 1] != "\n"
+				) {
+					// console.log("following no carriage returns; need to add two")
+					temp_latesttext = temp_latesttext + "\n" + "\n" + this.new_text;
+				}
+
+				if (
+					this.original_text[this.relevantGap.endCharacter] == "\n" &&
+					this.original_text[this.relevantGap.endCharacter + 1] == "\n"
+				) {
+					// console.log("precedeing two carriage returns; no need to add any")
+					temp_latesttext =
+						temp_latesttext +
+						this.original_text.substring(this.relevantGap.endCharacter);
+				}
+				else if (
+					this.original_text[this.relevantGap.endCharacter] == "\n" &&
+					this.original_text[this.relevantGap.endCharacter + 1] != "\n"
+				) {
+					// console.log("preceding one carriage return; need to add one")
+					temp_latesttext =
+						temp_latesttext + "\n" +
+						this.original_text.substring(this.relevantGap.endCharacter);
+				}
+				else if (
+					this.original_text[this.relevantGap.endCharacter] != "\n" &&
+					this.original_text[this.relevantGap.endCharacter + 1] != "\n"
+				) {
+					// console.log("preceding no carriage returns; need to add two")
+					temp_latesttext =
+						temp_latesttext + "\n" + "\n" +
+						this.original_text.substring(this.relevantGap.endCharacter);
+				}
+				this.latest_text=temp_latesttext
+			} else if (Number.isNaN(this.relevantGap.endCharacter) == true) {
+				// if the gap does not have an ending
+				let temp_latesttext = this.original_text;
+				if (
+					this.original_text[this.original_text.length - 2] == "\n" &&
+					this.original_text[this.original_text.length - 1] == "\n"
+				) {
+					temp_latesttext = temp_latesttext + this.new_text + "\n"
+				} else if (
+					this.original_text[this.original_text.length - 2] != "\n" &&
+					this.original_text[this.original_text.length - 1] == "\n"
+				) {
+					temp_latesttext = temp_latesttext + "\n" + this.new_text + "\n"
+				} else if (
+					this.original_text[this.original_text.length - 2] != "\n" &&
+					this.original_text[this.original_text.length - 1] != "\n"
+				) {
+					temp_latesttext = temp_latesttext + "\n" + "\n" + this.new_text + "\n"
+				}
+				this.latest_text=temp_latesttext
 			}
+
+			// if (
+			// 	Number.isNaN(this.relevantGap.endCharacter) == false &&
+			// 	this.original_text[this.relevantGap.endCharacter - 1] == "\n" &&
+			// 	this.original_text[this.relevantGap.endCharacter - 2] == "\n" &&
+			// 	this.original_text[this.relevantGap.endCharacter] != "\n"
+			// ) {
+			// 	// if the gap does have an ending and immediately follows two carriage returns, but doesn't immediately precede a carriage return
+			// 	console.log("hit0");
+			// 	this.latest_text =
+			// 		this.original_text.substring(0, this.relevantGap.endCharacter - 1) +
+			// 		this.new_text +
+			// 		"\n" +
+			// 		"\n" +
+			// 		this.original_text.substring(this.relevantGap.endCharacter);
+			// } else if (
+			// 	Number.isNaN(this.relevantGap.endCharacter) == false &&
+			// 	this.original_text[this.relevantGap.endCharacter - 1] == "\n" &&
+			// 	this.original_text[this.relevantGap.endCharacter] != "\n"
+			// ) {
+			// 	// if the gap does have an ending and immediately follows one (but not two) carriage returns, but doesn't immediately precede a carriage return
+			// 	console.log("hit1");
+			// 	this.latest_text =
+			// 		this.original_text.substring(0, this.relevantGap.endCharacter - 1) +
+			// 		"\n" +
+			// 		this.new_text +
+			// 		"\n" +
+			// 		"\n" +
+			// 		this.original_text.substring(this.relevantGap.endCharacter);
+			// } else if (
+			// 	Number.isNaN(this.relevantGap.endCharacter) == false &&
+			// 	this.original_text[this.relevantGap.endCharacter - 1] == "\n" &&
+			// 	this.original_text[this.relevantGap.endCharacter] == "\n"
+			// ) {
+			// 	// if the gap does have an ending and immediately follows a carriage return, and immediately precedes a carriage return
+			// 	console.log("hit2");
+			// 	this.latest_text =
+			// 		this.original_text.substring(0, this.relevantGap.endCharacter - 1) +
+			// 		"\n" +
+			// 		this.new_text +
+			// 		"\n" +
+			// 		this.original_text.substring(this.relevantGap.endCharacter);
+			// } else if (
+			// 	Number.isNaN(this.relevantGap.endCharacter) == false &&
+			// 	this.original_text[this.relevantGap.endCharacter - 1] != "\n" &&
+			// 	this.original_text[this.relevantGap.endCharacter] == "\n"
+			// ) {
+			// 	// if the gap does have an ending, but doesn't immediately follow a carriage return, but does immediately precede a carriage return
+			// 	console.log("hit3");
+			// 	this.latest_text =
+			// 		this.original_text.substring(0, this.relevantGap.endCharacter - 1) +
+			// 		"\n" +
+			// 		"\n" +
+			// 		this.new_text +
+			// 		"\n" +
+			// 		this.original_text.substring(this.relevantGap.endCharacter);
+			// } else if (
+			// 	Number.isNaN(this.relevantGap.endCharacter) == false &&
+			// 	this.original_text[this.relevantGap.endCharacter - 1] != "\n" &&
+			// 	this.original_text[this.relevantGap.endCharacter] != "\n"
+			// ) {
+			// 	// if the gap does have an ending, but doesn't immediately follow a carriage return, but doesn't immediately precede a carriage return
+			// 	console.log("hit4");
+			// 	this.latest_text =
+			// 		this.original_text.substring(0, this.relevantGap.endCharacter - 1) +
+			// 		"\n" +
+			// 		"\n" +
+			// 		this.new_text +
+			// 		"\n" +
+			// 		"\n" +
+			// 		this.original_text.substring(this.relevantGap.endCharacter);
+			// } else
+			//  if (
+			// 	Number.isNaN(this.relevantGap.endCharacter) == true &&
+			// 	this.original_text[this.original_text.length - 1] == "\n"
+			// ) {
+			// 	console.log("hit5");
+			// 	this.latest_text = this.original_text + "\n" + this.new_text + "\n"; // if the gap is at the end of the current text and immediately follows a carriage return
+			// } else if (
+			// 	Number.isNaN(this.relevantGap.endCharacter) == true &&
+			// 	this.original_text[this.original_text.length - 1] != "\n"
+			// ) {
+			// 	console.log("hit6");
+			// 	this.latest_text = // if the gap is at the end of the current text and does not immediately follow a carriage return
+			// 		this.original_text + "\n" + "\n" + this.new_text + "\n";
+			// }
 
 			// console.log(this.latest_text);
 
 			// console.log(this.latest_text.length)
 
 			let textLengthDifference =
-				this.latest_text.length - this.original_text.length;
+				this.latest_text_cleaned.length - this.original_text_cleaned.length;
 			for (let prop in this.new_associations) {
 				delete this.new_associations[prop];
 			}
 			// console.log(this.$store.state.startTimePrompter)
 			// console.log(this.$store.state.endTimePrompter)
 
-			let regexwithspacedby = new RegExp(
-				`${this.escapeRegex(this.spaced_by)}|\n`
-			);
-
-			// console.log("spaced by" + this.spaced_by + ".")
-			// console.log("total original text: " + this.original_text)
-			// console.log("total new text: " + this.latest_text)
-
-			// let origtextclean=
-			// if (origtextclean[0]==this.spaced_by) {origtextclean.shift}
-			// let latesttextclean=
-			// if (latesttextclean[0]==this.spaced_by) {latesttextclean.shift}
+			// console.log(original_text_cleaned)
+			// console.log(latest_text_cleaned)
 
 			this.instructions = this.patienceDiffPlus(
-				this.original_text.split(regexwithspacedby),
-				this.latest_text.normalize("NFC").split(regexwithspacedby)
+				this.original_text_cleaned,
+				this.latest_text_cleaned
 			);
 
 			// console.log("associations: " + JSON.stringify(this.new_associations));
@@ -706,6 +934,8 @@ export default {
 				}
 			}
 
+			this.instructions.lines.forEach((element) => console.log(element));
+
 			// this.manuallyDraggedEndTimeMemory = this.$store.state.endTimePrompter
 			let instructionsmapped = this.instructions.lines.map(
 				(item) => item.bIndex
@@ -716,7 +946,7 @@ export default {
 				this.instructions.lines.forEach((element) => {
 					// console.log(element['bIndex'])
 					// console.log(element)
-					if (element["bIndex"] >= 0 && element["line"] != regexwithspacedby) {
+					if (element["bIndex"] >= 0 && element["line"] != this.regexwithspacedby) {
 						this.new_associations[element["bIndex"]] =
 							((this.$store.state.startTimePrompter +
 								this.$store.state.endTimePrompter) *
@@ -725,26 +955,50 @@ export default {
 					}
 				});
 			} else if (this.spaced_by == "") {
-				for (let l = 1; l < textLengthDifference - 1; l++) {
-					// console.log(l)
-					// console.log(this.relevantGap.startCharacter)
-					let indexofchar = instructionsmapped.indexOf(
-						this.relevantGap.startCharacter + l
-					);
-					// console.log(indexofchar)
-					// console.log(this.instructions.lines[indexofchar])
+				//if gap ends in other text
+				if (Number.isNaN(this.relevantGap.endCharacter) == false) {
+					// console.log("gold");
+					for (let l = 0; l < textLengthDifference - 1; l++) {
+						// console.log(l);
+						// console.log(this.relevantGap.endCharacter + l);
+						let indexofchar = instructionsmapped.indexOf(
+							this.relevantGap.endCharacter + l
+						);
+						// console.log(indexofchar)
+						// console.log(this.instructions.lines[indexofchar]);
 
-					if (this.instructions.lines[indexofchar]["line"] != "\n") {
-						this.new_associations[this.relevantGap.startCharacter + l] =
-							((this.$store.state.startTimePrompter +
-								this.$store.state.endTimePrompter) *
-								100) /
-							2;
+						if (this.instructions.lines[indexofchar]["line"] != "\n") {
+							this.new_associations[this.relevantGap.endCharacter + l] =
+								((this.$store.state.startTimePrompter +
+									this.$store.state.endTimePrompter) *
+									100) /
+								2;
+						}
+					}
+				}
+
+				// if no text following the "gap"
+				else if (Number.isNaN(this.relevantGap.endCharacter) == true) {
+					// console.log("silver");
+					for (let l = 1; l < textLengthDifference; l++) {
+						// console.log(l);
+						// console.log(this.original_text.length - 1 + l);
+						let indexofchar = instructionsmapped.indexOf(
+							this.original_text.length - 1 + l
+						);
+						// console.log(indexofchar)
+						// console.log(this.instructions.lines[indexofchar]);
+
+						if (this.instructions.lines[indexofchar]["line"] != "\n") {
+							this.new_associations[this.original_text.length - 1 + l] =
+								((this.$store.state.startTimePrompter +
+									this.$store.state.endTimePrompter) *
+									100) /
+								2;
+						}
 					}
 				}
 			}
-
-			this.instructions.lines.forEach((element) => console.log(element));
 
 			fetch(
 				process.env.VUE_APP_api_URL +
@@ -785,7 +1039,9 @@ export default {
 						this.newPromptsfunc();
 
 						// console.log(this.latest_text)
-						// console.log("TROUBLESHOOTING TODAY" + JSON.stringify(this.new_associations))
+						// console.log(
+						// 	"TROUBLESHOOTING TODAY" + JSON.stringify(this.new_associations)
+						// );
 						//add in the association for the new phrase.
 						fetch(
 							process.env.VUE_APP_api_URL +
@@ -815,11 +1071,11 @@ export default {
 					return;
 				})
 				.catch((error) => console.error("Error:", error));
-			// console.log("original text: " + this.original_text)
-			// console.log(this.original_text.length)
+			// console.log("original text: " + this.original_text);
+			// console.log(this.original_text.length);
 			this.original_text = this.latest_text;
-			// console.log("original text: " + this.original_text)
-			// console.log(this.original_text.length)
+			// console.log("original text: " + this.original_text);
+			// console.log(this.original_text.length);
 		},
 
 		/**
