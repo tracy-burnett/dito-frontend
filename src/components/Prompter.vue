@@ -946,7 +946,7 @@ export default {
 				this.instructions.lines.forEach((element) => {
 					// console.log(element['bIndex'])
 					// console.log(element)
-					if (element["bIndex"] >= 0 && element["line"] != this.regexwithspacedby) {
+					if (element["bIndex"] >= 0 && element["line"] != "\n") {
 						this.new_associations[element["bIndex"]] =
 							((this.$store.state.startTimePrompter +
 								this.$store.state.endTimePrompter) *
