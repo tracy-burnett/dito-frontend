@@ -49,7 +49,7 @@
 					<textarea
 						class="w-full px-3 py-1 border border-gray-300 rounded"
 						placeholder="Text of First Interpretation"
-						v-model="int_text"
+						v-model="int_text_unstripped"
 						style="overflow:hidden;"
 						oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
 					/>
@@ -80,12 +80,24 @@ export default {
 			title: "",
 			description: "",
 			int_title: "",
-			int_text: "",
+			int_text_unstripped: "",
 			int_language: "",
 			int_spacing: "",
 			myArray: null,
 			file: null,
 		};
+	},
+  computed: {
+
+		int_text() {
+			let stripped=this.latest_text_unstripped.replace(this.regexwithmultiplespacedby, this.int_spacing)
+			return stripped
+		},
+		
+
+		regexwithmultiplespacedby() {
+			return new RegExp(`${this.escapeRegex(this.int_spacing)}+`, "g")
+		},
 	},
 	methods: {
 		async upload() {

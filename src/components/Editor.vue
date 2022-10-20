@@ -18,7 +18,7 @@
       class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded"
       :rows="latesttextrows"
       style="overflow: hidden"
-      v-model="latest_text"
+      v-model="latest_text_unstripped"
     ></textarea>
     <!-- {{latest_text.length}}
 {{$store.state.consoleswidth}}
@@ -35,15 +35,29 @@ export default {
     return {
       language_name: "",
       title: "",
-      latest_text: "",
+      latest_text_unstripped: "",
       original_text: "",
       spaced_by: "",
     };
   },
   computed: {
+
+		latest_text() {
+			// console.log(this.new_text_unstripped)
+			let stripped=this.latest_text_unstripped.replace(this.regexwithmultiplespacedby, this.spaced_by)
+			// console.log(stripped)
+			return stripped
+		},
+
+		regexwithmultiplespacedby() {
+			return new RegExp(`${this.escapeRegex(this.spaced_by)}+`, "g")
+		},
+
     numbernewlines() {
-      return this.latest_text.split(/\r\n|\r|\n/).length;
+      return this.latest_text_unstripped.split(/\r\n|\r|\n/).length;
     },
+
+
     titlesize() {
       if (
         this.title.length > 3 &&
@@ -71,7 +85,7 @@ export default {
 
     latesttextrows() {
       return (
-        ((6 * this.latest_text.length) /
+        ((6 * this.latest_text_unstripped.length) /
           (this.$store.state.consoleswidth - 570)) *
           this.$store.state.consoles.length +
         this.numbernewlines
@@ -178,8 +192,8 @@ original_text_cleaned, latest_text_cleaned
                 }
               })
         .catch((error) => console.error("Error:", error));
-
       this.original_text = this.latest_text;
+      this.latest_text_unstripped=this.latest_text
     },
 
 /**
@@ -656,7 +670,7 @@ return difference;
       .then((data) => {
         this.title = data.interpretation.title;
         this.language_name = data.interpretation.language_name;
-        this.latest_text = data.interpretation.latest_text;
+        this.latest_text_unstripped = data.interpretation.latest_text;
         this.original_text = data.interpretation.latest_text;
         this.spaced_by = data.interpretation.spaced_by;
       })
