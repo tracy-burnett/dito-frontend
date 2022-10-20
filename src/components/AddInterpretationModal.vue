@@ -82,8 +82,10 @@ export default {
     computed: {
 
 int_text() {
+  if (this.int_spacing != ""){
   let stripped=this.int_text_unstripped.replace(this.regexwithmultiplespacedby, this.int_spacing)
-  return stripped
+  return stripped}
+  else if (this.int_spacing == "") {return this.int_text_unstripped}
 },
 
 
