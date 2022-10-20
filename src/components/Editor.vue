@@ -43,10 +43,12 @@ export default {
   computed: {
 
 		latest_text() {
-			// console.log(this.new_text_unstripped)
-			let stripped=this.latest_text_unstripped.replace(this.regexwithmultiplespacedby, this.spaced_by)
-			// console.log(stripped)
-			return stripped
+
+  if (this.spaced_by != ""){
+  let stripped=this.latest_text_unstripped.replace(this.regexwithmultiplespacedby, this.spaced_by)
+  return stripped}
+  else if (this.spaced_by == "") {return this.latest_text_unstripped}
+
 		},
 
 		regexwithmultiplespacedby() {

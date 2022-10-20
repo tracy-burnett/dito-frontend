@@ -88,11 +88,11 @@ export default {
 	},
 	computed: {
 		new_text() {
-			// console.log(this.new_text_unstripped)
-			let stripped=this.new_text_unstripped.replace(this.regexwithmultiplespacedby, this.spaced_by)
-			// console.log(stripped)
-			return stripped
-		},
+  if (this.spaced_by != ""){
+  let stripped=this.new_text_unstripped.replace(this.regexwithmultiplespacedby, this.spaced_by)
+  return stripped}
+  else if (this.spaced_by == "") {return this.new_text_unstripped}
+},
 
 		scribingclean() {
 			if (this.$store.state.audioDuration < this.scribing) {
