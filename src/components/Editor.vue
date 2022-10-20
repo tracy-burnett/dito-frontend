@@ -142,7 +142,7 @@ original_text_cleaned, latest_text_cleaned
         }
       }
 
-      this.instructions.lines.forEach(element => console.log(JSON.stringify(element)))
+      // this.instructions.lines.forEach(element => console.log(JSON.stringify(element)))
       
 
       fetch(

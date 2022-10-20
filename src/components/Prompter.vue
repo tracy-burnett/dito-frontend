@@ -12,14 +12,14 @@
 -->
 		<!-- {{new_associations}}  -->
 		<!-- {{scribingclean}} -->
-		associations: {{associations}}<br>
-		association gaps: {{associationGaps}}<br>
+		<!-- associations: {{associations}}<br>
+		association gaps: {{associationGaps}}<br> -->
 		<!-- {{$store.state.startTimePrompter*100}}<br> -->
 		<!-- {{manuallyDraggedEndTimeMemory}}<br> -->
 		<!-- {{$store.state.endTimePrompter*100}}<br> -->
-		{{usableGaps}}<br>
+		<!-- {{usableGaps}}<br> -->
 		<!-- {{$store.state.audioDuration}}<br> -->
-		{{relevantGap}}<br>
+		<!-- {{relevantGap}}<br> -->
 		<!-- {{original_text}}<br> -->
 		<!-- {{original_text_cleaned}} -->
 		<!-- {{allowSubmit}}<br> -->
@@ -757,19 +757,19 @@ export default {
 					this.original_text[this.relevantGap.endCharacter - 2] == "\n" &&
 					this.original_text[this.relevantGap.endCharacter - 1] == "\n"
 				) {
-					console.log("following two carriage returns; no need to add one")
+					// console.log("following two carriage returns; no need to add one")
 					temp_latesttext = temp_latesttext + this.new_text;
 				} else if (
 					this.original_text[this.relevantGap.endCharacter - 2] != "\n" &&
 					this.original_text[this.relevantGap.endCharacter - 1] == "\n"
 				) {
-					console.log("following a single carriage return; need to add one")
+					// console.log("following a single carriage return; need to add one")
 					temp_latesttext = temp_latesttext + "\n" + this.new_text;
 				} else if (
 					this.original_text[this.relevantGap.endCharacter - 2] != "\n" &&
 					this.original_text[this.relevantGap.endCharacter - 1] != "\n"
 				) {
-					console.log("following no carriage returns; need to add two")
+					// console.log("following no carriage returns; need to add two")
 					temp_latesttext = temp_latesttext + "\n" + "\n" + this.new_text;
 				}
 				// console.log("gap end character: " + this.relevantGap.endCharacter)
@@ -779,7 +779,7 @@ export default {
 					this.original_text[this.relevantGap.endCharacter] == "\n" &&
 					this.original_text[this.relevantGap.endCharacter + 1] == "\n"
 				) {
-					console.log("precedeing two carriage returns; no need to add any")
+					// console.log("precedeing two carriage returns; no need to add any")
 					temp_latesttext =
 						temp_latesttext +
 						this.original_text.substring(this.relevantGap.endCharacter);
@@ -788,7 +788,7 @@ export default {
 					this.original_text[this.relevantGap.endCharacter] == "\n" &&
 					this.original_text[this.relevantGap.endCharacter + 1] != "\n"
 				) {
-					console.log("preceding one carriage return; need to add one")
+					// console.log("preceding one carriage return; need to add one")
 					temp_latesttext =
 						temp_latesttext + "\n" +
 						this.original_text.substring(this.relevantGap.endCharacter);
@@ -797,7 +797,7 @@ export default {
 					this.original_text[this.relevantGap.endCharacter] != "\n" &&
 					this.original_text[this.relevantGap.endCharacter + 1] != "\n"
 				) {
-					console.log("preceding no carriage returns; need to add two")
+					// console.log("preceding no carriage returns; need to add two")
 					temp_latesttext =
 						temp_latesttext + "\n" + "\n" +
 						this.original_text.substring(this.relevantGap.endCharacter);
@@ -911,8 +911,8 @@ export default {
 			// 		this.original_text + "\n" + "\n" + this.new_text + "\n";
 			// }
 
-			console.log(this.latest_text);
-			console.log(this.original_text)
+			// console.log(this.latest_text);
+			// console.log(this.original_text)
 
 			// console.log(this.latest_text.length)
 
@@ -924,8 +924,8 @@ export default {
 			// console.log(this.$store.state.startTimePrompter)
 			// console.log(this.$store.state.endTimePrompter)
 
-			console.log(this.original_text_cleaned)
-			console.log(this.latest_text_cleaned)
+			// console.log(this.original_text_cleaned)
+			// console.log(this.latest_text_cleaned)
 
 			this.instructions = this.patienceDiffPlus(
 				this.original_text_cleaned,
@@ -1034,7 +1034,7 @@ export default {
 				})
 				.then((response) => {
 					if (response == "interpretation updated") {
-						console.log(textLengthDifference);
+						// console.log(textLengthDifference);
 						this.usableGaps.forEach((element) => {
 							element.startCharacter += textLengthDifference;
 							if (element.endCharacter != null) {
