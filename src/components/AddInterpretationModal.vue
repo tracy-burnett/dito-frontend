@@ -82,7 +82,7 @@ export default {
     computed: {
 
 int_text() {
-  let stripped=this.latest_text_unstripped.replace(this.regexwithmultiplespacedby, this.int_spacing)
+  let stripped=this.int_text_unstripped.replace(this.regexwithmultiplespacedby, this.int_spacing)
   return stripped
 },
 
@@ -92,6 +92,9 @@ regexwithmultiplespacedby() {
 },
 },
   methods: {
+    escapeRegex: function (string) {
+    		return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+		},
     create() {
 
       if (this.int_title != "" || this.int_text != "" || this.int_language != "") {

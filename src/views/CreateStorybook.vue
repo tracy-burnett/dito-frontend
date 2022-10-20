@@ -90,7 +90,7 @@ export default {
   computed: {
 
 		int_text() {
-			let stripped=this.latest_text_unstripped.replace(this.regexwithmultiplespacedby, this.int_spacing)
+			let stripped=this.int_text_unstripped.replace(this.regexwithmultiplespacedby, this.int_spacing)
 			return stripped
 		},
 		
@@ -100,6 +100,9 @@ export default {
 		},
 	},
 	methods: {
+    escapeRegex: function (string) {
+    		return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+		},
 		async upload() {
 			// get secure url from server
 			this.file = this.$refs.audioInput.files[0];
