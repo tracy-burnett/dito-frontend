@@ -249,13 +249,13 @@ export default {
 		},
 		toggleStorybookStylefunction(styleselection) {
 			this.styleoption = styleselection;
-			if (this.styleoption=='Prompter') {
+			if (this.styleoption=='Prompter' || this.styleoption=='Studio') {
 									this.$store.commit(
 						"updatePrompterID",
 						this.interpretation_id
 					);
 			}
-			else if (this.styleoption !='Prompter' && this.$store.state.prompterID==this.interpretation_id) {
+			else if (this.styleoption !='Prompter' && this.styleoption != 'Studio' && this.$store.state.prompterID==this.interpretation_id) {
 				this.$store.commit("removePrompterID")
 			}
 		},
