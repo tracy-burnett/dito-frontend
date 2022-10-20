@@ -17,9 +17,9 @@
 		<!-- {{$store.state.startTimePrompter*100}}<br> -->
 		<!-- {{manuallyDraggedEndTimeMemory}}<br> -->
 		<!-- {{$store.state.endTimePrompter*100}}<br> -->
-		{{usableGaps}}<br>
+		<!-- {{usableGaps}}<br> -->
 		<!-- {{$store.state.audioDuration}}<br> -->
-		{{relevantGap}}<br>
+		<!-- {{relevantGap}}<br> -->
 		<!-- {{original_text}}<br> -->
 		<!-- {{original_text_cleaned}} -->
 		<!-- {{allowSubmit}}<br> -->
@@ -942,7 +942,7 @@ export default {
 				}
 			}
 
-			console.log(this.instructions.lines)
+			// console.log(this.instructions.lines)
 
 			// this.manuallyDraggedEndTimeMemory = this.$store.state.endTimePrompter
 			let instructionsmapped = this.instructions.lines.map(
@@ -1047,9 +1047,9 @@ export default {
 						this.newPromptsfunc();
 
 						// console.log(this.latest_text)
-						console.log(
-							"TROUBLESHOOTING TODAY" + JSON.stringify(this.new_associations)
-						);
+						// console.log(
+						// 	"TROUBLESHOOTING TODAY" + JSON.stringify(this.new_associations)
+						// );
 						//add in the association for the new phrase.
 						fetch(
 							process.env.VUE_APP_api_URL +
