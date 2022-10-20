@@ -7,6 +7,8 @@
 		<!-- playback speed slider -->
 		<div class="flex justify-center text-xs">
 			playback speed {{playbackspeed}}
+			<!-- <br>{{startTimeSeconds}} -->
+			<!-- <br>{{(startTimeSeconds+endTimeSeconds)/2}}<br>{{endTimeSeconds}} -->
 		</div>
 		<div>
 			<input

@@ -102,7 +102,7 @@ export default {
 		original_text_cleaned() {
 			// console.log(this.original_text);
 			let split_text = this.original_text.split(this.regexwithspacedby);
-			// console.log(split_text);
+			// console.log("original: " + split_text);
 			// console.log(split_text.length + "length");
 
 			for (let j = split_text.length; j >= 0; j--) {
@@ -122,9 +122,11 @@ export default {
 		},
 
 		latest_text_cleaned() {
+			// console.log("latest: " + this.latest_text)
 			let split_text = this.latest_text
 				.normalize("NFC")
 				.split(this.regexwithspacedby);
+
 
 			for (let j = split_text.length; j >= 0; j--) {
 				if (split_text[j] === undefined || split_text[j] == "") {
@@ -220,12 +222,13 @@ export default {
 			} else {
 				this.allowSubmit = true;
 			}
-			// if (
-			// 	this.$store.state.endTimePrompter * 100 <
-			// 	this.usableGaps[0].startTime
-			// ) {
-			// 	this.usableGaps[0].startTime = this.$store.state.endTimePrompter * 100;
-			// } else
+			if (
+				this.$store.state.endTimePrompter * 100 <
+				this.relevantGap.endTime+5
+			) {
+				this.relevantGap.endTime = this.$store.state.endTimePrompter * 100;
+				this.usableGaps[0].startTime=this.$store.state.endTimePrompter * 100-5
+			} else
 			if (
 				this.$store.state.endTimePrompter * 100 >
 				this.usableGaps[0].startTime + 5
@@ -382,6 +385,8 @@ export default {
 		},
 
 		newPromptsfunc() {
+			// console.log("relevant: " + JSON.stringify(this.relevantGap))
+			// console.log("usable: " + JSON.stringify(this.usableGaps))
 			this.new_text = "";
 			// console.log("sensitivity " + this.sensitivity);
 			this.contentEndingIndex = 0;
@@ -768,7 +773,9 @@ export default {
 					// console.log("following no carriage returns; need to add two")
 					temp_latesttext = temp_latesttext + "\n" + "\n" + this.new_text;
 				}
-
+				// console.log("gap end character: " + this.relevantGap.endCharacter)
+				// console.log(this.original_text[this.relevantGap.endCharacter])
+				// console.log(this.original_text[this.relevantGap.endCharacter + 1])
 				if (
 					this.original_text[this.relevantGap.endCharacter] == "\n" &&
 					this.original_text[this.relevantGap.endCharacter + 1] == "\n"
@@ -906,19 +913,20 @@ export default {
 			// }
 
 			// console.log(this.latest_text);
+			// console.log(this.original_text)
 
 			// console.log(this.latest_text.length)
 
 			let textLengthDifference =
-				this.latest_text_cleaned.length - this.original_text_cleaned.length;
+				this.latest_text.length - this.original_text.length;
 			for (let prop in this.new_associations) {
 				delete this.new_associations[prop];
 			}
 			// console.log(this.$store.state.startTimePrompter)
 			// console.log(this.$store.state.endTimePrompter)
 
-			// console.log(original_text_cleaned)
-			// console.log(latest_text_cleaned)
+			// console.log(this.original_text_cleaned)
+			// console.log(this.latest_text_cleaned)
 
 			this.instructions = this.patienceDiffPlus(
 				this.original_text_cleaned,
@@ -934,7 +942,7 @@ export default {
 				}
 			}
 
-			this.instructions.lines.forEach((element) => console.log(element));
+			// console.log(this.instructions.lines)
 
 			// this.manuallyDraggedEndTimeMemory = this.$store.state.endTimePrompter
 			let instructionsmapped = this.instructions.lines.map(
@@ -946,7 +954,7 @@ export default {
 				this.instructions.lines.forEach((element) => {
 					// console.log(element['bIndex'])
 					// console.log(element)
-					if (element["bIndex"] >= 0 && element["line"] != "\n") {
+					if (element["bIndex"] >= 0 && element["aIndex"] == -1 && element["line"] != "\n") {
 						this.new_associations[element["bIndex"]] =
 							((this.$store.state.startTimePrompter +
 								this.$store.state.endTimePrompter) *
