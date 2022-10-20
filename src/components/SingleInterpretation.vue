@@ -69,10 +69,13 @@
 				</div>
 			</div>
 
-			<div v-if="styleoption==='Prompter'">
+			<div v-if="styleoption==='Prompter' || styleoption==='Studio'">
 				<!--FLAG-->
-				<div class="flex">
+				<div v-if="styleoption===Prompter" class="flex">
 					scribe less / more
+				</div>
+				<div v-else-if="styleoption===Studio" class="flex">
+					study less / more
 				</div>
 				<div>
 					<input
@@ -87,7 +90,7 @@
 
 			</div>
 
-			<div v-if="styleoption==='Prompter'">
+			<div v-if="styleoption==='Prompter' || styleoption==='Studio'">
 				<button
 					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
 					@click="newPrompt()"
@@ -157,6 +160,7 @@ import Viewer from "@/components/Viewer.vue";
 import Editor from "@/components/Editor.vue";
 import Tagger from "@/components/Tagger.vue";
 import Prompter from "@/components/Prompter.vue";
+import Studio from "@/components/Studio.vue";
 import StorybookStyleMenu from "@/components/StorybookStyleMenu.vue";
 import SelectInterpretationMenu from "@/components/SelectInterpretationMenu.vue";
 import DeleteInterpretationViewer from "@/components/DeleteInterpretationViewer.vue";
@@ -168,6 +172,7 @@ export default {
 		Viewer,
 		Tagger,
 		Prompter,
+		Studio,
 		StorybookStyleMenu,
 		SelectInterpretationMenu,
 		DeleteInterpretationViewer,
