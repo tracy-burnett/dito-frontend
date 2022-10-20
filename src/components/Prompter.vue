@@ -12,14 +12,14 @@
 -->
 		<!-- {{new_associations}}  -->
 		<!-- {{scribingclean}} -->
-		<!-- associations: {{associations}}<br>
-		association gaps: {{associationGaps}}<br> -->
+		associations: {{associations}}<br>
+		association gaps: {{associationGaps}}<br>
 		<!-- {{$store.state.startTimePrompter*100}}<br> -->
 		<!-- {{manuallyDraggedEndTimeMemory}}<br> -->
 		<!-- {{$store.state.endTimePrompter*100}}<br> -->
-		<!-- {{usableGaps}}<br> -->
+		{{usableGaps}}<br>
 		<!-- {{$store.state.audioDuration}}<br> -->
-		<!-- {{relevantGap}}<br> -->
+		{{relevantGap}}<br>
 		<!-- {{original_text}}<br> -->
 		<!-- {{original_text_cleaned}} -->
 		<!-- {{allowSubmit}}<br> -->
@@ -102,7 +102,7 @@ export default {
 		original_text_cleaned() {
 			// console.log(this.original_text);
 			let split_text = this.original_text.split(this.regexwithspacedby);
-			// console.log(split_text);
+			// console.log("original: " + split_text);
 			// console.log(split_text.length + "length");
 
 			for (let j = split_text.length; j >= 0; j--) {
@@ -122,9 +122,11 @@ export default {
 		},
 
 		latest_text_cleaned() {
+			// console.log("latest: " + this.latest_text)
 			let split_text = this.latest_text
 				.normalize("NFC")
 				.split(this.regexwithspacedby);
+
 
 			for (let j = split_text.length; j >= 0; j--) {
 				if (split_text[j] === undefined || split_text[j] == "") {
@@ -382,6 +384,8 @@ export default {
 		},
 
 		newPromptsfunc() {
+			// console.log("relevant: " + JSON.stringify(this.relevantGap))
+			// console.log("usable: " + JSON.stringify(this.usableGaps))
 			this.new_text = "";
 			// console.log("sensitivity " + this.sensitivity);
 			this.contentEndingIndex = 0;
@@ -753,27 +757,29 @@ export default {
 					this.original_text[this.relevantGap.endCharacter - 2] == "\n" &&
 					this.original_text[this.relevantGap.endCharacter - 1] == "\n"
 				) {
-					// console.log("following two carriage returns; no need to add one")
+					console.log("following two carriage returns; no need to add one")
 					temp_latesttext = temp_latesttext + this.new_text;
 				} else if (
 					this.original_text[this.relevantGap.endCharacter - 2] != "\n" &&
 					this.original_text[this.relevantGap.endCharacter - 1] == "\n"
 				) {
-					// console.log("following a single carriage return; need to add one")
+					console.log("following a single carriage return; need to add one")
 					temp_latesttext = temp_latesttext + "\n" + this.new_text;
 				} else if (
 					this.original_text[this.relevantGap.endCharacter - 2] != "\n" &&
 					this.original_text[this.relevantGap.endCharacter - 1] != "\n"
 				) {
-					// console.log("following no carriage returns; need to add two")
+					console.log("following no carriage returns; need to add two")
 					temp_latesttext = temp_latesttext + "\n" + "\n" + this.new_text;
 				}
-
+				// console.log("gap end character: " + this.relevantGap.endCharacter)
+				// console.log(this.original_text[this.relevantGap.endCharacter])
+				// console.log(this.original_text[this.relevantGap.endCharacter + 1])
 				if (
 					this.original_text[this.relevantGap.endCharacter] == "\n" &&
 					this.original_text[this.relevantGap.endCharacter + 1] == "\n"
 				) {
-					// console.log("precedeing two carriage returns; no need to add any")
+					console.log("precedeing two carriage returns; no need to add any")
 					temp_latesttext =
 						temp_latesttext +
 						this.original_text.substring(this.relevantGap.endCharacter);
@@ -782,7 +788,7 @@ export default {
 					this.original_text[this.relevantGap.endCharacter] == "\n" &&
 					this.original_text[this.relevantGap.endCharacter + 1] != "\n"
 				) {
-					// console.log("preceding one carriage return; need to add one")
+					console.log("preceding one carriage return; need to add one")
 					temp_latesttext =
 						temp_latesttext + "\n" +
 						this.original_text.substring(this.relevantGap.endCharacter);
@@ -791,7 +797,7 @@ export default {
 					this.original_text[this.relevantGap.endCharacter] != "\n" &&
 					this.original_text[this.relevantGap.endCharacter + 1] != "\n"
 				) {
-					// console.log("preceding no carriage returns; need to add two")
+					console.log("preceding no carriage returns; need to add two")
 					temp_latesttext =
 						temp_latesttext + "\n" + "\n" +
 						this.original_text.substring(this.relevantGap.endCharacter);
@@ -905,20 +911,21 @@ export default {
 			// 		this.original_text + "\n" + "\n" + this.new_text + "\n";
 			// }
 
-			// console.log(this.latest_text);
+			console.log(this.latest_text);
+			console.log(this.original_text)
 
 			// console.log(this.latest_text.length)
 
 			let textLengthDifference =
-				this.latest_text_cleaned.length - this.original_text_cleaned.length;
+				this.latest_text.length - this.original_text.length;
 			for (let prop in this.new_associations) {
 				delete this.new_associations[prop];
 			}
 			// console.log(this.$store.state.startTimePrompter)
 			// console.log(this.$store.state.endTimePrompter)
 
-			// console.log(original_text_cleaned)
-			// console.log(latest_text_cleaned)
+			console.log(this.original_text_cleaned)
+			console.log(this.latest_text_cleaned)
 
 			this.instructions = this.patienceDiffPlus(
 				this.original_text_cleaned,
@@ -934,7 +941,7 @@ export default {
 				}
 			}
 
-			this.instructions.lines.forEach((element) => console.log(element));
+			// console.log(this.instructions.lines)
 
 			// this.manuallyDraggedEndTimeMemory = this.$store.state.endTimePrompter
 			let instructionsmapped = this.instructions.lines.map(
@@ -1027,7 +1034,7 @@ export default {
 				})
 				.then((response) => {
 					if (response == "interpretation updated") {
-						// console.log(textLengthDifference);
+						console.log(textLengthDifference);
 						this.usableGaps.forEach((element) => {
 							element.startCharacter += textLengthDifference;
 							if (element.endCharacter != null) {
