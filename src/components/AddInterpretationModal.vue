@@ -48,7 +48,7 @@
         m-0
       "
         placeholder="Text of New Interpretation"
-        v-model="int_text"
+        v-model="int_text_unstripped"
         rows="5"
         style="overflow-y: scroll"
       />
@@ -69,7 +69,7 @@ export default {
   data() {
     return {
       int_title: "",
-      int_text: "",
+      int_text_unstripped: "",
       int_language: "",
       int_spacing: "",
     };
@@ -79,7 +79,22 @@ export default {
       default: "",
     },
   },
+    computed: {
+
+int_text() {
+  let stripped=this.int_text_unstripped.replace(this.regexwithmultiplespacedby, this.int_spacing)
+  return stripped
+},
+
+
+regexwithmultiplespacedby() {
+  return new RegExp(`${this.escapeRegex(this.int_spacing)}+`, "g")
+},
+},
   methods: {
+    escapeRegex: function (string) {
+    		return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+		},
     create() {
 
       if (this.int_title != "" || this.int_text != "" || this.int_language != "") {

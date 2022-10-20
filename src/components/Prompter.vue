@@ -45,7 +45,7 @@
 			:rows="latesttextrows"
 			style="overflow: hidden"
 			placeholder="enter new text here"
-			v-model="new_text"
+			v-model="new_text_unstripped"
 			ref="promptertextarea"
 		></textarea>
 		<div v-if="allowSubmit==true">this text will be submitted when a new prompt is generated</div>
@@ -63,7 +63,7 @@ export default {
 	name: "Editor",
 	data: () => {
 		return {
-			new_text: "",
+			new_text_unstripped: "",
 			language_name: "",
 			title: "",
 			latest_text: "",
@@ -87,6 +87,13 @@ export default {
 		};
 	},
 	computed: {
+		new_text() {
+			// console.log(this.new_text_unstripped)
+			let stripped=this.new_text_unstripped.replace(this.regexwithmultiplespacedby, this.spaced_by)
+			// console.log(stripped)
+			return stripped
+		},
+
 		scribingclean() {
 			if (this.$store.state.audioDuration < this.scribing) {
 				return this.$store.state.audioDuration;
@@ -97,6 +104,10 @@ export default {
 
 		regexwithspacedby() {
 			return new RegExp(`${this.escapeRegex(this.spaced_by)}|(\n)`);
+		},
+
+		regexwithmultiplespacedby() {
+			return new RegExp(`${this.escapeRegex(this.spaced_by)}+`, "g")
 		},
 
 		original_text_cleaned() {
@@ -239,7 +250,7 @@ export default {
 		},
 		"$store.state.triggerNewText": function () {
 			// console.log("new text triggered");
-			this.new_text = "";
+			this.new_text_unstripped = "";
 		},
 	},
 	methods: {
@@ -387,7 +398,7 @@ export default {
 		newPromptsfunc() {
 			// console.log("relevant: " + JSON.stringify(this.relevantGap))
 			// console.log("usable: " + JSON.stringify(this.usableGaps))
-			this.new_text = "";
+			this.new_text_unstripped = "";
 			// console.log("sensitivity " + this.sensitivity);
 			this.contentEndingIndex = 0;
 			this.contentStartingIndex = 0;
