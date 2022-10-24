@@ -10,16 +10,19 @@
 		in <span class="px-3 py-1 border-gray-300 rounded">{{ language_name }}</span><br />
 		<!-- {{associationGaps}}
 -->
+
+<!-- {{$store.state.startTimePrompter}}<br>
+		{{$store.state.endTimePrompter}}<br> -->
 		<!-- {{new_associations}}  -->
 		<!-- {{scribingclean}} -->
-		<!-- associations: {{associations}}<br>
-		association gaps: {{associationGaps}}<br> -->
+		<!-- associations: {{associations}}<br> -->
+		<!-- association gaps: {{associationGaps}}<br> -->
 		<!-- {{$store.state.startTimePrompter*100}}<br> -->
 		<!-- {{manuallyDraggedEndTimeMemory}}<br> -->
 		<!-- {{$store.state.endTimePrompter*100}}<br> -->
-		<!-- {{usableGaps}}<br> -->
+		{{usableGaps}}<br>
 		<!-- {{$store.state.audioDuration}}<br> -->
-		<!-- {{relevantGap}}<br> -->
+		{{relevantGap}}<br>
 		<!-- {{original_text}}<br> -->
 		<!-- {{original_text_cleaned}} -->
 		<!-- {{allowSubmit}}<br> -->
@@ -60,7 +63,7 @@
 <script>
 export default {
 	inheritAttrs: false,
-	name: "Editor",
+	name: "Prompter",
 	data: () => {
 		return {
 			new_text_unstripped: "",
@@ -238,12 +241,16 @@ export default {
 				this.relevantGap.endTime+5
 			) {
 				this.relevantGap.endTime = this.$store.state.endTimePrompter * 100;
-				this.usableGaps[0].startTime=this.$store.state.endTimePrompter * 100-5
+				if (this.usableGaps[0].startCharacter == this.relevantGap.startCharacter) {
+					// console.log("success")
+				this.usableGaps[0].startTime=this.$store.state.endTimePrompter * 100-5}
+				// else {console.log("fail")}
 			} else
 			if (
 				this.$store.state.endTimePrompter * 100 >
 				this.usableGaps[0].startTime + 5
 			) {
+				console.log("culprit a")
 				this.usableGaps[0].startTime =
 					this.$store.state.endTimePrompter * 100 - 5;
 			}
@@ -561,7 +568,7 @@ export default {
 						this.scribingclean && // FLAG TIME DECISION fyi when the user sets this value too low it can prevent them from annotating some parts of the audio because it ignores them because if it is sensitive enough to detect them then the gap is too big for the user to annotate based on the length of phrase that they say they prefer to annotate.
 					this.contentEndingIndex >= 5
 				) {
-					// console.log(this.contentEndingIndex - 5 + this.relevantGap.startTime);
+					// console.log((this.usableGaps[0].endTime - (this.contentEndingIndex - 5 + this.relevantGap.startTime)) + " is greater than or equal to " + this.scribingclean + ", and " + this.contentEndingIndex + " is greater than or equal to 5");
 
 					// console.log("manual: " + this.manuallyDraggedEndTimeMemory*100)
 					// console.log("prompter calculated: " + (this.contentEndingIndex - 5 + this.relevantGap.startTime))
@@ -576,8 +583,13 @@ export default {
 					// }
 					// else {
 					// console.log("no manually dragged did not work")
+					let temp=parseInt(this.usableGaps[0].startTime)
+					// console.log(temp + " " + this.usableGaps.length)
 					this.usableGaps[0].startTime =
 						this.contentEndingIndex - 5 + this.relevantGap.startTime;
+					temp=parseInt(this.usableGaps[0].startTime)
+					// console.log(temp + " " + this.usableGaps.length)
+					// console.log("culprit b")
 					// }
 					// console.log(
 					// 	"changing start time to the end of current gap: " +
@@ -588,13 +600,13 @@ export default {
 						(this.contentEndingIndex - 5 + this.relevantGap.startTime) <
 					this.scribingclean // FLAG TIME DECISION
 				) {
-					// console.log(
-					// 	this.usableGaps[0].endTime -
-					// 		(this.contentEndingIndex - 5 + this.relevantGap.startTime) +
-					// 		" is less than " +
-					// 		this.scribingclean
-					// );
-					// console.log("moving to next gap");
+					console.log(
+						this.usableGaps[0].endTime -
+							(this.contentEndingIndex - 5 + this.relevantGap.startTime) +
+							" is less than " +
+							this.scribingclean
+					);
+					console.log("moving to next gap");
 					this.usableGaps.shift();
 				}
 

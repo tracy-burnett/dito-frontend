@@ -118,7 +118,7 @@ export default {
 				for (let j = character_array.length; j >= 0; j--) {
 					if (character_array[j] === undefined || character_array[j] == "") {character_array.splice(j, 1)} // second parameter being 1 means remove 1 element only
 				}
-				console.log(character_array)
+				// console.log(character_array)
 
 				for (let i = 0; i < character_array.length; i++) {
 					let sample_object = {};

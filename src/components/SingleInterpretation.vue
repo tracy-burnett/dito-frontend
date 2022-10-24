@@ -6,8 +6,8 @@
 			class="sticky z-20 flex flex-wrap justify-around flex-rows-1 top-12"
 			style="background: white"
 		>
-		<!-- {{styleoption}}<br> -->
-<!-- {{$store.state.prompterID}}hi -->
+			<!-- {{styleoption}}<br> -->
+			<!-- {{$store.state.prompterID}}hi -->
 			<!-- this component allows the user to remove the entire interpretation column from their browser window -->
 
 			<!-- SelectInterpretationMenu allows the user to swap out the interpretation they are currently viewing for a different one -->
@@ -24,6 +24,7 @@
 			<div>
 				<StorybookStyleMenu
 					:interpretationStatus="interpretationStatus"
+					:interpretation_id="interpretation_id"
 					@toggleStorybookStyle="toggleStorybookStylefunction($event)"
 				/>
 			</div>
@@ -87,6 +88,24 @@
 
 			</div>
 
+			<div v-if="styleoption==='Studio'">
+				<!--FLAG-->
+				<div class="flex">
+					listen to less / more
+				</div>
+				<div>
+					<input
+						id="studyingslider"
+						v-model="studying"
+						type="range"
+						min="200"
+						max="2000"
+						step="50"
+					/>
+				</div>
+
+			</div>
+
 			<div v-if="styleoption==='Prompter'">
 				<button
 					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
@@ -95,6 +114,16 @@
 					New Prompt
 				</button>
 			</div>
+
+			<div v-if="styleoption==='Studio'">
+				<button
+					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
+					@click="newPhrase()"
+				>
+					New Prompt
+				</button>
+			</div>
+
 			<div v-if="styleoption==='Editor'">
 				<!-- this is where should allow user to choose other punctuating characters or strings to always be their own word and not accidentally joining two other words -->
 				<button
@@ -135,15 +164,18 @@
 				:audio_id="audio_id"
 				:timestep="timestep"
 				:scribing="scribing"
+				:studying="studying"
 				:fontsize="fontsize"
 				:clearTimestampsvar="clearTimestampsvar"
 				:updateAssociations="updateAssociations"
 				:clearOldTimestampsvar="clearOldTimestampsvar"
 				:saveEditscounter="saveEditscounter"
 				:newPromptscounter="newPromptscounter"
+				:newPhrasescounter="newPhrasescounter"
 				:interpretationStatus="interpretationStatus"
 				:interpretation_id="interpretation_id"
 				@permanentlydestroy="permanentlydestroy($event)"
+				@increasePhrasesCounter="newPhrase()"
 			>
 
 			</component>
@@ -157,6 +189,7 @@ import Viewer from "@/components/Viewer.vue";
 import Editor from "@/components/Editor.vue";
 import Tagger from "@/components/Tagger.vue";
 import Prompter from "@/components/Prompter.vue";
+import Studio from "@/components/Studio.vue";
 import StorybookStyleMenu from "@/components/StorybookStyleMenu.vue";
 import SelectInterpretationMenu from "@/components/SelectInterpretationMenu.vue";
 import DeleteInterpretationViewer from "@/components/DeleteInterpretationViewer.vue";
@@ -168,6 +201,7 @@ export default {
 		Viewer,
 		Tagger,
 		Prompter,
+		Studio,
 		StorybookStyleMenu,
 		SelectInterpretationMenu,
 		DeleteInterpretationViewer,
@@ -177,10 +211,12 @@ export default {
 		return {
 			timestep: 500,
 			scribing: 200,
+			studying: 200,
 			fontsize: 16,
 			updateAssociations: 0,
 			clearTimestampsvar: 0,
 			newPromptscounter: 0,
+			newPhrasescounter: 0,
 			// submitcounter: 0,
 			saveEditscounter: 0,
 			clearOldTimestampsvar: 0,
@@ -239,19 +275,22 @@ export default {
 		newPrompt() {
 			this.newPromptscounter++;
 		},
+		newPhrase() {
+			this.newPhrasescounter++;
+		},
 		updateAssociationsfunc() {
 			this.updateAssociations++;
 		},
 		toggleStorybookStylefunction(styleselection) {
 			this.styleoption = styleselection;
-			if (this.styleoption=='Prompter') {
-									this.$store.commit(
-						"updatePrompterID",
-						this.interpretation_id
-					);
-			}
-			else if (this.styleoption !='Prompter' && this.$store.state.prompterID==this.interpretation_id) {
-				this.$store.commit("removePrompterID")
+			if (this.styleoption == "Prompter" || this.styleoption == "Studio") {
+				this.$store.commit("updatePrompterID", this.interpretation_id);
+			} else if (
+				this.styleoption != "Prompter" &&
+				this.styleoption != "Studio" &&
+				this.$store.state.prompterID == this.interpretation_id
+			) {
+				this.$store.commit("removePrompterID");
 			}
 		},
 
