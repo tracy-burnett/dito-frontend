@@ -584,12 +584,12 @@ export default {
 					// else {
 					// console.log("no manually dragged did not work")
 					let temp=parseInt(this.usableGaps[0].startTime)
-					console.log(temp + " " + this.usableGaps.length)
+					// console.log(temp + " " + this.usableGaps.length)
 					this.usableGaps[0].startTime =
 						this.contentEndingIndex - 5 + this.relevantGap.startTime;
 					temp=parseInt(this.usableGaps[0].startTime)
-					console.log(temp + " " + this.usableGaps.length)
-					console.log("culprit b")
+					// console.log(temp + " " + this.usableGaps.length)
+					// console.log("culprit b")
 					// }
 					// console.log(
 					// 	"changing start time to the end of current gap: " +
