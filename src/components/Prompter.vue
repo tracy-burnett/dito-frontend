@@ -20,9 +20,9 @@
 		<!-- {{$store.state.startTimePrompter*100}}<br> -->
 		<!-- {{manuallyDraggedEndTimeMemory}}<br> -->
 		<!-- {{$store.state.endTimePrompter*100}}<br> -->
-		<!-- {{usableGaps}}<br> -->
+		{{usableGaps}}<br>
 		<!-- {{$store.state.audioDuration}}<br> -->
-		<!-- {{relevantGap}}<br> -->
+		{{relevantGap}}<br>
 		<!-- {{original_text}}<br> -->
 		<!-- {{original_text_cleaned}} -->
 		<!-- {{allowSubmit}}<br> -->
@@ -241,8 +241,10 @@ export default {
 				this.relevantGap.endTime+5
 			) {
 				this.relevantGap.endTime = this.$store.state.endTimePrompter * 100;
-				if (this.usableGaps[0].startTime < this.$store.state.endTimePrompter*100-5) {
+				if (this.usableGaps[0].startCharacter == this.relevantGap.startCharacter) {
+					// console.log("success")
 				this.usableGaps[0].startTime=this.$store.state.endTimePrompter * 100-5}
+				// else {console.log("fail")}
 			} else
 			if (
 				this.$store.state.endTimePrompter * 100 >
