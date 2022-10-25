@@ -50,6 +50,8 @@
 			placeholder="enter new text here"
 			v-model="new_text_unstripped"
 			ref="promptertextarea"
+			@keydown.enter.exact.prevent="emitNewPrompt()"
+			@keydown.enter.shift.exact.prevent="new_text_unstripped += '\n'"
 		></textarea>
 		<div v-if="allowSubmit==true">this text will be submitted when a new prompt is generated</div>
 		<div v-else-if="allowSubmit==false">this text WILL NOT be submitted when a new prompt is generated</div>
@@ -717,6 +719,11 @@ export default {
 				this.allowSubmit = true;
 				this.$refs.promptertextarea.focus();
 			}
+		},
+
+		
+		emitNewPrompt() {
+			this.$emit("generateNewPrompt"); //
 		},
 
 		// convert a value from seconds to HH:MM:SS
