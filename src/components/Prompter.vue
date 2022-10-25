@@ -408,7 +408,7 @@ export default {
 					associationsObject.endCharacter = null;
 					this.associationGaps.push(associationsObject);
 
-					if (tempcurrentgapstart < element.endTime-200) {
+					if (tempcurrentgapstart < this.associationGaps[0].endTime-200) {
 						// FLAG TIME DECISION
 						this.usableGaps.push(this.associationGaps[0]);
 					}
