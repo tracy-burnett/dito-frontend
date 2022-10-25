@@ -388,7 +388,7 @@ export default {
 		this.wavesurfer.on("region-created", (region, event) => {
 			// console.log(region);
 			if (that.updatingFromPrompter == false) {
-				console.log("creating region, not from prompter");
+				// console.log("creating region, not from prompter");
 				that.startTimeSeconds = region.start;
 				that.endTimeSeconds = region.end;
 				// console.log(that.startTimeSeconds)
@@ -401,7 +401,7 @@ export default {
 					that.$store.commit("forceTriggerNewText");
 				}
 			} else if (that.updatingFromPrompter == true) {
-				console.log("creating region from prompter");
+				// console.log("creating region from prompter");
 				that.startTimeSeconds = that.$store.state.startTimePrompter;
 				that.endTimeSeconds = that.$store.state.endTimePrompter;
 				that.updatingFromPrompter = false;

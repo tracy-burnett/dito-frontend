@@ -20,9 +20,9 @@
 		<!-- {{$store.state.startTimePrompter*100}}<br> -->
 		<!-- {{manuallyDraggedEndTimeMemory}}<br> -->
 		<!-- {{$store.state.endTimePrompter*100}}<br> -->
-		{{usableGaps}}<br>
+		<!-- {{usableGaps}}<br> -->
 		<!-- {{$store.state.audioDuration}}<br> -->
-		{{relevantGap}}<br>
+		<!-- {{relevantGap}}<br> -->
 		<!-- {{original_text}}<br> -->
 		<!-- {{original_text_cleaned}} -->
 		<!-- {{allowSubmit}}<br> -->
@@ -619,13 +619,13 @@ export default {
 						(this.contentEndingIndex - 5 + this.relevantGap.startTime) <
 					this.scribingclean // FLAG TIME DECISION
 				) {
-					console.log(
-						this.usableGaps[0].endTime -
-							(this.contentEndingIndex - 5 + this.relevantGap.startTime) +
-							" is less than " +
-							this.scribingclean
-					);
-					console.log("moving to next gap");
+					// console.log(
+					// 	this.usableGaps[0].endTime -
+					// 		(this.contentEndingIndex - 5 + this.relevantGap.startTime) +
+					// 		" is less than " +
+					// 		this.scribingclean
+					// );
+					// console.log("moving to next gap");
 					this.usableGaps.shift();
 				}
 
