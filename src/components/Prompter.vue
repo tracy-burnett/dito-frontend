@@ -20,7 +20,7 @@
 		<!-- {{$store.state.startTimePrompter*100}}<br> -->
 		<!-- {{manuallyDraggedEndTimeMemory}}<br> -->
 		<!-- {{$store.state.endTimePrompter*100}}<br> -->
-		<!-- {{usableGaps}}<br> -->
+		{{usableGaps}}<br>
 		<!-- {{$store.state.audioDuration}}<br> -->
 		<!-- {{relevantGap}}<br> -->
 		<!-- {{original_text}}<br> -->
@@ -103,7 +103,7 @@ export default {
 		},
 
 		scribingclean() {
-			if (this.$store.state.audioDuration < this.scribing) {
+			if (this.$store.state.audioDuration < this.scribing && this.$store.state.audioDuration >0) {
 				return this.$store.state.audioDuration;
 			} else {
 				return this.scribing;
@@ -238,13 +238,12 @@ export default {
 					this.$store.state.startTimePrompter * 100 >=
 						this.relevantGap.startTime &&
 					this.$store.state.endTimePrompter * 100 <= this.usableGaps[0].endTime
-				)
+				) // GAPS NOT POPULATED YET
 			) {
 				this.allowSubmit = false;
-			} else {
+			} else { // GAPS POPULATED
 				this.allowSubmit = true;
-			}
-			if (
+				if (
 				this.$store.state.endTimePrompter * 100 <
 				this.relevantGap.endTime + 5
 			) {
@@ -261,10 +260,11 @@ export default {
 				this.$store.state.endTimePrompter * 100 >
 				this.usableGaps[0].startTime + 5
 			) {
-				console.log("culprit a");
 				this.usableGaps[0].startTime =
 					this.$store.state.endTimePrompter * 100 - 5;
 			}
+			}
+
 		},
 		"$store.state.triggerNewText": function () {
 			// console.log("new text triggered");
