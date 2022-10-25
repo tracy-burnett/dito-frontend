@@ -20,9 +20,9 @@
 		<!-- {{$store.state.startTimePrompter*100}}<br> -->
 		<!-- {{manuallyDraggedEndTimeMemory}}<br> -->
 		<!-- {{$store.state.endTimePrompter*100}}<br> -->
-		{{usableGaps}}<br>
+		<!-- {{usableGaps}}<br> -->
 		<!-- {{$store.state.audioDuration}}<br> -->
-		{{relevantGap}}<br>
+		<!-- {{relevantGap}}<br> -->
 		<!-- {{original_text}}<br> -->
 		<!-- {{original_text_cleaned}} -->
 		<!-- {{allowSubmit}}<br> -->
