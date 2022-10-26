@@ -189,6 +189,15 @@ export default {
 				let tempEndTimeMilliseconds = value.endTime.slice(-2) + "0";
 				let tempEndTimeSeconds = this.secondsToTime(value.endTime.slice(0, -2));
 				let tempSubstring = this.getTempSubstring(value.startCharacter);
+console.log(tempSubstring)
+				let tempSubstringSplit = tempSubstring.split('')
+				tempSubstringSplit.forEach((character,index) => {
+					if (character==="\n") {
+						tempSubstringSplit[index]="\\n"
+				}})
+
+				tempSubstring=tempSubstringSplit.join('')
+
 				this.srt +=
 					index +
 					1 +
