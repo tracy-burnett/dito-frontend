@@ -7,7 +7,10 @@
 			<button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn">Interaction</button>
 			<div class="dropdown-content">
 				<a @click="toggleStorybookStyle('Viewer')">Viewing</a>
-
+				<a
+					v-if="($store.state.prompterID == null || $store.state.prompterID == interpretation_id) && (interpretationStatus == 'owner' || interpretationStatus == 'editor')"
+					@click="toggleStorybookStyle('Prompter')"
+				>Scribing</a>
 				<a
 					v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'"
 					@click="toggleStorybookStyle('Editor')"
@@ -16,10 +19,7 @@
 					v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'"
 					@click="toggleStorybookStyle('Tagger')"
 				>Tagging</a>
-				<a
-					v-if="($store.state.prompterID == null || $store.state.prompterID == interpretation_id) && (interpretationStatus == 'owner' || interpretationStatus == 'editor')"
-					@click="toggleStorybookStyle('Prompter')"
-				>Scribing</a>
+
 				<a
 					v-if="$store.state.prompterID == null || $store.state.prompterID == interpretation_id"
 					@click="toggleStorybookStyle('Studio')"

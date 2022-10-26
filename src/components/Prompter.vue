@@ -11,7 +11,7 @@
 		<!-- {{associationGaps}}
 -->
 
-<!-- {{$store.state.startTimePrompter}}<br>
+		<!-- {{$store.state.startTimePrompter}}<br>
 		{{$store.state.endTimePrompter}}<br> -->
 		<!-- {{new_associations}}  -->
 		<!-- {{scribingclean}} -->
@@ -50,6 +50,8 @@
 			placeholder="enter new text here"
 			v-model="new_text_unstripped"
 			ref="promptertextarea"
+			@keydown.enter.exact.prevent="emitNewPrompt()"
+			@keydown.enter.shift.exact.prevent="new_text_unstripped += '\n'"
 		></textarea>
 		<div v-if="allowSubmit==true">this text will be submitted when a new prompt is generated</div>
 		<div v-else-if="allowSubmit==false">this text WILL NOT be submitted when a new prompt is generated</div>
@@ -91,14 +93,19 @@ export default {
 	},
 	computed: {
 		new_text() {
-  if (this.spaced_by != ""){
-  let stripped=this.new_text_unstripped.replace(this.regexwithmultiplespacedby, this.spaced_by)
-  return stripped}
-  else if (this.spaced_by == "") {return this.new_text_unstripped}
-},
+			if (this.spaced_by != "") {
+				let stripped = this.new_text_unstripped.replace(
+					this.regexwithmultiplespacedby,
+					this.spaced_by
+				);
+				return stripped;
+			} else if (this.spaced_by == "") {
+				return this.new_text_unstripped;
+			}
+		},
 
 		scribingclean() {
-			if (this.$store.state.audioDuration < this.scribing) {
+			if (this.$store.state.audioDuration < this.scribing && this.$store.state.audioDuration >0) {
 				return this.$store.state.audioDuration;
 			} else {
 				return this.scribing;
@@ -110,7 +117,7 @@ export default {
 		},
 
 		regexwithmultiplespacedby() {
-			return new RegExp(`${this.escapeRegex(this.spaced_by)}+`, "g")
+			return new RegExp(`${this.escapeRegex(this.spaced_by)}+`, "g");
 		},
 
 		original_text_cleaned() {
@@ -127,7 +134,7 @@ export default {
 			}
 
 			if (this.spaced_by.length > 0) {
-				return split_text
+				return split_text;
 			} else if (this.spaced_by.length == 0) {
 				let strung_together = split_text.join("");
 				// console.log(strung_together);
@@ -141,7 +148,6 @@ export default {
 				.normalize("NFC")
 				.split(this.regexwithspacedby);
 
-
 			for (let j = split_text.length; j >= 0; j--) {
 				if (split_text[j] === undefined || split_text[j] == "") {
 					split_text.splice(j, 1);
@@ -149,7 +155,7 @@ export default {
 			}
 
 			if (this.spaced_by.length > 0) {
-				return split_text
+				return split_text;
 			} else if (this.spaced_by.length == 0) {
 				let strung_together = split_text.join("");
 				// console.log(strung_together);
@@ -198,6 +204,10 @@ export default {
 		// 		this.updateText();
 		// 	}
 		// },
+		scribingclean: function () {
+			let tempcurrentgapstart = this.relevantGap.startTime
+			this.findGaps(tempcurrentgapstart)
+		},
 		newPromptscounter: function () {
 			if (this.allowSubmit == true && this.new_text != "") {
 				// this.newpromptsfunc will be called if submit is successful inside updatetext()
@@ -230,30 +240,33 @@ export default {
 					this.$store.state.startTimePrompter * 100 >=
 						this.relevantGap.startTime &&
 					this.$store.state.endTimePrompter * 100 <= this.usableGaps[0].endTime
-				)
+				) // GAPS NOT POPULATED YET
 			) {
 				this.allowSubmit = false;
-			} else {
+			} else { // GAPS POPULATED
 				this.allowSubmit = true;
-			}
-			if (
+				if (
 				this.$store.state.endTimePrompter * 100 <
-				this.relevantGap.endTime+5
+				this.relevantGap.endTime + 5
 			) {
 				this.relevantGap.endTime = this.$store.state.endTimePrompter * 100;
-				if (this.usableGaps[0].startCharacter == this.relevantGap.startCharacter) {
+				if (
+					this.usableGaps[0].startCharacter == this.relevantGap.startCharacter
+				) {
 					// console.log("success")
-				this.usableGaps[0].startTime=this.$store.state.endTimePrompter * 100-5}
+					this.usableGaps[0].startTime =
+						this.$store.state.endTimePrompter * 100 - 5;
+				}
 				// else {console.log("fail")}
-			} else
-			if (
+			} else if (
 				this.$store.state.endTimePrompter * 100 >
 				this.usableGaps[0].startTime + 5
 			) {
-				console.log("culprit a")
 				this.usableGaps[0].startTime =
 					this.$store.state.endTimePrompter * 100 - 5;
 			}
+			}
+
 		},
 		"$store.state.triggerNewText": function () {
 			// console.log("new text triggered");
@@ -265,11 +278,13 @@ export default {
 			return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 		},
 
-		findGaps: function () {
+		findGaps: function (tempcurrentgapstart=0) { // tempcurrentgapstart will be 0 if no parameter is passed in
 			// console.log("find gaps begun")
 			if (this.$store.state.audioDuration > 0) {
 				// console.log("inside first if")
 				this.associationGaps.length = 0;
+				this.usableGaps.length=0
+				this.relevantGap={}
 				if (Object.keys(this.associations).length > 0) {
 					//start
 					let startTime = 0;
@@ -374,22 +389,28 @@ export default {
 							200 // FLAG TIME DECISION
 							// && (element.startCharacter == element.endCharacter ||
 							// 	element.endCharacter == null)
+							&& tempcurrentgapstart < element.endTime-200
 						) {
 							// console.log("in first if")
 							// console.log(element.endTime - element.startTime);
-							this.usableGaps.push(element);
+							if (element.startTime >= tempcurrentgapstart){
+							this.usableGaps.push(element);}
+							else if (element.startTime < tempcurrentgapstart) {
+								element.startTime=tempcurrentgapstart
+								this.usableGaps.push(element)
+							}
 						}
 					});
 				} else {
 					let associationsObject = {};
-					associationsObject.startTime = 0;
+					associationsObject.startTime = tempcurrentgapstart;
 					associationsObject.endTime = this.$store.state.audioDuration;
 
 					associationsObject.startCharacter = 0;
 					associationsObject.endCharacter = null;
 					this.associationGaps.push(associationsObject);
 
-					if (associationsObject.endTime - associationsObject.startTime > 200) {
+					if (tempcurrentgapstart < this.associationGaps[0].endTime-200) {
 						// FLAG TIME DECISION
 						this.usableGaps.push(this.associationGaps[0]);
 					}
@@ -583,11 +604,11 @@ export default {
 					// }
 					// else {
 					// console.log("no manually dragged did not work")
-					let temp=parseInt(this.usableGaps[0].startTime)
+					let temp = parseInt(this.usableGaps[0].startTime);
 					// console.log(temp + " " + this.usableGaps.length)
 					this.usableGaps[0].startTime =
 						this.contentEndingIndex - 5 + this.relevantGap.startTime;
-					temp=parseInt(this.usableGaps[0].startTime)
+					temp = parseInt(this.usableGaps[0].startTime);
 					// console.log(temp + " " + this.usableGaps.length)
 					// console.log("culprit b")
 					// }
@@ -600,13 +621,13 @@ export default {
 						(this.contentEndingIndex - 5 + this.relevantGap.startTime) <
 					this.scribingclean // FLAG TIME DECISION
 				) {
-					console.log(
-						this.usableGaps[0].endTime -
-							(this.contentEndingIndex - 5 + this.relevantGap.startTime) +
-							" is less than " +
-							this.scribingclean
-					);
-					console.log("moving to next gap");
+					// console.log(
+					// 	this.usableGaps[0].endTime -
+					// 		(this.contentEndingIndex - 5 + this.relevantGap.startTime) +
+					// 		" is less than " +
+					// 		this.scribingclean
+					// );
+					// console.log("moving to next gap");
 					this.usableGaps.shift();
 				}
 
@@ -698,6 +719,11 @@ export default {
 				this.allowSubmit = true;
 				this.$refs.promptertextarea.focus();
 			}
+		},
+
+		
+		emitNewPrompt() {
+			this.$emit("generateNewPrompt"); //
 		},
 
 		// convert a value from seconds to HH:MM:SS
@@ -807,26 +833,27 @@ export default {
 					temp_latesttext =
 						temp_latesttext +
 						this.original_text.substring(this.relevantGap.endCharacter);
-				}
-				else if (
+				} else if (
 					this.original_text[this.relevantGap.endCharacter] == "\n" &&
 					this.original_text[this.relevantGap.endCharacter + 1] != "\n"
 				) {
 					// console.log("preceding one carriage return; need to add one")
 					temp_latesttext =
-						temp_latesttext + "\n" +
+						temp_latesttext +
+						"\n" +
 						this.original_text.substring(this.relevantGap.endCharacter);
-				}
-				else if (
+				} else if (
 					this.original_text[this.relevantGap.endCharacter] != "\n" &&
 					this.original_text[this.relevantGap.endCharacter + 1] != "\n"
 				) {
 					// console.log("preceding no carriage returns; need to add two")
 					temp_latesttext =
-						temp_latesttext + "\n" + "\n" +
+						temp_latesttext +
+						"\n" +
+						"\n" +
 						this.original_text.substring(this.relevantGap.endCharacter);
 				}
-				this.latest_text=temp_latesttext
+				this.latest_text = temp_latesttext;
 			} else if (Number.isNaN(this.relevantGap.endCharacter) == true) {
 				// if the gap does not have an ending
 				let temp_latesttext = this.original_text;
@@ -834,19 +861,20 @@ export default {
 					this.original_text[this.original_text.length - 2] == "\n" &&
 					this.original_text[this.original_text.length - 1] == "\n"
 				) {
-					temp_latesttext = temp_latesttext + this.new_text + "\n"
+					temp_latesttext = temp_latesttext + this.new_text + "\n";
 				} else if (
 					this.original_text[this.original_text.length - 2] != "\n" &&
 					this.original_text[this.original_text.length - 1] == "\n"
 				) {
-					temp_latesttext = temp_latesttext + "\n" + this.new_text + "\n"
+					temp_latesttext = temp_latesttext + "\n" + this.new_text + "\n";
 				} else if (
 					this.original_text[this.original_text.length - 2] != "\n" &&
 					this.original_text[this.original_text.length - 1] != "\n"
 				) {
-					temp_latesttext = temp_latesttext + "\n" + "\n" + this.new_text + "\n"
+					temp_latesttext =
+						temp_latesttext + "\n" + "\n" + this.new_text + "\n";
 				}
-				this.latest_text=temp_latesttext
+				this.latest_text = temp_latesttext;
 			}
 
 			// if (
@@ -977,7 +1005,11 @@ export default {
 				this.instructions.lines.forEach((element) => {
 					// console.log(element['bIndex'])
 					// console.log(element)
-					if (element["bIndex"] >= 0 && element["aIndex"] == -1 && element["line"] != "\n") {
+					if (
+						element["bIndex"] >= 0 &&
+						element["aIndex"] == -1 &&
+						element["line"] != "\n"
+					) {
 						this.new_associations[element["bIndex"]] =
 							((this.$store.state.startTimePrompter +
 								this.$store.state.endTimePrompter) *

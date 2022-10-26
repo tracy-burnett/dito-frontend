@@ -176,6 +176,7 @@
 				:interpretation_id="interpretation_id"
 				@permanentlydestroy="permanentlydestroy($event)"
 				@increasePhrasesCounter="newPhrase()"
+				@generateNewPrompt="newPrompt()"
 			>
 
 			</component>

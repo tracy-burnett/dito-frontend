@@ -151,7 +151,7 @@ export default {
 			totalDuration: 0, // the total length of the audio, in seconds
 			playing: false,
 			audioURL: "",
-			updatingFromPrompter: false
+			updatingFromPrompter: false,
 		};
 	},
 
@@ -161,7 +161,52 @@ export default {
 			this.wavesurfer.setPlaybackRate(this.playbackspeed);
 		},
 		"$store.state.incomingCurrentTime": function () {
-			this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
+			if (
+				this.$store.state.incomingCurrentTime >= this.startTimeSeconds &&
+				this.$store.state.incomingCurrentTime < this.endTimeSeconds
+			) {
+				this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
+			} else if (
+				this.$store.state.incomingCurrentTime < this.startTimeSeconds
+			) {
+				let tempendtime = this.endTimeSeconds;
+				this.wavesurfer.clearRegions();
+				this.updatingFromPrompter = false;
+				this.wavesurfer.addRegion({
+					start: this.$store.state.incomingCurrentTime,
+					end: tempendtime,
+					id: "region",
+					loop: false,
+				});
+				this.startTime = this.secondsToTime(
+					Math.round(this.$store.state.incomingCurrentTime)
+				);
+				this.endTime = this.secondsToTime(Math.round(tempendtime));
+				this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
+			} else if (this.$store.state.incomingCurrentTime >= this.endTimeSeconds) {
+				let tempendtime = this.endTimeSeconds;
+				this.wavesurfer.clearRegions();
+				this.updatingFromPrompter = false;
+				this.wavesurfer.addRegion({
+					start: this.$store.state.incomingCurrentTime,
+					end: this.totalDuration,
+					id: "region",
+					loop: false,
+				});
+				this.startTime = this.secondsToTime(
+					Math.round(this.$store.state.incomingCurrentTime)
+				);
+				this.endTime = this.secondsToTime(Math.round(this.totalDuration));
+				this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
+			}
+			// this.startTimeSeconds = this.$store.state.startTimePrompter; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
+			// this.endTimeSeconds = this.$store.state.endTimePrompter; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
+			if (!this.playing) {
+				this.play();
+			} else if (this.playing) {
+				this.play();
+				this.play();
+			}
 		},
 		"$store.state.playerRerender": function () {
 			this.shouldRerender(this.$store.state.playerRerender);
@@ -322,8 +367,8 @@ export default {
 		// whenever the highlighted region or either of its bounds is dragged, update our data about where the region begins and ends accordingly
 		this.wavesurfer.on("region-update-end", (region, event) => {
 			// console.log(region)
-			that.startTimeSeconds = region.start
-			that.endTimeSeconds = region.end
+			that.startTimeSeconds = region.start;
+			that.endTimeSeconds = region.end;
 			// console.log(that.startTimeSeconds)
 			// console.log(that.endTimeSeconds)
 			// that.startTime = that.secondsToTime(that.startTimeSeconds);
@@ -343,9 +388,9 @@ export default {
 		this.wavesurfer.on("region-created", (region, event) => {
 			// console.log(region);
 			if (that.updatingFromPrompter == false) {
-				console.log("creating region, not from prompter")
-				that.startTimeSeconds = region.start
-				that.endTimeSeconds = region.end
+				// console.log("creating region, not from prompter");
+				that.startTimeSeconds = region.start;
+				that.endTimeSeconds = region.end;
 				// console.log(that.startTimeSeconds)
 				// console.log(that.endTimeSeconds)
 				// that.startTime = that.secondsToTime(that.startTimeSeconds);
@@ -353,9 +398,10 @@ export default {
 				that.$store.commit("updateStartTimePrompter", that.startTimeSeconds);
 				that.$store.commit("updateEndTimePrompter", that.endTimeSeconds);
 				if (region.id != "initialregion") {
-			that.$store.commit("forceTriggerNewText")}
+					that.$store.commit("forceTriggerNewText");
+				}
 			} else if (that.updatingFromPrompter == true) {
-				console.log("creating region from prompter")
+				// console.log("creating region from prompter");
 				that.startTimeSeconds = that.$store.state.startTimePrompter;
 				that.endTimeSeconds = that.$store.state.endTimePrompter;
 				that.updatingFromPrompter = false;
