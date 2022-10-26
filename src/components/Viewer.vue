@@ -7,6 +7,9 @@
 			<span class="px-3 py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 			in <span class="px-3 py-1 border-gray-300 rounded">{{ language_name }}</span>
 
+<br><br>
+			Change the slider above that says "highlight less / more".<br>
+			When the text below is highlighted in phrases of a length that you like, then click "Download."
 			<!-- {{associations}}<br>
 			{{parsedAssociations}}<br>
 			{{substringArray}}<br> -->
