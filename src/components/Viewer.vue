@@ -183,10 +183,12 @@ export default {
 		downloadSRT() {
 			this.parsedAssociations.forEach((value, index) => {
 				let tempStartTimeMilliseconds = value.startTime.slice(-2) + "0";
+				while (tempStartTimeMilliseconds.length<3) {tempStartTimeMilliseconds += 0}
 				let tempStartTimeSeconds = this.secondsToTime(
 					value.startTime.slice(0, -2)
 				);
 				let tempEndTimeMilliseconds = value.endTime.slice(-2) + "0";
+				while (tempEndTimeMilliseconds.length<3) {tempEndTimeMilliseconds += 0}
 				let tempEndTimeSeconds = this.secondsToTime(value.endTime.slice(0, -2));
 				let tempSubstring = this.getTempSubstring(value.startCharacter);
 console.log(tempSubstring)
