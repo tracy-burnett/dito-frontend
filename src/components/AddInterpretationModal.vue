@@ -52,6 +52,9 @@
         rows="5"
         style="overflow-y: scroll"
       />
+
+<!--ALLOW UPLOAD INTERPRETATION, HERE-->
+
       <button
         class="w-full px-3 py-2 mt-16 text-sm font-medium text-white transition-colors border rounded bg-cyan-700 border-cyan-600 hover:bg-cyan-600"
         @click="create"
