@@ -5,9 +5,9 @@
 	>
 		<span class="px-3 py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="px-3 py-1 border-gray-300 rounded">{{ language_name }}</span><br />
-		{{new_associations}}<br><br>
+		<!-- {{new_associations}}<br><br> -->
 		<!-- {{startingindex}}<br><br> -->
-		{{parsedAssociations}}<br><br>
+		<!-- {{parsedAssociations}}<br><br> -->
 		<!-- {{latest_text}}<br><br> -->
 		<!-- {{latest_text_part}}<br><br> -->
 		<!-- {{latest_text_character_array}} -->
@@ -153,7 +153,7 @@ export default {
 				.then((response) => response.json())
 				.then((data) => {
 					this.associations = data.associations;
-					console.log(this.associations)
+					// console.log(this.associations)
 				})
 				.then(() => this.handle_associations()) // turn the highlighting information from backend into something usable, then call clipText
 
@@ -216,7 +216,7 @@ export default {
 			} else {
 				this.startingindex = 0;
 			}
-			console.log("starting index is " + this.startingindex);
+			// console.log("starting index is " + this.startingindex);
 			if (deletefromend.length >= 1) {
 				this.endingindex = Math.min(...deletefromend);
 			} else {
@@ -230,18 +230,22 @@ export default {
 				`${this.escapeRegex(this.spaced_by)}|(\n)`
 			);
 			// console.log(this.latest_text.substring(0,this.startingindex).split(regexwithspacedby))
-			
-			this.deletedfrombeginningIndex=this.latest_text.substring(0,this.startingindex).split(regexwithspacedby)
 
+			this.deletedfrombeginningIndex = this.latest_text
+				.substring(0, this.startingindex)
+				.split(regexwithspacedby);
 
 			for (let j = this.deletedfrombeginningIndex.length; j >= 0; j--) {
-				if (this.deletedfrombeginningIndex[j] === undefined || this.deletedfrombeginningIndex[j] == "") {
+				if (
+					this.deletedfrombeginningIndex[j] === undefined ||
+					this.deletedfrombeginningIndex[j] == ""
+				) {
 					this.deletedfrombeginningIndex.splice(j, 1);
 				} // second parameter being 1 means remove 1 element only
 			}
-			console.log(this.deletedfrombeginningIndex)
-			
-			console.log(this.deletedfrombeginningIndex.length)
+			// console.log(this.deletedfrombeginningIndex)
+
+			// console.log(this.deletedfrombeginningIndex.length)
 			// console.log(this.latest_text)
 			// console.log(this.latest_text_part)
 
@@ -253,7 +257,7 @@ export default {
 					character_array.splice(j, 1);
 				} // second parameter being 1 means remove 1 element only
 			}
-			console.log(character_array)
+			// console.log(character_array)
 
 			for (let i = 0; i < character_array.length; i++) {
 				let sample_object = {};
@@ -293,9 +297,11 @@ export default {
 
 		// if you click on a character, it gives it a new tag
 		addNewAssociation(characterindex) {
-			console.log(characterindex);
+			// console.log(characterindex);
 			let clicktime = this.$store.state.audioplayertime;
-			this.latest_text_character_array[characterindex-this.deletedfrombeginningIndex.length].newtag = true;
+			this.latest_text_character_array[
+				characterindex - this.deletedfrombeginningIndex.length
+			].newtag = true;
 			this.new_associations[characterindex] = Math.round(clicktime);
 			// console.log(JSON.stringify(this.new_associations));
 		},
@@ -311,7 +317,7 @@ export default {
 			//     associations: this.new_associations, // Pass in the list of the new tags
 			//   })
 			// );
-			console.log(this.new_associations)
+			// console.log(this.new_associations)
 			// send new tags to the database
 			fetch(
 				process.env.VUE_APP_api_URL +
@@ -336,8 +342,9 @@ export default {
 				.then((response) => response)
 				.then((data) => console.log(data))
 				.then(() => {
-					this.clearTimestamps()
-				this.adulterateText()})
+					this.clearTimestamps();
+					this.adulterateText();
+				})
 				.catch((error) => console.error("Error:", error));
 		},
 	},
