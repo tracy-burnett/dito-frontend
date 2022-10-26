@@ -120,7 +120,16 @@
 					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
 					@click="newPhrase()"
 				>
-					New Prompt
+					New Phrase
+				</button>
+			</div>
+
+			<div v-if="styleoption==='Viewer'">
+				<button
+					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
+					@click="download()"
+				>
+					Download
 				</button>
 			</div>
 
@@ -222,7 +231,7 @@ export default {
 			saveEditscounter: 0,
 			clearOldTimestampsvar: 0,
 			interpretationStatus: "", // this remembers whether the currently logged-in user is a viewer, editor, or owner of the currently-displayed interpretation
-			styleoption: "Viewer", // this can be Viewer, Editor, or Tagger, depending on how the user is currently interacting with the displayed interpretation
+			styleoption: "Studio", // this can be Viewer, Editor, or Tagger, depending on how the user is currently interacting with the displayed interpretation
 			interpretationFull: {}, // this contains all of the information about the currently displayed interpretation
 		};
 	},
@@ -269,6 +278,10 @@ export default {
 		},
 		saveEditsincrease() {
 			this.saveEditscounter++;
+		},
+
+		download() {
+			// download a txt file here
 		},
 		// 		submitincrease() {
 		// 	this.submitcounter++;
