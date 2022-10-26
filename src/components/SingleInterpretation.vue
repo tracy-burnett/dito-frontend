@@ -125,12 +125,17 @@
 			</div>
 
 			<div v-if="styleoption==='Viewer'">
-				<button
-					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-					@click="download()"
-				>
-					Download
-				</button>
+				<div
+			class="dropdown"
+			style="float: right"
+		>
+			<button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn">Download</button>
+			<div class="dropdown-content">
+				<a
+					@click="downloadSRT()"
+				>.srt</a>
+			</div>
+		</div>
 			</div>
 
 			<div v-if="styleoption==='Editor'">
@@ -180,6 +185,7 @@
 				:clearOldTimestampsvar="clearOldTimestampsvar"
 				:saveEditscounter="saveEditscounter"
 				:newPromptscounter="newPromptscounter"
+				:downloadSRTcounter="downloadSRTcounter"
 				:newPhrasescounter="newPhrasescounter"
 				:interpretationStatus="interpretationStatus"
 				:interpretation_id="interpretation_id"
@@ -226,6 +232,7 @@ export default {
 			updateAssociations: 0,
 			clearTimestampsvar: 0,
 			newPromptscounter: 0,
+			downloadSRTcounter: 0,
 			newPhrasescounter: 0,
 			// submitcounter: 0,
 			saveEditscounter: 0,
@@ -280,8 +287,8 @@ export default {
 			this.saveEditscounter++;
 		},
 
-		download() {
-			// download a txt file here
+		downloadSRT() {
+			this.downloadSRTcounter++
 		},
 		// 		submitincrease() {
 		// 	this.submitcounter++;
