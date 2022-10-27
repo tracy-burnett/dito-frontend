@@ -290,7 +290,7 @@ export default {
 
 		// if you click on a character that you have tagged in this session, it untags it
 		removeThisAssociation(characterindex) {
-			this.latest_text_character_array[characterindex].newtag = false;
+			this.latest_text_character_array[characterindex - this.deletedfrombeginningIndex.length].newtag = false;
 			delete this.new_associations[characterindex];
 			// console.log(JSON.stringify(this.new_associations));
 		},
