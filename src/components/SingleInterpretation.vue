@@ -133,7 +133,7 @@
 			<div class="dropdown-content">
 				<a
 					@click="downloadSRT()"
-				>.srt</a>
+				>overlapping .srt</a>
 			</div>
 		</div>
 			</div>

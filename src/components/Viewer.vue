@@ -181,6 +181,7 @@ export default {
 		},
 
 		downloadSRT() {
+			this.srt=""
 			this.parsedAssociations.forEach((value, index) => {
 				let tempStartTimeMilliseconds = value.startTime.slice(-2) + "0";
 				while (tempStartTimeMilliseconds.length<3) {tempStartTimeMilliseconds += 0}
@@ -191,7 +192,7 @@ export default {
 				while (tempEndTimeMilliseconds.length<3) {tempEndTimeMilliseconds += 0}
 				let tempEndTimeSeconds = this.secondsToTime(value.endTime.slice(0, -2));
 				let tempSubstring = this.getTempSubstring(value.startCharacter);
-console.log(tempSubstring)
+// console.log(tempSubstring)
 				let tempSubstringSplit = tempSubstring.split('')
 				tempSubstringSplit.forEach((character,index) => {
 					if (character==="\n") {
@@ -216,6 +217,8 @@ console.log(tempSubstring)
 					"\n\n";
 			});
 			// console.log(this.srt)
+			if (this.srt.slice(-2) == "\n\n"){
+			this.srt=this.srt.slice(0,-2)}
 
 			let blob = new Blob([this.srt], { type: "text/plain;charset=utf-8" });
 			saveAs(
