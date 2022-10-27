@@ -7,9 +7,12 @@
 			<span class="px-3 py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 			in <span class="px-3 py-1 border-gray-300 rounded">{{ language_name }}</span>
 
-			<!-- {{associations}}<br>
-			{{parsedAssociations}}<br>
-			{{substringArray}}<br> -->
+			<br><br>
+			Change the slider above that says "highlight less / more".<br>
+			When the text below is highlighted in phrases of a length that you like, then click "Download."<br><br>
+			<!-- {{associations}}<br><br>
+			{{parsedAssociations}}<br><br>
+			{{substringArray}}<br><br> -->
 			<!-- for each substring that would be independently highlighted, render it as highlighted or not based on running the highlight function on it whenever the current audioplayer time changes.
 also, if the user clicks on the text of that substring, snap the audio player to play the corresponding audio for that substring. -->
 			<div class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded">
@@ -39,6 +42,8 @@ also, if the user clicks on the text of that substring, snap the audio player to
 </template>
 
 <script>
+import { saveAs } from "file-saver";
+
 export default {
 	name: "Viewer",
 	inheritAttrs: false,
@@ -46,6 +51,7 @@ export default {
 		return {
 			language_name: "",
 			title: "",
+			srt: "",
 			relevantCharacters: [], // character indices in the text where highlighting might need to begin or end
 			parsedAssociations: [], // array of objects that each indicates which range of characters should be highlighted within a given range of milliseconds
 			substringArray: [], // array of objects that each includes a substring of the displayed text, with the index of the substring's starting character
@@ -61,6 +67,7 @@ export default {
 		audio_id: {
 			default: "",
 		},
+		downloadSRTcounter: { default: 0 },
 		timestep: { default: 500 },
 		fontsize: { default: 12 },
 		interpretation_id: { default: "" },
@@ -69,6 +76,9 @@ export default {
 	watch: {
 		interpretationStatus: function () {
 			this.fetchNewInterpretation();
+		},
+		downloadSRTcounter: function () {
+			this.downloadSRT();
 		},
 		timestep: function () {
 			this.fetchNewInterpretation();
@@ -168,6 +178,76 @@ export default {
 					}
 				}
 			}
+		},
+
+		downloadSRT() {
+			this.srt=""
+			this.parsedAssociations.forEach((value, index) => {
+				let tempStartTimeMilliseconds = value.startTime.slice(-2) + "0";
+				while (tempStartTimeMilliseconds.length<3) {tempStartTimeMilliseconds += 0}
+				let tempStartTimeSeconds = this.secondsToTime(
+					value.startTime.slice(0, -2)
+				);
+				let tempEndTimeMilliseconds = value.endTime.slice(-2) + "0";
+				while (tempEndTimeMilliseconds.length<3) {tempEndTimeMilliseconds += 0}
+				let tempEndTimeSeconds = this.secondsToTime(value.endTime.slice(0, -2));
+				let tempSubstring = this.getTempSubstring(value.startCharacter);
+// console.log(tempSubstring)
+				let tempSubstringSplit = tempSubstring.split('')
+				tempSubstringSplit.forEach((character,index) => {
+					if (character==="\n") {
+						tempSubstringSplit[index]="\\n"
+				}})
+
+				tempSubstring=tempSubstringSplit.join('')
+
+				this.srt +=
+					index +
+					1 +
+					"\n" +
+					tempStartTimeSeconds +
+					"," +
+					tempStartTimeMilliseconds +
+					" --> " +
+					tempEndTimeSeconds +
+					"," +
+					tempEndTimeMilliseconds +
+					"\n" +
+					tempSubstring +
+					"\n\n";
+			});
+			// console.log(this.srt)
+			if (this.srt.slice(-2) == "\n\n"){
+			this.srt=this.srt.slice(0,-2)}
+
+			let blob = new Blob([this.srt], { type: "text/plain;charset=utf-8" });
+			saveAs(
+				blob,
+				this.title +
+					"-" +
+					this.language_name +
+					"-timestep" +
+					this.timestep +
+					".srt"
+			);
+		},
+
+		getTempSubstring(startcharacter) {
+			let tempSubstring = "";
+			this.substringArray.forEach((substring) => {
+				if (substring.startingcharacter == startcharacter) {
+					tempSubstring = substring.text;
+				}
+			});
+
+			return tempSubstring;
+		},
+
+		// convert a value from seconds to HH:MM:SS
+		secondsToTime(seconds) {
+			var date = new Date(1970, 0, 1);
+			date.setSeconds(seconds);
+			return date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
 		},
 
 		latest_text_slices() {

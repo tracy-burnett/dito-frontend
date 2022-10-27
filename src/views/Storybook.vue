@@ -10,6 +10,17 @@
 				@closeInterpretationModal="closeInterpretationModal()"
 			/>
 		</span>
+				<span
+			v-if="showUploadIntModal"
+			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
+		>
+			<UploadIntModal
+				:audio_id="audio_ID"
+				@addCreatedInterpretation="addCreatedInterpretation($event)"
+				@closeUploadIntModal="closeUploadIntModal()"
+			/>
+		</span>
+
 		<Navbar />
 		<div class="flex">
 			<PlayerVertical
@@ -45,6 +56,7 @@
 				:audio_id="audio_ID"
 				:interpretationsList="interpretationsList"
 				@toggleInterpretationModal="toggleInterpretationModal()"
+				@toggleUploadIntModal="toggleUploadIntModal()"
 				@displayInterpretationID="displayInterpretationID($event)"
 			/>
 		</div>
@@ -57,6 +69,7 @@ import PlayerVertical from "@/components/PlayerVertical.vue";
 import SingleInterpretation from "@/components/SingleInterpretation.vue";
 import AddInterpretationViewer from "@/components/AddInterpretationViewer.vue";
 import AddInterpretationModal from "@/components/AddInterpretationModal.vue";
+import UploadIntModal from "@/components/UploadIntModal.vue";
 
 export default {
 	name: "Storybook",
@@ -66,6 +79,7 @@ export default {
 		SingleInterpretation,
 		AddInterpretationViewer,
 		AddInterpretationModal,
+		UploadIntModal,
 	},
 	data: () => {
 		return {
@@ -73,6 +87,7 @@ export default {
 			interpretationsList: [], // the list of interpretations that can be selected from the dropdown menu (does not include interpretations currently being viewed by this user in this browser window)
 			formerInterpretationsList: [], // the list of interpretations currently being viewed by this user in this browser window
 			showAddInterpretationModal: false,
+			showUploadIntModal: false,
 		};
 	},
 	props: {
@@ -207,6 +222,12 @@ export default {
 		addCreatedInterpretation(interpretation) {
 			this.formerInterpretationsList.push(interpretation);
           this.$store.commit("addConsolesCount", interpretation.id);
+		},
+		toggleUploadIntModal() {
+			this.showUploadIntModal = !this.showAddInterpretationModal;
+		},
+		closeUploadIntModal() {
+			this.showUploadIntModal = false
 		},
 		toggleInterpretationModal() {
 			this.showAddInterpretationModal = !this.showAddInterpretationModal;
