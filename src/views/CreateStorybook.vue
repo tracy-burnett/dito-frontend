@@ -133,7 +133,7 @@ export default {
 						{ method: "PUT", body: this.file }
 					)
 						.then((response) => {
-							console.log(response);
+							// console.log(response);
 
 							this.$store.commit("forcePlayerRerender", data["audio_ID"]);
 							return;
