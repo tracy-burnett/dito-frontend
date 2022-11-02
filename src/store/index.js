@@ -53,7 +53,7 @@ export default new Vuex.Store({
     Login_User(state, user) {
 
       state.user = user
-      state.infobit=state.infobitToBe
+      state.infobit = state.infobitToBe
     },
 
     SetIdToken(state, token) {
@@ -68,13 +68,16 @@ export default new Vuex.Store({
       state.sidebar = visibility;
     },
 
-    
+
     toggleInfobit(state, infobit) {
-      if (infobit=="InfoRevitalize")
-{      state.infobit = infobit;}
-else if (!state.user) {state.infobit="Login"
-state.infobitToBe=infobit}
-else if (state.user) {state.infobit=infobit}
+      if (infobit == "InfoRevitalize") { state.infobit = infobit; }
+      else if (infobit=="Login") {state.infobit="Login"
+    state.infobitToBe="PublicCardList"}
+      else if (!state.user) {
+        state.infobit = "Login"
+        state.infobitToBe = infobit
+      }
+      else if (state.user) { state.infobit = infobit }
     },
 
 
@@ -84,11 +87,12 @@ else if (state.user) {state.infobit=infobit}
 
     updateIncomingCurrentTime(state, value) {
       if (value <= 0) {
-        
-      state.incomingCurrentTime = 0
+
+        state.incomingCurrentTime = 0
       }
-      else{
-      state.incomingCurrentTime = value}
+      else {
+        state.incomingCurrentTime = value
+      }
     },
 
     updateAudioTime(state, audiotime) {
@@ -238,7 +242,12 @@ else if (state.user) {state.infobit=infobit}
         // onAuthStateChanged listener will handle user assignment
         // context.commit('Logout_User')
         // })
-        .then(context.commit('toggleInfobit', "InfoRevitalize"))
+        .then(() =>
+
+      {    context.commit('toggleInfobit', "InfoRevitalize")
+          
+			// this.$router.replace("/");
+      })
         .catch((error) => {
           // An error happened.
           console.log("Oops. " + error.code + ": " + error.message);
@@ -273,8 +282,13 @@ else if (state.user) {state.infobit=infobit}
               }),
             })
               .then((response) => response.json())
-              .then((response) => {console.log(response)
-              context.commit('toggleInfobit', newinfobit)})
+              .then((response) => {
+                console.log(response)
+                
+			// this.$router.replace("/");
+                context.commit('toggleInfobit', newinfobit)
+                
+              })
               .catch(function (error) {
                 console.log("Oops. " + error.code + ": " + error.message);
               });

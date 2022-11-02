@@ -1,7 +1,7 @@
 <template>
 	<div class="flex flex-col items-center  pt-[8vh] hover:overflow-x-auto cardlist">
 		<input
-			class="px-3 py-1 border border-gray-300 rounded w-[20vw]"
+			class="px-3 fixed py-1 border border-gray-300 rounded w-[20vw]"
 			placeholder="Search Storybooks"
 			v-model="searchterm"
 			@keyup.enter="search"
@@ -10,7 +10,7 @@
 		<!-- <div class="pt-[3vh] flex flex-row items-center"> -->
 			<!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
 
-  <div v-if="searchResultAudioArray.length>0" class="pt-[3vh] flex flex-row items-center">
+  <div v-if="searchResultAudioArray.length>0" class="pt-[3vh] mt-[5vh] flex flex-row items-center">
     <div
 				v-for="audio in searchResultAudioArray"
 				:key="audio.id"
@@ -23,7 +23,7 @@
 					:audio_ID="audio.id"
 				/></div>
   </div>
-  <div v-else class="pt-[3vh] flex flex-row items-center">
+  <div v-else class="pt-[3vh] mt-[5vh] flex flex-row items-center">
       <div
 				v-for="audio in audioArray"
 				:key="audio.id"
