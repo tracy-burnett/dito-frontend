@@ -7,13 +7,13 @@
       </div> Create New Interpretation
     </div>
         <!-- this is a button for creating a new Interpretation and having it displayed in its own column -->
-        <div  class="sticky top-40" id="upload" @click="upload" style="cursor:pointer">
+        <div  class="absolute top-40" id="upload" @click="upload" style="cursor:pointer">
       <div class="w-10 h-10">
         <img src="@/assets/add-new.svg" />
       </div> Upload .srt Interpretation
     </div>
     <!-- this is a button for adding another column that shows an Interpretation that you have access to but aren't yet viewing -->
-    <div  class="sticky top-64" v-show="this.interpretationsList[0]" id="add" @click="add" style="cursor:pointer">
+    <div  class="absolute top-64" v-show="this.interpretationsList[0]" id="add" @click="add" style="cursor:pointer">
       <div class="w-10 h-10">
         <img src="@/assets/add-existing.svg" />
       </div> Add Another Console

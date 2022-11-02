@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-5 pt-[15vh]">
+  <div class="mx-5 pt-[11vh]">
     <!-- <h1 class="mt-8 mb-6 text-2xl font-bold text-center">{{ title }}</h1> -->
     <div class="flex flex-row items-center hover:overflow-x-auto cardlist">
       <!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
@@ -25,7 +25,7 @@ export default {
       audioArray: [], // the list of audio files owned by, or shared with, the logged-in user
     };
   },
-  name: "PublicCardList",
+  name: "InfoRevitalize",
   props: {
 
 title: {

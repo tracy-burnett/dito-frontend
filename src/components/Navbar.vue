@@ -1,19 +1,23 @@
 <template>
 	<div v-if="$store.state.sidebar">
-  <!-- <Teleport to="body"> -->
-    <div id="closesidebar" class="w-full h-full z-40 fixed" @click="closeSidebar()">hello</div>
-    <!-- </Teleport> -->
-			<SidebarAlt />
+		<!-- <Teleport to="body"> -->
+		<div
+			id="closesidebar"
+			class="fixed z-40 w-full h-full"
+			@click="closeSidebar()"
+		></div>
+		<!-- </Teleport> -->
+		<SidebarAlt />
 	</div>
 
-	<div class="bar flex justify-between items-center bg-gray-900 px-5 py-1 sticky top-0 z-10">
+	<div class="sticky top-0 z-10 flex items-center justify-between px-5 py-1 bg-sky-600 bar">
 		<router-link
-			class="text-xl text-gray-100 font-semibold"
+			class="text-xl font-mediumbold text-slate-100"
 			to="/"
 		>
 			<div class="flex">
 				<svg
-					class="h-7 fill-blue-400"
+					class="h-7 fill-blue-700"
 					viewBox="0 -155 826.5 1030.1"
 					xml:space="preserve"
 				>
@@ -24,7 +28,7 @@
 						</g>
 					</switch>
 				</svg>
-				&nbsp; dito: dialect interpretations & translations (online)
+				&nbsp; dito: dialect interpretation & translation (online)
 			</div>
 		</router-link>
 
@@ -67,7 +71,7 @@
 			</div>
 			<img
 				src="@/assets/menu-outline.svg"
-				class="cursor-pointer w-8 ml-8"
+				class="w-8 ml-8 cursor-pointer"
 				@click="showSidebar"
 			/>
 		</div>
@@ -90,7 +94,7 @@ export default {
 		showSidebar() {
 			this.$store.commit("toggleSidebar", true);
 		},
-    
+
 		closeSidebar() {
 			this.$store.commit("toggleSidebar", false);
 		},
@@ -112,6 +116,8 @@ export default {
 <style scoped>
 .bar {
 	min-width: 42rem;
+	
+/* background-image:
+     linear-gradient(to bottom,#111827,rgba(11,18,27, 0)); */
 }
-
 </style>

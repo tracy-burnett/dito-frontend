@@ -1,7 +1,7 @@
 <template>
-	<div class="lg:ml-16 mx-5 w-full">
+	<div class="w-full mx-5 lg:ml-16">
 
-		<h1 class="font-bold text-2xl mt-8 mb-6">Active Storybooks</h1>
+		<h1 class="mt-8 mb-6 text-2xl font-bold">Active Storybooks</h1>
 
 		<div class="flex justify-around w-full">
 			<span>
@@ -182,7 +182,7 @@
 			</span><br /><br />
 
 			<span v-if="(audioArrayArchive.length > 0) && (checkedFilters.includes('archived'))">
-				<h1 class="font-bold text-2xl mt-8 mb-6">Archived Storybooks</h1>
+				<h1 class="mt-8 mb-6 text-2xl font-bold">Archived Storybooks</h1>
 				<br />
 				<div class="grid grid-cols-8 px-4 py-2 ml-20">
 					<p></p>
@@ -349,7 +349,5 @@ export default {
 </script>
 
 <style scoped>
-.flex {
-	flex-wrap: wrap;
-}
+
 </style>

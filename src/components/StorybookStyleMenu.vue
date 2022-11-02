@@ -18,13 +18,15 @@
 					v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'"
 					@click="toggleStorybookStyle('Tagger')"
 				>Tagging</a>
-				<a v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'" @click="toggleStorybookStyle('Viewer')">Viewing</a>
+				<a
+					@click="toggleStorybookStyle('Viewer')"
+				>Viewing</a>
 
 				<a
 					v-if="$store.state.prompterID == null || $store.state.prompterID == interpretation_id"
 					@click="toggleStorybookStyle('Studio')"
 				>Studying</a>
-				
+
 			</div>
 		</div>
 	</div>
@@ -40,7 +42,7 @@ export default {
 		interpretationStatus: {
 			default: "viewer",
 		},
-    interpretation_id: {
+		interpretation_id: {
 			default: null,
 		},
 	},

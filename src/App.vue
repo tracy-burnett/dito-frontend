@@ -46,5 +46,7 @@ export default {
   color: #2c3e50;
   margin-top: 60px; */
   /* overflow:hidden */
+  font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* overscroll-behavior-x: none; */
 }
 </style>

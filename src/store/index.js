@@ -18,6 +18,8 @@ export default new Vuex.Store({
     consoleswidth: 0,
     prompterID: null, // the id of the interpretation currently using Prompter (there can only be one at a time)
     peaksData: [],
+    infobit: "PublicCardList",
+    infobitToBe: "PublicCardList",
     regionRerender: 0,
     dashboardRerender: 0,
     startTimePrompter: 0, // in s with hundredth of a second precision
@@ -51,6 +53,7 @@ export default new Vuex.Store({
     Login_User(state, user) {
 
       state.user = user
+      state.infobit=state.infobitToBe
     },
 
     SetIdToken(state, token) {
@@ -63,6 +66,15 @@ export default new Vuex.Store({
 
     toggleSidebar(state, visibility) {
       state.sidebar = visibility;
+    },
+
+    
+    toggleInfobit(state, infobit) {
+      if (infobit=="PublicCardList")
+{      state.infobit = infobit;}
+else if (!state.user) {state.infobit="Login"
+state.infobitToBe=infobit}
+else if (state.user) {state.infobit=infobit}
     },
 
 
@@ -226,6 +238,7 @@ export default new Vuex.Store({
         // onAuthStateChanged listener will handle user assignment
         // context.commit('Logout_User')
         // })
+        .then(context.commit('toggleInfobit', "PublicCardList"))
         .catch((error) => {
           // An error happened.
           console.log("Oops. " + error.code + ": " + error.message);
@@ -234,10 +247,8 @@ export default new Vuex.Store({
 
     },
 
-    Register_User: (context, { email, password, display_name, description, anonymous }) => {
-      const register_email = email
-      const register_password = password
-      return createUserWithEmailAndPassword(auth, register_email, register_password)
+    Register_User: (context, { reg_email, reg_password, reg_display_name, reg_description, reg_anonymous, newinfobit }) => {
+      return createUserWithEmailAndPassword(auth, reg_email, reg_password)
         .then((userCredential) => { return userCredential })
         // .then((data) => {
         // onAuthStateChanged listener will handle user assignment
@@ -255,14 +266,15 @@ export default new Vuex.Store({
                 Authorization: data.user.accessToken,
               },
               body: JSON.stringify({
-                display_name: display_name.normalize('NFC'),
-                description: description.normalize('NFC'),
-                anonymous: anonymous,
-                email: email,
+                display_name: reg_display_name.normalize('NFC'),
+                description: reg_description.normalize('NFC'),
+                anonymous: reg_anonymous,
+                email: reg_email,
               }),
             })
               .then((response) => response.json())
-              .then((response) => console.log(response))
+              .then((response) => {console.log(response)
+              context.commit('toggleInfobit', newinfobit)})
               .catch(function (error) {
                 console.log("Oops. " + error.code + ": " + error.message);
               });

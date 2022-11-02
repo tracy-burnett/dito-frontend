@@ -51,14 +51,14 @@
 			</span>
 			<!-- the AddInterpretationViewer component can tell this Storybook component to add a new column for an interpretation that it just created (addCreatedInterpretation),
       or to add a new column for an interpretation that has previously been created (displayInterpretationID). -->
-
+<div v-if="$store.state.user">
 			<AddInterpretationViewer
 				:audio_id="audio_ID"
 				:interpretationsList="interpretationsList"
 				@toggleInterpretationModal="toggleInterpretationModal()"
 				@toggleUploadIntModal="toggleUploadIntModal()"
 				@displayInterpretationID="displayInterpretationID($event)"
-			/>
+			/></div>
 		</div>
 	</div>
 </template>
