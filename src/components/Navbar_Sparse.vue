@@ -1,18 +1,18 @@
 <template>
 
-	<div class="sticky top-0 z-10 pb-2 bg-sky-600 bar">
+	<div class="sticky top-0 z-30 pb-2 bg-sky-600">
 
 
-		<div class="w-[20vh] absolute -ml-[7vh] -mt-[4vh] cursor-pointer" @click="gohome">
-			<img src="@/assets/dito_logo_main_color.svg" />
+		<div class="w-[20vh] absolute -ml-[7vh] -mt-[4vh]"  >
+			<img class="cursor-pointer" src="@/assets/dito_logo_main_color.svg" @click="gohome"/>
 		</div>
 
 		<div class="flex-row items-center justify-between">
 
-			<div class="flex flex-col items-center cursor-pointer">
+			<div class="flex flex-col items-center">
 
 				<div
-					class="flex flex-col items-center w-10 h-10 pt-7"
+					class="flex flex-col items-center w-10 h-10 cursor-pointer pt-7"
 					v-if="LoginLogoutButton"
 					@click="signoutuser()"
 				>
@@ -27,7 +27,7 @@
 				</div>
 
 				<div
-					class="flex flex-col items-center w-10 h-10 pt-7"
+					class="flex flex-col items-center w-10 h-10 cursor-pointer pt-7"
 					v-else
 					@click="openlogin()"
 				>
@@ -78,10 +78,5 @@ export default {
 </script>
 
 <style scoped>
-.bar {
-	min-width: 42rem;
 
-	/* background-image:
-     linear-gradient(to bottom,#111827,rgba(11,18,27, 0)); */
-}
 </style>

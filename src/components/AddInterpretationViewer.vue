@@ -1,22 +1,22 @@
 <template>
-  <div>
+  <div class="sticky w-[16vh]">
     <!-- this is a button for creating a new Interpretation and having it displayed in its own column -->
-    <div  class="sticky top-16" id="create" @click="show" style="cursor:pointer">
+    <div  class="fixed top-16  mt-[26vh]" id="create" @click="show" style="cursor:pointer">
       <div class="w-10 h-10">
         <img src="@/assets/add-new.svg" />
-      </div> Create New Interpretation
+      </div> Create New<br>Interpretation
     </div>
         <!-- this is a button for creating a new Interpretation and having it displayed in its own column -->
-        <div  class="absolute top-40" id="upload" @click="upload" style="cursor:pointer">
+        <div  class="fixed mt-[46vh]" id="upload" @click="upload" style="cursor:pointer">
       <div class="w-10 h-10">
         <img src="@/assets/add-new.svg" />
-      </div> Upload .srt Interpretation
+      </div> Upload .srt<br>Interpretation
     </div>
     <!-- this is a button for adding another column that shows an Interpretation that you have access to but aren't yet viewing -->
-    <div  class="absolute top-64" v-show="this.interpretationsList[0]" id="add" @click="add" style="cursor:pointer">
+    <div  class="fixed  mt-[66vh]" v-show="this.interpretationsList[0]" id="add" @click="add" style="cursor:pointer">
       <div class="w-10 h-10">
         <img src="@/assets/add-existing.svg" />
-      </div> Add Another Console
+      </div> Add Another<br>Console
     </div>
     <br />
   </div>

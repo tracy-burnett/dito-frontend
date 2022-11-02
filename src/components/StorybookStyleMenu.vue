@@ -67,15 +67,14 @@ export default {
 	/* background-color: #7833ff; */
 	border: none;
 	color: white;
-	padding: 10px 20px;
+	padding: 1vh 1vh;
 	text-align: center;
 	text-decoration: none;
 	display: inline-block;
-	margin: 4px 2px;
+	/* margin: 4px 2px; */
 	cursor: pointer;
 	border-radius: 16px;
 }
-
 .dropdown {
 	position: relative;
 	display: inline-block;

@@ -1,12 +1,12 @@
 <template>
 	<div
-		class="flex flex-col"
-		style="position:fixed;top:16;"
+		class="flex flex-col h-[20vh] mt-[2vh]"
+		style="position:fixed;"
 	>
 
 		<!-- playback speed slider -->
 		<div class="flex justify-center text-xs">
-			playback speed {{playbackspeed}}
+			playback speed {{playbackspeed}}x
 			<!-- <br>{{startTimeSeconds}} -->
 			<!-- <br>{{(startTimeSeconds+endTimeSeconds)/2}}<br>{{endTimeSeconds}} -->
 		</div>
@@ -18,10 +18,9 @@
 				min=".2"
 				max="1.5"
 				step=".10"
-				style="width: 100%"
+				style="width: 16vh"
 			/>
 		</div>
-
 		<!-- <div class="flex justify-center text-xs">{{playbackspeed}}</div> -->
 		<!-- audio player body -->
 		<div class="container shadow-xl rounded-xl">
@@ -642,9 +641,9 @@ export default {
 }
 
 .container {
-	height: 85vh;
-	min-height: 600px;
-	width: 8vw;
+	/* height: 100vh; */
+	/* min-height: 600px; */
+	width: 4vw;
 	min-width: 100px;
 	position: relative;
 	/* left: 10px; */
@@ -660,7 +659,7 @@ export default {
 .waveform {
 	/* flex: 1; */
 	display: flex;
-	height: 410px;
+	height: 55vh;
 	background: #dbeafe;
 
 	/* background: linear-gradient(90deg, #155E75, #64748B, #155E75) */
