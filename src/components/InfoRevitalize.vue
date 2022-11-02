@@ -1,72 +1,143 @@
 <template>
-  <div class="mx-5 pt-[15vh]">
-    <!-- <h1 class="mt-8 mb-6 text-2xl font-bold text-center">{{ title }}</h1> -->
-    <div class="flex flex-row items-center hover:overflow-x-auto cardlist">
-      <!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
-      <div v-for="audio in audioArray" :key="audio.id">
-        <Card
-          :date="audio.uploaded_at.substring(0, 10) + ' UTC'"
-          :uploader="audio.uploaded_by.display_name"
-          :description="audio.description"
-          :title="audio.title"
-          :audio_ID="audio.id"
-        />
-      </div>
-    </div>
+	<div class="flex flex-col items-center  pt-[8vh] hover:overflow-x-auto cardlist">
+		<input
+			class="px-3 py-1 border border-gray-300 rounded w-[20vw]"
+			placeholder="Search Storybooks"
+			v-model="searchterm"
+			@keyup.enter="search"
+		/>
+		<!-- <h1 class="mt-8 mb-6 text-2xl font-bold text-center">{{ title }}</h1> -->
+		<!-- <div class="pt-[3vh] flex flex-row items-center"> -->
+			<!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
+
+  <div v-if="searchResultAudioArray.length>0" class="pt-[3vh] flex flex-row items-center">
+    <div
+				v-for="audio in searchResultAudioArray"
+				:key="audio.id"
+			>
+				<Card
+					:date="audio.uploaded_at.substring(0, 10) + ' UTC'"
+					:uploader="audio.uploaded_by.display_name"
+					:description="audio.description"
+					:title="audio.title"
+					:audio_ID="audio.id"
+				/></div>
   </div>
+  <div v-else class="pt-[3vh] flex flex-row items-center">
+      <div
+				v-for="audio in audioArray"
+				:key="audio.id"
+			>
+				<Card
+					:date="audio.uploaded_at.substring(0, 10) + ' UTC'"
+					:uploader="audio.uploaded_by.display_name"
+					:description="audio.description"
+					:title="audio.title"
+					:audio_ID="audio.id"
+				/>
+			<!-- </div> -->
+  </div>
+		</div>
+	</div>
 </template>
 
 <script>
 import Card from "@/components/Card.vue";
 
 export default {
-  data() {
-    return {
-      audioArray: [], // the list of audio files owned by, or shared with, the logged-in user
-    };
-  },
-  name: "InfoRevitalize",
-  props: {
+	data() {
+		return {
+			audioArray: [], // the list of audio files owned by, or shared with, the logged-in user
+			searchResultAudioArray: [],
+			searchterm: "",
+		};
+	},
+	name: "InfoRevitalize",
+	props: {
+		title: {
+			default: "Browse Public Storybooks",
+		},
+	},
+	computed: {
+		regexwithsearchterm() {
+			return new RegExp(`${this.escapeRegex(this.searchterm)}+`, "g");
+		},
+	},
+	// watch: {
+	//   "$store.state.idToken": function () {
+	//     this.getStorybooks();
+	//   },
 
-title: {
-  default: "Browse Public Storybooks"
-},},
-  // watch: {
-  //   "$store.state.idToken": function () {
-  //     this.getStorybooks();
-  //   },
-    
-  // },
-  components: {
-    Card,
-  },
-  mounted() {
-    // if (this.$store.state.idToken) {
-      
-      this.getStorybooks();
-      history.pushState(null, null, location.href);
-window.onpopstate = function(event) {
-    history.go(1);
-};
-    // }
-  },
-  methods: {
-    getStorybooks() {
-      fetch(process.env.VUE_APP_api_URL + "audio/", {
-        method: "GET",
+	// },
+	components: {
+		Card,
+	},
+	mounted() {
+		// if (this.$store.state.idToken) {
 
-        headers: {
-          "Content-Type": "application/json",
-          // Authorization: this.$store.state.idToken,
-        },
-      })
-        .then((response) => response.json()) // json to object
-        .then((data) => {
-          this.audioArray = data["audio"]; // collect the list of audio files that are owned by, or shared with, the logged-in user
-        })
-        .catch((error) => console.error("Error:", error));
-    },
-  },
+		this.getStorybooks();
+		history.pushState(null, null, location.href);
+		window.onpopstate = function (event) {
+			history.go(1);
+		};
+		// }
+	},
+	methods: {
+		escapeRegex: function (string) {
+			return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+		},
+
+		search() {
+			console.log(this.searchterm);
+			this.searchResultAudioArray = [...this.audioArray]
+      let i=0
+      while (i<this.searchResultAudioArray.length) {
+        let audio=this.audioArray[i]
+				let k = 0;
+				if (audio.description.match(this.regexwithsearchterm)) {
+					k++;
+				}
+				if (
+					audio.last_updated_at.substring(0, 10).match(this.regexwithsearchterm)
+				) {
+					k++;
+				}
+				if (audio.title.match(this.regexwithsearchterm)) {
+					k++;
+				}
+				if (
+					audio.uploaded_at.substring(0, 10).match(this.regexwithsearchterm)
+				) {
+					k++;
+				}
+
+				if (audio.uploaded_by.anonymous == false) {
+					if (audio.uploaded_by.display_name.match(this.regexwithsearchterm)) {
+						k++;
+					}
+				}
+        
+				if (k==0) {this.searchResultAudioArray.splice(i,1)}
+        else {i+=1}
+			}
+		},
+
+		getStorybooks() {
+			fetch(process.env.VUE_APP_api_URL + "audio/", {
+				method: "GET",
+
+				headers: {
+					"Content-Type": "application/json",
+					// Authorization: this.$store.state.idToken,
+				},
+			})
+				.then((response) => response.json()) // json to object
+				.then((data) => {
+					this.audioArray = data["audio"]; // collect the list of audio files that are owned by, or shared with, the logged-in user
+				})
+				.catch((error) => console.error("Error:", error));
+		},
+	},
 };
 </script>
 
@@ -79,5 +150,29 @@ window.onpopstate = function(event) {
 
 .cardlist::-webkit-scrollbar {
 	display: none; /* for Chrome, Safari, and Opera */
+}
+
+::placeholder {
+	text-align: center;
+}
+
+/* or, for legacy browsers */
+
+::-webkit-input-placeholder {
+	text-align: center;
+}
+
+:-moz-placeholder {
+	/* Firefox 18- */
+	text-align: center;
+}
+
+::-moz-placeholder {
+	/* Firefox 19+ */
+	text-align: center;
+}
+
+:-ms-input-placeholder {
+	text-align: center;
 }
 </style>

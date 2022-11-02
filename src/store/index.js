@@ -18,8 +18,8 @@ export default new Vuex.Store({
     consoleswidth: 0,
     prompterID: null, // the id of the interpretation currently using Prompter (there can only be one at a time)
     peaksData: [],
-    infobit: "PublicCardList",
-    infobitToBe: "PublicCardList",
+    infobit: "InfoRevitalize",
+    infobitToBe: "InfoRevitalize",
     regionRerender: 0,
     dashboardRerender: 0,
     startTimePrompter: 0, // in s with hundredth of a second precision
@@ -70,7 +70,7 @@ export default new Vuex.Store({
 
     
     toggleInfobit(state, infobit) {
-      if (infobit=="PublicCardList")
+      if (infobit=="InfoRevitalize")
 {      state.infobit = infobit;}
 else if (!state.user) {state.infobit="Login"
 state.infobitToBe=infobit}
@@ -238,7 +238,7 @@ else if (state.user) {state.infobit=infobit}
         // onAuthStateChanged listener will handle user assignment
         // context.commit('Logout_User')
         // })
-        .then(context.commit('toggleInfobit', "PublicCardList"))
+        .then(context.commit('toggleInfobit', "InfoRevitalize"))
         .catch((error) => {
           // An error happened.
           console.log("Oops. " + error.code + ": " + error.message);

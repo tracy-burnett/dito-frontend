@@ -52,6 +52,13 @@ export default {
 			this.$emit("toggleStorybookStyle", styleselection);
 		},
 	},
+	mounted() {
+		if (this.$store.state.infobit=="PublicCardList") {
+			this.toggleStorybookStyle('Viewer')
+		}
+		else if (this.$store.state.infobit=="InfoRevitalize")
+		{this.toggleStorybookStyle('Studio')}
+	},
 };
 </script>
 
