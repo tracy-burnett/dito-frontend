@@ -3,7 +3,7 @@
 	<div class="sticky top-0 z-10 pb-2 bg-sky-600 bar">
 
 
-		<div class="w-[20vh] absolute -ml-[7vh] -mt-[4vh]">
+		<div class="w-[20vh] absolute -ml-[7vh] -mt-[4vh] cursor-pointer" @click="gohome">
 			<img src="@/assets/dito_logo_main_color.svg" />
 		</div>
 
@@ -62,6 +62,10 @@ export default {
 			this.$router.replace("/");
 			this.$store.commit("toggleInfobit", "Login");
 		},
+
+		gohome: function() {
+			this.$router.replace("/");
+		}
 	},
 
 	computed: {
