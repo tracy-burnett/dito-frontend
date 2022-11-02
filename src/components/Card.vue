@@ -28,7 +28,6 @@
 
 <script>
 import cardbanner from "@/assets/IMG_0478.jpg";
-import logo from "@/assets/dito_logo_main.svg";
 
 export default {
 	name: "Card",
