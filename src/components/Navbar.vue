@@ -1,14 +1,14 @@
 <template>
-	<div v-if="$store.state.sidebar">
+	<!-- <div v-if="$store.state.sidebar"> -->
 		<!-- <Teleport to="body"> -->
-		<div
+		<!-- <div
 			id="closesidebar"
 			class="fixed z-40 w-full h-full"
 			@click="closeSidebar()"
-		></div>
+		></div> -->
 		<!-- </Teleport> -->
-		<SidebarAlt />
-	</div>
+		<!-- <SidebarAlt /> -->
+	<!-- </div> -->
 
 	<div class="sticky top-0 z-10 flex items-center justify-between px-5 py-1 bg-sky-600 bar">
 		<router-link
@@ -69,17 +69,17 @@
 					to="/login"
 				>LOGIN</router-link>
 			</div>
-			<img
+			<!-- <img
 				src="@/assets/menu-outline.svg"
 				class="w-8 ml-8 cursor-pointer"
 				@click="showSidebar"
-			/>
+			/> -->
 		</div>
 	</div>
 </template>
 
 <script>
-import SidebarAlt from "@/components/SidebarAlt.vue";
+// import SidebarAlt from "@/components/SidebarAlt.vue";
 
 export default {
 	name: "Navbar",
@@ -89,15 +89,15 @@ export default {
 			user: "",
 		};
 	},
-	components: { SidebarAlt },
+	// components: { SidebarAlt },
 	methods: {
-		showSidebar() {
-			this.$store.commit("toggleSidebar", true);
-		},
+		// showSidebar() {
+		// 	this.$store.commit("toggleSidebar", true);
+		// },
 
-		closeSidebar() {
-			this.$store.commit("toggleSidebar", false);
-		},
+		// closeSidebar() {
+		// 	this.$store.commit("toggleSidebar", false);
+		// },
 
 		signoutuser: function () {
 			this.$store.dispatch("Logout_User");
