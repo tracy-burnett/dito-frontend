@@ -22,12 +22,25 @@
 			/>
 		</span>
 		<div
-			class="relative overflow-hidden transition-colors bg-white border cardrow rounded-xl mr-7"
+			class="relative overflow-hidden transition-colors bg-white border cardrow rounded-xl"
 			:class="{ editing: dropdown, notediting: !dropdown }"
 		>
 			<slot></slot>
 			<!-- <img class="w-full h-1/2" :src="image" alt="Sunset in the mountains" /> -->
-			<div class="grid items-center grid-cols-8 px-4 py-2 ml-20">
+			<div class="grid items-center grid-cols-10">
+				<div v-if="picked==audio_ID"><button
+						class="w-1/2 px-3 py-2 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+						@click="selectrow()"
+					>
+						Unselect
+					</button></div>
+				<div v-else-if="!archived"> <button
+						class="w-1/2 px-3 py-2 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+						@click="selectrow()"
+					>
+						Select
+					</button></div>
+				<div v-else></div>
 				<div v-if="!archived">
 					<button
 						class="w-1/2 px-3 py-2 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
@@ -80,7 +93,7 @@
 					<span v-if="publictf"> yes</span>
 					<span v-else> no</span>
 				</span>
- 
+
 				<span v-else>
 					<span v-if="publictf"> yes</span>
 					<span v-else> no</span></span>
@@ -89,13 +102,18 @@
       </p> -->
 				<div>
 					<div v-if="!archived && status == 'owner'">
-						<!-- <button
-            class="w-2/3 px-3 py-2 text-sm font-medium text-white transition-colors bg-indigo-500 border border-indigo-400 rounded hover:bg-indigo-400"
-            @click="savechanges()"
-          >
-            Save Edits</button
-          ><br> -->
-						owner access<br><button
+
+						owner access
+					</div>
+					<div v-else-if="archived && status == 'owner'">
+
+					</div>
+					<div v-else>{{status}} access</div>
+				</div>
+				<div>
+					<div v-if="!archived && status == 'owner'">
+
+<button
 							class="w-2/3 px-3 py-2 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 							@click="archive()"
 						>
@@ -110,8 +128,11 @@
 							Restore
 						</button>
 					</div>
-					<div v-else>{{status}} access</div>
+					<div v-else></div>
 				</div>
+
+
+
 				<p v-if="status == 'owner'"><button @click="showStorybookModal(audio_ID)">Manage Collaborators</button></p>
 				<p v-else-if="status == 'editor'"><button @click="showAddViewersModal(audio_ID)">Manage Viewers</button></p>
 				<!-- <p v-else-if="status == 'viewer'"><button>Request to Collaborate</button></p> -->
@@ -143,7 +164,7 @@ export default {
 	components: { IntManager, StorybookModal, AddViewersModal },
 	watch: {
 		dropdown: function () {
-          this.$store.commit("forceDashboardRerender");
+			this.$store.commit("forceDashboardRerender");
 		},
 	},
 	computed: {
@@ -207,6 +228,9 @@ export default {
 	},
 
 	methods: {
+		selectrow() {
+			this.$emit("SelectRow", this.audio_ID);
+		},
 		showStorybookModal() {
 			this.$store.commit("showStorybookModal", this.audio_ID);
 		},
@@ -336,8 +360,8 @@ export default {
 					},
 					body: JSON.stringify({
 						// url: "coverimage.jpg",
-						title: this.title.normalize('NFC'),
-						description: this.description.normalize('NFC'),
+						title: this.title.normalize("NFC"),
+						description: this.description.normalize("NFC"),
 						public: this.publictf,
 						// shared_with: [],
 					}),

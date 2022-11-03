@@ -1,9 +1,12 @@
 <template>
-	<div class="w-full mx-5 lg:ml-16">
+	<div
+		class="w-full privatecardlist"
+		style="overflow: scroll; height:44vh;"
+	>
 
-		<h1 class="mt-8 mb-6 text-2xl font-bold">Active Storybooks</h1>
+		<!-- <h1 class="mt-8 mb-6 text-2xl font-bold">Active Storybooks</h1> -->
 
-		<div class="flex justify-around w-full">
+		<div class="flex flex-row w-full">
 			<span>
 				<input
 					type="checkbox"
@@ -56,7 +59,8 @@
 				<label for="archived"> archived</label></span>
 			<!-- {{audioArray}} --><br /><br />
 		</div>
-		<div class="">
+
+		<div>
 			<div class="grid grid-cols-8 px-4 py-2 ml-20">
 				<p></p>
 				<p class="font-bold">Title</p>
@@ -87,14 +91,18 @@
 						:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
 						:title="audio.title"
 						:audio_ID="audio.id"
-					> <input
+						@SelectRow="uncheck(audio.id)"
+					> 
+
+
+					<!-- <input
 							type="radio"
 							:id="audio.id"
 							:value="audio.id"
 							v-model="selected"
 							@click="uncheck(audio.id)"
 						/>
-						<label :for="audio.id"> more options</label>
+						<label :for="audio.id"> edit</label> -->
 					</CardRow>
 				</span>
 			</span>
@@ -115,14 +123,14 @@
 						:title="audio.title"
 						:audio_ID="audio.id"
 					>
-						<input
+						<!-- <input
 							type="radio"
 							:id="audio.id"
 							:value="audio.id"
 							v-model="selected"
 							@click="uncheck(audio.id)"
 						/>
-						<label :for="audio.id"> more options</label>
+						<label :for="audio.id"> more options</label> -->
 					</CardRow>
 				</div>
 			</span>
@@ -141,14 +149,15 @@
 						:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
 						:title="audio.title"
 						:audio_ID="audio.id"
-					> <input
+					>
+					 <!-- <input
 							type="radio"
 							:id="audio.id"
 							:value="audio.id"
 							v-model="selected"
 							@click="uncheck(audio.id)"
 						/>
-						<label :for="audio.id"> more options</label>
+						<label :for="audio.id"> more options</label> -->
 					</CardRow>
 				</div>
 			</span>
@@ -168,24 +177,25 @@
 						:title="audio.title"
 						:audio_ID="audio.id"
 					>
-						<div><input
+						<div>
+							<!-- <input
 								type="radio"
 								:id="audio.id"
 								:value="audio.id"
 								v-model="selected"
 								@click="uncheck(audio.id)"
 							/>
-							<label :for="audio.id"> more options</label>
+							<label :for="audio.id"> more options</label> -->
 						</div>
 					</CardRow>
 				</div>
 			</span><br /><br />
 
 			<span v-if="(audioArrayArchive.length > 0) && (checkedFilters.includes('archived'))">
-				<h1 class="mt-8 mb-6 text-2xl font-bold">Archived Storybooks</h1>
+				<h1 class="mt-8 mb-6 text-2xl font-bold">Shelved Storybooks</h1>
 				<br />
-				<div class="grid grid-cols-8 px-4 py-2 ml-20">
-					<p></p>
+				<div class="grid grid-cols-9 px-4 py-2 ml-20">
+					<div></div><div></div>
 					<p class="font-bold">Title</p>
 					<p class="">Description</p>
 					<p class="">created by</p>
@@ -230,7 +240,6 @@ export default {
 			audioArrayPublic: [],
 			audioArrayArchive: [],
 			lastknownscrollposition: 0,
-			checkedFilters: ["owner", "editor", "viewer", "public"],
 		};
 	},
 	computed: {
@@ -241,6 +250,15 @@ export default {
 			},
 			set(selected) {
 				this.$store.commit("updateSelected", selected);
+			},
+		},
+		checkedFilters: {
+			// getter
+			get() {
+				return this.$store.state.checkedFilters; // in the store
+			},
+			set(checkedFilters) {
+				this.$store.commit("updateCheckedFilters", checkedFilters);
 			},
 		},
 	},
@@ -266,6 +284,7 @@ export default {
 			if (id == this.selected) {
 				this.selected = false;
 			}
+		else if (id != this.selected) {this.selected=id}
 		},
 
 		getStorybooks() {
@@ -349,5 +368,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
