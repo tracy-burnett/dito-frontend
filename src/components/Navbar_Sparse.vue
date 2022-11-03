@@ -7,12 +7,12 @@
 			<img class="cursor-pointer" src="@/assets/dito_logo_main_color.svg" @click="gohome"/>
 		</div>
 
-		<div class="flex-row items-center justify-between">
+		<div class="flex flex-row-reverse items-center justify-between">
 
 			<div class="flex flex-col items-center">
 
 				<div
-					class="flex flex-col items-center w-10 h-10 cursor-pointer pt-7"
+					class="flex flex-col items-center w-10 h-10 cursor-pointer mr-[4vh] pt-[1vh]"
 					v-if="LoginLogoutButton"
 					@click="signoutuser()"
 				>
@@ -27,7 +27,7 @@
 				</div>
 
 				<div
-					class="flex flex-col items-center w-10 h-10 cursor-pointer pt-7"
+					class="flex flex-col items-center w-10 h-10 cursor-pointer mr-[4vh] pt-[1vh]"
 					v-else
 					@click="openlogin()"
 				>

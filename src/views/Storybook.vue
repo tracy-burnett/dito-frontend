@@ -260,7 +260,7 @@ export default {
 	z-index: -1;
 	position: absolute;
 	width: 100%;
-	height: 24vh;
+	height: 16vh;
 	margin-top: -2vh;
 	background-image: linear-gradient(
 		rgb(0.784% 51.765% 78.039%) 0%,

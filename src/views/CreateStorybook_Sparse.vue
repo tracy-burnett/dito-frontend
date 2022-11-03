@@ -23,7 +23,7 @@
 			/>
 		</div>
 		<div class="flex flex-col items-center w-2/5">
-			<h1 class="text-2xl font-bold text-slate-700">Start First Interpretation</h1>
+			<h1 class="text-2xl font-bold text-slate-700">Start First Interpretation (optional)</h1>
 			<br />
 			<input
 				class="w-full px-3 py-1 border border-gray-300 rounded"
@@ -171,7 +171,7 @@ export default {
 							.then(() =>
 								// post request to create new interpretation for this audio
 								{
-									this.$router.replace("/");
+									this.$store.commit("toggleInfobit","InfoPublish")
 
 									if (this.int_title || this.int_text || this.int_language) {
 										fetch(

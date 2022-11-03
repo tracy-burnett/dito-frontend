@@ -1,9 +1,9 @@
 <template>
 	<div class="h-full ml-[1vh] overflow-hidden">
 		<!-- this SingleInterpretation component represents what is viewable in a single interpretation column of an open storybook -->
-		<div class="flex flex-col mt-[4vh]">
+		<div class="flex flex-col -mt-[0vh] ">
 			<div class="flex flex-row justify-center ">
-				<div class="sticky z-20 flex flex-row flex-wrap justify-around shrink ">
+				<div class="sticky flex flex-row flex-wrap justify-around shrink ">
 					<div v-if="styleoption==='Tagger'"><button
 							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
 							@click="updateAssociationsfunc()"
@@ -25,7 +25,7 @@
 
 
 				</div>
-				<div class="sticky z-20 flex flex-row flex-wrap-reverse justify-around shrink top-12">
+				<div class="sticky flex flex-row flex-wrap-reverse justify-around shrink top-12">
 
 					<div>
 						<StorybookStyleMenu
