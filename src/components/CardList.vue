@@ -1,67 +1,78 @@
 <template>
 	<div
-		class="w-full privatecardlist"
+		class="w-full privatecardlist pb-[8vh]"
 		style="overflow: scroll; height:44vh;"
 	>
 
 		<!-- <h1 class="mt-8 mb-6 text-2xl font-bold">Active Storybooks</h1> -->
 
-		<div class="flex flex-row w-full">
-			<span>
-				<input
-					type="checkbox"
-					id="owner"
-					value="owner"
-					v-model="checkedFilters"
-					@change="getStorybooks()"
-				/>
-				<label for="owner"> owner</label></span>
+		<div class="fixed z-40 flex flex-row justify-around w-full -mt-[5vh]">
+			
+			<div class="flex flex-row justify-between basis-2/5"><p>Filters:</p>
+				<div>
+					<input
+						type="checkbox"
+						id="owner"
+						value="owner"
+						v-model="checkedFilters"
+						@change="getStorybooks()"
+					/>
+					<label for="owner"> owner</label></div>
 
-			<span>
-				<input
-					type="checkbox"
-					id="editor"
-					value="editor"
-					v-model="checkedFilters"
-					@change="getStorybooks()"
-				/>
-				<label for="editor"> editor</label></span>
+				<div>
+					<input
+						type="checkbox"
+						id="editor"
+						value="editor"
+						v-model="checkedFilters"
+						@change="getStorybooks()"
+					/>
+					<label for="editor"> editor</label></div>
 
-			<span>
-				<input
-					type="checkbox"
-					id="viewer"
-					value="viewer"
-					v-model="checkedFilters"
-					@change="getStorybooks()"
-				/>
-				<label for="viewer"> viewer</label></span>
+				<div>
+					<input
+						type="checkbox"
+						id="viewer"
+						value="viewer"
+						v-model="checkedFilters"
+						@change="getStorybooks()"
+					/>
+					<label for="viewer"> viewer</label></div>
 
-			<span>
+				<div>
+					<input
+						type="checkbox"
+						id="public"
+						value="public"
+						v-model="checkedFilters"
+						@change="getStorybooks()"
+					/>
+					<label for="public"> other</label></div>
+				<!-- {{audioArray}} -->
+
+				<div>
+					<input
+						type="checkbox"
+						id="archived"
+						value="archived"
+						v-model="checkedFilters"
+						@change="getStorybooks()"
+					/>
+					<label for="archived"> archived</label></div>
+			</div><div>
 				<input
-					type="checkbox"
-					id="public"
-					value="public"
-					v-model="checkedFilters"
-					@change="getStorybooks()"
+					class="px-3 py-.5 border border-gray-300 rounded w-[20vw]"
+					placeholder="Search Storybooks"
+					v-model="searchterm"	
+					@keyup.enter="search"
 				/>
-				<label for="public"> other</label></span>
+			</div>
 			<!-- {{audioArray}} -->
-
-			<span>
-				<input
-					type="checkbox"
-					id="archived"
-					value="archived"
-					v-model="checkedFilters"
-					@change="getStorybooks()"
-				/>
-				<label for="archived"> archived</label></span>
-			<!-- {{audioArray}} --><br /><br />
+			
 		</div>
 
 		<div>
-			<div class="grid grid-cols-8 px-4 py-2 ml-20">
+			<div class="grid grid-cols-9">
 				<p></p>
 				<p class="font-bold">Title</p>
 				<p class="">Description</p>
@@ -92,10 +103,9 @@
 						:title="audio.title"
 						:audio_ID="audio.id"
 						@SelectRow="uncheck(audio.id)"
-					> 
+					>
 
-
-					<!-- <input
+						<!-- <input
 							type="radio"
 							:id="audio.id"
 							:value="audio.id"
@@ -150,7 +160,7 @@
 						:title="audio.title"
 						:audio_ID="audio.id"
 					>
-					 <!-- <input
+						<!-- <input
 							type="radio"
 							:id="audio.id"
 							:value="audio.id"
@@ -192,10 +202,11 @@
 			</span><br /><br />
 
 			<span v-if="(audioArrayArchive.length > 0) && (checkedFilters.includes('archived'))">
-				<h1 class="mt-8 mb-6 text-2xl font-bold">Shelved Storybooks</h1>
+				<h1 class="mt-8 mb-6 text-2xl font-bold">Archived Storybooks (deleted, but can be restored)</h1>
 				<br />
-				<div class="grid grid-cols-9 px-4 py-2 ml-20">
-					<div></div><div></div>
+				<div class="grid grid-cols-9">
+					<div></div>
+					
 					<p class="font-bold">Title</p>
 					<p class="">Description</p>
 					<p class="">created by</p>
@@ -283,8 +294,9 @@ export default {
 			// console.log("now is " + this.selected)
 			if (id == this.selected) {
 				this.selected = false;
+			} else if (id != this.selected) {
+				this.selected = id;
 			}
-		else if (id != this.selected) {this.selected=id}
 		},
 
 		getStorybooks() {
@@ -368,4 +380,7 @@ export default {
 </script>
 
 <style scoped>
+::placeholder {
+	/* vertical-align: center; */
+}
 </style>

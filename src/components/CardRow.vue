@@ -27,36 +27,28 @@
 		>
 			<slot></slot>
 			<!-- <img class="w-full h-1/2" :src="image" alt="Sunset in the mountains" /> -->
-			<div class="grid items-center grid-cols-10">
+			<div class="grid items-center grid-cols-9">
 				<div v-if="picked==audio_ID"><button
-						class="w-1/2 px-3 py-2 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 						@click="selectrow()"
 					>
-						Unselect
+						Hide Interpretations
 					</button></div>
 				<div v-else-if="!archived"> <button
-						class="w-1/2 px-3 py-2 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 						@click="selectrow()"
 					>
-						Select
+						See Interpretations
 					</button></div>
 				<div v-else></div>
-				<div v-if="!archived">
-					<button
-						class="w-1/2 px-3 py-2 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
-						@click="openstorybook()"
-					>
-						View
-					</button>
-				</div>
-				<div v-else></div>
+
 				<div v-if="
-            !archived && dropdown && (status == 'owner' || status == 'editor')
+            !archived && (status == 'owner' || status == 'editor')
           ">
 					<textarea
-						class="w-full font-bold border-gray-300 rounded"
-						rows="3"
-						style="overflow: hidden"
+						class="w-full font-bold border-gray-300 rounded edittext"
+						rows="1"
+						style="overflow: scroll"
 						v-model="title"
 						@focusout="savechanges()"
 					></textarea>
@@ -65,12 +57,12 @@
 					<p class="font-bold">{{ title }}</p>
 				</div>
 				<div v-if="
-            !archived && dropdown && (status == 'owner' || status == 'editor')
+            !archived && (status == 'owner' || status == 'editor')
           ">
 					<textarea
-						class="w-full border-gray-300 rounded"
-						rows="3"
-						style="overflow: hidden"
+						class="w-full border-gray-300 rounded edittext"
+						rows="1"
+						style="overflow: scroll"
 						v-model="description"
 						@focusout="savechanges()"
 					></textarea>
@@ -110,11 +102,21 @@
 					</div>
 					<div v-else>{{status}} access</div>
 				</div>
-				<div>
-					<div v-if="!archived && status == 'owner'">
+				<div class="flex flex-row">
+
+					<div v-if="!archived">
+					<button
+						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+						@click="openstorybook()"
+					>
+						View
+					</button>
+				</div>
+				<div v-else></div>&nbsp;
+				<div v-if="!archived && status == 'owner'">
 
 <button
-							class="w-2/3 px-3 py-2 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+							class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 							@click="archive()"
 						>
 							Archive
@@ -122,19 +124,21 @@
 					</div>
 					<div v-else-if="archived && status == 'owner'">
 						<button
-							class="w-1/2 px-3 py-2 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+							class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 							@click="unarchive()"
 						>
 							Restore
 						</button>
 					</div>
 					<div v-else></div>
-				</div>
+			</div>
 
 
 
-				<p v-if="status == 'owner'"><button @click="showStorybookModal(audio_ID)">Manage Collaborators</button></p>
-				<p v-else-if="status == 'editor'"><button @click="showAddViewersModal(audio_ID)">Manage Viewers</button></p>
+				<p v-if="status == 'owner'"><button 						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+ @click="showStorybookModal(audio_ID)">Manage Collaborators</button></p>
+				<p v-else-if="status == 'editor'"><button 						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+ @click="showAddViewersModal(audio_ID)">Manage Viewers</button></p>
 				<!-- <p v-else-if="status == 'viewer'"><button>Request to Collaborate</button></p> -->
 			</div>
 		</div>
@@ -388,7 +392,6 @@ export default {
 }
 /* .editing {
 
-  background: rgba(0, 0, 0, 0.5);
 } */
 .notediting {
 	background: white;
@@ -398,4 +401,14 @@ export default {
   top: calc(50% - 1.75rem);
   right: 0;
 } */
+
+.edittext {
+	-ms-overflow-style: none; /* for Internet Explorer, Edge */
+	scrollbar-width: none; /* for Firefox */
+	overflow-y: scroll;
+}
+
+.edittext::-webkit-scrollbar {
+	display: none; /* for Chrome, Safari, and Opera */
+}
 </style>

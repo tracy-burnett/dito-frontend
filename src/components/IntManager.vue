@@ -29,8 +29,8 @@
       class="relative overflow-hidden transition-colors bg-white border intmanagerrow rounded-xl"
     >
       <!-- <img class="w-full h-1/2" :src="image" alt="Sunset in the mountains" /> -->
-      <div class="grid items-center grid-cols-10">
-        <p></p><p></p>
+      <div class="grid items-center grid-cols-9">
+        <p></p>
           <p class="font-bold">{{ interpretation.title }}</p>
         <p v-if="interpretation.spaced_by">{{ interpretation.language_name }} spaced by "{{interpretation.spaced_by}}"</p>
         <p v-else>{{ interpretation.language_name }}</p>
@@ -51,8 +51,10 @@
         <p>
         {{ status }} access
       </p><p></p>
-      <p v-if="status == 'owner'"><button @click="showIntCollabModal(interpretation.id)">Manage Collaborators</button></p>
-      <p v-else-if="status == 'editor'"><button @click="showIntViewersModal(interpretation.id)">Add Viewers</button></p>
+      <p v-if="status == 'owner'"><button 						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+  @click="showIntCollabModal(interpretation.id)">Manage Collaborators</button></p>
+      <p v-else-if="status == 'editor'"><button 						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+ @click="showIntViewersModal(interpretation.id)">Add Viewers</button></p>
       <!-- <p v-else-if="status == 'viewer' || status == 'public'"><button>Request to Collaborate</button></p> -->
       </div>
     </div>
