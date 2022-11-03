@@ -6,6 +6,10 @@
 		class="flex-auto"
 		
 	>
+		Write down the words that you hear, then press "Enter."  If you want to move to a new prompt without saving data, then leave the text box blank and press "Enter" or click on the "New Prompt" button above.<br>
+			If you want to adjust the segment of the audio being played to better fit the words, either drag the "scribe less / more" slider above or manually adjust the highlighted region in the audio player to the left by editing the timestamps at the top or bottom or clicking and dragging the highlighted region or its edges.<br><br>
+			
+
 		<span class="px-3 py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="px-3 py-1 border-gray-300 rounded">{{ language_name }}</span><br />
 		<!-- {{associationGaps}}
@@ -43,6 +47,9 @@
 		{{consecutiveZerosArray}} -->
 		<!-- {{newPromptscounter}} -->
 		<!-- {{$store.state.audioDuration}} -->
+
+
+
 		<textarea
 			class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded prompter"
 

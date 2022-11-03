@@ -7,7 +7,8 @@
 			in <span class="px-3 py-1 border-gray-300 rounded">{{ language_name }}</span>
 
 			<br><br>
-			Change the slider above that says "highlight less / more".<br>When the text below is highlighted in phrases of a length that you like, then click "Download."
+			Click on the phrases below to skip to the part of the audio file that contains them.<br>
+			Change the slider above that says "highlight less / more" to highlight and refer to the text in shorter or longer phrases as words are being spoken.<br>When the text below is highlighted in phrases of a length that you like, then select an option from the "Download" menu to save the interpretation to your computer.
 			<!-- {{associations}}<br><br>
 			{{parsedAssociations}}<br><br>
 			{{substringArray}}<br><br> -->

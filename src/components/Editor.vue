@@ -5,6 +5,9 @@
 	>
 		<!-- {{title.length}} -->
 		<!-- {{$store.getters.maxsize}} -->
+		Edit the title, language name, or text of the interpretation.  We will make every attempt to preserve the timestamps of the words as you move them around.
+		<br>Don't forget to click the "Save" button above after you make your changes!<br>
+		<br>
 		<input
 			class="px-3 py-1 font-bold border-gray-300 rounded"
 			v-model="title"

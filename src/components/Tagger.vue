@@ -2,6 +2,11 @@
 	<div
 		class="flex-auto"
 	>
+	Click on the words as you hear them being spoken, and they will turn green.  Click on them again if you are not satisfied with your timing, and they will revert to black.<br>
+	When you are satisfied with your clicks, click the "Save" button above.  To clear all of the green, click "Clear New" above.  To clear all of the timestamps within this interpretation from the database and start from scratch, click "Clear Old" (this cannot be undone).<br><br>
+	
+
+
 		<span class="px-3 py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="px-3 py-1 border-gray-300 rounded">{{ language_name }}</span><br />
 		<!-- {{new_associations}}<br><br> -->

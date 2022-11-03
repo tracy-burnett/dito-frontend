@@ -5,6 +5,7 @@
 	<div
 		class="flex-auto"
 	>
+
 		<span class="px-3 py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="px-3 py-1 border-gray-300 rounded">{{ language_name }}</span><br />
 
@@ -14,8 +15,13 @@
 		<!-- {{$store.state.startTimePrompter}}<br>
 		{{$store.state.endTimePrompter}}<br> -->
 
+
+
 		<div class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded">
-			Retype exactly whichever phrase most closely matches what you are hearing.
+			Retype exactly whichever phrase most closely matches what you are hearing.  If you are correct, you will automatically receive a new prompt (no need to press "Enter").<br>
+			Click "New Phrase" above to skip the current prompt.<br>
+			Adjust the "listen to less / more" slider above to change the length of phrase that you are prompted with (note that adjusting this slider at all will bring you back to the beginning of the audio file).<br><br>
+
 			<div v-if="substringArray.length>0">
 				<span style="white-space: pre-wrap">
 					1. {{ phrasechoicesArray[0] }}<br>

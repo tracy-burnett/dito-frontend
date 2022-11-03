@@ -4,17 +4,20 @@
 		<div class="flex flex-col -mt-[0vh] ">
 			<div class="flex flex-row justify-center ">
 				<div class="sticky flex flex-row flex-wrap justify-around shrink ">
-					<div v-if="styleoption==='Tagger'"><button
-							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-							@click="updateAssociationsfunc()"
-						>
-							Save
-						</button></div>
+
+
 					<div>
 						<DeleteInterpretationViewer
 							:interpretation_id="interpretation_id"
 							@returnFormerInterpretation="returnFormerInterpretation($event)"
 						/>
+					</div>
+					<div v-if="styleoption==='Tagger'">
+						<!-- quick and dirty way to undo tags you haven't saved to the database yet -->
+						<button
+							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
+							@click="clearTimestamps()"
+						>Clear New</button>
 					</div>
 					<div>
 						<SelectInterpretationMenu
@@ -73,13 +76,7 @@
 						</button>
 					</div>
 
-					<div v-if="styleoption==='Tagger'">
-						<!-- quick and dirty way to undo tags you haven't saved to the database yet -->
-						<button
-							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-							@click="clearTimestamps()"
-						>Clear New</button>
-					</div>
+
 					<!-- quick and dirty way to purge the database of all tags for this interpretation, mainly used for debugging purposes -->
 					<div v-if="styleoption==='Tagger'"><button
 							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
@@ -87,7 +84,12 @@
 						>
 							Clear Old
 						</button></div>
-
+						<div v-if="styleoption==='Tagger'"><button
+							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
+							@click="updateAssociationsfunc()"
+						>
+							Save
+						</button></div>
 				</div>
 			</div>
 			<div class="flex flex-row flex-wrap justify-center">
