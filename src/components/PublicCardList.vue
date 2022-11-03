@@ -88,7 +88,7 @@ export default {
 		},
 
 		search() {
-			console.log(this.searchterm);
+			console.log(this.regexwithsearchterm);
 			this.searchResultAudioArray = [...this.audioArray]
       let i=0
       while (i<this.searchResultAudioArray.length) {
