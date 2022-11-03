@@ -69,7 +69,7 @@
 			<div>
 				<input
 					class="px-3 py-.5 border border-gray-300 rounded w-[20vw]"
-					placeholder="Search Storybooks"
+					placeholder="Search Storybooks (not perfect yet)"
 					v-model="searchterm"
 					@keyup.enter="search"
 				/>

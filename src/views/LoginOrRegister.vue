@@ -23,6 +23,9 @@
           >
             Login
           </button>
+
+      <br>
+      (Forgot Password feature not available yet)
         </div><p>-or-</p>
 <div class="flex flex-col items-center w-2/5 ">
 

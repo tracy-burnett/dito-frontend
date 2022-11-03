@@ -1,5 +1,5 @@
 <template>
-	<div class="h-full ml-[1vh] overflow-hidden">
+	<div class="h-full ml-[1vh] overflow-scroll singleint">
 		<!-- this SingleInterpretation component represents what is viewable in a single interpretation column of an open storybook -->
 		<div class="flex flex-col -mt-[0vh] ">
 			<div class="flex flex-row justify-center ">
@@ -348,6 +348,17 @@ export default {
 </script>
 
 <style scoped>
+.singleint {
+	-ms-overflow-style: none; /* for Internet Explorer, Edge */
+	scrollbar-width: none; /* for Firefox */
+	overflow-y: scroll;
+}
+
+.singleint::-webkit-scrollbar {
+	display: none; /* for Chrome, Safari, and Opera */
+}
+
+
 .dropbtn {
 	/* background-color: #7833ff; */
 	border: none;

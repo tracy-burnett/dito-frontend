@@ -30,13 +30,13 @@
 			class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded studio"
 		:style="{ 'font-size': fontsize + 'px' }"
 		
-			style="overflow: scroll; height:19vh;"
+			style="overflow: scroll; height:14vh;"
 			placeholder="enter new text here"
 			v-model="new_text_unstripped"
 			ref="promptertextarea"
 		></textarea>
-
-	</div>
+<div class="flex flex-row justify-center w-full" v-if="finished==true"><div><button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn">Visit Another Storybook (not working yet)</button></div>
+	</div>	</div>
 </template>
 
 <script>
@@ -51,6 +51,7 @@ export default {
 			latest_text: "",
 			phrasechoicesArray: [],
 			substringindex: null,
+			finished: false,
 			spaced_by: "",
 			associations: null,
 			parsedAssociations: [], // array of objects that each indicates which range of characters should be highlighted within a given range of milliseconds
@@ -146,6 +147,7 @@ export default {
 					this.substringindex++;
 				} else if (this.substringindex == this.substringArray.length - 1) {
 					this.substringindex = 0;
+					this.finished=true
 				}
 				this.new_text_unstripped=""
 			}
@@ -349,5 +351,18 @@ export default {
 
 .studio::-webkit-scrollbar {
 	display: none; /* for Chrome, Safari, and Opera */
+}
+
+.dropbtn {
+	/* background-color: #7833ff; */
+	border: none;
+	color: white;
+	padding: 1vh 1vh;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	/* margin: 4px 2px; */
+	cursor: pointer;
+	border-radius: 16px;
 }
 </style>

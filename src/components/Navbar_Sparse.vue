@@ -6,10 +6,10 @@
 		<div class="w-[20vh] absolute -ml-[7vh] -mt-[4vh]"  >
 			<img class="cursor-pointer" src="@/assets/dito_logo_main_color.svg" @click="gohome"/>
 		</div>
-<!-- 
-		<div class="w-[20vh] absolute ml-[45vw]"  >
-			<p class="">storybook name and description</p>
-		</div> -->
+
+		<div class="absolute w-full text-sm"  >
+			<p class="text-center text-slate-100 ">this website is in beta production; database backups are not guaranteed.  Download .srt files within "Viewer" mode of your interpretations to preserve valuable data.</p>
+		</div>
 
 		<div class="flex flex-row-reverse items-center justify-between">
 
