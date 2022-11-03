@@ -2,7 +2,6 @@
 	<slot></slot>
 	<div
 		class="flex-auto"
-		:style="{ 'font-size': fontsize + 'px' } "
 	>
 		<!-- {{title.length}} -->
 		<!-- {{$store.getters.maxsize}} -->
@@ -21,6 +20,7 @@
 			class="w-full border-gray-300 rounded editor"
 
 		style="overflow: scroll; height:50vh;"
+		:style="{ 'font-size': fontsize + 'px' } "
 			v-model="latest_text_unstripped"
 		></textarea>
 		<!-- {{latest_text.length}}

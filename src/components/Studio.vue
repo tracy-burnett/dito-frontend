@@ -4,7 +4,6 @@
 	<slot></slot>
 	<div
 		class="flex-auto"
-		:style="{ 'font-size': fontsize + 'px' }"
 	>
 		<span class="px-3 py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="px-3 py-1 border-gray-300 rounded">{{ language_name }}</span><br />
@@ -29,6 +28,7 @@
 
 		<textarea
 			class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded studio"
+		:style="{ 'font-size': fontsize + 'px' }"
 		
 			style="overflow: scroll; height:19vh;"
 			placeholder="enter new text here"

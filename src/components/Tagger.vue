@@ -1,7 +1,6 @@
 <template>
 	<div
 		class="flex-auto"
-		:style="{ 'font-size': fontsize + 'px' }"
 	>
 		<span class="px-3 py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="px-3 py-1 border-gray-300 rounded">{{ language_name }}</span><br />
@@ -12,7 +11,8 @@
 		<!-- {{latest_text_part}}<br><br> -->
 		<!-- {{latest_text_character_array}} -->
 		<!-- for each character in the array of characters for the text, display it and if the user clicks on it, tag or untag it, depending on whether it has already been tagged in this session or not -->
-		<div class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded tagger"		style="overflow: scroll; height:45vh;">
+		<div class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded tagger"	
+		:style="{ 'font-size': fontsize + 'px' }"	style="overflow: scroll; height:45vh;">
 			<span
 				v-for="character in latest_text_character_array"
 				:key="character.index"

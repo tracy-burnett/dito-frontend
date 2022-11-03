@@ -1,7 +1,6 @@
 <template>
 	<div
 		class="flex-auto"
-		:style="{ 'font-size': fontsize + 'px' }"
 	>
 		<div>
 			<span class="px-3 py-1 font-bold border-gray-300 rounded">{{ title }}</span>
@@ -15,6 +14,7 @@
 			<!-- for each substring that would be independently highlighted, render it as highlighted or not based on running the highlight function on it whenever the current audioplayer time changes.
 also, if the user clicks on the text of that substring, snap the audio player to play the corresponding audio for that substring. -->
 			<div class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded viewer"
+		:style="{ 'font-size': fontsize + 'px' }"
 		style="overflow: scroll; height:35vh;">
 				<span
 					v-for="substring in substringArray"

@@ -4,7 +4,6 @@
 	<slot></slot>
 	<div
 		class="flex-auto"
-		:style="{ 'font-size': fontsize + 'px' }"
 		
 	>
 		<span class="px-3 py-1 font-bold border-gray-300 rounded">{{ title }}</span>
@@ -48,6 +47,7 @@
 			class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded prompter"
 
 
+			:style="{ 'font-size': fontsize + 'px' }"
 			style="overflow: scroll; height:41vh;"
 			placeholder="enter new text here"
 			v-model="new_text_unstripped"
