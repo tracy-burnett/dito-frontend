@@ -1,8 +1,7 @@
 <template>
 	<div
-		class="flex-auto viewer"
+		class="flex-auto"
 		:style="{ 'font-size': fontsize + 'px' }"
-		style="overflow: scroll; height:78vh"
 	>
 		<div>
 			<span class="px-3 py-1 font-bold border-gray-300 rounded">{{ title }}</span>
@@ -15,7 +14,8 @@
 			{{substringArray}}<br><br> -->
 			<!-- for each substring that would be independently highlighted, render it as highlighted or not based on running the highlight function on it whenever the current audioplayer time changes.
 also, if the user clicks on the text of that substring, snap the audio player to play the corresponding audio for that substring. -->
-			<div class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded">
+			<div class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded viewer"
+		style="overflow: scroll; height:35vh;">
 				<span
 					v-for="substring in substringArray"
 					:key="substring.startingcharacter"
@@ -93,15 +93,15 @@ export default {
 		timestep: function () {
 			this.fetchNewInterpretation();
 		},
-		currenthighlight: function() {
-			if (this.$refs.highlightedwords) {
-							// this.$nextTick(() => {
-								this.$refs.highlightedwords[
-									this.currenthighlight
-								].scrollIntoView({ block: "start" });
-							// });
-						}
-		}
+		currenthighlight: function () {
+			// if (this.$refs.highlightedwords && this.fontsize <= 16) {
+			// 	// this.$nextTick(() => {
+			// 	this.$refs.highlightedwords[this.currenthighlight].scrollIntoView({
+			// 		block: "start",
+			// 	});
+			// 	// });
+			// }
+		},
 	},
 	mounted() {
 		// this.fontsizeoriginal=this.fontsize
@@ -343,7 +343,6 @@ export default {
 					) {
 						k++;
 						this.currenthighlight = elementindex;
-
 					}
 				}
 			});
@@ -357,24 +356,24 @@ export default {
 			return k; // any value of k greater than 0 will cause the substring to be highlighted at this moment in the audio player time
 		},
 
-// 				calculateScrollTopMargin(substring) {
-// 		// //return pixels to offset
-// 		// 			((6 * this.latest_text_unstripped.length) /
-// 		//           (this.$store.state.consoleswidth - 570)) *
-// 		//           this.$store.state.consoles.length +
-// 		//         this.numbernewlines
+		// 				calculateScrollTopMargin(substring) {
+		// 		// //return pixels to offset
+		// 		// 			((6 * this.latest_text_unstripped.length) /
+		// 		//           (this.$store.state.consoleswidth - 570)) *
+		// 		//           this.$store.state.consoles.length +
+		// 		//         this.numbernewlines
 
-// 		// 			let calculated=(this.fontsize*(substring.startingcharacter+this.welcometext.length) /
-// 		//           (this.$store.state.consoleswidth - 570)) *
-// 		//           this.$store.state.consoles.length +60+(8*(substring.text.match(/\n/g) || []).length))
-// 		// 			console.log(calculated)
-// let calculated=500
-// // if (this.fontsize>this.fontsizeoriginal) {
-// // 					calculated=this.fontsize/this.fontsizeoriginal*(-50)
-				
-// // 					console.log(calculated)}
-// 					return calculated
-// 				},
+		// 		// 			let calculated=(this.fontsize*(substring.startingcharacter+this.welcometext.length) /
+		// 		//           (this.$store.state.consoleswidth - 570)) *
+		// 		//           this.$store.state.consoles.length +60+(8*(substring.text.match(/\n/g) || []).length))
+		// 		// 			console.log(calculated)
+		// let calculated=500
+		// // if (this.fontsize>this.fontsizeoriginal) {
+		// // 					calculated=this.fontsize/this.fontsizeoriginal*(-50)
+
+		// // 					console.log(calculated)}
+		// 					return calculated
+		// 				},
 
 		snapToTimestamp(startingcharacter) {
 			console.log(startingcharacter);

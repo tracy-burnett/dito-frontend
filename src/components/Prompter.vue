@@ -5,6 +5,7 @@
 	<div
 		class="flex-auto"
 		:style="{ 'font-size': fontsize + 'px' }"
+		
 	>
 		<span class="px-3 py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="px-3 py-1 border-gray-300 rounded">{{ language_name }}</span><br />
@@ -44,9 +45,10 @@
 		<!-- {{newPromptscounter}} -->
 		<!-- {{$store.state.audioDuration}} -->
 		<textarea
-			class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded"
-			:rows="latesttextrows"
-			style="overflow: hidden"
+			class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded prompter"
+
+
+			style="overflow: scroll; height:41vh;"
 			placeholder="enter new text here"
 			v-model="new_text_unstripped"
 			ref="promptertextarea"
@@ -166,14 +168,14 @@ export default {
 		numbernewlines() {
 			return this.latest_text.split(/\r\n|\r|\n/).length;
 		},
-		latesttextrows() {
-			return (
-				((6 * this.latest_text.length) /
-					(this.$store.state.consoleswidth - 570)) *
-					this.$store.state.consoles.length +
-				this.numbernewlines
-			);
-		},
+		// latesttextrows() {
+		// 	return (
+		// 		((6 * this.latest_text.length) /
+		// 			(this.$store.state.consoleswidth - 570)) *
+		// 			this.$store.state.consoles.length +
+		// 		this.numbernewlines
+		// 	);
+		// },
 	},
 	props: {
 		// ID of associated audio file
@@ -1589,3 +1591,16 @@ export default {
 	},
 };
 </script>
+
+
+<style scoped>
+.prompter {
+	-ms-overflow-style: none; /* for Internet Explorer, Edge */
+	scrollbar-width: none; /* for Firefox */
+	overflow-y: scroll;
+}
+
+.prompter::-webkit-scrollbar {
+	display: none; /* for Chrome, Safari, and Opera */
+}
+</style>

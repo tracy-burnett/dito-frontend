@@ -12,7 +12,7 @@
 		<!-- {{latest_text_part}}<br><br> -->
 		<!-- {{latest_text_character_array}} -->
 		<!-- for each character in the array of characters for the text, display it and if the user clicks on it, tag or untag it, depending on whether it has already been tagged in this session or not -->
-		<div class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded">
+		<div class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded tagger"		style="overflow: scroll; height:45vh;">
 			<span
 				v-for="character in latest_text_character_array"
 				:key="character.index"
@@ -350,3 +350,16 @@ export default {
 	},
 };
 </script>
+
+
+<style scoped>
+.tagger {
+	-ms-overflow-style: none; /* for Internet Explorer, Edge */
+	scrollbar-width: none; /* for Firefox */
+	overflow-y: scroll;
+}
+
+.tagger::-webkit-scrollbar {
+	display: none; /* for Chrome, Safari, and Opera */
+}
+</style>

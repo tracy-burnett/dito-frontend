@@ -1,5 +1,5 @@
 <template>
-	<div class="h-full ml-[1vh]">
+	<div class="h-full ml-[1vh] overflow-hidden">
 		<!-- this SingleInterpretation component represents what is viewable in a single interpretation column of an open storybook -->
 		<div class="flex flex-col mt-[4vh]">
 			<div class="flex flex-row justify-center ">

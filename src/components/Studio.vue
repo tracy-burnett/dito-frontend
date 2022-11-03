@@ -28,8 +28,9 @@
 		</div>
 
 		<textarea
-			class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded"
-			style="overflow: hidden"
+			class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded studio"
+		
+			style="overflow: scroll; height:19vh;"
 			placeholder="enter new text here"
 			v-model="new_text_unstripped"
 			ref="promptertextarea"
@@ -337,3 +338,16 @@ export default {
 	},
 };
 </script>
+
+
+<style scoped>
+.studio {
+	-ms-overflow-style: none; /* for Internet Explorer, Edge */
+	scrollbar-width: none; /* for Firefox */
+	overflow-y: scroll;
+}
+
+.studio::-webkit-scrollbar {
+	display: none; /* for Chrome, Safari, and Opera */
+}
+</style>
