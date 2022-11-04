@@ -18,13 +18,15 @@
 					v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'"
 					@click="toggleStorybookStyle('Tagger')"
 				>Tagging</a>
-				<a v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'" @click="toggleStorybookStyle('Viewer')">Viewing</a>
+				<a
+					@click="toggleStorybookStyle('Viewer')"
+				>Viewing</a>
 
 				<a
 					v-if="$store.state.prompterID == null || $store.state.prompterID == interpretation_id"
 					@click="toggleStorybookStyle('Studio')"
 				>Studying</a>
-				
+
 			</div>
 		</div>
 	</div>
@@ -40,7 +42,7 @@ export default {
 		interpretationStatus: {
 			default: "viewer",
 		},
-    interpretation_id: {
+		interpretation_id: {
 			default: null,
 		},
 	},
@@ -50,6 +52,13 @@ export default {
 			this.$emit("toggleStorybookStyle", styleselection);
 		},
 	},
+	mounted() {
+		if (this.$store.state.infobit=="PublicCardList") {
+			this.toggleStorybookStyle('Viewer')
+		}
+		else if (this.$store.state.infobit=="InfoRevitalize")
+		{this.toggleStorybookStyle('Studio')}
+	},
 };
 </script>
 
@@ -58,15 +67,14 @@ export default {
 	/* background-color: #7833ff; */
 	border: none;
 	color: white;
-	padding: 10px 20px;
+	padding: 1vh 1vh;
 	text-align: center;
 	text-decoration: none;
 	display: inline-block;
-	margin: 4px 2px;
+	/* margin: 4px 2px; */
 	cursor: pointer;
 	border-radius: 16px;
 }
-
 .dropdown {
 	position: relative;
 	display: inline-block;

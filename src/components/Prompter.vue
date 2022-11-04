@@ -4,8 +4,12 @@
 	<slot></slot>
 	<div
 		class="flex-auto"
-		:style="{ 'font-size': fontsize + 'px' }"
+		
 	>
+		Write down the words that you hear, then press "Enter."  If you want to move to a new prompt without saving data, then leave the text box blank and press "Enter" or click on the "New Prompt" button above.<br>
+			If you want to adjust the segment of the audio being played to better fit the words, either drag the "scribe less / more" slider above or manually adjust the highlighted region in the audio player to the left by editing the timestamps at the top or bottom or clicking and dragging the highlighted region or its edges.<br><br>
+			
+
 		<span class="px-3 py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="px-3 py-1 border-gray-300 rounded">{{ language_name }}</span><br />
 		<!-- {{associationGaps}}
@@ -43,10 +47,15 @@
 		{{consecutiveZerosArray}} -->
 		<!-- {{newPromptscounter}} -->
 		<!-- {{$store.state.audioDuration}} -->
+
+
+
 		<textarea
-			class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded"
-			:rows="latesttextrows"
-			style="overflow: hidden"
+			class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded prompter"
+
+
+			:style="{ 'font-size': fontsize + 'px' }"
+			style="overflow: scroll; height:41vh;"
 			placeholder="enter new text here"
 			v-model="new_text_unstripped"
 			ref="promptertextarea"
@@ -166,14 +175,14 @@ export default {
 		numbernewlines() {
 			return this.latest_text.split(/\r\n|\r|\n/).length;
 		},
-		latesttextrows() {
-			return (
-				((6 * this.latest_text.length) /
-					(this.$store.state.consoleswidth - 570)) *
-					this.$store.state.consoles.length +
-				this.numbernewlines
-			);
-		},
+		// latesttextrows() {
+		// 	return (
+		// 		((6 * this.latest_text.length) /
+		// 			(this.$store.state.consoleswidth - 570)) *
+		// 			this.$store.state.consoles.length +
+		// 		this.numbernewlines
+		// 	);
+		// },
 	},
 	props: {
 		// ID of associated audio file
@@ -1589,3 +1598,16 @@ export default {
 	},
 };
 </script>
+
+
+<style scoped>
+.prompter {
+	-ms-overflow-style: none; /* for Internet Explorer, Edge */
+	scrollbar-width: none; /* for Firefox */
+	overflow-y: scroll;
+}
+
+.prompter::-webkit-scrollbar {
+	display: none; /* for Chrome, Safari, and Opera */
+}
+</style>

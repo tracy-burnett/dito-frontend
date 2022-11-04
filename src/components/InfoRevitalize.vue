@@ -52,7 +52,7 @@ export default {
 			searchterm: "",
 		};
 	},
-	name: "PublicCardList",
+	name: "InfoRevitalize",
 	props: {
 		title: {
 			default: "Browse Public Storybooks",
@@ -88,7 +88,7 @@ export default {
 		},
 
 		search() {
-			console.log(this.regexwithsearchterm);
+			console.log(this.searchterm);
 			this.searchResultAudioArray = [...this.audioArray]
       let i=0
       while (i<this.searchResultAudioArray.length) {

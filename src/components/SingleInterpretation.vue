@@ -1,175 +1,166 @@
 <template>
-	<div class="h-full">
+	<div class="h-full ml-[1vh] overflow-scroll singleint">
 		<!-- this SingleInterpretation component represents what is viewable in a single interpretation column of an open storybook -->
+		<div class="flex flex-col -mt-[0vh] ">
+			<div class="flex flex-row justify-center ">
+				<div class="sticky flex flex-row flex-wrap justify-around shrink ">
 
-		<div
-			class="sticky z-20 flex flex-wrap justify-around flex-rows-1 top-12"
-			style="background: white"
-		>
-			<!-- {{styleoption}}<br> -->
-			<!-- {{$store.state.prompterID}}hi -->
-			<!-- this component allows the user to remove the entire interpretation column from their browser window -->
 
-			<!-- SelectInterpretationMenu allows the user to swap out the interpretation they are currently viewing for a different one -->
-			<!-- this SingleInterpretation component tells the SelectInterpretationMenu component what interpretations to place in its Dropdown menu via interpretationsList -->
-			<!-- the user's selection of a new interpretation is communicated back to this SingleInterpretation component via the changeInterpretationID event -->
-			<div>
-				<SelectInterpretationMenu
-					:interpretationsList="interpretationsList"
-					@changeInterpretationID="changeInterpretationIDfunction($event)"
-				/>
-			</div>
-			<!-- the StorybookStyleMenu component allows the user to choose whether they want to interact with the interpretation via the Viewer, Tagger, or Editor feature -->
-			<!-- the user's selection is communicated back to this SingleInterpretation component via the toggleStorybookStyle event -->
-			<div>
-				<StorybookStyleMenu
-					:interpretationStatus="interpretationStatus"
-					:interpretation_id="interpretation_id"
-					@toggleStorybookStyle="toggleStorybookStylefunction($event)"
-				/>
-			</div>
-			<div>
-				<DeleteInterpretationViewer
-					:interpretation_id="interpretation_id"
-					@returnFormerInterpretation="returnFormerInterpretation($event)"
-				/>
-			</div>
-		</div>
-		<div
-			class="sticky z-10 flex flex-wrap justify-around flex-rows-1 top-24"
-			style="background: white"
-		>
-			<!-- <div class="w-40"></div> -->
+					<div>
+						<DeleteInterpretationViewer
+							:interpretation_id="interpretation_id"
+							@returnFormerInterpretation="returnFormerInterpretation($event)"
+						/>
+					</div>
+					<div v-if="styleoption==='Tagger'">
+						<!-- quick and dirty way to undo tags you haven't saved to the database yet -->
+						<button
+							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
+							@click="clearTimestamps()"
+						>Clear New</button>
+					</div>
+					<div>
+						<SelectInterpretationMenu
+							:interpretationsList="interpretationsList"
+							@changeInterpretationID="changeInterpretationIDfunction($event)"
+						/>
+					</div>
 
-			<div>
-				change font size<br>
-				<input
-					id="fontsizeslider"
-					v-model="fontsize"
-					type="range"
-					min="8"
-					max="50"
-					step=".5"
-				/>
-			</div>
 
-			<!--highlight more/less slider -->
-			<div v-if="styleoption==='Viewer'">
-				<div class="flex">
-					highlight less / more
 				</div>
+				<div class="sticky flex flex-row flex-wrap-reverse justify-around shrink top-12">
+
+					<div>
+						<StorybookStyleMenu
+							:interpretationStatus="interpretationStatus"
+							:interpretation_id="interpretation_id"
+							@toggleStorybookStyle="toggleStorybookStylefunction($event)"
+						/>
+					</div>
+					<div v-if="styleoption==='Viewer'">
+						<div
+							class="dropdown"
+							style="float: right"
+						>
+							<button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn">Download</button>
+							<div class="dropdown-content">
+								<a @click="downloadSRT()">overlapping .srt</a>
+							</div>
+						</div>
+					</div>
+					<div v-if="styleoption==='Prompter'">
+						<button
+							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
+							@click="newPrompt()"
+						>
+							New Prompt
+						</button>
+					</div>
+
+					<div v-if="styleoption==='Studio'">
+						<button
+							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
+							@click="newPhrase()"
+						>
+							New Phrase
+						</button>
+					</div>
+
+					<div v-if="styleoption==='Editor'">
+						<!-- this is where should allow user to choose other punctuating characters or strings to always be their own word and not accidentally joining two other words -->
+						<button
+							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
+							@click="saveEditsincrease()"
+						>
+							Save
+						</button>
+					</div>
+
+
+					<!-- quick and dirty way to purge the database of all tags for this interpretation, mainly used for debugging purposes -->
+					<div v-if="styleoption==='Tagger'"><button
+							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
+							@click="clearOldTimestamps()"
+						>
+							Clear Old
+						</button></div>
+						<div v-if="styleoption==='Tagger'"><button
+							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
+							@click="updateAssociationsfunc()"
+						>
+							Save
+						</button></div>
+				</div>
+			</div>
+			<div class="flex flex-row flex-wrap justify-center">
+
 				<div>
+					change font size<br>
 					<input
-						id="timestepslider"
-						v-model="timestep"
+						id="fontsizeslider"
+						v-model="fontsize"
 						type="range"
-						min="50"
-						max="2500"
-						step="50"
+						min="8"
+						max="50"
+						step=".5"
 					/>
 				</div>
-			</div>
 
-			<div v-if="styleoption==='Prompter'">
-				<!--FLAG-->
-				<div class="flex">
-					scribe less / more
-				</div>
-				<div>
-					<input
-						id="scribingslider"
-						v-model="scribing"
-						type="range"
-						min="200"
-						max="2000"
-						step="50"
-					/>
-				</div>
-
-			</div>
-
-			<div v-if="styleoption==='Studio'">
-				<!--FLAG-->
-				<div class="flex">
-					listen to less / more
-				</div>
-				<div>
-					<input
-						id="studyingslider"
-						v-model="studying"
-						type="range"
-						min="200"
-						max="2000"
-						step="50"
-					/>
+				<!--highlight more/less slider -->
+				<div v-if="styleoption==='Viewer'">
+					<div class="flex">
+						highlight less / more
+					</div>
+					<div>
+						<input
+							id="timestepslider"
+							v-model="timestep"
+							type="range"
+							min="50"
+							max="2500"
+							step="50"
+						/>
+					</div>
 				</div>
 
-			</div>
+				<div v-if="styleoption==='Prompter'">
+					<!--FLAG-->
+					<div class="flex">
+						scribe less / more
+					</div>
+					<div>
+						<input
+							id="scribingslider"
+							v-model="scribing"
+							type="range"
+							min="200"
+							max="2000"
+							step="50"
+						/>
+					</div>
 
-			<div v-if="styleoption==='Prompter'">
-				<button
-					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-					@click="newPrompt()"
-				>
-					New Prompt
-				</button>
-			</div>
+				</div>
 
-			<div v-if="styleoption==='Studio'">
-				<button
-					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-					@click="newPhrase()"
-				>
-					New Phrase
-				</button>
-			</div>
+				<div v-if="styleoption==='Studio'">
+					<!--FLAG-->
+					<div class="flex">
+						listen to less / more
+					</div>
+					<div>
+						<input
+							id="studyingslider"
+							v-model="studying"
+							type="range"
+							min="200"
+							max="2000"
+							step="50"
+						/>
+					</div>
 
-			<div v-if="styleoption==='Viewer'">
-				<div
-			class="dropdown"
-			style="float: right"
-		>
-			<button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn">Download</button>
-			<div class="dropdown-content">
-				<a
-					@click="downloadSRT()"
-				>overlapping .srt</a>
+				</div>
 			</div>
 		</div>
-			</div>
-
-			<div v-if="styleoption==='Editor'">
-				<!-- this is where should allow user to choose other punctuating characters or strings to always be their own word and not accidentally joining two other words -->
-				<button
-					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-					@click="saveEditsincrease()"
-				>
-					Save
-				</button>
-			</div>
-
-			<div v-if="styleoption==='Tagger'">
-				<!-- quick and dirty way to undo tags you haven't saved to the database yet -->
-				<button
-					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-					@click="clearTimestamps()"
-				>Clear New</button>
-			</div>
-			<!-- quick and dirty way to purge the database of all tags for this interpretation, mainly used for debugging purposes -->
-			<div v-if="styleoption==='Tagger'"><button
-					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-					@click="clearOldTimestamps()"
-				>
-					Clear Old
-				</button></div>
-			<div v-if="styleoption==='Tagger'"><button
-					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-					@click="updateAssociationsfunc()"
-				>
-					Save
-				</button></div>
-		</div>
-		<div>
+		<div class="mt-[6vh]">
 			<!-- this component will be Viewer, Tagger, or Editor, depending on the user's selection of "styleoption" via the StorybookStyleMenu -->
 			<!-- {{interpretationStatus}} -->
 			<!-- {{$store.state.user}} -->
@@ -288,7 +279,7 @@ export default {
 		},
 
 		downloadSRT() {
-			this.downloadSRTcounter++
+			this.downloadSRTcounter++;
 		},
 		// 		submitincrease() {
 		// 	this.submitcounter++;
@@ -359,15 +350,26 @@ export default {
 </script>
 
 <style scoped>
+.singleint {
+	-ms-overflow-style: none; /* for Internet Explorer, Edge */
+	scrollbar-width: none; /* for Firefox */
+	overflow-y: scroll;
+}
+
+.singleint::-webkit-scrollbar {
+	display: none; /* for Chrome, Safari, and Opera */
+}
+
+
 .dropbtn {
 	/* background-color: #7833ff; */
 	border: none;
 	color: white;
-	padding: 10px 20px;
+	padding: 1vh 1vh;
 	text-align: center;
 	text-decoration: none;
 	display: inline-block;
-	margin: 4px 2px;
+	/* margin: 4px 2px; */
 	cursor: pointer;
 	border-radius: 16px;
 }
@@ -382,7 +384,7 @@ export default {
 	position: absolute;
 	right: 0;
 	background-color: #f9f9f9;
-	min-width: 160px;
+	/* min-width: 160px; */
 	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 	z-index: 1;
 }
@@ -392,26 +394,6 @@ export default {
 	padding: 12px 16px;
 	text-decoration: none;
 	display: block;
-}
-
-.buttonplus {
-	/* background-color: #7833ff; */
-	border: none;
-	color: white;
-	padding: 9px 12px;
-	position: fixed;
-	left: 600px;
-	top: 300px;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	margin: 4px 2px;
-	cursor: pointer;
-	border-radius: 16px;
-}
-
-.buttonplus {
-	border-radius: 100%;
 }
 
 .dropdown-content a:hover {

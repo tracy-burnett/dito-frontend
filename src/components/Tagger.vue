@@ -1,8 +1,12 @@
 <template>
 	<div
 		class="flex-auto"
-		:style="{ 'font-size': fontsize + 'px' }"
 	>
+	Click on the words as you hear them being spoken, and they will turn green.  Click on them again if you are not satisfied with your timing, and they will revert to black.<br>
+	When you are satisfied with your clicks, click the "Save" button above.  To clear all of the green, click "Clear New" above.  To clear all of the timestamps within this interpretation from the database and start from scratch, click "Clear Old" (this cannot be undone).<br><br>
+	
+
+
 		<span class="px-3 py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="px-3 py-1 border-gray-300 rounded">{{ language_name }}</span><br />
 		<!-- {{new_associations}}<br><br> -->
@@ -12,7 +16,8 @@
 		<!-- {{latest_text_part}}<br><br> -->
 		<!-- {{latest_text_character_array}} -->
 		<!-- for each character in the array of characters for the text, display it and if the user clicks on it, tag or untag it, depending on whether it has already been tagged in this session or not -->
-		<div class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded">
+		<div class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded tagger"	
+		:style="{ 'font-size': fontsize + 'px' }"	style="overflow: scroll; height:45vh;">
 			<span
 				v-for="character in latest_text_character_array"
 				:key="character.index"
@@ -290,7 +295,7 @@ export default {
 
 		// if you click on a character that you have tagged in this session, it untags it
 		removeThisAssociation(characterindex) {
-			this.latest_text_character_array[characterindex].newtag = false;
+			this.latest_text_character_array[characterindex - this.deletedfrombeginningIndex.length].newtag = false;
 			delete this.new_associations[characterindex];
 			// console.log(JSON.stringify(this.new_associations));
 		},
@@ -350,3 +355,16 @@ export default {
 	},
 };
 </script>
+
+
+<style scoped>
+.tagger {
+	-ms-overflow-style: none; /* for Internet Explorer, Edge */
+	scrollbar-width: none; /* for Firefox */
+	overflow-y: scroll;
+}
+
+.tagger::-webkit-scrollbar {
+	display: none; /* for Chrome, Safari, and Opera */
+}
+</style>

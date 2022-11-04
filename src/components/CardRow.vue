@@ -22,28 +22,33 @@
 			/>
 		</span>
 		<div
-			class="relative overflow-hidden transition-colors bg-white border cardrow rounded-xl mr-7"
+			class="relative overflow-hidden transition-colors bg-white border cardrow rounded-xl"
 			:class="{ editing: dropdown, notediting: !dropdown }"
 		>
 			<slot></slot>
 			<!-- <img class="w-full h-1/2" :src="image" alt="Sunset in the mountains" /> -->
-			<div class="grid items-center grid-cols-8 px-4 py-2 ml-20">
-				<div v-if="!archived">
-					<button
-						class="w-1/2 px-3 py-2 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
-						@click="openstorybook()"
+			<div class="grid items-center grid-cols-9">
+				<div v-if="picked==audio_ID"><button
+						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+						@click="selectrow()"
 					>
-						View
-					</button>
-				</div>
+						Hide Interpretations
+					</button></div>
+				<div v-else-if="!archived"> <button
+						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+						@click="selectrow()"
+					>
+						See Interpretations
+					</button></div>
 				<div v-else></div>
+
 				<div v-if="
-            !archived && dropdown && (status == 'owner' || status == 'editor')
+            !archived && (status == 'owner' || status == 'editor')
           ">
 					<textarea
-						class="w-full font-bold border-gray-300 rounded"
-						rows="3"
-						style="overflow: hidden"
+						class="w-full font-bold border-gray-300 rounded edittext"
+						rows="1"
+						style="overflow: scroll"
 						v-model="title"
 						@focusout="savechanges()"
 					></textarea>
@@ -52,12 +57,12 @@
 					<p class="font-bold">{{ title }}</p>
 				</div>
 				<div v-if="
-            !archived && dropdown && (status == 'owner' || status == 'editor')
+            !archived && (status == 'owner' || status == 'editor')
           ">
 					<textarea
-						class="w-full border-gray-300 rounded"
-						rows="3"
-						style="overflow: hidden"
+						class="w-full border-gray-300 rounded edittext"
+						rows="1"
+						style="overflow: scroll"
 						v-model="description"
 						@focusout="savechanges()"
 					></textarea>
@@ -80,7 +85,7 @@
 					<span v-if="publictf"> yes</span>
 					<span v-else> no</span>
 				</span>
- 
+
 				<span v-else>
 					<span v-if="publictf"> yes</span>
 					<span v-else> no</span></span>
@@ -89,14 +94,29 @@
       </p> -->
 				<div>
 					<div v-if="!archived && status == 'owner'">
-						<!-- <button
-            class="w-2/3 px-3 py-2 text-sm font-medium text-white transition-colors bg-indigo-500 border border-indigo-400 rounded hover:bg-indigo-400"
-            @click="savechanges()"
-          >
-            Save Edits</button
-          ><br> -->
-						owner access<br><button
-							class="w-2/3 px-3 py-2 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+
+						owner access
+					</div>
+					<div v-else-if="archived && status == 'owner'">
+
+					</div>
+					<div v-else>{{status}} access</div>
+				</div>
+				<div class="flex flex-row">
+
+					<div v-if="!archived">
+					<button
+						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+						@click="openstorybook()"
+					>
+						View
+					</button>
+				</div>
+				<div v-else></div>&nbsp;
+				<div v-if="!archived && status == 'owner'">
+
+<button
+							class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 							@click="archive()"
 						>
 							Archive
@@ -104,16 +124,21 @@
 					</div>
 					<div v-else-if="archived && status == 'owner'">
 						<button
-							class="w-1/2 px-3 py-2 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+							class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 							@click="unarchive()"
 						>
 							Restore
 						</button>
 					</div>
-					<div v-else>{{status}} access</div>
-				</div>
-				<p v-if="status == 'owner'"><button @click="showStorybookModal(audio_ID)">Manage Collaborators</button></p>
-				<p v-else-if="status == 'editor'"><button @click="showAddViewersModal(audio_ID)">Manage Viewers</button></p>
+					<div v-else></div>
+			</div>
+
+
+
+				<p v-if="status == 'owner'"><button 						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+ @click="showStorybookModal(audio_ID)">Manage Collaborators</button></p>
+				<p v-else-if="status == 'editor'"><button 						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+ @click="showAddViewersModal(audio_ID)">Manage Viewers</button></p>
 				<!-- <p v-else-if="status == 'viewer'"><button>Request to Collaborate</button></p> -->
 			</div>
 		</div>
@@ -143,7 +168,7 @@ export default {
 	components: { IntManager, StorybookModal, AddViewersModal },
 	watch: {
 		dropdown: function () {
-          this.$store.commit("forceDashboardRerender");
+			this.$store.commit("forceDashboardRerender");
 		},
 	},
 	computed: {
@@ -207,6 +232,9 @@ export default {
 	},
 
 	methods: {
+		selectrow() {
+			this.$emit("SelectRow", this.audio_ID);
+		},
 		showStorybookModal() {
 			this.$store.commit("showStorybookModal", this.audio_ID);
 		},
@@ -336,8 +364,8 @@ export default {
 					},
 					body: JSON.stringify({
 						// url: "coverimage.jpg",
-						title: this.title.normalize('NFC'),
-						description: this.description.normalize('NFC'),
+						title: this.title.normalize("NFC"),
+						description: this.description.normalize("NFC"),
 						public: this.publictf,
 						// shared_with: [],
 					}),
@@ -364,7 +392,6 @@ export default {
 }
 /* .editing {
 
-  background: rgba(0, 0, 0, 0.5);
 } */
 .notediting {
 	background: white;
@@ -374,4 +401,14 @@ export default {
   top: calc(50% - 1.75rem);
   right: 0;
 } */
+
+.edittext {
+	-ms-overflow-style: none; /* for Internet Explorer, Edge */
+	scrollbar-width: none; /* for Firefox */
+	overflow-y: scroll;
+}
+
+.edittext::-webkit-scrollbar {
+	display: none; /* for Chrome, Safari, and Opera */
+}
 </style>

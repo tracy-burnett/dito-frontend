@@ -4,8 +4,8 @@
 	<slot></slot>
 	<div
 		class="flex-auto"
-		:style="{ 'font-size': fontsize + 'px' }"
 	>
+
 		<span class="px-3 py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="px-3 py-1 border-gray-300 rounded">{{ language_name }}</span><br />
 
@@ -15,8 +15,13 @@
 		<!-- {{$store.state.startTimePrompter}}<br>
 		{{$store.state.endTimePrompter}}<br> -->
 
+
+
 		<div class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded">
-			Retype exactly whichever phrase most closely matches what you are hearing.
+			Retype exactly whichever phrase most closely matches what you are hearing.  If you are correct, you will automatically receive a new prompt (no need to press "Enter").<br>
+			Click "New Phrase" above to skip the current prompt.<br>
+			Adjust the "listen to less / more" slider above to change the length of phrase that you are prompted with (note that adjusting this slider at all will bring you back to the beginning of the audio file).<br><br>
+
 			<div v-if="substringArray.length>0">
 				<span style="white-space: pre-wrap">
 					1. {{ phrasechoicesArray[0] }}<br>
@@ -28,14 +33,16 @@
 		</div>
 
 		<textarea
-			class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded"
-			style="overflow: hidden"
+			class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded studio"
+		:style="{ 'font-size': fontsize + 'px' }"
+		
+			style="overflow: scroll; height:14vh;"
 			placeholder="enter new text here"
 			v-model="new_text_unstripped"
 			ref="promptertextarea"
 		></textarea>
-
-	</div>
+<div class="flex flex-row justify-center w-full" v-if="finished==true"><div><button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn">Visit Another Storybook (not working yet)</button></div>
+	</div>	</div>
 </template>
 
 <script>
@@ -50,6 +57,7 @@ export default {
 			latest_text: "",
 			phrasechoicesArray: [],
 			substringindex: null,
+			finished: false,
 			spaced_by: "",
 			associations: null,
 			parsedAssociations: [], // array of objects that each indicates which range of characters should be highlighted within a given range of milliseconds
@@ -145,6 +153,7 @@ export default {
 					this.substringindex++;
 				} else if (this.substringindex == this.substringArray.length - 1) {
 					this.substringindex = 0;
+					this.finished=true
 				}
 				this.new_text_unstripped=""
 			}
@@ -337,3 +346,29 @@ export default {
 	},
 };
 </script>
+
+
+<style scoped>
+.studio {
+	-ms-overflow-style: none; /* for Internet Explorer, Edge */
+	scrollbar-width: none; /* for Firefox */
+	overflow-y: scroll;
+}
+
+.studio::-webkit-scrollbar {
+	display: none; /* for Chrome, Safari, and Opera */
+}
+
+.dropbtn {
+	/* background-color: #7833ff; */
+	border: none;
+	color: white;
+	padding: 1vh 1vh;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	/* margin: 4px 2px; */
+	cursor: pointer;
+	border-radius: 16px;
+}
+</style>

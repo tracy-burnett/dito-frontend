@@ -1,68 +1,65 @@
 <template>
-	<div class="flex-auto">
-		<div class="flex-col flex-1 h-full overflow-hidden">
-			<Navbar />
-			<div class="flex items-center justify-center h-full mt-10">
-				<div class="flex flex-col items-center p-8 bg-white border border-gray-300 shadow-md rounded-xl xl:w-2/5 lg:w-2/4 md:w-2/3">
-					<h1 class="text-2xl font-bold">Upload Audio File</h1>
-					<input
-						class="w-full px-3 py-1 mt-12 mb-3 border border-gray-300 rounded"
-						type="file"
-						accept="audio/*"
-						ref="audioInput"
-						@keyup.enter="upload"
-					/>
-					<input
-						class="w-full px-3 py-1 border border-gray-300 rounded"
-						placeholder="Storybook/Audio Title"
-						v-model="title"
-						@keyup.enter="upload"
-					/>
-					<input
-						class="w-full px-3 py-1 border border-gray-300 rounded"
-						placeholder="Description of Content"
-						v-model="description"
-						@keyup.enter="upload"
-					/>
-					<br /><br />
-					<h1 class="text-2xl font-bold">Start First Interpretation</h1>
-					<br />
-					<input
-						class="w-full px-3 py-1 border border-gray-300 rounded"
-						placeholder="Title of First Interpretation"
-						v-model="int_title"
-						@keyup.enter="upload"
-					/>
-					<input
-						class="w-full px-3 py-1 border border-gray-300 rounded"
-						placeholder="Language of First Interpretation"
-						v-model="int_language"
-						@keyup.enter="upload"
-					/>
-					<input
-						class="w-full px-3 py-1 border border-gray-300 rounded"
-						placeholder="What character is this language 'spaced' by? (or leave blank)"
-						v-model="int_spacing"
-						maxlength="1"
-						@keyup.enter="upload"
-					/>
-					<textarea
-						class="w-full px-3 py-1 border border-gray-300 rounded"
-						placeholder="Text of First Interpretation"
-						v-model="int_text_unstripped"
-						style="overflow:hidden;"
-						oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
-					/>
-					<button
-						class="w-full px-3 py-2 mt-16 text-sm font-medium text-white transition-colors border rounded border-sky-600 bg-sky-700 hover:bg-sky-600"
-						@click="upload"
-					>
-						Upload
-					</button>
-				</div>
-			</div>
+	<div class="flex justify-around pt-12">
+		<div class="flex flex-col items-center w-2/5 ">
+			<h1 class="text-2xl font-bold text-slate-700">Upload Audio File</h1>
+			<input
+				class="w-full px-3 py-1 mt-12 mb-3 border border-gray-300 rounded"
+				type="file"
+				accept="audio/*"
+				ref="audioInput"
+				@keyup.enter="upload"
+			/>
+			<input
+				class="w-full px-3 py-1 border border-gray-300 rounded"
+				placeholder="Storybook/Audio Title"
+				v-model="title"
+				@keyup.enter="upload"
+			/>
+			<input
+				class="w-full px-3 py-1 border border-gray-300 rounded"
+				placeholder="Description of Content"
+				v-model="description"
+				@keyup.enter="upload"
+			/>
+		</div>
+		<div class="flex flex-col items-center w-2/5">
+			<h1 class="text-2xl font-bold text-slate-700">Start First Interpretation (optional)</h1>
+			<br />
+			<input
+				class="w-full px-3 py-1 border border-gray-300 rounded"
+				placeholder="Title of First Interpretation"
+				v-model="int_title"
+				@keyup.enter="upload"
+			/>
+			<input
+				class="w-full px-3 py-1 border border-gray-300 rounded"
+				placeholder="Language of First Interpretation"
+				v-model="int_language"
+				@keyup.enter="upload"
+			/>
+			<input
+				class="w-full px-3 py-1 border border-gray-300 rounded"
+				placeholder="What character is this language 'spaced' by? (or leave blank)"
+				v-model="int_spacing"
+				maxlength="1"
+				@keyup.enter="upload"
+			/>
+			<textarea
+				class="w-full px-3 py-1 border border-gray-300 rounded"
+				placeholder="Text of First Interpretation"
+				v-model="int_text_unstripped"
+				style="overflow:hidden;"
+				oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
+			/>
 		</div>
 	</div>
+    <div class="flex flex-col items-center">
+	<button
+		class="w-1/2 px-3 py-2 text-sm font-medium text-white transition-colors border rounded mt-7 border-sky-600 bg-sky-700 hover:bg-sky-600"
+		@click="upload"
+	>
+		Upload
+	</button></div>
 </template>
 
 <script>
@@ -87,23 +84,26 @@ export default {
 			file: null,
 		};
 	},
-  computed: {
-
-	int_text() {
-  if (this.int_spacing != ""){
-  let stripped=this.int_text_unstripped.replace(this.regexwithmultiplespacedby, this.int_spacing)
-  return stripped}
-  else if (this.int_spacing == "") {return this.int_text_unstripped}
-},
-		
+	computed: {
+		int_text() {
+			if (this.int_spacing != "") {
+				let stripped = this.int_text_unstripped.replace(
+					this.regexwithmultiplespacedby,
+					this.int_spacing
+				);
+				return stripped;
+			} else if (this.int_spacing == "") {
+				return this.int_text_unstripped;
+			}
+		},
 
 		regexwithmultiplespacedby() {
-			return new RegExp(`${this.escapeRegex(this.int_spacing)}+`, "g")
+			return new RegExp(`${this.escapeRegex(this.int_spacing)}+`, "g");
 		},
 	},
 	methods: {
-    escapeRegex: function (string) {
-    		return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+		escapeRegex: function (string) {
+			return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 		},
 		async upload() {
 			// get secure url from server
@@ -154,10 +154,10 @@ export default {
 								Authorization: this.$store.state.idToken,
 							},
 							body: JSON.stringify({
-								id: this.name.normalize('NFC'),
+								id: this.name.normalize("NFC"),
 								// url: process.env.VUE_APP_SUBDOMAIN_URL,
-								title: this.title.normalize('NFC'),
-								description: this.description.normalize('NFC'),
+								title: this.title.normalize("NFC"),
+								description: this.description.normalize("NFC"),
 								// shared_with: [],
 							}),
 						})
@@ -171,7 +171,7 @@ export default {
 							.then(() =>
 								// post request to create new interpretation for this audio
 								{
-									this.$router.replace("/");
+									this.$store.commit("toggleInfobit","InfoPublish")
 
 									if (this.int_title || this.int_text || this.int_language) {
 										fetch(
@@ -187,10 +187,10 @@ export default {
 													Authorization: this.$store.state.idToken,
 												},
 												body: JSON.stringify({
-													title: this.int_title.normalize('NFC'),
-													latest_text: this.int_text.normalize('NFC'),
-													language_name: this.int_language.normalize('NFC'),
-													spaced_by: this.int_spacing.normalize('NFC'),
+													title: this.int_title.normalize("NFC"),
+													latest_text: this.int_text.normalize("NFC"),
+													language_name: this.int_language.normalize("NFC"),
+													spaced_by: this.int_spacing.normalize("NFC"),
 													public: false,
 												}),
 											}
