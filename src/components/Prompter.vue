@@ -89,15 +89,11 @@ export default {
 			associationGaps: [],
 			usableGaps: [],
 			relevantGap: {},
-			// scribing: 200,
 			allowSubmit: false,
 			usablePeaksData: [],
-			// usablePeaksData2: [],
 			contentStartingIndex: null,
 			contentEndingIndex: null,
-			sensitivity: 0.05, // .3
-			// consecutiveZerosArray: [],
-			// zerosCount: 0,
+			sensitivity: 0.05,
 		};
 	},
 	computed: {
@@ -130,13 +126,9 @@ export default {
 		},
 
 		original_text_cleaned() {
-			// console.log(this.original_text);
 			let split_text = this.original_text.split(this.regexwithspacedby);
-			// console.log("original: " + split_text);
-			// console.log(split_text.length + "length");
 
 			for (let j = split_text.length; j >= 0; j--) {
-				// console.log("hit");
 				if (split_text[j] === undefined || split_text[j] == "") {
 					split_text.splice(j, 1);
 				} // second parameter being 1 means remove 1 element only
@@ -146,13 +138,11 @@ export default {
 				return split_text;
 			} else if (this.spaced_by.length == 0) {
 				let strung_together = split_text.join("");
-				// console.log(strung_together);
 				return strung_together;
 			}
 		},
 
 		latest_text_cleaned() {
-			// console.log("latest: " + this.latest_text)
 			let split_text = this.latest_text
 				.normalize("NFC")
 				.split(this.regexwithspacedby);
@@ -167,7 +157,6 @@ export default {
 				return split_text;
 			} else if (this.spaced_by.length == 0) {
 				let strung_together = split_text.join("");
-				// console.log(strung_together);
 				return strung_together;
 			}
 		},
@@ -175,14 +164,6 @@ export default {
 		numbernewlines() {
 			return this.latest_text.split(/\r\n|\r|\n/).length;
 		},
-		// latesttextrows() {
-		// 	return (
-		// 		((6 * this.latest_text.length) /
-		// 			(this.$store.state.consoleswidth - 570)) *
-		// 			this.$store.state.consoles.length +
-		// 		this.numbernewlines
-		// 	);
-		// },
 	},
 	props: {
 		// ID of associated audio file
@@ -195,9 +176,6 @@ export default {
 		newPromptscounter: {
 			default: 0,
 		},
-		// submitcounter: {
-		// 	default: 0,
-		// },
 
 		fontsize: { default: 12 },
 
@@ -208,11 +186,6 @@ export default {
 		interpretationStatus: { default: "" },
 	},
 	watch: {
-		// submitcounter: function () {
-		// 	if (this.allowSubmit == true) {
-		// 		this.updateText();
-		// 	}
-		// },
 		scribingclean: function () {
 			let tempcurrentgapstart = this.relevantGap.startTime
 			this.findGaps(tempcurrentgapstart)
@@ -227,7 +200,6 @@ export default {
 			}
 		},
 		"$store.state.peaksData": function () {
-			// console.log("watched detected in Prompter")
 			this.findGaps(); // populates "this.usableGaps"
 		},
 		"$store.state.startTimePrompter": function () {
@@ -262,11 +234,9 @@ export default {
 				if (
 					this.usableGaps[0].startCharacter == this.relevantGap.startCharacter
 				) {
-					// console.log("success")
 					this.usableGaps[0].startTime =
 						this.$store.state.endTimePrompter * 100 - 5;
 				}
-				// else {console.log("fail")}
 			} else if (
 				this.$store.state.endTimePrompter * 100 >
 				this.usableGaps[0].startTime + 5
@@ -288,9 +258,7 @@ export default {
 		},
 
 		findGaps: function (tempcurrentgapstart=0) { // tempcurrentgapstart will be 0 if no parameter is passed in
-			// console.log("find gaps begun")
 			if (this.$store.state.audioDuration > 0) {
-				// console.log("inside first if")
 				this.associationGaps.length = 0;
 				this.usableGaps.length=0
 				this.relevantGap={}
@@ -580,16 +548,6 @@ export default {
 					}
 					// console.log(priorvalue);
 				}
-				// this.usablePeaksData2 = this.usablePeaksData
-				// 	.slice(this.contentStartingIndex, this.contentEndingIndex+1)
-				// 	.map((e) => Math.round(e * 1000) / 10)
-				// 	.map((e) => {
-				// 		if (Math.abs(e) > 0.5) {
-				// 			return 1;
-				// 		} else {
-				// 			return 0;
-				// 		}
-				// 	});
 
 				// if there's still a lot of time left in usable portion of audio we are currently working with, like a lot meaning enough that there could be another relevant segment in it, then keep considering it... otherwise, move to the next portion
 				if (
@@ -598,21 +556,6 @@ export default {
 						this.scribingclean && // FLAG TIME DECISION fyi when the user sets this value too low it can prevent them from annotating some parts of the audio because it ignores them because if it is sensitive enough to detect them then the gap is too big for the user to annotate based on the length of phrase that they say they prefer to annotate.
 					this.contentEndingIndex >= 5
 				) {
-					// console.log((this.usableGaps[0].endTime - (this.contentEndingIndex - 5 + this.relevantGap.startTime)) + " is greater than or equal to " + this.scribingclean + ", and " + this.contentEndingIndex + " is greater than or equal to 5");
-
-					// console.log("manual: " + this.manuallyDraggedEndTimeMemory*100)
-					// console.log("prompter calculated: " + (this.contentEndingIndex - 5 + this.relevantGap.startTime))
-					// if (this.manuallyDraggedEndTimeMemory > 0) {
-					// console.log(
-					// 	"changing start time to the end of current gap: " +
-					// 		this.usableGaps[0].startTime
-					// );
-					// this.usableGaps[0].startTime =
-					// 	this.manuallyDraggedEndTimeMemory*100; // should be in hundredths of a second
-					// // console.log("chosen: " + this.usableGaps[0].startTime);
-					// }
-					// else {
-					// console.log("no manually dragged did not work")
 					let temp = parseInt(this.usableGaps[0].startTime);
 					// console.log(temp + " " + this.usableGaps.length)
 					this.usableGaps[0].startTime =
@@ -656,60 +599,6 @@ export default {
 					);
 
 					this.$store.commit("forceRegionRerender");
-					// console.log("original text: " + this.original_text)
-					// console.log("original text length: " + this.original_text.length)
-					// console.log(this.relevantGap)
-
-					// decide how to populate new_text (the text box) when the prompt is first generated
-					// if (Number.isNaN(this.relevantGap.endCharacter) == false) {
-					// 	// if the gap ends at other text
-					// 	// console.log("in if")
-					// 	this.new_text = this.original_text.substring(
-					// 		this.relevantGap.startCharacter,
-					// 		this.relevantGap.endCharacter
-					// 	);
-					// 	// console.log(this.new_text + " -- and then some other text")
-					// } else {
-					// 	// if the gap doesn't have a concrete end, is just null
-
-					// 	if (this.relevantGap.startCharacter > 0) {
-					// 		this.new_text = this.original_text.substring(
-					// 			this.relevantGap.startCharacter + 1
-					// 		);
-					// 	} else if (this.relevantGap.startCharacter == 0) {
-					// 		this.new_text = this.original_text.substring(
-					// 			this.relevantGap.startCharacter
-					// 		);
-					// 	}
-					// 	// console.log(this.new_text + " -- and then no other text")
-					// }
-					// if (this.new_text[0] == "\n") {
-					// 	//if there is a carriage return at the beginning of the relevant text segment, then skip it [but why skip 2?]
-					// 	// console.log("NEW TEXT before adjustment: " + this.new_text)
-					// 	// console.log("new text length: " + this.new_text.length)
-					// 	// console.log("start character before adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
-					// 	this.relevantGap.startCharacter += 1;
-					// 	this.new_text = this.new_text.substring(1);
-					// 	this.usableGaps[0].startCharacter += 1;
-					// 	// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
-					// 	// console.log("NEW TEXT after adjustment: " + this.new_text)
-					// 	// console.log("after chopping the beginning: " + this.new_text)
-					// }
-					// if (this.new_text[this.new_text.length - 1] == "\n") {
-					// 	//if there is a carriage return at the end of the relevant text segment and it is not the only character, then roll back from it
-					// 	// console.log("NEW TEXT before adjustment: " + this.new_text)
-					// 	// console.log("new text length: " + this.new_text.length)
-					// 	// console.log("start character before adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
-					// 	this.relevantGap.endCharacter -= 1;
-					// 	this.new_text = this.new_text.substring(
-					// 		0,
-					// 		this.new_text.length - 2
-					// 	);
-					// 	this.usableGaps[0].endCharacter -= 1;
-					// 	// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
-					// 	// console.log("NEW TEXT after adjustment: " + this.new_text)
-					// 	// console.log("after chopping the end: " + this.new_text)
-					// }
 				} else {
 					if (this.sensitivity > 50) {
 						//dump the first few seconds because they're all silence
@@ -742,68 +631,8 @@ export default {
 			return date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
 		},
 
-		// verifyNewText() {
-		// 	// console.log("in verify new text function in prompter");
-		// 	// decide how to populate new_text (the text box) after region is changed in audio player
-		// 	if (Number.isNaN(this.relevantGap.endCharacter) == false) {
-		// 		// if the gap ends at other text
-		// 		// console.log("in if")
-		// 		this.new_text = this.original_text.substring(
-		// 			this.relevantGap.startCharacter,
-		// 			this.relevantGap.endCharacter
-		// 		);
-		// 		// console.log(this.new_text + " -- and then some other text")
-		// 	} else {
-		// 		// if the gap doesn't have a concrete end, is just null
-
-		// 		if (this.relevantGap.startCharacter > 0) {
-		// 			this.new_text = this.original_text.substring(
-		// 				this.relevantGap.startCharacter + 1
-		// 			);
-		// 		} else if (this.relevantGap.startCharacter == 0) {
-		// 			this.new_text = this.original_text.substring(
-		// 				this.relevantGap.startCharacter
-		// 			);
-		// 		}
-		// 		// console.log(this.new_text + " -- and then no other text")
-		// 	}
-		// 	if (this.new_text[0] == "\n") {
-		// 		//if there is a carriage return at the beginning of the relevant text segment, then skip it [but why skip 2?]
-		// 		// console.log("NEW TEXT before adjustment: " + this.new_text)
-		// 		// console.log("new text length: " + this.new_text.length)
-		// 		// console.log("start character before adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
-		// 		this.relevantGap.startCharacter += 1;
-		// 		this.new_text = this.new_text.substring(1);
-		// 		this.usableGaps[0].startCharacter += 1;
-		// 		// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
-		// 		// console.log("NEW TEXT after adjustment: " + this.new_text)
-		// 		// console.log("after chopping the beginning: " + this.new_text)
-		// 	}
-		// 	if (this.new_text[this.new_text.length - 1] == "\n") {
-		// 		//if there is a carriage return at the end of the relevant text segment and it is not the only character, then roll back from it
-		// 		// console.log("NEW TEXT before adjustment: " + this.new_text)
-		// 		// console.log("new text length: " + this.new_text.length)
-		// 		// console.log("start character before adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
-		// 		this.relevantGap.endCharacter -= 1;
-		// 		this.new_text = this.new_text.substring(0, this.new_text.length - 2);
-		// 		this.usableGaps[0].endCharacter -= 1;
-		// 		// console.log("start character after adjustment: " + this.relevantGap.startCharacter + "=" + this.usableGaps[0].startCharacter)
-		// 		// console.log("NEW TEXT after adjustment: " + this.new_text)
-		// 		// console.log("after chopping the end: " + this.new_text)
-		// 	}
-		// 	// console.log(
-		// 	// 	"NEW TEXT after editing region in audio player: " + this.new_text
-		// 	// );
-		// },
-
 		// edit the text when the user clicks "Save Edits"
 		updateText() {
-			// console.log(this.original_text);
-			// console.log("original text length: " + this.original_text.length);
-			// console.log(this.relevantGap.startCharacter);
-			// console.log(this.new_text);
-			// console.log("new text length: " + this.new_text.length);
-
 			// decide what the new full text should be--where exactly to insert new_text (the user input) into it, and how the carriage returns should be around it.
 
 			if (Number.isNaN(this.relevantGap.endCharacter) == false) {
@@ -886,108 +715,12 @@ export default {
 				this.latest_text = temp_latesttext;
 			}
 
-			// if (
-			// 	Number.isNaN(this.relevantGap.endCharacter) == false &&
-			// 	this.original_text[this.relevantGap.endCharacter - 1] == "\n" &&
-			// 	this.original_text[this.relevantGap.endCharacter - 2] == "\n" &&
-			// 	this.original_text[this.relevantGap.endCharacter] != "\n"
-			// ) {
-			// 	// if the gap does have an ending and immediately follows two carriage returns, but doesn't immediately precede a carriage return
-			// 	console.log("hit0");
-			// 	this.latest_text =
-			// 		this.original_text.substring(0, this.relevantGap.endCharacter - 1) +
-			// 		this.new_text +
-			// 		"\n" +
-			// 		"\n" +
-			// 		this.original_text.substring(this.relevantGap.endCharacter);
-			// } else if (
-			// 	Number.isNaN(this.relevantGap.endCharacter) == false &&
-			// 	this.original_text[this.relevantGap.endCharacter - 1] == "\n" &&
-			// 	this.original_text[this.relevantGap.endCharacter] != "\n"
-			// ) {
-			// 	// if the gap does have an ending and immediately follows one (but not two) carriage returns, but doesn't immediately precede a carriage return
-			// 	console.log("hit1");
-			// 	this.latest_text =
-			// 		this.original_text.substring(0, this.relevantGap.endCharacter - 1) +
-			// 		"\n" +
-			// 		this.new_text +
-			// 		"\n" +
-			// 		"\n" +
-			// 		this.original_text.substring(this.relevantGap.endCharacter);
-			// } else if (
-			// 	Number.isNaN(this.relevantGap.endCharacter) == false &&
-			// 	this.original_text[this.relevantGap.endCharacter - 1] == "\n" &&
-			// 	this.original_text[this.relevantGap.endCharacter] == "\n"
-			// ) {
-			// 	// if the gap does have an ending and immediately follows a carriage return, and immediately precedes a carriage return
-			// 	console.log("hit2");
-			// 	this.latest_text =
-			// 		this.original_text.substring(0, this.relevantGap.endCharacter - 1) +
-			// 		"\n" +
-			// 		this.new_text +
-			// 		"\n" +
-			// 		this.original_text.substring(this.relevantGap.endCharacter);
-			// } else if (
-			// 	Number.isNaN(this.relevantGap.endCharacter) == false &&
-			// 	this.original_text[this.relevantGap.endCharacter - 1] != "\n" &&
-			// 	this.original_text[this.relevantGap.endCharacter] == "\n"
-			// ) {
-			// 	// if the gap does have an ending, but doesn't immediately follow a carriage return, but does immediately precede a carriage return
-			// 	console.log("hit3");
-			// 	this.latest_text =
-			// 		this.original_text.substring(0, this.relevantGap.endCharacter - 1) +
-			// 		"\n" +
-			// 		"\n" +
-			// 		this.new_text +
-			// 		"\n" +
-			// 		this.original_text.substring(this.relevantGap.endCharacter);
-			// } else if (
-			// 	Number.isNaN(this.relevantGap.endCharacter) == false &&
-			// 	this.original_text[this.relevantGap.endCharacter - 1] != "\n" &&
-			// 	this.original_text[this.relevantGap.endCharacter] != "\n"
-			// ) {
-			// 	// if the gap does have an ending, but doesn't immediately follow a carriage return, but doesn't immediately precede a carriage return
-			// 	console.log("hit4");
-			// 	this.latest_text =
-			// 		this.original_text.substring(0, this.relevantGap.endCharacter - 1) +
-			// 		"\n" +
-			// 		"\n" +
-			// 		this.new_text +
-			// 		"\n" +
-			// 		"\n" +
-			// 		this.original_text.substring(this.relevantGap.endCharacter);
-			// } else
-			//  if (
-			// 	Number.isNaN(this.relevantGap.endCharacter) == true &&
-			// 	this.original_text[this.original_text.length - 1] == "\n"
-			// ) {
-			// 	console.log("hit5");
-			// 	this.latest_text = this.original_text + "\n" + this.new_text + "\n"; // if the gap is at the end of the current text and immediately follows a carriage return
-			// } else if (
-			// 	Number.isNaN(this.relevantGap.endCharacter) == true &&
-			// 	this.original_text[this.original_text.length - 1] != "\n"
-			// ) {
-			// 	console.log("hit6");
-			// 	this.latest_text = // if the gap is at the end of the current text and does not immediately follow a carriage return
-			// 		this.original_text + "\n" + "\n" + this.new_text + "\n";
-			// }
-
-			// console.log(this.latest_text);
-			// console.log(this.original_text)
-
-			// console.log(this.latest_text.length)
 
 			let textLengthDifference =
 				this.latest_text.length - this.original_text.length;
 			for (let prop in this.new_associations) {
 				delete this.new_associations[prop];
 			}
-			// console.log(this.$store.state.startTimePrompter)
-			// console.log(this.$store.state.endTimePrompter)
-
-			// console.log(this.original_text_cleaned)
-			// console.log(this.latest_text_cleaned)
-
 			this.instructions = this.patienceDiffPlus(
 				this.original_text_cleaned,
 				this.latest_text_cleaned
