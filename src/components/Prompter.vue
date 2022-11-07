@@ -2,13 +2,9 @@
 
 <template>
 	<slot></slot>
-	<div
-		class="flex-auto"
-		
-	>
-		Write down the words that you hear, then press "Enter."  If you want to move to a new prompt without saving data, then leave the text box blank and press "Enter" or click on the "New Prompt" button above.<br>
-			If you want to adjust the segment of the audio being played to better fit the words, either drag the "scribe less / more" slider above or manually adjust the highlighted region in the audio player to the left by editing the timestamps at the top or bottom or clicking and dragging the highlighted region or its edges.<br><br>
-			
+	<div class="flex-auto">
+		Write down the words that you hear, then press "Enter." If you want to move to a new prompt without saving data, then leave the text box blank and press "Enter" or click on the "New Prompt" button above.<br>
+		If you want to adjust the segment of the audio being played to better fit the words, either drag the "scribe less / more" slider above or manually adjust the highlighted region in the audio player to the left by editing the timestamps at the top or bottom or clicking and dragging the highlighted region or its edges.<br><br>
 
 		<span class="px-3 py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="px-3 py-1 border-gray-300 rounded">{{ language_name }}</span><br />
@@ -48,12 +44,8 @@
 		<!-- {{newPromptscounter}} -->
 		<!-- {{$store.state.audioDuration}} -->
 
-
-
 		<textarea
 			class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded prompter"
-
-
 			:style="{ 'font-size': fontsize + 'px' }"
 			style="overflow: scroll; height:41vh;"
 			placeholder="enter new text here"
@@ -752,11 +744,11 @@ export default {
 						element["aIndex"] == -1 &&
 						element["line"] != "\n"
 					) {
-						this.new_associations[element["bIndex"]] =
-							((this.$store.state.startTimePrompter +
+								this.new_associations[element["bIndex"]]={}
+						this.new_associations[element["bIndex"]][Math.round(((this.$store.state.startTimePrompter +
 								this.$store.state.endTimePrompter) *
 								100) /
-							2;
+							2)] =Math.round((this.$store.state.endTimePrompter-this.$store.state.startTimePrompter)*100/2)
 					}
 				});
 			} else if (this.spaced_by == "") {
@@ -773,11 +765,12 @@ export default {
 						// console.log(this.instructions.lines[indexofchar]);
 
 						if (this.instructions.lines[indexofchar]["line"] != "\n") {
-							this.new_associations[this.relevantGap.endCharacter + l] =
-								((this.$store.state.startTimePrompter +
+							this.new_associations[this.relevantGap.endCharacter + l]={}
+							this.new_associations[this.relevantGap.endCharacter + l][Math.round(((this.$store.state.startTimePrompter +
 									this.$store.state.endTimePrompter) *
 									100) /
-								2;
+								2)] =
+								Math.round((this.$store.state.endTimePrompter-this.$store.state.startTimePrompter)*100/2)
 						}
 					}
 				}
@@ -795,11 +788,18 @@ export default {
 						// console.log(this.instructions.lines[indexofchar]);
 
 						if (this.instructions.lines[indexofchar]["line"] != "\n") {
-							this.new_associations[this.original_text.length - 1 + l] =
-								((this.$store.state.startTimePrompter +
+							console.log(this.original_text.length-1+l)
+							console.log(((this.$store.state.startTimePrompter +
 									this.$store.state.endTimePrompter) *
 									100) /
-								2;
+								2)
+								console.log((this.$store.state.endTimePrompter-this.$store.state.startTimePrompter)*100/2)
+								this.new_associations[this.original_text.length - 1 + l]={}
+							this.new_associations[this.original_text.length - 1 + l][Math.round(((this.$store.state.startTimePrompter +
+									this.$store.state.endTimePrompter) *
+									100) /
+								2)] =
+								Math.round((this.$store.state.endTimePrompter-this.$store.state.startTimePrompter)*100/2)
 						}
 					}
 				}
