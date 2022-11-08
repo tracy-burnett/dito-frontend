@@ -60,6 +60,7 @@ export default {
 			file: null,
 			captions: [],
 			timestampsforBackend: [],
+			offsetsforBackend: [],
 			new_associations: {},
 			captions_cleaned: [], // no weird stuff, only words and carriage returns
 		};
@@ -144,7 +145,7 @@ export default {
 						return response.json();
 					})
 					.then((response) => {
-                        // console.log(response)
+						// console.log(response)
 						//add in the association for the new phrase.
 						fetch(
 							process.env.VUE_APP_api_URL +
@@ -183,6 +184,7 @@ export default {
 
 		srtToInterpretation() {
 			this.timestampsforBackend.length = 0;
+			this.offsetsforBackend.length = 0;
 			this.captions.length = 0;
 			// console.log(this.fileloaded)
 			let arrayToParse = this.fileloaded.split("\n\n");
@@ -211,6 +213,14 @@ export default {
 							Number(timestampEndSeconds + "." + timestampEndMilliseconds))) /
 					2;
 				this.timestampsforBackend.push(timestampforBackend);
+				let offsetforBackend =
+					(100 *
+						(Number(timestampEndSeconds + "." + timestampEndMilliseconds) -
+							Number(
+								timestampStartSeconds + "." + timestampStartMilliseconds
+							))) /
+					2;
+				this.offsetsforBackend.push(offsetforBackend);
 				let caption_text = srt_instructions[2] + "\n\n";
 				this.captions.push(caption_text);
 			});
@@ -265,8 +275,10 @@ export default {
 			this.captions_cleaned.forEach((caption, captionindex) => {
 				caption.forEach((word) => {
 					if (word != "\n") {
-						this.new_associations[wordindexcount] =
-							this.timestampsforBackend[captionindex];
+						this.new_associations[wordindexcount] = {};
+						this.new_associations[wordindexcount][
+							Math.round(this.timestampsforBackend[captionindex])
+						] = Math.round(this.offsetsforBackend[captionindex])
 					}
 
 					wordindexcount++;
