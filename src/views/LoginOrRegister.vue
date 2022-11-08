@@ -40,14 +40,14 @@
     register(reg_email, reg_password, reg_display_name, reg_description, reg_anonymous)
   "
 />
-<input
+<!-- <input
   class="w-full px-3 py-1 border border-gray-300 rounded"
   placeholder="Blurb"
   v-model="reg_description"
   @keyup.enter="
     register(reg_email, reg_password, reg_display_name, reg_description, reg_anonymous)
   "
-/>
+/> -->
 <input
   class="w-full px-3 py-1 border border-gray-300 rounded"
   placeholder="Display Name"
