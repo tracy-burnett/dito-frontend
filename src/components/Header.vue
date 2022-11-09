@@ -1,6 +1,6 @@
 <template>
 	<!-- <div class="beforehero"></div> -->
-	<div class="grid grid-cols-4 mx-[3vw] overflow-hidden justify-items-center hero -mt-[1vh]">
+	<div class="grid grid-cols-4 mx-[3vw] overflow-hidden justify-items-center hero">
 
 		<!-- <h1 class="mb-5 text-5xl font-extrabold text-gray-400">{{ title }}</h1> -->
 		<!-- <p class="text-sm font-light text-gray-900 lg:w-3/5 md:w-3/5 sm:w-full" style="white-space:pre-wrap">{{ body }}</p> -->
@@ -182,7 +182,7 @@ export default {
 	z-index: -1;
 	position: absolute;
 	width: 100%;
-	height: 46vh;
+	height: 58vh;
 	background-image: linear-gradient(
 		rgb(0.784% 51.765% 78.039%) 0%,
 		rgb(0.941% 52.027% 78.356%) 6.25%,

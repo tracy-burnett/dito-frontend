@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col items-center justify-center flex-1 flex-auto h-full mt-10 overflow-hidden backdrop"
+    class="flex flex-col items-center justify-center flex-1 flex-auto h-full overflow-hidden backdrop"
     @click.self="closeModal()"
   >
     <div
