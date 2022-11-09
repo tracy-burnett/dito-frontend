@@ -23,7 +23,7 @@
 		</div>
 		<!-- <div class="flex justify-center text-xs">{{playbackspeed}}</div> -->
 		<!-- audio player body -->
-		<div class="container shadow-xl rounded-xl">
+		<div class="container flex flex-col shadow-xl rounded-xl">
 			<!-- top-most time entry box (for start of view window) -->
 			<div
 				id="start"
@@ -31,6 +31,7 @@
 				class="start"
 			>
 				<input
+					class="text-sm"
 					type="string"
 					v-model="startTime"
 					pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
@@ -44,7 +45,7 @@
 				@click="play"
 				class="play"
 			>
-				<div class="w-[2.5vw]">
+				<div class="w-[5vh] mt-[1vh]">
 					<img
 						v-if="playing"
 						src="@/assets/pauseAudio.svg"
@@ -60,10 +61,11 @@
 			<div
 				id="current"
 				ref="current"
-				class="current"
+				class="current -mt-[2vh] pb-[4vh]"
 			>
 				<input
 					type="string"
+					class="text-sm"
 					v-model="currentTime"
 					pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
 					@click="pausePlayer()"
@@ -79,13 +81,13 @@
 				@wheel.prevent="getzoomnumber($event)"
 			>
 				<span
-					class="flex flex-col justify-center px-[2vw]"
+					class="flex flex-col justify-center px-[2vw] text-sm"
 					v-if="loadingpercent > 0 && loadingpercent < 100"
 				>
 					audio {{ loadingpercent }}% loaded
 				</span>
 				<span
-					class="flex flex-col justify-center px-[1vw]"
+					class="flex flex-col justify-center px-[1vw] text-sm"
 					v-else-if="loadingpercent==0"
 				>please be patient while your audio file is uploaded to the server</span>
 			</div>
@@ -98,6 +100,7 @@
 			>
 				<input
 					type="string"
+					class="text-sm"
 					v-model="endTime"
 					pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
 					@keyup.enter="updateRegion()"
@@ -106,9 +109,6 @@
 
 			<!-- clear highlight button -->
 			<div
-				id="end"
-				ref="end"
-				class="end"
 			>
 				<button
 					class="rounded-full clear"
@@ -642,7 +642,7 @@ export default {
 }
 
 .container {
-	/* height: 100vh; */
+	height: 80vh;
 	/* min-height: 600px; */
 	/* width: 7vw; */
 	width: 100px;
@@ -687,17 +687,19 @@ export default {
 }
 
 .start {
-	margin-top: 1vh;
 	position: relative;
 	/* top: 3px; */
+	height: 3vh;
 }
 
 .current {
 	position: relative;
 	/* top: -5px; */
+	height: 3vh;
 }
 
 .end {
+	height: 3vh;
 	/* top: 5px; */
 	/* padding: 5px; */
 }
@@ -711,7 +713,7 @@ input {
 	position: relative;
 	/* left: 100% - 65px; */
 	/*background-color: #e2e8f0;*/
-	background: #334155;
+	background: transparent;
 	color: white;
 	/* border-radius: 15%; */
 	border-radius: 3px;

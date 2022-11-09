@@ -2,7 +2,7 @@
 
 	<Navbar />
 	<div class="relative overflow-x-hidden justify-items-center hero">
-		<div class="pt-[5vh] flex flex-row justify-between h-[80vh]">
+		<div class="pt-[5vh] flex flex-row justify-between h-[100vh]">
 			<span
 				v-if="showAddInterpretationModal"
 				class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
@@ -31,14 +31,14 @@
 					@rerenderPlayer="playerKey++"
 				/>
 			</div>
-			<div class="flex flex-row w-full ml-[90px]">
+			<div class="flex flex-row w-full ml-[105px]">
 
 				<!-- given the Vuex store's list of interpretation ID's that the user wants displayed in columns in the browser window, create a column for each one -->
 
 				<span
 					v-for="interpretation in $store.state.consoles"
 					:key="interpretation"
-					class="w-full"
+					class="w-full box-border px-[.5vw]"
 				>
 					<!-- tell the column which audio ID we are working with, which interpretations to put in the dropdown menu for viewing, which interpretations are currently being viewed (formerInterpretationsList),
       and the id of the interpretation to be displayed in this column in the browser window.  The SingleInterpretation component can use events
