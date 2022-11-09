@@ -1,7 +1,7 @@
 <template>
 	<div
 		@click="openstorybook()"
-		class="relative mb-[3vh] overflow-hidden transition-colors bg-white border shadow-lg cursor-pointer hover:overflow-auto card rounded-xl mr-7 hover:border-cyan-600"
+		class="relative mb-[3vh] overflow-hidden transition-colors bg-white border shadow-lg cursor-pointer hover:overflow-auto card rounded-xl  hover:border-cyan-600"
 	>
 		<img
 			class="object-cover w-full h-1/2"
@@ -75,8 +75,8 @@ export default {
 
 <style scoped>
 .card {
-	width: 35vh;
-	height: 32vh;
+	width: 30.1vh;
+	height: 27.5vh;
 	-ms-overflow-style: none; /* for Internet Explorer, Edge */
 	scrollbar-width: none; /* for Firefox */
 	overflow-y: scroll;

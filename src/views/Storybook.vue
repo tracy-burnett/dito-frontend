@@ -1,8 +1,8 @@
 <template>
 
 	<Navbar />
-	<div class="relative pt-3 overflow-x-hidden justify-items-center hero">
-		<div class="flex flex-row justify-between h-[80vh]">
+	<div class="relative overflow-x-hidden justify-items-center hero">
+		<div class="pt-[5vh] flex flex-row justify-between h-[80vh]">
 			<span
 				v-if="showAddInterpretationModal"
 				class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
@@ -31,7 +31,7 @@
 					@rerenderPlayer="playerKey++"
 				/>
 			</div>
-			<div class="flex flex-row w-full ml-[15vh]">
+			<div class="flex flex-row w-full ml-[90px]">
 
 				<!-- given the Vuex store's list of interpretation ID's that the user wants displayed in columns in the browser window, create a column for each one -->
 
@@ -260,8 +260,7 @@ export default {
 	z-index: -1;
 	position: absolute;
 	width: 100%;
-	height: 16vh;
-	margin-top: -2vh;
+	height: 20vh;
 	background-image: linear-gradient(
 		rgb(0.784% 51.765% 78.039%) 0%,
 		rgb(0.941% 52.027% 78.356%) 6.25%,

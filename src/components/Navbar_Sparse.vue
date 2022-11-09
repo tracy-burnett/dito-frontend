@@ -1,47 +1,48 @@
 <template>
 
-	<div class="sticky top-0 z-30 pb-2 bg-sky-600">
+	<div class="sticky top-0 z-30 h-0 bg-sky-600">
 
-
-		<div class="w-[20vh] absolute -ml-[7vh] -mt-[4vh]"  >
-			<img class="cursor-pointer" src="@/assets/dito_logo_main_color.svg" @click="gohome"/>
+		<div class="w-[9.3vw] fixed -ml-[3.2vw] -mt-[1.9vw]">
+			<img
+				class="cursor-pointer"
+				src="@/assets/dito_logo_main_color.svg"
+				@click="gohome"
+			/>
 		</div>
 
-		<div class="absolute w-full text-sm"  >
-			<p class="text-center text-slate-100 ">this website is in beta production; database backups are not guaranteed.  Download .srt files within "Viewer" mode of your interpretations to preserve valuable data.</p>
+		<div class="fixed m-auto left-0 right-0 w-[70vw]">
+			<p class="text-sm text-center text-slate-100">this website is in beta production; database backups are not guaranteed. Download .srt files within "Viewer" mode of your interpretations to preserve valuable data.</p>
 		</div>
 
-		<div class="flex flex-row-reverse items-center justify-between">
 
-			<div class="flex flex-col items-center">
+			<div class="fixed right-0 flex flex-col items-center">
 
 				<div
-					class="flex flex-col items-center w-10 h-10 cursor-pointer mr-[4vh] pt-[1vh]"
+					class="flex flex-col items-center w-[3.2vw] cursor-pointer mr-[1vw] pt-[1vh]"
 					v-if="LoginLogoutButton"
 					@click="signoutuser()"
 				>
 					<img
 						src="@/assets/icon_sign_out.svg"
-						class="pl-1"
+						class="pl-[.5vw]"
 					/>
 					<div>
-						<p>Logout</p>
+						<p class="text-sm">Logout</p>
 					</div>
 
 				</div>
 
 				<div
-					class="flex flex-col items-center w-10 h-10 cursor-pointer mr-[4vh] pt-[1vh]"
+					class="flex flex-col items-center w-[3.2vw] cursor-pointer mr-[1vw] pt-[1vh]"
 					v-else
 					@click="openlogin()"
 				>
 					<img src="@/assets/icon_profile.svg" />
-					<p>Login</p>
+					<p class="text-sm">Login</p>
 
 				</div>
 
 			</div>
-		</div>
 	</div>
 </template>
 
@@ -68,9 +69,9 @@ export default {
 			this.$store.commit("toggleInfobit", "Login");
 		},
 
-		gohome: function() {
+		gohome: function () {
 			this.$router.replace("/");
-		}
+		},
 	},
 
 	computed: {
@@ -83,5 +84,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

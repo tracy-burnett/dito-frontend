@@ -8,7 +8,7 @@
 
 		<div class="fixed z-[8] flex flex-row justify-around w-full -mt-[5vh]">
 
-			<div class="flex flex-row justify-between basis-2/5">
+			<div class="flex flex-row flex-wrap justify-between sm:basis-full lg:basis-2/5">
 				<p>Filters:</p>
 				<div>
 					<input
@@ -78,8 +78,8 @@
 
 		</div>
 
-		<div>
-			<div class="grid grid-cols-9">
+		
+			<div class="grid pt-[3vh] sticky  w-full z-[9]"  style="grid-template-columns: repeat(9, minmax(150px,1fr));">
 				<p></p>
 				<p class="font-bold">Title</p>
 				<p class="">Description</p>
@@ -88,8 +88,9 @@
 				<p>last edited at</p>
 				<p>Public?</p>
 				<p>Access</p>
-				<p></p>
+				<p></p><p></p>
 			</div>
+			<div style="overscroll-behavior:none;">
 			<!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
 			<span v-if="checkedFilters.includes('owner')">
 				<span v-if="searchResultAudioArray.length>0">
@@ -292,7 +293,7 @@
 					<span v-if="(audioArrayArchiveAfterSearch.length > 0)">
 				<h1 class="mt-8 mb-6 text-2xl font-bold">Archived Storybooks (deleted, but can be restored)</h1>
 				<br />
-				<div class="grid grid-cols-9">
+				<div class="grid" style="grid-template-columns: repeat(9, minmax(150px,1fr));">
 					<div></div>
 
 					<p class="font-bold">Title</p>
@@ -327,7 +328,7 @@
 			<span v-if="(audioArrayArchive.length > 0)">
 				<h1 class="mt-8 mb-6 text-2xl font-bold">Archived Storybooks (these have been removed from the app, but can be restored)</h1>
 				<br />
-				<div class="grid grid-cols-9">
+				<div class="grid" style="grid-template-columns: repeat(9, minmax(150px,1fr));">
 					<div></div>
 
 					<p class="font-bold">Title</p>
@@ -595,5 +596,16 @@ export default {
 <style scoped>
 ::placeholder {
 	/* vertical-align: center; */
+}
+
+
+.privatecardlist {
+	-ms-overflow-style: none; /* for Internet Explorer, Edge */
+	scrollbar-width: none; /* for Firefox */
+	overflow-y: scroll;
+}
+
+.privatecardlist::-webkit-scrollbar {
+	display: none; /* for Chrome, Safari, and Opera */
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="flex flex-col h-[20vh] mt-[2vh]"
+		class="flex flex-col h-[20vh] mt-[6vh]"
 		style="position:fixed;"
 	>
 
@@ -18,7 +18,7 @@
 				min=".2"
 				max="1.5"
 				step=".10"
-				style="width: 16vh"
+				style="width: 7.5vw"
 			/>
 		</div>
 		<!-- <div class="flex justify-center text-xs">{{playbackspeed}}</div> -->
@@ -44,7 +44,7 @@
 				@click="play"
 				class="play"
 			>
-				<div class="w-10 h-10">
+				<div class="w-[2.5vw]">
 					<img
 						v-if="playing"
 						src="@/assets/pauseAudio.svg"
@@ -79,13 +79,13 @@
 				@wheel.prevent="getzoomnumber($event)"
 			>
 				<span
-					class="flex flex-col justify-center pl-6"
+					class="flex flex-col justify-center px-[2vw]"
 					v-if="loadingpercent > 0 && loadingpercent < 100"
 				>
 					audio {{ loadingpercent }}% loaded
 				</span>
 				<span
-					class="flex flex-col justify-center pl-4"
+					class="flex flex-col justify-center px-[1vw]"
 					v-else-if="loadingpercent==0"
 				>please be patient while your audio file is uploaded to the server</span>
 			</div>
@@ -622,9 +622,10 @@ export default {
 	color: white;
 	text-align: center;
 	position: relative;
-	top: 5px;
+	top: 1vh;
 	height: 22px;
 	width: 94%;
+	margin-bottom: 2vh;
 	/*background: radial-gradient(#798597, #616977);*/
 	background: #475569;
 }
@@ -643,11 +644,12 @@ export default {
 .container {
 	/* height: 100vh; */
 	/* min-height: 600px; */
-	width: 4vw;
-	min-width: 100px;
+	/* width: 7vw; */
+	width: 100px;
 	position: relative;
 	/* left: 10px; */
-	margin: 5px;
+	margin-top: 1vh;
+	margin-left: .2vw;
 	/* top: 5px; */
 	display: inline;
 	/*max-width: 7%;*/
@@ -659,7 +661,7 @@ export default {
 .waveform {
 	/* flex: 1; */
 	display: flex;
-	height: 55vh;
+	height: 40vh;
 	background: #dbeafe;
 
 	/* background: linear-gradient(90deg, #155E75, #64748B, #155E75) */
@@ -675,9 +677,9 @@ export default {
 .play {
 	/* width: "50px"; */
 	position: relative;
-	top: -0.5px;
-	padding-left: -10px;
-	padding-top: 8px;
+
+	/* padding-left: -10px; */
+	padding-top: 1vh;
 }
 
 .play:active {
@@ -685,29 +687,29 @@ export default {
 }
 
 .start {
-	padding: 5px;
+	margin-top: 1vh;
 	position: relative;
-	top: 3px;
+	/* top: 3px; */
 }
 
 .current {
 	position: relative;
-	top: -5px;
+	/* top: -5px; */
 }
 
 .end {
-	top: 5px;
-	padding: 5px;
+	/* top: 5px; */
+	/* padding: 5px; */
 }
 
 input {
 	box-sizing: border-box;
 	/*border: slategray solid 1px;*/
-	width: 65px;
+	width: 80px;
 	/*width: 65px;
   height: 18px;*/
 	position: relative;
-	left: 100% - 65px;
+	/* left: 100% - 65px; */
 	/*background-color: #e2e8f0;*/
 	background: #334155;
 	color: white;
