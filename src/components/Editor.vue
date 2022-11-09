@@ -16,10 +16,11 @@
 		<!-- {{title.length}} -->
 		<!-- {{$store.getters.maxsize}} --><p class="text-sm pt-[1vh] pb-[2vh] ">
 		Edit the title, language name, or text of the interpretation.  We will make every attempt to preserve the timestamps of the words as you move them around.
+		<br>Use new lines (carriage returns) to separate words that are not separated by the language's spacing character.
 		<br>Don't forget to click the "Save" button above after you make your changes!</p>
 
 		<textarea
-			class="w-full border-gray-300 rounded editor"
+			class="w-full px-[.5vw] border-gray-300 rounded editor"
 
 		style="overflow: scroll; height:38vh;"
 		:style="{ 'font-size': fontsize + 'px' } "

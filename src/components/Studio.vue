@@ -23,11 +23,11 @@
 			Adjust the "listen to less / more" slider above to change the length of phrase that you are prompted with (note that adjusting this slider at all will bring you back to the beginning of the audio file).<br><br>
 		</p>
 			<div class="-mt-[2vh] pb-[2vh]" v-if="substringArray.length>0">
-				<span style="white-space: pre-wrap">
-					1. {{ phrasechoicesArray[0] }}<br>
-					2. {{ phrasechoicesArray[1] }}<br>
-					3. {{ phrasechoicesArray[2] }}<br>
-					4. {{ phrasechoicesArray[3] }}<br>
+				<span style="white-space: pre-wrap" >
+<p @click="chooseanswer(phrasechoicesArray[0])">					1. {{ phrasechoicesArray[0] }}</p>
+<p @click="chooseanswer(phrasechoicesArray[1])">					2. {{ phrasechoicesArray[1] }}</p>
+	<p @click="chooseanswer(phrasechoicesArray[2])">					3. {{ phrasechoicesArray[2] }}</p>
+		<p @click="chooseanswer(phrasechoicesArray[3])">					4. {{ phrasechoicesArray[3] }}</p>
 				</span>
 			</div>
 		</div>
@@ -205,6 +205,11 @@ export default {
 		},
 	},
 	methods: {
+
+chooseanswer(answer) {
+	this.new_text_unstripped=answer
+},
+
 		escapeRegex: function (string) {
 			return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 		},

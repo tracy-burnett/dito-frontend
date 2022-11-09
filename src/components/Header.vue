@@ -23,7 +23,7 @@
 			@mouseleave="browse=false"
 			v-else
 		>
-			<p class="text-xs">Click here to use your language skills to interpret an audio file uploaded by another user.  Nobody will see your interpretation unless you share or publish it.</p>
+			<p class="text-xs">Click below to use your language skills to interpret an audio file uploaded by another user. Nobody will see your interpretation unless you share or publish it.</p>
 		</div>
 
 		<div
@@ -46,7 +46,7 @@
 			@mouseleave="contribute=false"
 			v-else
 		>
-			<p class="text-xs">Click here to upload an authentic recording of a language or a dialect that you speak or care about.</p>
+			<p class="text-xs">Click below to upload an authentic recording of a language or a dialect that you speak or care about.</p>
 		</div>
 
 		<div
@@ -69,14 +69,12 @@
 			@mouseleave="publish=false"
 			v-else
 		>
-			<p class="text-xs">Click here to review, share, and publish (or unpublish) the audio files that you uploaded and the interpretations you wrote.</p>
+			<p class="text-xs">Click below to review, share, and publish (or unpublish) the audio files that you uploaded and the interpretations you wrote.</p>
 		</div>
-
 
 		<div
 			class="cursor-pointer contents"
 			v-if="revitalize==false"
-
 			@mouseover="revitalize=true"
 			@mouseleave="revitalize=false"
 		>
@@ -90,19 +88,29 @@
 		<div
 			class="flex flex-col items-center justify-center  cursor-pointer h-[35vh] w-[20vw]"
 			@click="$store.commit('toggleInfobit', 'InfoRevitalize');"
-
 			@mouseover="revitalize=true"
 			@mouseleave="revitalize=false"
 			v-else
 		>
-			<p class="text-xs">Click here to enhance your language skills and exposure with listening comprehension, reading comprehension, and typing training exercises in the context of any storybook published or shared with you.</p>
+			<p class="text-xs">Click below to enhance your language skills and exposure with listening comprehension, reading comprehension, and typing training exercises in the context of any storybook published or shared with you.</p>
 		</div>
 
-
-		<p class="font-semibold text-center sm:text-xs text-slate-700">Explore and Collaborate</p>
-		<p class="font-semibold text-center sm:text-xs text-slate-700">Contribute Audio</p>
-		<p class="font-semibold text-center sm:text-xs text-slate-700">Publish Storybooks</p>
-		<p class="font-semibold text-center sm:text-xs text-slate-700">Learn and Revitalize</p>
+		<p
+			class="font-semibold text-center sm:text-xs text-slate-700"
+			@click="$store.commit('toggleInfobit', 'PrivateCardList');"
+		>Explore and Collaborate</p>
+		<p
+			class="font-semibold text-center sm:text-xs text-slate-700"
+			@click="$store.commit('toggleInfobit', 'CreateStorybook');"
+		>Contribute Audio</p>
+		<p
+			class="font-semibold text-center sm:text-xs text-slate-700"
+			@click="$store.commit('toggleInfobit', 'InfoPublish');"
+		>Publish Storybooks</p>
+		<p
+			class="font-semibold text-center sm:text-xs text-slate-700"
+			@click="$store.commit('toggleInfobit', 'InfoRevitalize');"
+		>Learn and Revitalize</p>
 	</div>
 
 </template>
