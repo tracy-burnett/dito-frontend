@@ -11,7 +11,7 @@
 		</div>
 
 		<div class="fixed m-auto left-0 right-0 w-[70vw]">
-			<p class="text-sm text-center text-slate-100">this website is in beta production; database backups are not guaranteed. Download .srt files within "Viewer" mode of your interpretations to preserve valuable data.</p>
+			<!-- <p class="text-sm text-center text-slate-100">this website is in beta production; database backups are not guaranteed. Download .srt files within "Viewer" mode of your interpretations to preserve valuable data.</p> -->
 		</div>
 
 
@@ -70,7 +70,7 @@ export default {
 		},
 
 		gohome: function () {
-			this.$router.replace("/");
+			this.$router.push("/");
 		},
 	},
 

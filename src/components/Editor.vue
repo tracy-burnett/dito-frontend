@@ -2,13 +2,7 @@
 	<slot></slot>
 	<div
 		class="flex-auto"
-	>
-		<!-- {{title.length}} -->
-		<!-- {{$store.getters.maxsize}} -->
-		Edit the title, language name, or text of the interpretation.  We will make every attempt to preserve the timestamps of the words as you move them around.
-		<br>Don't forget to click the "Save" button above after you make your changes!<br>
-		<br>
-		<input
+	>		<input
 			class="px-3 py-1 font-bold border-gray-300 rounded"
 			v-model="title"
 			:size="titlesize"
@@ -18,11 +12,16 @@
 			class="h-full px-3 py-1 border-gray-300 rounded"
 			v-model="language_name"
 			:size="languagesize"
-		/>
+		/><br>
+		<!-- {{title.length}} -->
+		<!-- {{$store.getters.maxsize}} --><p class="text-sm pt-[1vh] pb-[2vh] ">
+		Edit the title, language name, or text of the interpretation.  We will make every attempt to preserve the timestamps of the words as you move them around.
+		<br>Don't forget to click the "Save" button above after you make your changes!</p>
+
 		<textarea
 			class="w-full border-gray-300 rounded editor"
 
-		style="overflow: scroll; height:50vh;"
+		style="overflow: scroll; height:38vh;"
 		:style="{ 'font-size': fontsize + 'px' } "
 			v-model="latest_text_unstripped"
 		></textarea>

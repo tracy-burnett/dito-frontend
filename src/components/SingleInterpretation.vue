@@ -1,7 +1,7 @@
 <template>
-	<div class="h-full ml-[1vh] overflow-scroll singleint">
+	<div class="h-full singleint">
 		<!-- this SingleInterpretation component represents what is viewable in a single interpretation column of an open storybook -->
-		<div class="flex flex-col -mt-[0vh] ">
+		<div class="flex flex-col -mt-[0vh]">
 			<div class="flex flex-row justify-center ">
 				<div class="sticky flex flex-row flex-wrap justify-around shrink ">
 
@@ -386,7 +386,7 @@ export default {
 	background-color: #f9f9f9;
 	/* min-width: 160px; */
 	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-	z-index: 1;
+	z-index: 45;
 }
 
 .dropdown-content a {

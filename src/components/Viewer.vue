@@ -1,22 +1,24 @@
 <template>
-	<div
-		class="flex-auto"
-	>
+	<div class="flex-auto">
 		<div>
-			<span class="px-3 py-1 font-bold border-gray-300 rounded">{{ title }}</span>
-			in <span class="px-3 py-1 border-gray-300 rounded">{{ language_name }}</span>
+			<span class="py-1 font-bold border-gray-300 rounded">{{ title }}</span>
+			in <span class="py-1 border-gray-300 rounded">{{ language_name }}</span>
 
 			<br><br>
-			Click on the phrases below to skip to the part of the audio file that contains them.<br>
-			Change the slider above that says "highlight less / more" to highlight and refer to the text in shorter or longer phrases as words are being spoken.<br>When the text below is highlighted in phrases of a length that you like, then select an option from the "Download" menu to save the interpretation to your computer.
+			<p class="text-sm">
+				Click on the phrases below to skip to the part of the audio file that contains them.<br>
+				Change the slider above that says "highlight less / more" to highlight and refer to the text in shorter or longer phrases as words are being spoken.<br>When the text below is highlighted in phrases of a length that you like, then select an option from the "Download" menu to save the interpretation to your computer.
+			</p>
 			<!-- {{associations}}<br><br>
 			{{parsedAssociations}}<br><br>
 			{{substringArray}}<br><br> -->
 			<!-- for each substring that would be independently highlighted, render it as highlighted or not based on running the highlight function on it whenever the current audioplayer time changes.
 also, if the user clicks on the text of that substring, snap the audio player to play the corresponding audio for that substring. -->
-			<div class="w-full h-full px-3 py-1 mt-12 mb-3 border-gray-300 rounded viewer"
-		:style="{ 'font-size': fontsize + 'px' }"
-		style="overflow: scroll; height:35vh;">
+			<div
+				class="w-full h-full py-1 border-gray-300 rounded viewer"
+				:style="{ 'font-size': fontsize + 'px' }"
+				style="overscroll-behavior:none; height: 33vh;"
+			>
 				<span
 					v-for="substring in substringArray"
 					:key="substring.startingcharacter"
