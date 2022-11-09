@@ -116,7 +116,7 @@
 							id="timestepslider"
 							v-model="timestep"
 							type="range"
-							min="50"
+							min="10"
 							max="2500"
 							step="50"
 						/>
@@ -133,7 +133,7 @@
 							id="scribingslider"
 							v-model="scribing"
 							type="range"
-							min="200"
+							min="10"
 							max="2000"
 							step="50"
 						/>
@@ -151,7 +151,7 @@
 							id="studyingslider"
 							v-model="studying"
 							type="range"
-							min="200"
+							min="10"
 							max="2000"
 							step="50"
 						/>
