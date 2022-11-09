@@ -2,9 +2,7 @@
 
 <template>
 	<slot></slot>
-	<div
-		class="flex-auto"
-	>
+	<div class="flex-auto">
 
 		<span class="py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="py-1 border-gray-300 rounded ">{{ language_name }}</span><br />
@@ -15,34 +13,40 @@
 		<!-- {{$store.state.startTimePrompter}}<br>
 		{{$store.state.endTimePrompter}}<br> -->
 
-
-
-		<div class="w-full h-full py-[1vh] border-gray-300 rounded"><p class="text-sm">
-			Retype exactly whichever phrase most closely matches what you are hearing.  If you are correct, you will automatically receive a new prompt (no need to press "Enter").<br>
-			Click "New Phrase" above to skip the current prompt.<br>
-			Adjust the "listen to less / more" slider above to change the length of phrase that you are prompted with (note that adjusting this slider at all will bring you back to the beginning of the audio file).<br><br>
-		</p>
-			<div class="-mt-[2vh] pb-[2vh]" v-if="substringArray.length>0">
-				<span style="white-space: pre-wrap" >
-<p @click="chooseanswer(phrasechoicesArray[0])">					1. {{ phrasechoicesArray[0] }}</p>
-<p @click="chooseanswer(phrasechoicesArray[1])">					2. {{ phrasechoicesArray[1] }}</p>
-	<p @click="chooseanswer(phrasechoicesArray[2])">					3. {{ phrasechoicesArray[2] }}</p>
-		<p @click="chooseanswer(phrasechoicesArray[3])">					4. {{ phrasechoicesArray[3] }}</p>
+		<div class="w-full h-full py-[1vh] border-gray-300 rounded">
+			<p class="text-sm">
+				Retype exactly whichever phrase most closely matches what you are hearing. If you are correct, you will automatically receive a new prompt (no need to press "Enter").<br>
+				Click "New Phrase" above to skip the current prompt.<br>
+				Adjust the "listen to less / more" slider above to change the length of phrase that you are prompted with (note that adjusting this slider at all will bring you back to the beginning of the audio file).<br><br>
+			</p>
+			<div
+				class="-mt-[2vh] pb-[2vh]"
+				v-if="substringArray.length>0"
+			>
+				<span style="white-space: pre-wrap">
+					<p @click="chooseanswer(phrasechoicesArray[0])"> 1. {{ phrasechoicesArray[0] }}</p>
+					<p @click="chooseanswer(phrasechoicesArray[1])"> 2. {{ phrasechoicesArray[1] }}</p>
+					<p @click="chooseanswer(phrasechoicesArray[2])"> 3. {{ phrasechoicesArray[2] }}</p>
+					<p @click="chooseanswer(phrasechoicesArray[3])"> 4. {{ phrasechoicesArray[3] }}</p>
 				</span>
 			</div>
 		</div>
 
 		<textarea
 			class="w-full h-full px-3 py-1 border-gray-300 rounded studio"
-		:style="{ 'font-size': fontsize + 'px' }"
-		
+			:style="{ 'font-size': fontsize + 'px' }"
 			style="overflow: scroll; height:14vh;"
 			placeholder="enter new text here"
 			v-model="new_text_unstripped"
 			ref="promptertextarea"
 		></textarea>
-<div class="flex flex-row justify-center w-full" v-if="finished==true"><div><button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn">Visit Another Storybook (not working yet)</button></div>
-	</div>	</div>
+		<div
+			class="flex flex-row justify-center w-full"
+			v-if="finished==true"
+		>
+			<div><button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn">Visit Another Storybook (not working yet)</button></div>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -116,14 +120,21 @@ export default {
 		interpretationStatus: { default: "" },
 	},
 	watch: {
-		scribingclean: function() {this.fetchNewInterpretation()},
+		interpretationStatus: function () {
+			this.fetchNewInterpretation();
+		},
+
+		scribingclean: function () {
+			this.fetchNewInterpretation();
+		},
 
 		new_text: function () {
-			if (this.substringArray.length >=1) {
-			if (this.new_text == this.substringArray[this.substringindex].text) {
-				this.new_text_unstripped = "";
-				this.$emit("increasePhrasesCounter");
-			}}
+			if (this.substringArray.length >= 1) {
+				if (this.new_text == this.substringArray[this.substringindex].text) {
+					this.new_text_unstripped = "";
+					this.$emit("increasePhrasesCounter");
+				}
+			}
 		},
 
 		"substringArray.length": function () {
@@ -153,9 +164,9 @@ export default {
 					this.substringindex++;
 				} else if (this.substringindex == this.substringArray.length - 1) {
 					this.substringindex = 0;
-					this.finished=true
+					this.finished = true;
 				}
-				this.new_text_unstripped=""
+				this.new_text_unstripped = "";
 			}
 		},
 
@@ -205,23 +216,22 @@ export default {
 		},
 	},
 	methods: {
-
-chooseanswer(answer) {
-	this.new_text_unstripped=answer
-},
+		chooseanswer(answer) {
+			this.new_text_unstripped = answer;
+		},
 
 		escapeRegex: function (string) {
 			return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 		},
 
 		fetchNewInterpretation() {
-			this.new_text_unstripped=""
-			this.phrasechoicesArray=[]
-			this.substringindex=null
-			this.associations=null
-			this.parsedAssociations=[]
-			this.substringArray=[]
-			
+			this.new_text_unstripped = "";
+			this.phrasechoicesArray = [];
+			this.substringindex = null;
+			this.associations = null;
+			this.parsedAssociations = [];
+			this.substringArray = [];
+
 			fetch(
 				process.env.VUE_APP_api_URL +
 					"interpretations/" +
