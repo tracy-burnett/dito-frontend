@@ -55,15 +55,6 @@ export default {
 </script>
 
 <style scoped>
-.privatecardlist {
-	-ms-overflow-style: none; /* for Internet Explorer, Edge */
-	scrollbar-width: none; /* for Firefox */
-	overflow-y: scroll;
-}
-
-.privatecardlist::-webkit-scrollbar {
-	display: none; /* for Chrome, Safari, and Opera */
-}
 
 .dropbtn {
 	/* background-color: #7833ff; */

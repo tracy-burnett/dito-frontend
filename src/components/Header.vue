@@ -1,6 +1,6 @@
 <template>
 	<!-- <div class="beforehero"></div> -->
-	<div class="grid grid-cols-4 pt-3 mx-16 overflow-x-hidden justify-items-center hero">
+	<div class="grid grid-cols-4 mx-[3vw] overflow-hidden justify-items-center hero -mt-[1vh]">
 
 		<!-- <h1 class="mb-5 text-5xl font-extrabold text-gray-400">{{ title }}</h1> -->
 		<!-- <p class="text-sm font-light text-gray-900 lg:w-3/5 md:w-3/5 sm:w-full" style="white-space:pre-wrap">{{ body }}</p> -->
@@ -11,19 +11,19 @@
 			@mouseleave="browse=false"
 		>
 			<img
-				class="object-scale-down pb-4"
+				class="object-scale-down h-[35vh] w-[20vw]"
 				@click="$store.commit('toggleInfobit', 'PublicCardList');"
 				:src="image1"
 			/>
 		</div>
 		<div
-			class="flex flex-col items-center justify-center w-full cursor-pointer  h-[40vh]"
+			class="flex flex-col items-center justify-center cursor-pointer h-[35vh] w-[20vw]"
 			@click="$store.commit('toggleInfobit', 'PublicCardList');"
 			@mouseover="browse=true"
 			@mouseleave="browse=false"
 			v-else
 		>
-			<p>Click here to use your language skills to interpret an audio file uploaded by another user.  Nobody will see your interpretation unless you share or publish it.</p>
+			<p class="text-xs">Click here to use your language skills to interpret an audio file uploaded by another user.  Nobody will see your interpretation unless you share or publish it.</p>
 		</div>
 
 		<div
@@ -33,20 +33,20 @@
 			@mouseleave="contribute=false"
 		>
 			<img
-				class="object-scale-down pb-4 h-[40vh]"
+				class="object-scale-down h-[35vh] w-[20vw]"
 				@click="$store.commit('toggleInfobit', 'CreateStorybook');"
 				:src="image2"
 			/>
 		</div>
 
 		<div
-			class="flex flex-col items-center justify-center w-full cursor-pointer h-[40vh]"
+			class="flex flex-col items-center justify-center cursor-pointer h-[35vh] w-[20vw]"
 			@click="$store.commit('toggleInfobit', 'CreateStorybook');"
 			@mouseover="contribute=true"
 			@mouseleave="contribute=false"
 			v-else
 		>
-			<p>Click here to upload an authentic recording of a language or a dialect that you speak or care about.</p>
+			<p class="text-xs">Click here to upload an authentic recording of a language or a dialect that you speak or care about.</p>
 		</div>
 
 		<div
@@ -56,20 +56,20 @@
 			@mouseleave="publish=false"
 		>
 			<img
-				class="object-scale-down pb-4  h-[40vh]"
+				class="object-scale-down h-[35vh] w-[20vw]"
 				@click="$store.commit('toggleInfobit', 'InfoPublish');"
 				:src="image3"
 			/>
 		</div>
 
 		<div
-			class="flex flex-col items-center justify-center w-full cursor-pointer"
+			class="flex flex-col items-center justify-center cursor-pointer h-[35vh] w-[20vw]"
 			@click="$store.commit('toggleInfobit', 'InfoPublish');"
 			@mouseover="publish=true"
 			@mouseleave="publish=false"
 			v-else
 		>
-			<p>Click here to review, share, and publish (or unpublish) the audio files that you uploaded and the interpretations you wrote.</p>
+			<p class="text-xs">Click here to review, share, and publish (or unpublish) the audio files that you uploaded and the interpretations you wrote.</p>
 		</div>
 
 
@@ -81,28 +81,28 @@
 			@mouseleave="revitalize=false"
 		>
 			<img
-				class="object-scale-down pb-4  h-[40vh]"
+				class="object-scale-down h-[35vh] w-[20vw]"
 				@click="$store.commit('toggleInfobit', 'InfoRevitalize');"
 				:src="image4"
 			/>
 		</div>
 
 		<div
-			class="flex flex-col items-center justify-center w-full cursor-pointer"
+			class="flex flex-col items-center justify-center  cursor-pointer h-[35vh] w-[20vw]"
 			@click="$store.commit('toggleInfobit', 'InfoRevitalize');"
 
 			@mouseover="revitalize=true"
 			@mouseleave="revitalize=false"
 			v-else
 		>
-			<p>Click here to enhance your language skills and exposure with listening comprehension, reading comprehension, and typing training exercises in the context of any storybook published or shared with you.</p>
+			<p class="text-xs">Click here to enhance your language skills and exposure with listening comprehension, reading comprehension, and typing training exercises in the context of any storybook published or shared with you.</p>
 		</div>
 
 
-		<p class="-mt-8 font-semibold text-center text-slate-700">Explore and Collaborate</p>
-		<p class="-mt-8 font-semibold text-center text-slate-700">Contribute Audio</p>
-		<p class="-mt-8 font-semibold text-center text-slate-700">Publish Storybooks</p>
-		<p class="-mt-8 font-semibold text-center text-slate-700">Learn and Revitalize</p>
+		<p class="font-semibold text-center sm:text-xs text-slate-700">Explore and Collaborate</p>
+		<p class="font-semibold text-center sm:text-xs text-slate-700">Contribute Audio</p>
+		<p class="font-semibold text-center sm:text-xs text-slate-700">Publish Storybooks</p>
+		<p class="font-semibold text-center sm:text-xs text-slate-700">Learn and Revitalize</p>
 	</div>
 
 </template>
@@ -182,8 +182,7 @@ export default {
 	z-index: -1;
 	position: absolute;
 	width: 100%;
-	height: 48vh;
-	margin-top: -16px;
+	height: 46vh;
 	background-image: linear-gradient(
 		rgb(0.784% 51.765% 78.039%) 0%,
 		rgb(0.941% 52.027% 78.356%) 6.25%,

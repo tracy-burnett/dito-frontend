@@ -26,10 +26,10 @@
     </span>
 
     <div
-      class="relative overflow-hidden transition-colors bg-white border intmanagerrow rounded-xl"
+      class="relative transition-colors bg-white border intmanagerrow rounded-xl"
     >
       <!-- <img class="w-full h-1/2" :src="image" alt="Sunset in the mountains" /> -->
-      <div class="grid items-center grid-cols-9">
+      <div class="grid items-center" style="grid-template-columns: repeat(9, minmax(150px,1fr));">
         <p></p>
           <p class="font-bold">{{ interpretation.title }}</p>
         <p v-if="interpretation.spaced_by">{{ interpretation.language_name }} spaced by "{{interpretation.spaced_by}}"</p>
