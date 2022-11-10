@@ -31,7 +31,7 @@
 					@rerenderPlayer="playerKey++"
 				/>
 			</div>
-			<div class="flex flex-row w-full ml-[105px]">
+			<div class="flex flex-row w-full ml-[105px] mr-[7vw]">
 
 				<!-- given the Vuex store's list of interpretation ID's that the user wants displayed in columns in the browser window, create a column for each one -->
 
