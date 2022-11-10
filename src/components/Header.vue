@@ -96,19 +96,19 @@
 		</div>
 
 		<p
-			class="font-semibold text-center sm:text-xs text-slate-700"
+			class="font-semibold text-center cursor-pointer sm:text-xs text-slate-700"
 			@click="$store.commit('toggleInfobit', 'PublicCardList');"
 		>Explore and Collaborate</p>
 		<p
-			class="font-semibold text-center sm:text-xs text-slate-700"
+			class="font-semibold text-center cursor-pointer sm:text-xs text-slate-700"
 			@click="$store.commit('toggleInfobit', 'CreateStorybook');"
 		>Contribute Audio</p>
 		<p
-			class="font-semibold text-center sm:text-xs text-slate-700"
+			class="font-semibold text-center cursor-pointer sm:text-xs text-slate-700"
 			@click="$store.commit('toggleInfobit', 'InfoPublish');"
 		>Publish Storybooks</p>
 		<p
-			class="font-semibold text-center sm:text-xs text-slate-700"
+			class="font-semibold text-center cursor-pointer sm:text-xs text-slate-700"
 			@click="$store.commit('toggleInfobit', 'InfoRevitalize');"
 		>Learn and Revitalize</p>
 	</div>
