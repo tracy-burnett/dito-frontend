@@ -14,35 +14,37 @@
 			<!-- <p class="text-sm text-center text-slate-100">this website is in beta production; database backups are not guaranteed. Download .srt files within "Viewer" mode of your interpretations to preserve valuable data.</p> -->
 		</div>
 
+		<div class="fixed right-0 flex flex-col items-center">
 
-			<div class="fixed right-0 flex flex-col items-center">
-
-				<div
-					class="flex flex-col items-center mr-[1vw]"
-					v-if="LoginLogoutButton"
-					@click="signoutuser()"
-				>
-					<img
-						src="@/assets/icon_sign_out.svg"
-						class="pl-[.5vw] w-[3.2vw] cursor-pointer pt-[1vh]"
-					/>
-					<div>
-						<p class="text-sm">Logout</p>
-					</div>
-
-				</div>
-
-				<div
-					class="flex flex-col items-center w-[3.2vw] cursor-pointer mr-[1vw] pt-[1vh]"
-					v-else
-					@click="openlogin()"
-				>
-					<img src="@/assets/icon_profile.svg" class="w-[3.2vw] cursor-pointer  pt-[1vh]" />
-					<p class="text-sm">Login</p>
-
+			<div
+				class="flex flex-col items-center cursor-pointer mr-[1vw]"
+				v-if="LoginLogoutButton"
+				@click="signoutuser()"
+			>
+				<img
+					src="@/assets/icon_sign_out.svg"
+					class="pl-[.5vw] w-[3.2vw]  pt-[1vh]"
+				/>
+				<div>
+					<p class="text-sm">Logout</p>
 				</div>
 
 			</div>
+
+			<div
+				class="flex flex-col items-center cursor-pointer mr-[1vw]"
+				v-else
+				@click="openlogin()"
+			>
+				<img
+					src="@/assets/icon_profile.svg"
+					class="w-[3.2vw]  pt-[1vh]"
+				/>
+				<p class="text-sm">Login</p>
+
+			</div>
+
+		</div>
 	</div>
 </template>
 
