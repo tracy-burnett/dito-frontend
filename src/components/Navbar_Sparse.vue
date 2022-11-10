@@ -18,13 +18,13 @@
 			<div class="fixed right-0 flex flex-col items-center">
 
 				<div
-					class="flex flex-col items-center w-[3.2vw] cursor-pointer mr-[1vw] pt-[1vh]"
+					class="flex flex-col items-center mr-[1vw]"
 					v-if="LoginLogoutButton"
 					@click="signoutuser()"
 				>
 					<img
 						src="@/assets/icon_sign_out.svg"
-						class="pl-[.5vw]"
+						class="pl-[.5vw] w-[3.2vw] cursor-pointer pt-[1vh]"
 					/>
 					<div>
 						<p class="text-sm">Logout</p>
@@ -37,7 +37,7 @@
 					v-else
 					@click="openlogin()"
 				>
-					<img src="@/assets/icon_profile.svg" />
+					<img src="@/assets/icon_profile.svg" class="w-[3.2vw] cursor-pointer  pt-[1vh]" />
 					<p class="text-sm">Login</p>
 
 				</div>
