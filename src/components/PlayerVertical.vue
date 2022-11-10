@@ -18,7 +18,7 @@
 				min=".2"
 				max="1.5"
 				step=".10"
-				style="width: 7.5vw"
+				style="width: 105px"
 			/>
 		</div>
 		<!-- <div class="flex justify-center text-xs">{{playbackspeed}}</div> -->
