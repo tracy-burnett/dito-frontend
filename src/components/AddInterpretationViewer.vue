@@ -1,22 +1,22 @@
 <template>
-  <div class="sticky w-[13vw]">
+  <div class="fixed right-0 w-[100px] flex flex-col  justify-center top-[23vh]">
     <!-- this is a button for creating a new Interpretation and having it displayed in its own column -->
-    <div  class="fixed  mt-[26vh]" id="create" @click="show" style="cursor:pointer">
-      <div class="w-[3.4vw]">
-        <img src="@/assets/add-new.svg" />
-      </div> Create New<br>Interpretation
+    <div  class="flex flex-col items-left py-[2vh]" id="create" @click="show" style="cursor:pointer">
+      <div class="w-[7.5vh]">
+        <img src="@/assets/icon_add_no_fill.svg" />
+      </div> <p class="text-sm text-left md:text-base">Create New<br>Interpretation</p>
     </div>
         <!-- this is a button for creating a new Interpretation and having it displayed in its own column -->
-        <div  class="fixed mt-[46vh]" id="upload" @click="upload" style="cursor:pointer">
-      <div class="w-[3.4vw]">
-        <img src="@/assets/add-new.svg" />
-      </div> Upload .srt<br>Interpretation
+        <div  class="flex flex-col items-left py-[2vh]" id="upload" @click="upload" style="cursor:pointer">
+      <div class="w-[7.5vh]">
+        <img src="@/assets/icon_add_no_fill.svg" />
+      </div><p class="text-sm text-left md:text-base"> Upload .srt<br>Interpretation</p>
     </div>
     <!-- this is a button for adding another column that shows an Interpretation that you have access to but aren't yet viewing -->
-    <div  class="fixed  mt-[66vh]" v-show="this.interpretationsList[0]" id="add" @click="add" style="cursor:pointer">
-      <div class="w-[3.4vw]">
-        <img src="@/assets/add-existing.svg" />
-      </div> Add Another<br>Console
+    <div  class="flex flex-col items-left pt-[2vh]" v-show="this.interpretationsList[0]" id="add" @click="add" style="cursor:pointer">
+      <div class="w-[7.5vh]">
+        <img src="@/assets/icon_add_fill.svg" />
+      </div> <p class="text-sm text-left md:text-base">Add Another<br>Console</p>
     </div>
     <br />
   </div>
