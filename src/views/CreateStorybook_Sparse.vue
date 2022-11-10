@@ -5,7 +5,7 @@
 			<input
 				class="w-full px-3 py-1 mt-12 mb-3 border border-gray-300 rounded"
 				type="file"
-				accept="audio/*"
+				accept="audio/*,.mp4"
 				ref="audioInput"
 				@keyup.enter="upload"
 			/>
