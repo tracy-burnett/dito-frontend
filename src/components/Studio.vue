@@ -23,7 +23,7 @@
 				class="-mt-[2vh] pb-[2vh]"
 				v-if="substringArray.length>0"
 			>
-				<span style="white-space: pre-wrap">
+				<span style="white-space: pre-wrap" 			:style="{ 'font-size': fontsize + 'px' }">
 					<p @click="chooseanswer(phrasechoicesArray[0])"> 1. {{ phrasechoicesArray[0] }}</p>
 					<p @click="chooseanswer(phrasechoicesArray[1])"> 2. {{ phrasechoicesArray[1] }}</p>
 					<p @click="chooseanswer(phrasechoicesArray[2])"> 3. {{ phrasechoicesArray[2] }}</p>
