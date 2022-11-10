@@ -4,19 +4,19 @@
     <div  class="fixed  mt-[26vh]" id="create" @click="show" style="cursor:pointer">
       <div class="w-[3.4vw]">
         <img src="@/assets/add-new.svg" />
-      </div> <p class="md:text-base sm:text-sm">Create New<br>Interpretation</p>
+      </div> <p class="text-sm md:text-base">Create New<br>Interpretation</p>
     </div>
         <!-- this is a button for creating a new Interpretation and having it displayed in its own column -->
         <div  class="fixed mt-[46vh]" id="upload" @click="upload" style="cursor:pointer">
       <div class="w-[3.4vw]">
         <img src="@/assets/add-new.svg" />
-      </div><p class="md:text-base sm:text-sm"> Upload .srt<br>Interpretation</p>
+      </div><p class="text-sm md:text-base"> Upload .srt<br>Interpretation</p>
     </div>
     <!-- this is a button for adding another column that shows an Interpretation that you have access to but aren't yet viewing -->
     <div  class="fixed  mt-[66vh]" v-show="this.interpretationsList[0]" id="add" @click="add" style="cursor:pointer">
       <div class="w-[3.4vw]">
         <img src="@/assets/add-existing.svg" />
-      </div> <p class="md:text-base sm:text-sm">Add Another<br>Console</p>
+      </div> <p class="text-sm md:text-base">Add Another<br>Console</p>
     </div>
     <br />
   </div>
