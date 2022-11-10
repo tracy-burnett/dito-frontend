@@ -97,7 +97,7 @@
 
 		<p
 			class="font-semibold text-center sm:text-xs text-slate-700"
-			@click="$store.commit('toggleInfobit', 'PrivateCardList');"
+			@click="$store.commit('toggleInfobit', 'PublicCardList');"
 		>Explore and Collaborate</p>
 		<p
 			class="font-semibold text-center sm:text-xs text-slate-700"
