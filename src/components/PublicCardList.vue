@@ -8,10 +8,13 @@
 		/>
 		<!-- <h1 class="mt-8 mb-6 text-2xl font-bold text-center">{{ title }}</h1> -->
 		<!-- <div class="pt-[3vh] flex flex-row items-center"> -->
-			<!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
+		<!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
 
-  <div v-if="searchResultAudioArray.length>0" class="pt-[9vh]  flex flex-row items-center">
-    <div
+		<div
+			v-if="searchResultAudioArray.length>0"
+			class="pt-[9vh]  flex flex-row items-center"
+		>
+			<div
 				v-for="audio in searchResultAudioArray"
 				:key="audio.id"
 			>
@@ -21,10 +24,14 @@
 					:description="audio.description"
 					:title="audio.title"
 					:audio_ID="audio.id"
-				/></div>
-  </div>
-  <div v-else class=" pt-[9vh] flex flex-row items-center">
-      <div
+				/>
+			</div>
+		</div>
+		<div
+			v-else
+			class=" pt-[9vh] flex flex-row items-center"
+		>
+			<div
 				v-for="audio in audioArray"
 				:key="audio.id"
 			>
@@ -35,8 +42,8 @@
 					:title="audio.title"
 					:audio_ID="audio.id"
 				/>
-			<!-- </div> -->
-  </div>
+				<!-- </div> -->
+			</div>
 		</div>
 	</div>
 </template>
@@ -89,10 +96,10 @@ export default {
 
 		search() {
 			console.log(this.regexwithsearchterm);
-			this.searchResultAudioArray = [...this.audioArray]
-      let i=0
-      while (i<this.searchResultAudioArray.length) {
-        let audio=this.audioArray[i]
+			this.searchResultAudioArray = [...this.audioArray];
+			let i = 0;
+			while (i < this.searchResultAudioArray.length) {
+				let audio = this.audioArray[i];
 				let k = 0;
 				if (audio.description.match(this.regexwithsearchterm)) {
 					k++;
@@ -116,9 +123,12 @@ export default {
 						k++;
 					}
 				}
-        
-				if (k==0) {this.searchResultAudioArray.splice(i,1)}
-        else {i+=1}
+
+				if (k == 0) {
+					this.searchResultAudioArray.splice(i, 1);
+				} else {
+					i += 1;
+				}
 			}
 		},
 
