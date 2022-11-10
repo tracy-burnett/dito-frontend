@@ -1,6 +1,6 @@
 <template>
 
-	<div class="sticky top-0 z-30 h-0 overflow-hidden bg-sky-600">
+	<div class="sticky top-0 z-30 h-0 bg-sky-600">
 
 		<div class="w-[9.3vw] fixed -ml-[3.2vw] -mt-[1.9vw]">
 			<img

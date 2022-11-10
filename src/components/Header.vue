@@ -188,7 +188,7 @@ export default {
 .hero::before {
 	content: " ";
 	z-index: -1;
-	position: absolute;
+	position: fixed;
 	width: 100%;
 	height: 58vh;
 	background-image: linear-gradient(
