@@ -5,7 +5,7 @@
 			<input
 				class="w-full px-3 py-1 mt-12 mb-3 border border-gray-300 rounded"
 				type="file"
-				accept="audio/*"
+				accept="audio/mpeg,audio/mp4,audio-x/flac,audio/x-mpegurl,audio/x-wav,audio/x-ms-wma,audio/x-aiff,audio/x-aac,audio/ogg,audio/mp4a-latm,audio/midi,audio/mpegurl,audio/x-m4a,audio/mp3,audio/x-mp3,audio/x-mpeg,audio/3gpp,audio/3gpp2,audio/vnd.wave"
 				ref="audioInput"
 				@keyup.enter="upload"
 			/>

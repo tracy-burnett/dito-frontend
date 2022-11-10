@@ -189,7 +189,8 @@ export default {
 	content: " ";
 	z-index: -1;
 	position: absolute;
-	width: 100%;
+	width: 100vw;
+	left: 0;
 	height: 58vh;
 	background-image: linear-gradient(
 		rgb(0.784% 51.765% 78.039%) 0%,
