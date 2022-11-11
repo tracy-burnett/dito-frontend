@@ -17,8 +17,8 @@
 		{{$store.state.endTimePrompter}}<br> -->
 		<!-- {{new_associations}}  -->
 		<!-- {{scribingclean}} -->
-		associations: {{associations}}<br>
-		association gaps: {{associationGaps}}<br>
+		<!-- associations: {{associations}}<br> -->
+		<!-- association gaps: {{associationGaps}}<br> -->
 		<!-- {{$store.state.startTimePrompter*100}}<br> -->
 		<!-- {{manuallyDraggedEndTimeMemory}}<br> -->
 		<!-- {{$store.state.endTimePrompter*100}}<br> -->
