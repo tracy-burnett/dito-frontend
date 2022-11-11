@@ -92,7 +92,7 @@
 			@mouseleave="revitalize=false"
 			v-else
 		>
-			<p class="text-xs">Click below to enhance your language skills and exposure with listening comprehension, reading comprehension, and typing training exercises in the context of any storybook published or shared with you.</p>
+			<p class="text-xs">Click below to enhance your language skills and exposure with listening comprehension, reading comprehension, and typing training exercises in the context of any published storybook.</p>
 		</div>
 
 		<p

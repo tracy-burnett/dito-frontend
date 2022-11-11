@@ -108,8 +108,7 @@
 			</div>
 
 			<!-- clear highlight button -->
-			<div
-			>
+			<div>
 				<button
 					class="rounded-full clear"
 					@click="clearallregions()"
@@ -122,6 +121,8 @@
 </template>
 
 <script>
+import { getIdToken } from "firebase/auth";
+
 export default {
 	// name of component
 	name: "PlayerVertical",
@@ -287,7 +288,18 @@ export default {
 		this.wavesurfer.destroy();
 	},
 
-	mounted() {
+	async mounted() {
+		// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+		await getIdToken(this.$store.state.user)
+			.then((idToken) => {
+				this.$store.commit("SetIdToken", idToken);
+				// console.log(this.$store.state.idToken)
+			})
+			.catch((error) => {
+				// An error happened.
+				console.log("Oops. " + error.code + ": " + error.message);
+			});
+
 		//get secure url from server
 		this.$store.commit("updateAudioDuration", 0);
 		this.$store.commit("removePeaksData");
@@ -649,7 +661,7 @@ export default {
 	position: relative;
 	/* left: 10px; */
 	margin-top: 1vh;
-	margin-left: .2vw;
+	margin-left: 0.2vw;
 	/* top: 5px; */
 	display: inline;
 	/*max-width: 7%;*/

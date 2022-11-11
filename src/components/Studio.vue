@@ -23,7 +23,10 @@
 				class="-mt-[2vh] pb-[2vh]"
 				v-if="substringArray.length>0"
 			>
-				<span style="white-space: pre-wrap" 			:style="{ 'font-size': fontsize + 'px' }">
+				<span
+					style="white-space: pre-wrap"
+					:style="{ 'font-size': fontsize + 'px' }"
+				>
 					<p @click="chooseanswer(phrasechoicesArray[0])"> 1. {{ phrasechoicesArray[0] }}</p>
 					<p @click="chooseanswer(phrasechoicesArray[1])"> 2. {{ phrasechoicesArray[1] }}</p>
 					<p @click="chooseanswer(phrasechoicesArray[2])"> 3. {{ phrasechoicesArray[2] }}</p>
@@ -50,6 +53,8 @@
 </template>
 
 <script>
+import { getIdToken } from "firebase/auth";
+
 export default {
 	inheritAttrs: false,
 	name: "Studio",
@@ -224,7 +229,18 @@ export default {
 			return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 		},
 
-		fetchNewInterpretation() {
+		async fetchNewInterpretation() {
+			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+			await getIdToken(this.$store.state.user)
+				.then((idToken) => {
+					this.$store.commit("SetIdToken", idToken);
+					// console.log(this.$store.state.idToken)
+				})
+				.catch((error) => {
+					// An error happened.
+					console.log("Oops. " + error.code + ": " + error.message);
+				});
+
 			this.new_text_unstripped = "";
 			this.phrasechoicesArray = [];
 			this.substringindex = null;

@@ -27,7 +27,10 @@
 		>
 			<slot></slot>
 			<!-- <img class="w-full h-1/2" :src="image" alt="Sunset in the mountains" /> -->
-			<div class="grid items-center" style="grid-template-columns: repeat(9, minmax(150px,1fr));">
+			<div
+				class="grid items-center"
+				style="grid-template-columns: repeat(9, minmax(150px,1fr));"
+			>
 				<div v-if="picked==audio_ID"><button
 						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 						@click="selectrow()"
@@ -105,17 +108,17 @@
 				<div class="flex flex-row">
 
 					<div v-if="!archived">
-					<button
-						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
-						@click="openstorybook()"
-					>
-						View
-					</button>
-				</div>
-				<div v-else></div>&nbsp;
-				<div v-if="!archived && status == 'owner'">
+						<button
+							class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+							@click="openstorybook()"
+						>
+							View
+						</button>
+					</div>
+					<div v-else></div>&nbsp;
+					<div v-if="!archived && status == 'owner'">
 
-<button
+						<button
 							class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 							@click="archive()"
 						>
@@ -131,14 +134,16 @@
 						</button>
 					</div>
 					<div v-else></div>
-			</div>
+				</div>
 
-
-
-				<p v-if="status == 'owner'"><button 						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
- @click="showStorybookModal(audio_ID)">Manage Collaborators</button></p>
-				<p v-else-if="status == 'editor'"><button 						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
- @click="showAddViewersModal(audio_ID)">Manage Viewers</button></p>
+				<p v-if="status == 'owner'"><button
+						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+						@click="showStorybookModal(audio_ID)"
+					>Manage Collaborators</button></p>
+				<p v-else-if="status == 'editor'"><button
+						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+						@click="showAddViewersModal(audio_ID)"
+					>Manage Viewers</button></p>
 				<!-- <p v-else-if="status == 'viewer'"><button>Request to Collaborate</button></p> -->
 			</div>
 		</div>
@@ -162,6 +167,7 @@
 import IntManager from "@/components/IntManager.vue";
 import StorybookModal from "@/components/StorybookModal.vue";
 import AddViewersModal from "@/components/AddViewersModal.vue";
+import { getIdToken } from "firebase/auth";
 
 export default {
 	name: "CardRow",
@@ -241,8 +247,19 @@ export default {
 		showAddViewersModal() {
 			this.$store.commit("showAddViewersModal", this.audio_ID);
 		},
-		getInterpretations() {
+		async getInterpretations() {
 			if (this.dropdown) {
+				// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+				await getIdToken(this.$store.state.user)
+					.then((idToken) => {
+						this.$store.commit("SetIdToken", idToken);
+						// console.log(this.$store.state.idToken)
+					})
+					.catch((error) => {
+						// An error happened.
+						console.log("Oops. " + error.code + ": " + error.message);
+					});
+
 				const apiUrl =
 					process.env.VUE_APP_api_URL +
 					"interpretations/audio/" +
@@ -275,7 +292,18 @@ export default {
 			});
 		},
 
-		unarchive() {
+		async unarchive() {
+			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+			await getIdToken(this.$store.state.user)
+				.then((idToken) => {
+					this.$store.commit("SetIdToken", idToken);
+					// console.log(this.$store.state.idToken)
+				})
+				.catch((error) => {
+					// An error happened.
+					console.log("Oops. " + error.code + ": " + error.message);
+				});
+
 			fetch(
 				process.env.VUE_APP_api_URL +
 					"audio/" +
@@ -311,7 +339,18 @@ export default {
 				});
 		},
 
-		archive() {
+		async archive() {
+			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+			await getIdToken(this.$store.state.user)
+				.then((idToken) => {
+					this.$store.commit("SetIdToken", idToken);
+					// console.log(this.$store.state.idToken)
+				})
+				.catch((error) => {
+					// An error happened.
+					console.log("Oops. " + error.code + ": " + error.message);
+				});
+
 			fetch(
 				process.env.VUE_APP_api_URL +
 					"audio/" +
@@ -347,7 +386,18 @@ export default {
 				});
 		},
 
-		savechanges() {
+		async savechanges() {
+			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+			await getIdToken(this.$store.state.user)
+				.then((idToken) => {
+					this.$store.commit("SetIdToken", idToken);
+					// console.log(this.$store.state.idToken)
+				})
+				.catch((error) => {
+					// An error happened.
+					console.log("Oops. " + error.code + ": " + error.message);
+				});
+
 			fetch(
 				process.env.VUE_APP_api_URL +
 					"audio/" +

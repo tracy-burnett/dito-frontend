@@ -50,6 +50,7 @@
 
 <script>
 import Card from "@/components/Card.vue";
+import { getIdToken } from "firebase/auth";
 
 export default {
 	data() {
@@ -132,18 +133,29 @@ export default {
 			}
 		},
 
-		getStorybooks() {
-			fetch(process.env.VUE_APP_api_URL + "audio/", {
+		async getStorybooks() {
+			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+			await getIdToken(this.$store.state.user)
+				.then((idToken) => {
+					this.$store.commit("SetIdToken", idToken);
+					// console.log(this.$store.state.idToken)
+				})
+				.catch((error) => {
+					// An error happened.
+					console.log("Oops. " + error.code + ": " + error.message);
+				});
+
+			fetch(process.env.VUE_APP_api_URL + "audio/user/", {
 				method: "GET",
 
 				headers: {
 					"Content-Type": "application/json",
-					// Authorization: this.$store.state.idToken,
+					Authorization: this.$store.state.idToken,
 				},
 			})
 				.then((response) => response.json()) // json to object
 				.then((data) => {
-					this.audioArray = data["audio"]; // collect the list of audio files that are owned by, or shared with, the logged-in user
+					this.audioArray = data["audio files"]; // collect the list of audio files that are owned by, or shared with, the logged-in user
 				})
 				.catch((error) => console.error("Error:", error));
 		},

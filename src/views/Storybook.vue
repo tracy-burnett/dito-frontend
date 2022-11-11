@@ -24,7 +24,7 @@
 				/>
 			</span>
 
-			<div >
+			<div>
 				<PlayerVertical
 					:key="playerKey"
 					:audio_ID="audio_ID"
@@ -77,6 +77,7 @@ import SingleInterpretation from "@/components/SingleInterpretation.vue";
 import AddInterpretationViewer from "@/components/AddInterpretationViewer.vue";
 import AddInterpretationModal from "@/components/AddInterpretationModal.vue";
 import UploadIntModal from "@/components/UploadIntModal.vue";
+import { getIdToken } from "firebase/auth";
 
 export default {
 	name: "Storybook",
@@ -109,8 +110,20 @@ export default {
 		window.removeEventListener("resize", this.myEventHandler);
 	},
 
-	mounted() {
+	async mounted() {
 		//fetch the interpretations the logged-in user has access to for this audio file
+
+		// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+		await getIdToken(this.$store.state.user)
+			.then((idToken) => {
+				this.$store.commit("SetIdToken", idToken);
+				// console.log(this.$store.state.idToken)
+			})
+			.catch((error) => {
+				// An error happened.
+				console.log("Oops. " + error.code + ": " + error.message);
+			});
+
 		const apiUrl =
 			process.env.VUE_APP_api_URL +
 			"interpretations/audio/" +
