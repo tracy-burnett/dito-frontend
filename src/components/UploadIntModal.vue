@@ -114,7 +114,18 @@ export default {
 			}
 		},
 
-		create() {
+		async create() {
+			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+			await getIdToken(this.$store.state.user)
+				.then((idToken) => {
+					this.$store.commit("SetIdToken", idToken);
+					// console.log(this.$store.state.idToken)
+				})
+				.catch((error) => {
+					// An error happened.
+					console.log("Oops. " + error.code + ": " + error.message);
+				});
+
 			if (
 				this.int_title != "" ||
 				this.int_text != "" ||
@@ -278,7 +289,7 @@ export default {
 						this.new_associations[wordindexcount] = {};
 						this.new_associations[wordindexcount][
 							Math.round(this.timestampsforBackend[captionindex])
-						] = Math.round(this.offsetsforBackend[captionindex])
+						] = Math.round(this.offsetsforBackend[captionindex]);
 					}
 
 					wordindexcount++;

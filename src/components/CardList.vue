@@ -78,19 +78,22 @@
 
 		</div>
 
-		
-			<div class="grid pt-[3vh] sticky  w-full z-[9]"  style="grid-template-columns: repeat(9, minmax(150px,1fr));">
-				<p></p>
-				<p class="font-bold">Title</p>
-				<p class="">Description</p>
-				<p class="">created by</p>
-				<!-- <p>created at</p> -->
-				<p>last edited at</p>
-				<p>Public?</p>
-				<p>Access</p>
-				<p></p><p></p>
-			</div>
-			<div style="overscroll-behavior:none;">
+		<div
+			class="grid pt-[3vh] sticky  w-full z-[9]"
+			style="grid-template-columns: repeat(9, minmax(150px,1fr));"
+		>
+			<p></p>
+			<p class="font-bold">Title</p>
+			<p class="">Description</p>
+			<p class="">created by</p>
+			<!-- <p>created at</p> -->
+			<p>last edited at</p>
+			<p>Public?</p>
+			<p>Access</p>
+			<p></p>
+			<p></p>
+		</div>
+		<div style="overscroll-behavior:none;">
 			<!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
 			<span v-if="checkedFilters.includes('owner')">
 				<span v-if="searchResultAudioArray.length>0">
@@ -294,23 +297,24 @@
 
 				<span v-if="searchResultAudioArray.length>0">
 
-
-
 					<span v-if="(audioArrayArchiveAfterSearch.length > 0)">
-				<h1 class="mt-8 mb-6 text-2xl font-bold">Archived Storybooks (deleted, but can be restored)</h1>
-				<br />
-				<div class="grid" style="grid-template-columns: repeat(9, minmax(150px,1fr));">
-					<div></div>
+						<h1 class="mt-8 mb-6 text-2xl font-bold">Archived Storybooks (deleted, but can be restored)</h1>
+						<br />
+						<div
+							class="grid"
+							style="grid-template-columns: repeat(9, minmax(150px,1fr));"
+						>
+							<div></div>
 
-					<p class="font-bold">Title</p>
-					<p class="">Description</p>
-					<p class="">created by</p>
-					<!-- <p>created at</p> -->
-					<p>last edited at</p>
-					<p></p>
-					<p></p>
-				</div>
-			</span>
+							<p class="font-bold">Title</p>
+							<p class="">Description</p>
+							<p class="">created by</p>
+							<!-- <p>created at</p> -->
+							<p>last edited at</p>
+							<p></p>
+							<p></p>
+						</div>
+					</span>
 
 					<div
 						v-for="audio in audioArrayArchiveAfterSearch"
@@ -330,22 +334,24 @@
 					</div>
 				</span><span v-else>
 
-					
-			<span v-if="(audioArrayArchive.length > 0)">
-				<h1 class="mt-8 mb-6 text-2xl font-bold">Archived Storybooks (these have been removed from the app, but can be restored)</h1>
-				<br />
-				<div class="grid" style="grid-template-columns: repeat(9, minmax(150px,1fr));">
-					<div></div>
+					<span v-if="(audioArrayArchive.length > 0)">
+						<h1 class="mt-8 mb-6 text-2xl font-bold">Archived Storybooks (these have been removed from the app, but can be restored)</h1>
+						<br />
+						<div
+							class="grid"
+							style="grid-template-columns: repeat(9, minmax(150px,1fr));"
+						>
+							<div></div>
 
-					<p class="font-bold">Title</p>
-					<p class="">Description</p>
-					<p class="">created by</p>
-					<!-- <p>created at</p> -->
-					<p>last edited at</p>
-					<p></p>
-					<p></p>
-				</div>
-			</span>
+							<p class="font-bold">Title</p>
+							<p class="">Description</p>
+							<p class="">created by</p>
+							<!-- <p>created at</p> -->
+							<p>last edited at</p>
+							<p></p>
+							<p></p>
+						</div>
+					</span>
 
 					<div
 						v-for="audio in audioArrayArchive"
@@ -518,7 +524,18 @@ export default {
 			}
 		},
 
-		getStorybooks() {
+		async getStorybooks() {
+			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+			await getIdToken(this.$store.state.user)
+				.then((idToken) => {
+					this.$store.commit("SetIdToken", idToken);
+					// console.log(this.$store.state.idToken)
+				})
+				.catch((error) => {
+					// An error happened.
+					console.log("Oops. " + error.code + ": " + error.message);
+				});
+
 			this.audioArray = [];
 			(this.audioArrayOwner = []), // the list of audio files owned by the logged-in user
 				(this.audioArrayEditor = []),
@@ -602,7 +619,6 @@ export default {
 ::placeholder {
 	/* vertical-align: center; */
 }
-
 
 .privatecardlist {
 	-ms-overflow-style: none; /* for Internet Explorer, Edge */

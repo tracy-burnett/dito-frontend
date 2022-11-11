@@ -1,8 +1,6 @@
 <template>
 	<slot></slot>
-	<div
-		class="flex-auto"
-	>		<input
+	<div class="flex-auto"> <input
 			class="px-3 py-1 font-bold border-gray-300 rounded"
 			v-model="title"
 			:size="titlesize"
@@ -14,16 +12,17 @@
 			:size="languagesize"
 		/><br>
 		<!-- {{title.length}} -->
-		<!-- {{$store.getters.maxsize}} --><p class="text-sm pt-[1vh] pb-[2vh] ">
-		Edit the title, language name, or text of the interpretation.  We will make every attempt to preserve the timestamps of the words as you move them around.
-		<br>Use new lines (carriage returns) to separate words that are not separated by the language's spacing character.
-		<br>Don't forget to click the "Save" button above after you make your changes!</p>
+		<!-- {{$store.getters.maxsize}} -->
+		<p class="text-sm pt-[1vh] pb-[2vh] ">
+			Edit the title, language name, or text of the interpretation. We will make every attempt to preserve the timestamps of the words as you move them around.
+			<br>Use new lines (carriage returns) to separate words that are not separated by the language's spacing character.
+			<br>Don't forget to click the "Save" button above after you make your changes!
+		</p>
 
 		<textarea
 			class="w-full px-[.5vw] border-gray-300 rounded editor"
-
-		style="overflow: scroll; height:38vh;"
-		:style="{ 'font-size': fontsize + 'px' } "
+			style="overflow: scroll; height:38vh;"
+			:style="{ 'font-size': fontsize + 'px' } "
 			v-model="latest_text_unstripped"
 		></textarea>
 		<!-- {{latest_text.length}}
@@ -134,7 +133,7 @@ export default {
 		},
 
 		// edit the text when the user clicks "Save Edits"
-		updateText() {
+		async updateText() {
 			let regexwithspacedby = new RegExp(
 				`${this.escapeRegex(this.spaced_by)}|(\n)`
 			);
@@ -178,6 +177,17 @@ export default {
 			}
 
 			// this.instructions.lines.forEach(element => console.log(JSON.stringify(element)))
+
+			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+			await getIdToken(this.$store.state.user)
+				.then((idToken) => {
+					this.$store.commit("SetIdToken", idToken);
+					// console.log(this.$store.state.idToken)
+				})
+				.catch((error) => {
+					// An error happened.
+					console.log("Oops. " + error.code + ": " + error.message);
+				});
 
 			fetch(
 				process.env.VUE_APP_api_URL +
@@ -595,7 +605,18 @@ export default {
 			return difference;
 		},
 	},
-	mounted() {
+	async mounted() {
+		// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+		await getIdToken(this.$store.state.user)
+			.then((idToken) => {
+				this.$store.commit("SetIdToken", idToken);
+				// console.log(this.$store.state.idToken)
+			})
+			.catch((error) => {
+				// An error happened.
+				console.log("Oops. " + error.code + ": " + error.message);
+			});
+
 		fetch(
 			process.env.VUE_APP_api_URL +
 				"interpretations/" +

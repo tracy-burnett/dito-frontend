@@ -48,6 +48,7 @@ also, if the user clicks on the text of that substring, snap the audio player to
 
 <script>
 import { saveAs } from "file-saver";
+import { getIdToken } from "firebase/auth";
 
 export default {
 	name: "Viewer",
@@ -115,7 +116,18 @@ export default {
 
 	methods: {
 		// access the interpretation that needs to be displayed
-		fetchNewInterpretation() {
+		async fetchNewInterpretation() {
+			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+			await getIdToken(this.$store.state.user)
+				.then((idToken) => {
+					this.$store.commit("SetIdToken", idToken);
+					// console.log(this.$store.state.idToken)
+				})
+				.catch((error) => {
+					// An error happened.
+					console.log("Oops. " + error.code + ": " + error.message);
+				});
+
 			const apiUrl =
 				process.env.VUE_APP_api_URL +
 				"interpretations/" +

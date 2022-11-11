@@ -11,7 +11,7 @@
     <div class="flex items-top">
       <span
         v-if="showAddInterpretationModal"
-        class="fixed inset-0 w-full h-screen flex items-center justify-center"
+        class="fixed inset-0 flex items-center justify-center w-full h-screen"
         ><AddInterpretationModal
           :audio_id="audio_ID"
           @addCreatedInterpretation="addCreatedInterpretation($event)"
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import Navbar from "@/components/Navbar.vue";
+import Navbar from "@/components/Navbar_Sparse.vue";
 import PlayerHorizontal from "@/components/PlayerHorizontal.vue";
 import SingleInterpretation from "@/components/SingleInterpretation.vue";
 import AddInterpretationViewer from "@/components/AddInterpretationViewer.vue";

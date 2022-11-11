@@ -53,17 +53,18 @@
 			/>
 		</div>
 	</div>
-    <div class="flex flex-col items-center">
-	<button
-		class="w-1/2 px-3 py-2 text-sm font-medium text-white transition-colors border rounded mt-7 border-sky-600 bg-sky-700 hover:bg-sky-600"
-		@click="upload"
-	>
-		Upload
-	</button></div>
+	<div class="flex flex-col items-center">
+		<button
+			class="w-1/2 px-3 py-2 text-sm font-medium text-white transition-colors border rounded mt-7 border-sky-600 bg-sky-700 hover:bg-sky-600"
+			@click="upload"
+		>
+			Upload
+		</button>
+	</div>
 </template>
 
 <script>
-import Navbar from "@/components/Navbar.vue";
+import Navbar from "@/components/Navbar_Sparse.vue";
 
 export default {
 	name: "CreateStorybook",
@@ -106,6 +107,17 @@ export default {
 			return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 		},
 		async upload() {
+			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+			await getIdToken(this.$store.state.user)
+				.then((idToken) => {
+					this.$store.commit("SetIdToken", idToken);
+					// console.log(this.$store.state.idToken)
+				})
+				.catch((error) => {
+					// An error happened.
+					console.log("Oops. " + error.code + ": " + error.message);
+				});
+
 			// get secure url from server
 			this.file = this.$refs.audioInput.files[0];
 			this.name = this.file["name"];
@@ -171,7 +183,7 @@ export default {
 							.then(() =>
 								// post request to create new interpretation for this audio
 								{
-									this.$store.commit("toggleInfobit","InfoPublish")
+									this.$store.commit("toggleInfobit", "InfoPublish");
 
 									if (this.int_title || this.int_text || this.int_language) {
 										fetch(
