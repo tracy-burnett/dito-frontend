@@ -50,7 +50,6 @@
 
 <script>
 import Card from "@/components/Card.vue";
-import { getIdToken } from "firebase/auth";
 
 export default {
 	data() {
@@ -133,18 +132,7 @@ export default {
 			}
 		},
 
-		async getStorybooks() {
-			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
-			await getIdToken(this.$store.state.user)
-				.then((idToken) => {
-					this.$store.commit("SetIdToken", idToken);
-					// console.log(this.$store.state.idToken)
-				})
-				.catch((error) => {
-					// An error happened.
-					console.log("Oops. " + error.code + ": " + error.message);
-				});
-
+		getStorybooks() {
 			fetch(process.env.VUE_APP_api_URL + "audio/", {
 				method: "GET",
 

@@ -145,17 +145,17 @@ export default {
 					console.log("Oops. " + error.code + ": " + error.message);
 				});
 
-			fetch(process.env.VUE_APP_api_URL + "audio/", {
+			fetch(process.env.VUE_APP_api_URL + "audio/user/", {
 				method: "GET",
 
 				headers: {
 					"Content-Type": "application/json",
-					// Authorization: this.$store.state.idToken,
+					Authorization: this.$store.state.idToken,
 				},
 			})
 				.then((response) => response.json()) // json to object
 				.then((data) => {
-					this.audioArray = data["audio"]; // collect the list of audio files that are owned by, or shared with, the logged-in user
+					this.audioArray = data["audio files"]; // collect the list of audio files that are owned by, or shared with, the logged-in user
 				})
 				.catch((error) => console.error("Error:", error));
 		},
