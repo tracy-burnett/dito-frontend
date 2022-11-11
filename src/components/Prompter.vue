@@ -80,6 +80,7 @@ export default {
 			manuallyDraggedEndTimeMemory: 0,
 			new_associations: {},
 			tempcurrentgapstart: 0,
+			tempcurrentgapend: 0,
 			associations: null,
 			associationGaps: [],
 			newPromptorScribingToggle: false, // when New Prompt is clicked, this becomes false.  When scribing changes, this becomes true.
@@ -199,6 +200,7 @@ export default {
 			}
 		},
 		"$store.state.peaksData": function () {
+			this.tempcurrentgapend=this.$store.state.audioDuration
 			this.findGaps(); // populates "this.usableGaps"
 		},
 		"$store.state.startTimePrompter": function () {
@@ -206,7 +208,7 @@ export default {
 				!(
 					this.$store.state.startTimePrompter * 100 >=
 						this.relevantGap.startTime &&
-					this.$store.state.endTimePrompter * 100 <= this.usableGaps[0].endTime
+					this.$store.state.endTimePrompter * 100 <= Math.min(this.usableGaps[0].endTime,this.tempcurrentgapend)
 				)
 			) {
 				this.allowSubmit = false;
@@ -219,7 +221,7 @@ export default {
 				!(
 					this.$store.state.startTimePrompter * 100 >=
 						this.relevantGap.startTime &&
-					this.$store.state.endTimePrompter * 100 <= this.usableGaps[0].endTime
+					this.$store.state.endTimePrompter * 100 <= Math.min(this.usableGaps[0].endTime,this.tempcurrentgapend)
 				) // GAPS NOT POPULATED YET
 			) {
 				this.allowSubmit = false;
@@ -563,6 +565,7 @@ export default {
 					this.usableGaps[0].startTime =
 						this.contentEndingIndex - 5 + this.relevantGap.startTime;
 					temp = parseInt(this.usableGaps[0].startTime);
+					this.tempcurrentgapend=this.$store.state.audioDuration
 					// console.log(temp + " " + this.usableGaps.length)
 					// console.log("culprit b")
 					// }
@@ -583,7 +586,9 @@ export default {
 					// );
 					// console.log("moving to next gap");
 					console.log("SHIFTING")
+					this.tempcurrentgapend=this.usableGaps.endTime
 					this.usableGaps.shift();
+					console.log(this.tempcurrentgapend)
 				}
 
 				//if the portion we decided to highlight is big enough, then highlight it; otherwise, play around with the sensitivity, then run this algorithm again
