@@ -22,9 +22,9 @@
 		<!-- {{$store.state.startTimePrompter*100}}<br> -->
 		<!-- {{manuallyDraggedEndTimeMemory}}<br> -->
 		<!-- {{$store.state.endTimePrompter*100}}<br> -->
-		<!-- {{usableGaps}}<br> -->
+		{{usableGaps}}<br>
 		<!-- {{$store.state.audioDuration}}<br> -->
-		<!-- {{relevantGap}}<br> -->
+		{{relevantGap}}<br>
 		<!-- {{original_text}}<br> -->
 		<!-- {{original_text_cleaned}} -->
 		<!-- {{allowSubmit}}<br> -->
@@ -79,8 +79,10 @@ export default {
 			spaced_by: "",
 			manuallyDraggedEndTimeMemory: 0,
 			new_associations: {},
+			tempcurrentgapstart: 0,
 			associations: null,
 			associationGaps: [],
+			newPromptorScribingToggle: false, // when New Prompt is clicked, this becomes false.  When scribing changes, this becomes true.
 			usableGaps: [],
 			relevantGap: {},
 			allowSubmit: false,
@@ -181,10 +183,13 @@ export default {
 	},
 	watch: {
 		scribingclean: function () {
-			let tempcurrentgapstart = this.relevantGap.startTime
-			this.findGaps(tempcurrentgapstart)
+			if (this.newPromptorScribingToggle == false)
+			{this.tempcurrentgapstart = this.relevantGap.startTime}
+			this.newPromptorScribingToggle=true;
+			this.findGaps()
 		},
 		newPromptscounter: function () {
+			this.newPromptorScribingToggle=false;
 			if (this.allowSubmit == true && this.new_text != "") {
 				// this.newpromptsfunc will be called if submit is successful inside updatetext()
 				this.updateText();
@@ -251,7 +256,7 @@ export default {
 			return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 		},
 
-		findGaps: function (tempcurrentgapstart=0) { // tempcurrentgapstart will be 0 if no parameter is passed in
+		findGaps: function () { // tempcurrentgapstart will be 0 if no parameter is passed in
 			if (this.$store.state.audioDuration > 0) {
 				this.associationGaps.length = 0;
 				this.usableGaps.length=0
@@ -360,28 +365,28 @@ export default {
 							200 // FLAG TIME DECISION
 							// && (element.startCharacter == element.endCharacter ||
 							// 	element.endCharacter == null)
-							&& tempcurrentgapstart < element.endTime-200
+							&& this.tempcurrentgapstart < element.endTime-200
 						) {
 							// console.log("in first if")
 							// console.log(element.endTime - element.startTime);
-							if (element.startTime >= tempcurrentgapstart){
+							if (element.startTime >= this.tempcurrentgapstart){
 							this.usableGaps.push(element);}
-							else if (element.startTime < tempcurrentgapstart) {
-								element.startTime=tempcurrentgapstart
+							else if (element.startTime < this.tempcurrentgapstart) {
+								element.startTime=this.tempcurrentgapstart
 								this.usableGaps.push(element)
 							}
 						}
 					});
 				} else {
 					let associationsObject = {};
-					associationsObject.startTime = tempcurrentgapstart;
+					associationsObject.startTime = this.tempcurrentgapstart;
 					associationsObject.endTime = this.$store.state.audioDuration;
 
 					associationsObject.startCharacter = 0;
 					associationsObject.endCharacter = null;
 					this.associationGaps.push(associationsObject);
 
-					if (tempcurrentgapstart < this.associationGaps[0].endTime-200) {
+					if (this.tempcurrentgapstart < this.associationGaps[0].endTime-200) {
 						// FLAG TIME DECISION
 						this.usableGaps.push(this.associationGaps[0]);
 					}
@@ -395,13 +400,16 @@ export default {
 		},
 
 		newPromptsfunc() {
+			if (this.newPromptorScribingToggle == true) {
+				this.relevantGap.startTime=this.tempcurrentgapstart
+			}
 			// console.log("relevant: " + JSON.stringify(this.relevantGap))
 			// console.log("usable: " + JSON.stringify(this.usableGaps))
 			this.new_text_unstripped = "";
 			// console.log("sensitivity " + this.sensitivity);
 			this.contentEndingIndex = 0;
 			this.contentStartingIndex = 0;
-
+			// console.log(this.relevantGap)
 			// console.log(this.usableGaps[0].startTime)
 
 			//if the audio player has loaded, and the gaps have been identified, and ???
@@ -574,6 +582,7 @@ export default {
 					// 		this.scribingclean
 					// );
 					// console.log("moving to next gap");
+					console.log("SHIFTING")
 					this.usableGaps.shift();
 				}
 
