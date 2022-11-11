@@ -377,6 +377,7 @@
 
 <script>
 import CardRow from "@/components/CardRow.vue";
+import { getIdToken } from "firebase/auth";
 
 export default {
 	data() {

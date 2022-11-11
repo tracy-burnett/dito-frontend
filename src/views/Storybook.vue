@@ -77,6 +77,7 @@ import SingleInterpretation from "@/components/SingleInterpretation.vue";
 import AddInterpretationViewer from "@/components/AddInterpretationViewer.vue";
 import AddInterpretationModal from "@/components/AddInterpretationModal.vue";
 import UploadIntModal from "@/components/UploadIntModal.vue";
+import { getIdToken } from "firebase/auth";
 
 export default {
 	name: "Storybook",

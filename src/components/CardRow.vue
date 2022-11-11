@@ -167,6 +167,7 @@
 import IntManager from "@/components/IntManager.vue";
 import StorybookModal from "@/components/StorybookModal.vue";
 import AddViewersModal from "@/components/AddViewersModal.vue";
+import { getIdToken } from "firebase/auth";
 
 export default {
 	name: "CardRow",

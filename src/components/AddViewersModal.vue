@@ -40,6 +40,8 @@
 </template>
 
 <script>
+import { getIdToken } from "firebase/auth";
+
 export default {
 	name: "AddViewersModal",
 	components: {},

@@ -67,6 +67,8 @@
 </template>
 
 <script>
+import { getIdToken } from "firebase/auth";
+
 export default {
 	inheritAttrs: false,
 	name: "Prompter",

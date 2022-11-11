@@ -45,6 +45,8 @@
 </template>
 
 <script>
+import { getIdToken } from "firebase/auth";
+
 export default {
 	name: "Tagger",
 	inheritAttrs: false,

@@ -70,6 +70,7 @@
 <script>
 import IntCollabModal from "@/components/IntCollabModal.vue";
 import IntViewersModal from "@/components/IntViewersModal.vue";
+import { getIdToken } from "firebase/auth";
 
 export default {
 	name: "IntManager",

@@ -50,6 +50,7 @@
 
 <script>
 import Card from "@/components/Card.vue";
+import { getIdToken } from "firebase/auth";
 
 export default {
 	data() {
