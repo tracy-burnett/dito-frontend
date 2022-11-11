@@ -76,6 +76,8 @@ export default {
 <style scoped>
 .card {
 	width: 30.1vh;
+	margin-left: .5vw;
+	margin-right: .5vw;
 	height: 27.5vh;
 	-ms-overflow-style: none; /* for Internet Explorer, Edge */
 	scrollbar-width: none; /* for Firefox */
