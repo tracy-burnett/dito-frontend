@@ -174,6 +174,7 @@
 							:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
 							:title="audio.title"
 							:audio_ID="audio.id"
+							@SelectRow="uncheck(audio.id)"
 						>
 						</CardRow>
 					</div>
@@ -194,6 +195,7 @@
 							:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
 							:title="audio.title"
 							:audio_ID="audio.id"
+							@SelectRow="uncheck(audio.id)"
 						>
 						</CardRow>
 					</div>
@@ -216,6 +218,7 @@
 							:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
 							:title="audio.title"
 							:audio_ID="audio.id"
+							@SelectRow="uncheck(audio.id)"
 						>
 						</CardRow>
 					</div>
@@ -235,6 +238,7 @@
 							:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
 							:title="audio.title"
 							:audio_ID="audio.id"
+							@SelectRow="uncheck(audio.id)"
 						>
 						</CardRow>
 					</div>
@@ -256,6 +260,7 @@
 							:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
 							:title="audio.title"
 							:audio_ID="audio.id"
+							@SelectRow="uncheck(audio.id)"
 						>
 							<div>
 							</div>
@@ -276,6 +281,7 @@
 							:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
 							:title="audio.title"
 							:audio_ID="audio.id"
+							@SelectRow="uncheck(audio.id)"
 						>
 							<div>
 							</div>
@@ -505,7 +511,6 @@ export default {
 		uncheck(id) {
 			// console.log(id)
 			// console.log("was " + this.previouslySelected)
-			// console.log("now is " + this.selected)
 			if (id == this.selected) {
 				this.selected = false;
 			} else if (id != this.selected) {
