@@ -22,6 +22,7 @@
 		<!-- {{$store.state.startTimePrompter*100}}<br> -->
 		<!-- {{manuallyDraggedEndTimeMemory}}<br> -->
 		<!-- {{$store.state.endTimePrompter*100}}<br> -->
+		{{tempcurrentgapend}}<br>
 		{{usableGaps}}<br>
 		<!-- {{$store.state.audioDuration}}<br> -->
 		{{relevantGap}}<br>
@@ -586,7 +587,7 @@ export default {
 					// );
 					// console.log("moving to next gap");
 					console.log("SHIFTING")
-					this.tempcurrentgapend=this.usableGaps.endTime
+					this.tempcurrentgapend=this.usableGaps[0].endTime
 					this.usableGaps.shift();
 					console.log(this.tempcurrentgapend)
 				}
