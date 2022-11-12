@@ -135,7 +135,7 @@
 							type="range"
 							min="10"
 							max="2000"
-							step="50"
+							step="10"
 						/>
 					</div>
 
@@ -153,7 +153,7 @@
 							type="range"
 							min="10"
 							max="2000"
-							step="50"
+							step="10"
 						/>
 					</div>
 
