@@ -97,7 +97,7 @@
 			<p></p>
 		</div>
 
-		<div v-if="processingStorybooks==true" class="flex flex-row flex-wrap justify-around basis-full pt-[10vh] lg:basis-2/5">connecting to server; please wait...</div>
+		<div v-if="processingStorybooks==true" class="flex flex-row flex-wrap justify-around basis-full pt-[10vh] lg:basis-2/5">processing information from server; please wait...</div>
 
 		<div style="overscroll-behavior:none;">
 			<!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
