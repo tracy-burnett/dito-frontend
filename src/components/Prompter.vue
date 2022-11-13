@@ -23,7 +23,6 @@
 		<div v-if="allowSubmit==true">this text will be submitted when a new prompt is generated</div>
 		<div v-else-if="allowSubmit==false">this text WILL NOT be submitted when a new prompt is generated</div>
 
-
 	</div>
 </template>
 
@@ -376,10 +375,7 @@ export default {
 			this.contentStartingIndex = 0;
 
 			//if the audio player has loaded, and the gaps have been identified, and ???
-			if (
-				this.$store.state.audioDuration > 0 &&
-				this.usableGaps.length > 0
-			) {
+			if (this.$store.state.audioDuration > 0 && this.usableGaps.length > 0) {
 				// a little gap to work with to generate this prompt
 				this.relevantGap.startTime = parseInt(this.usableGaps[0].startTime); // should be in hundredths of a second
 				this.relevantGap.endTime = Math.min(
