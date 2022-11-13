@@ -390,7 +390,7 @@ if (this.readyVerification==2)
 			progressColor: "#475569",
 			// barWidth: 2,
 			barHeight: 4,
-			normalize: true,
+			// normalize: true,
 			hideScrollbar: true,
 			// barRadius: 3,
 			vertical: true,
