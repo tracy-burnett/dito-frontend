@@ -33,6 +33,7 @@ also, if the user clicks on the text of that substring, snap the audio player to
 
 					<span
 						v-else
+						class="cursor-pointer"
 						@click="snapToTimestamp(substring.startingcharacter)"
 						style="white-space: pre-wrap"
 					>{{ substring.text }}</span>
