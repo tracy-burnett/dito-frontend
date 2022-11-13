@@ -133,7 +133,7 @@
 							id="scribingslider"
 							v-model="scribing"
 							type="range"
-							min="30"
+							min="10"
 							max="2000"
 							step="10"
 						/>
