@@ -84,12 +84,12 @@
 					class="flex flex-col justify-center px-[2vw] text-sm"
 					v-if="loadingpercent > 0 && loadingpercent < 100"
 				>
-					audio {{ loadingpercent }}% loaded
+					waveform {{ loadingpercent }}% complete
 				</span>
-				<span
+				<!-- <span
 					class="flex flex-col justify-center px-[1vw] text-sm"
 					v-else-if="loadingpercent==0"
-				>please be patient while your audio file is uploaded to the server</span>
+				>please be patient while your audio file is uploaded to the server</span> -->
 			</div>
 
 			<!-- bottom-most time entry box (for end of view window) -->
@@ -140,8 +140,10 @@ export default {
 			playbackspeed: 1,
 			isLoaded: false,
 			loadingpercent: 0,
+			readyVerification: 0,
 			// peaksData: [],
 			zoomnumber: 1,
+			sendtobackendBoolean: false,
 			startTime: "00:00:00", // the beginning of the highlighted region as calculated by wavesurfer OR manually input by the user, in HH:MM:SS
 			currentTime: "00:00:00", // wherever the audio is currently playing as calculated by wavesurfer OR manually input by the user, in HH:MM:SS
 			endTime: "00:00:00", // the end of the highlighted region as calculated by wavesurfer OR manually input by the user, in HH:MM:SS
@@ -157,6 +159,44 @@ export default {
 
 	// watch these variables to see if they change.  if they do, then call the corresponding functions.
 	watch: {
+readyVerification: function () {
+if (this.readyVerification==2)
+	{
+		
+		// FLAG
+		this.isLoaded = true;
+		this.totalDuration = this.wavesurfer.getDuration();
+			// console.log(this.totalDuration)
+			this.$store.commit("updateAudioDuration", this.totalDuration * 1000);
+			this.endTimeSeconds = this.totalDuration;
+			this.endTime = this.secondsToTime(this.endTimeSeconds);
+			this.wavesurfer.addRegion({
+				start: 0,
+				end: this.totalDuration,
+				id: "initialregion",
+				loop: false,
+			});
+			this.wavesurfer.enableDragSelection({
+				id: "initialregion",
+				loop: false,
+			});
+
+			let that=this
+			// length of output array/2, accuracy (irrelevant), don't popup a new window, start at 0,
+			this.wavesurfer
+				.exportPCM((this.totalDuration / 2) * 100, 10000, true, 0)
+				.then(function (result) {
+					that.$store.commit("updatePeaksData", result);
+					if (that.sendtobackendBoolean==true){
+						// console.log("peaks to send:")
+						// console.log(result)
+						that.peaksToBackend(JSON.stringify(result))
+					}
+				});
+	}
+
+},
+
 		playbackspeed: function () {
 			this.wavesurfer.setPlaybackRate(this.playbackspeed);
 		},
@@ -289,6 +329,7 @@ export default {
 	},
 
 	async mounted() {
+		this.sendtobackendBoolean=false
 		// REFRESH ID TOKEN FIRST AND WAIT FOR IT
 		await getIdToken(this.$store.state.user)
 			.then((idToken) => {
@@ -320,8 +361,21 @@ export default {
 				return response.json();
 			})
 			.then((data) => {
+				// console.log(data)
 				this.audioURL = data["url"];
-				this.wavesurfer.load(this.audioURL);
+				if (data["peaks"]) {
+					// console.log("loading peaks from backend!")
+					// console.log(JSON.parse(data["peaks"]))
+					// console.log(Math.max(...JSON.parse(data["peaks"])))
+					// console.log(JSON.parse(data["peaks"]).reduce((max, v) => max >= v ? max : v, -Infinity))
+
+					this.wavesurfer.load(this.audioURL, JSON.parse(data["peaks"]))
+				}
+				else 
+				{
+					// console.log("generating new peaks on frontend")
+					this.wavesurfer.load(this.audioURL)
+					this.sendtobackendBoolean=true}
 			})
 			.catch((error) => {
 				console.error("Error:", error);
@@ -347,32 +401,21 @@ export default {
 			],
 		});
 
-		const that = this;
+		let that = this;
 
 		// When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
 		this.wavesurfer.on("waveform-ready", function () {
-			that.isLoaded = true;
-			that.totalDuration = that.wavesurfer.getDuration();
-			that.$store.commit("updateAudioDuration", that.totalDuration * 1000);
-			that.endTimeSeconds = that.totalDuration;
-			that.endTime = that.secondsToTime(that.endTimeSeconds);
-			that.wavesurfer.addRegion({
-				start: 0,
-				end: that.totalDuration,
-				id: "initialregion",
-				loop: false,
-			});
-			that.wavesurfer.enableDragSelection({
-				id: "initialregion",
-				loop: false,
-			});
+			// console.log("waveform ready")
+			that.readyVerification+=1
 
-			// length of output array/2, accuracy (irrelevant), don't popup a new window, start at 0,
-			that.wavesurfer
-				.exportPCM((that.totalDuration / 2) * 100, 10000, true, 0)
-				.then(function (result) {
-					that.$store.commit("updatePeaksData", result);
-				});
+		});
+
+
+				// When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
+				this.wavesurfer.on("ready", function () {
+			// console.log("audio ready")
+			that.readyVerification+=1
+
 		});
 
 		// whenever the highlighted region or either of its bounds is dragged, update our data about where the region begins and ends accordingly
@@ -469,6 +512,44 @@ export default {
 	},
 
 	methods: {
+
+		peaksToBackend(generatedpeaks) {
+
+
+			fetch(
+				process.env.VUE_APP_api_URL +
+					"audio/" +
+					this.audio_ID +
+					"/public/",
+				{
+					method: "PATCH",
+					headers: {
+						"Content-Type": "application/json",
+
+						Authorization: this.$store.state.idToken,
+					},
+					body: JSON.stringify({
+						// url: "coverimage.jpg",
+						// title: this.title,
+						// description: this.description,
+						// public: this.publictf,
+						// archived: false,
+						// shared_with: [],
+						peaks: generatedpeaks
+					}),
+				}
+			)
+				.then((response) => {
+					return response.json();
+				})
+				.then((response) => {
+					console.log(response)
+				})
+				.catch((error) => {
+					console.error("Error:", error);
+				});
+		},
+
 		// if we get news that this audio file just completed being uploaded, then rerender this audio player
 		shouldRerender(incomingID) {
 			if (incomingID == this.audio_ID) {
