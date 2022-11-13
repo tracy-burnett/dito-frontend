@@ -84,7 +84,7 @@
 					class="flex flex-col justify-center px-[2vw] text-sm"
 					v-if="loadingpercent > 0 && loadingpercent < 100"
 				>
-					audio {{ loadingpercent }}% loaded
+					waveform {{ loadingpercent }}% complete
 				</span>
 				<!-- <span
 					class="flex flex-col justify-center px-[1vw] text-sm"
@@ -166,7 +166,7 @@ if (this.readyVerification==2)
 		// FLAG
 		this.isLoaded = true;
 		this.totalDuration = this.wavesurfer.getDuration();
-			console.log(this.totalDuration)
+			// console.log(this.totalDuration)
 			this.$store.commit("updateAudioDuration", this.totalDuration * 1000);
 			this.endTimeSeconds = this.totalDuration;
 			this.endTime = this.secondsToTime(this.endTimeSeconds);
@@ -188,8 +188,8 @@ if (this.readyVerification==2)
 				.then(function (result) {
 					that.$store.commit("updatePeaksData", result);
 					if (that.sendtobackendBoolean==true){
-						console.log("peaks to send:")
-						console.log(result)
+						// console.log("peaks to send:")
+						// console.log(result)
 						that.peaksToBackend(JSON.stringify(result))
 					}
 				});
@@ -361,15 +361,19 @@ if (this.readyVerification==2)
 				return response.json();
 			})
 			.then((data) => {
-				console.log(data)
+				// console.log(data)
 				this.audioURL = data["url"];
 				if (data["peaks"]) {
-					console.log("loading peaks from backend!")
-					console.log(JSON.parse(data["peaks"]))
+					// console.log("loading peaks from backend!")
+					// console.log(JSON.parse(data["peaks"]))
+					// console.log(Math.max(...JSON.parse(data["peaks"])))
+					// console.log(JSON.parse(data["peaks"]).reduce((max, v) => max >= v ? max : v, -Infinity))
+
 					this.wavesurfer.load(this.audioURL, JSON.parse(data["peaks"]))
 				}
 				else 
-				{console.log("generating new peaks on frontend")
+				{
+					// console.log("generating new peaks on frontend")
 					this.wavesurfer.load(this.audioURL)
 					this.sendtobackendBoolean=true}
 			})
@@ -401,7 +405,7 @@ if (this.readyVerification==2)
 
 		// When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
 		this.wavesurfer.on("waveform-ready", function () {
-			console.log("waveform ready")
+			// console.log("waveform ready")
 			that.readyVerification+=1
 
 		});
@@ -409,7 +413,7 @@ if (this.readyVerification==2)
 
 				// When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
 				this.wavesurfer.on("ready", function () {
-			console.log("audio ready")
+			// console.log("audio ready")
 			that.readyVerification+=1
 
 		});
