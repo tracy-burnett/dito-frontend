@@ -8,7 +8,7 @@
 
 		<div class="fixed z-[8] flex flex-row justify-around w-full -mt-[5vh]">
 
-			<div class="flex flex-row flex-wrap justify-between sm:basis-full lg:basis-2/5">
+			<div class="flex flex-row flex-wrap justify-between basis-full lg:basis-2/5">
 				<p>Filters:</p>
 				<div>
 					<input
@@ -78,6 +78,9 @@
 
 		</div>
 
+		
+
+
 		<div
 			class="grid pt-[3vh] sticky  w-full z-[9]"
 			style="grid-template-columns: repeat(9, minmax(150px,1fr));"
@@ -93,6 +96,9 @@
 			<p></p>
 			<p></p>
 		</div>
+
+		<div v-if="processingStorybooks==true" class="flex flex-row flex-wrap justify-around basis-full pt-[10vh] lg:basis-2/5">processing information from server; please wait...</div>
+
 		<div style="overscroll-behavior:none;">
 			<!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
 			<span v-if="checkedFilters.includes('owner')">
@@ -391,6 +397,7 @@ export default {
 			lastknownscrollposition: 0,
 			searchResultAudioArray: [],
 			searchterm: "",
+			processingStorybooks: false,
 		};
 	},
 	computed: {
@@ -429,6 +436,7 @@ export default {
 	mounted() {
 		// if (this.$store.state.idToken) {
 			this.getStorybooks();
+							window.addEventListener("scroll", this.myEventHandler);
 		// }
 	},
 	methods: {
@@ -526,6 +534,9 @@ export default {
 		},
 
 		async getStorybooks() {
+
+this.processingStorybooks=true
+
 			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
 			await getIdToken(this.$store.state.user)
 				.then((idToken) => {
@@ -591,13 +602,13 @@ export default {
 								this.audioArrayArchive.push(element);
 							}
 						});
+						this.processingStorybooks=false
 						this.$nextTick(function () {
 							// console.log(this.$store.state.cardlistscrollposition)
 							window.scrollTo(
 								0,
 								this.$store.state.cardlistscrollposition * 14.3
 							);
-							window.addEventListener("scroll", this.myEventHandler);
 						});
 					})
 					.catch((error) => console.error("Error:", error));

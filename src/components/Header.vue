@@ -3,7 +3,7 @@
 	<div class="grid grid-cols-4 mx-[3vw] overflow-hidden justify-items-center hero">
 
 		<!-- <h1 class="mb-5 text-5xl font-extrabold text-gray-400">{{ title }}</h1> -->
-		<!-- <p class="text-sm font-light text-gray-900 lg:w-3/5 md:w-3/5 sm:w-full" style="white-space:pre-wrap">{{ body }}</p> -->
+		<!-- <p class="w-full text-sm font-light text-gray-900 lg:w-3/5 md:w-3/5" style="white-space:pre-wrap">{{ body }}</p> -->
 		<div
 			class="cursor-pointer contents"
 			v-if="browse==false"
@@ -96,19 +96,19 @@
 		</div>
 
 		<p
-			class="font-semibold text-center cursor-pointer sm:text-xs text-slate-700"
+			class="text-xs font-semibold text-center cursor-pointer md:text-sm text-slate-700"
 			@click="$store.commit('toggleInfobit', 'PublicCardList');"
 		>Explore and Collaborate</p>
 		<p
-			class="font-semibold text-center cursor-pointer sm:text-xs text-slate-700"
+			class="text-xs font-semibold text-center cursor-pointer md:text-sm text-slate-700"
 			@click="$store.commit('toggleInfobit', 'CreateStorybook');"
 		>Contribute Audio</p>
 		<p
-			class="font-semibold text-center cursor-pointer sm:text-xs text-slate-700"
+			class="text-xs font-semibold text-center cursor-pointer md:text-sm text-slate-700"
 			@click="$store.commit('toggleInfobit', 'InfoPublish');"
 		>Publish Storybooks</p>
 		<p
-			class="font-semibold text-center cursor-pointer sm:text-xs text-slate-700"
+			class="text-xs font-semibold text-center cursor-pointer md:text-sm text-slate-700"
 			@click="$store.commit('toggleInfobit', 'InfoRevitalize');"
 		>Learn and Revitalize</p>
 	</div>
