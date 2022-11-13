@@ -45,6 +45,11 @@
 				<!-- </div> -->
 			</div>
 		</div>
+		<div
+			v-if="processingStorybooks==true"
+			class="flex flex-row flex-wrap justify-around basis-full pt-[10vh] lg:basis-2/5"
+		>processing information from server; please wait...</div>
+
 	</div>
 </template>
 
@@ -58,6 +63,7 @@ export default {
 			audioArray: [], // the list of audio files owned by, or shared with, the logged-in user
 			searchResultAudioArray: [],
 			searchterm: "",
+			processingStorybooks: false,
 		};
 	},
 	name: "PublicCardList",
@@ -134,6 +140,8 @@ export default {
 		},
 
 		async getStorybooks() {
+			this.processingStorybooks = true;
+
 			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
 			await getIdToken(this.$store.state.user)
 				.then((idToken) => {
@@ -156,6 +164,8 @@ export default {
 				.then((response) => response.json()) // json to object
 				.then((data) => {
 					this.audioArray = data["audio files"]; // collect the list of audio files that are owned by, or shared with, the logged-in user
+
+					this.processingStorybooks = false;
 				})
 				.catch((error) => console.error("Error:", error));
 		},

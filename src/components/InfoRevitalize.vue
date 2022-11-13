@@ -45,6 +45,10 @@
 				<!-- </div> -->
 			</div>
 		</div>
+		<div
+			v-if="processingStorybooks==true"
+			class="flex flex-row flex-wrap justify-around basis-full pt-[10vh] lg:basis-2/5"
+		>processing information from server; please wait...</div>
 	</div>
 </template>
 
@@ -57,6 +61,7 @@ export default {
 			audioArray: [], // the list of audio files owned by, or shared with, the logged-in user
 			searchResultAudioArray: [],
 			searchterm: "",
+			processingStorybooks: false,
 		};
 	},
 	name: "InfoRevitalize",
@@ -133,6 +138,7 @@ export default {
 		},
 
 		getStorybooks() {
+			this.processingStorybooks = true;
 			fetch(process.env.VUE_APP_api_URL + "audio/", {
 				method: "GET",
 
@@ -144,6 +150,8 @@ export default {
 				.then((response) => response.json()) // json to object
 				.then((data) => {
 					this.audioArray = data["audio"]; // collect the list of audio files that are owned by, or shared with, the logged-in user
+
+					this.processingStorybooks = false;
 				})
 				.catch((error) => console.error("Error:", error));
 		},
