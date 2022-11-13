@@ -81,16 +81,29 @@
 				@wheel.prevent="getzoomnumber($event)"
 			>
 				<div
-				class="absolute h-[40vh] z-10 content-center w-full flex flex-col py-[14vh] px-[1vw] text-sm" style="
+					class="absolute h-[40vh] z-10 content-center w-full flex flex-col py-[14vh] px-[1vw] text-sm"
+					style="
 	background: #dbeafe;"
 					v-if="loadingpercent > 0 && loadingpercent < 100"
-				><p>waveform {{ loadingpercent }}% completed</p>
-		</div>
+				>
+					<p>waveform {{ loadingpercent }}% completed</p>
+				</div>
 				<div
-					class="absolute h-[40vh] z-10 content-center w-full flex flex-col py-[9vh] px-[1vw] text-sm" style="
+					class="absolute h-[40vh] z-10 content-center w-full flex flex-col py-[9vh] px-[1vw] text-sm"
+					style="
 	background: #dbeafe;"
 					v-else-if="readyVerification==1 && totalDuration==0"
-				><p>please be patient while your audio file finishes loading</p></div>
+				>
+					<p>please be patient while your audio file finishes loading</p>
+				</div>
+				<div
+					class="absolute h-[40vh] z-10 content-center w-full flex flex-col py-[9vh] px-[1vw] text-sm"
+					style="
+	background: #dbeafe;"
+					v-else-if="readyVerification==0"
+				>
+					<p>please be patient while the waveform finishes loading</p>
+				</div>
 			</div>
 
 			<!-- bottom-most time entry box (for end of view window) -->
@@ -160,43 +173,40 @@ export default {
 
 	// watch these variables to see if they change.  if they do, then call the corresponding functions.
 	watch: {
-readyVerification: function () {
-if (this.readyVerification==2)
-	{
-		
-		// FLAG
-		this.isLoaded = true;
-		this.totalDuration = this.wavesurfer.getDuration();
-			// console.log(this.totalDuration)
-			this.$store.commit("updateAudioDuration", this.totalDuration * 1000);
-			this.endTimeSeconds = this.totalDuration;
-			this.endTime = this.secondsToTime(this.endTimeSeconds);
-			this.wavesurfer.addRegion({
-				start: 0,
-				end: this.totalDuration,
-				id: "initialregion",
-				loop: false,
-			});
-			this.wavesurfer.enableDragSelection({
-				id: "initialregion",
-				loop: false,
-			});
-
-			let that=this
-			// length of output array/2, accuracy (irrelevant), don't popup a new window, start at 0,
-			this.wavesurfer
-				.exportPCM((this.totalDuration / 2) * 100, 10000, true, 0)
-				.then(function (result) {
-					that.$store.commit("updatePeaksData", result);
-					if (that.sendtobackendBoolean==true){
-						// console.log("peaks to send:")
-						// console.log(result)
-						that.peaksToBackend(JSON.stringify(result))
-					}
+		readyVerification: function () {
+			if (this.readyVerification == 2) {
+				// FLAG
+				this.isLoaded = true;
+				this.totalDuration = this.wavesurfer.getDuration();
+				// console.log(this.totalDuration)
+				this.$store.commit("updateAudioDuration", this.totalDuration * 1000);
+				this.endTimeSeconds = this.totalDuration;
+				this.endTime = this.secondsToTime(this.endTimeSeconds);
+				this.wavesurfer.addRegion({
+					start: 0,
+					end: this.totalDuration,
+					id: "initialregion",
+					loop: false,
 				});
-	}
+				this.wavesurfer.enableDragSelection({
+					id: "initialregion",
+					loop: false,
+				});
 
-},
+				let that = this;
+				// length of output array/2, accuracy (irrelevant), don't popup a new window, start at 0,
+				this.wavesurfer
+					.exportPCM((this.totalDuration / 2) * 100, 10000, true, 0)
+					.then(function (result) {
+						that.$store.commit("updatePeaksData", result);
+						if (that.sendtobackendBoolean == true) {
+							// console.log("peaks to send:")
+							// console.log(result)
+							that.peaksToBackend(JSON.stringify(result));
+						}
+					});
+			}
+		},
 
 		playbackspeed: function () {
 			this.wavesurfer.setPlaybackRate(this.playbackspeed);
@@ -330,7 +340,7 @@ if (this.readyVerification==2)
 	},
 
 	async mounted() {
-		this.sendtobackendBoolean=false
+		this.sendtobackendBoolean = false;
 		// REFRESH ID TOKEN FIRST AND WAIT FOR IT
 		await getIdToken(this.$store.state.user)
 			.then((idToken) => {
@@ -370,13 +380,12 @@ if (this.readyVerification==2)
 					// console.log(Math.max(...JSON.parse(data["peaks"])))
 					// console.log(JSON.parse(data["peaks"]).reduce((max, v) => max >= v ? max : v, -Infinity))
 
-					this.wavesurfer.load(this.audioURL, JSON.parse(data["peaks"]))
-				}
-				else 
-				{
+					this.wavesurfer.load(this.audioURL, JSON.parse(data["peaks"]));
+				} else {
 					// console.log("generating new peaks on frontend")
-					this.wavesurfer.load(this.audioURL)
-					this.sendtobackendBoolean=true}
+					this.wavesurfer.load(this.audioURL);
+					this.sendtobackendBoolean = true;
+				}
 			})
 			.catch((error) => {
 				console.error("Error:", error);
@@ -407,16 +416,13 @@ if (this.readyVerification==2)
 		// When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
 		this.wavesurfer.on("waveform-ready", function () {
 			// console.log("waveform ready")
-			that.readyVerification+=1
-
+			that.readyVerification += 1;
 		});
 
-
-				// When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
-				this.wavesurfer.on("ready", function () {
+		// When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
+		this.wavesurfer.on("ready", function () {
 			// console.log("audio ready")
-			that.readyVerification+=1
-
+			that.readyVerification += 1;
 		});
 
 		// whenever the highlighted region or either of its bounds is dragged, update our data about where the region begins and ends accordingly
@@ -513,15 +519,9 @@ if (this.readyVerification==2)
 	},
 
 	methods: {
-
 		peaksToBackend(generatedpeaks) {
-
-
 			fetch(
-				process.env.VUE_APP_api_URL +
-					"audio/" +
-					this.audio_ID +
-					"/public/",
+				process.env.VUE_APP_api_URL + "audio/" + this.audio_ID + "/public/",
 				{
 					method: "PATCH",
 					headers: {
@@ -536,7 +536,7 @@ if (this.readyVerification==2)
 						// public: this.publictf,
 						// archived: false,
 						// shared_with: [],
-						peaks: generatedpeaks
+						peaks: generatedpeaks,
 					}),
 				}
 			)
@@ -544,7 +544,7 @@ if (this.readyVerification==2)
 					return response.json();
 				})
 				.then((response) => {
-					console.log(response)
+					console.log(response);
 				})
 				.catch((error) => {
 					console.error("Error:", error);
