@@ -78,9 +78,6 @@
 
 		</div>
 
-		
-
-
 		<div
 			class="grid pt-[3vh] sticky  w-full z-[9]"
 			style="grid-template-columns: repeat(9, minmax(150px,1fr));"
@@ -97,7 +94,10 @@
 			<p></p>
 		</div>
 
-		<div v-if="processingStorybooks==true" class="flex flex-row flex-wrap justify-around basis-full pt-[10vh] lg:basis-2/5">processing information from server; please wait...</div>
+		<div
+			v-if="processingStorybooks==true"
+			class="flex flex-row flex-wrap justify-around basis-full pt-[10vh] lg:basis-2/5"
+		>processing information from server; please wait...</div>
 
 		<div style="overscroll-behavior:none;">
 			<!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
@@ -435,8 +435,8 @@ export default {
 	},
 	mounted() {
 		// if (this.$store.state.idToken) {
-			this.getStorybooks();
-							window.addEventListener("scroll", this.myEventHandler);
+		this.getStorybooks();
+		window.addEventListener("scroll", this.myEventHandler);
 		// }
 	},
 	methods: {
@@ -534,8 +534,7 @@ export default {
 		},
 
 		async getStorybooks() {
-
-this.processingStorybooks=true
+			this.processingStorybooks = true;
 
 			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
 			await getIdToken(this.$store.state.user)
@@ -602,7 +601,7 @@ this.processingStorybooks=true
 								this.audioArrayArchive.push(element);
 							}
 						});
-						this.processingStorybooks=false
+						this.processingStorybooks = false;
 						this.$nextTick(function () {
 							// console.log(this.$store.state.cardlistscrollposition)
 							window.scrollTo(
