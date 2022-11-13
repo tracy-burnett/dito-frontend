@@ -80,16 +80,17 @@
 				class="flex waveform"
 				@wheel.prevent="getzoomnumber($event)"
 			>
-				<span
-					class="flex flex-col justify-center px-[2vw] text-sm"
+				<div
+				class="absolute h-[40vh] z-10 content-center w-full flex flex-col py-[14vh] px-[1vw] text-sm" style="
+	background: #dbeafe;"
 					v-if="loadingpercent > 0 && loadingpercent < 100"
-				>
-					waveform {{ loadingpercent }}% complete
-				</span>
-				<!-- <span
-					class="flex flex-col justify-center px-[1vw] text-sm"
-					v-else-if="loadingpercent==0"
-				>please be patient while your audio file is uploaded to the server</span> -->
+				><p>waveform {{ loadingpercent }}% completed</p>
+		</div>
+				<div
+					class="absolute h-[40vh] z-10 content-center w-full flex flex-col py-[9vh] px-[1vw] text-sm" style="
+	background: #dbeafe;"
+					v-else-if="readyVerification==1 && totalDuration==0"
+				><p>please be patient while your audio file finishes loading</p></div>
 			</div>
 
 			<!-- bottom-most time entry box (for end of view window) -->
