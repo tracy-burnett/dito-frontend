@@ -427,9 +427,9 @@ export default {
 		CardRow,
 	},
 	mounted() {
-		if (this.$store.state.idToken) {
+		// if (this.$store.state.idToken) {
 			this.getStorybooks();
-		}
+		// }
 	},
 	methods: {
 		escapeRegex: function (string) {
