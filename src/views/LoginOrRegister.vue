@@ -63,6 +63,16 @@
     register(reg_email, reg_password, reg_display_name, reg_description, reg_anonymous)
   "
 			/>
+			<input
+				class="w-full px-3 border border-gray-300 rounded"
+				placeholder="Verify Password"
+				type="password"
+				v-model="reg_password_verify"
+				@keyup.enter="
+    register(reg_email, reg_password, reg_display_name, reg_description, reg_anonymous)
+  "
+			/>
+			<div v-if="allowRegister==true" class="w-full">
 			<button
 				type="submit"
 				class="w-full px-3 py-1 mt-[2vh] font-medium text-white transition-colors border rounded border-cyan-600 bg-cyan-700 hover:bg-cyan-600"
@@ -71,7 +81,10 @@
   "
 			>
 				Register
-			</button>
+			</button></div>
+			<div v-else class="w-full px-3 py-1 mt-[2vh] font-medium text-white transition-colors border rounded border-cyan-600 bg-cyan-700">
+				<p class="text-xs text-center sm:text-base">(passwords do not match; re-enter your password and try again)</p>
+			</div>
 		</div>
 	</div>
 </template>
@@ -86,10 +99,20 @@ export default {
 			password: "",
 			reg_email: "",
 			reg_password: "",
+			reg_password_verify: "",
 			reg_display_name: "",
 			reg_description: "",
 			reg_anonymous: false,
 		};
+	},
+	
+	computed: {
+		allowRegister() {
+			if (this.reg_password === this.reg_password_verify)
+			{return true}
+			else
+			{return false}
+		},
 	},
 	methods: {
 		register: function (
@@ -99,7 +122,8 @@ export default {
 			reg_description,
 			reg_anonymous
 		) {
-			let newinfobit = this.$store.state.infobitToBe;
+			if (this.allowRegister == true)
+{			let newinfobit = this.$store.state.infobitToBe;
 			this.$store
 				.dispatch("Register_User", {
 					reg_email,
@@ -112,7 +136,7 @@ export default {
 				.catch((error) => {
 					// An error happened.
 					console.log("Oops. " + error.code + ": " + error.message);
-				});
+				});}
 		},
 		login: function (email, password) {
 			this.$store
