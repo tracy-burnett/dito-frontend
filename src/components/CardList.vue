@@ -536,16 +536,18 @@ export default {
 		async getStorybooks() {
 			this.processingStorybooks = true;
 
-			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
-			await getIdToken(this.$store.state.user)
-				.then((idToken) => {
-					this.$store.commit("SetIdToken", idToken);
-					// console.log(this.$store.state.idToken)
-				})
-				.catch((error) => {
-					// An error happened.
-					console.log("Oops. " + error.code + ": " + error.message);
-				});
+			if (this.$store.state.user) {
+				// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+				await getIdToken(this.$store.state.user)
+					.then((idToken) => {
+						this.$store.commit("SetIdToken", idToken);
+						// console.log(this.$store.state.idToken)
+					})
+					.catch((error) => {
+						// An error happened.
+						console.log("Oops. " + error.code + ": " + error.message);
+					});
+			}
 
 			this.audioArray = [];
 			(this.audioArrayOwner = []), // the list of audio files owned by the logged-in user

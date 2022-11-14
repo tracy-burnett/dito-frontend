@@ -38,13 +38,14 @@
 						/>
 					</div>
 					<div v-if="styleoption==='Viewer'">
+					<!--FLAG-->
 						<div
 							class="dropdown"
 							style="float: right"
 						>
 							<button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn">Download</button>
 							<div class="dropdown-content">
-								<a @click="downloadSRT()">overlapping .srt</a>
+								<a v-if="this.interpretationStatus == 'owner' || this.interpretationStatus=='editor'" @click="downloadSRT()">overlapping .srt</a>
 							</div>
 						</div>
 					</div>
