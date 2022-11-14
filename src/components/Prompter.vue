@@ -54,7 +54,7 @@ export default {
 			contentStartingIndex: null,
 			contentEndingIndex: null,
 			sensitivity: 0.05,
-			recursionStopper: 0,
+			recursionStopper: false,
 		};
 	},
 	computed: {
@@ -550,11 +550,12 @@ export default {
 							this.usableGaps[0].startTime = this.relevantGap.endTime - 5;
 							this.emitNewPrompt();
 						} else if (this.recursionStopper == false) {
-							// console.log("resetting sensitivity")
+							// console.log("resetting sensitivity to .05")
 							this.recursionStopper = true;
 							this.emitNewPrompt();
 						}
 					} else {
+						// console.log("upping the sensitivity to " + this.sensitivity)
 						this.sensitivity += 0.05;
 						this.newPromptsfunc();
 					}
