@@ -104,16 +104,18 @@ export default {
 
 	async mounted() {
 		// get the text
-		// REFRESH ID TOKEN FIRST AND WAIT FOR IT
-		await getIdToken(this.$store.state.user)
-			.then((idToken) => {
-				this.$store.commit("SetIdToken", idToken);
-				// console.log(this.$store.state.idToken)
-			})
-			.catch((error) => {
-				// An error happened.
-				console.log("Oops. " + error.code + ": " + error.message);
-			});
+		if (this.$store.state.user) {
+			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+			await getIdToken(this.$store.state.user)
+				.then((idToken) => {
+					this.$store.commit("SetIdToken", idToken);
+					// console.log(this.$store.state.idToken)
+				})
+				.catch((error) => {
+					// An error happened.
+					console.log("Oops. " + error.code + ": " + error.message);
+				});
+		}
 
 		fetch(
 			process.env.VUE_APP_api_URL +
@@ -151,16 +153,18 @@ export default {
 	},
 	methods: {
 		async adulterateText() {
-			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
-			await getIdToken(this.$store.state.user)
-				.then((idToken) => {
-					this.$store.commit("SetIdToken", idToken);
-					// console.log(this.$store.state.idToken)
-				})
-				.catch((error) => {
-					// An error happened.
-					console.log("Oops. " + error.code + ": " + error.message);
-				});
+			if (this.$store.state.user) {
+				// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+				await getIdToken(this.$store.state.user)
+					.then((idToken) => {
+						this.$store.commit("SetIdToken", idToken);
+						// console.log(this.$store.state.idToken)
+					})
+					.catch((error) => {
+						// An error happened.
+						console.log("Oops. " + error.code + ": " + error.message);
+					});
+			}
 
 			fetch(
 				process.env.VUE_APP_api_URL +
@@ -343,16 +347,18 @@ export default {
 		},
 
 		async updateAssociationsfunc() {
-			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
-			await getIdToken(this.$store.state.user)
-				.then((idToken) => {
-					this.$store.commit("SetIdToken", idToken);
-					// console.log(this.$store.state.idToken)
-				})
-				.catch((error) => {
-					// An error happened.
-					console.log("Oops. " + error.code + ": " + error.message);
-				});
+			if (this.$store.state.user) {
+				// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+				await getIdToken(this.$store.state.user)
+					.then((idToken) => {
+						this.$store.commit("SetIdToken", idToken);
+						// console.log(this.$store.state.idToken)
+					})
+					.catch((error) => {
+						// An error happened.
+						console.log("Oops. " + error.code + ": " + error.message);
+					});
+			}
 			// console.log(
 			//   JSON.stringify({
 			//     text: this.latest_text, // Pass in a string that meets a minimum character count and includes all the new tags you want to save

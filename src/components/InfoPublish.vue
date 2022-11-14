@@ -11,7 +11,6 @@
   <div>
 		<div class="flex items-center mt-[7vh]">
 			<CardList
-				:title="usernameStorybooks"
 				:key="$store.state.dashboardRerender"
 			/>
 		</div>
@@ -32,10 +31,10 @@ export default {
 	},
   name: "InfoPublish",
   computed: {
-		usernameStorybooks() {
-				return this.$store.state.user.email + "'s Storybooks";
+		// usernameStorybooks() {
+		// 		return this.$store.state.user.email + "'s Storybooks";
 
-		},
+		// },
 	},
   props: {
 

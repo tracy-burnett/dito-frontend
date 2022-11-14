@@ -37,7 +37,8 @@
 							@toggleStorybookStyle="toggleStorybookStylefunction($event)"
 						/>
 					</div>
-					<div v-if="styleoption==='Viewer'">
+					<div v-if="styleoption==='Viewer' && (this.interpretationStatus == 'owner' || this.interpretationStatus=='editor')">
+					<!--FLAG-->
 						<div
 							class="dropdown"
 							style="float: right"
