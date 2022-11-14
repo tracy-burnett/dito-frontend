@@ -56,7 +56,7 @@
 			/>
 			<input
 				class="w-full px-3 border border-gray-300 rounded"
-				placeholder="Password"
+				placeholder="Password (must be at least six characters long)"
 				type="password"
 				v-model="reg_password"
 				@keyup.enter="
