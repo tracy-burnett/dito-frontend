@@ -7,13 +7,13 @@
 		<span class="py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="py-1 border-gray-300 rounded ">{{ language_name }}</span><br /><br />
 		<p class="text-sm -mt-[1vh]">
-			Write down the words that you hear, then press "Enter." If you want to move to a new prompt without saving data, then leave the text box blank and press "Enter" or click on the "New Prompt" button above.<br>
+			Write down the words that you hear, then press "Enter." If you want to move to a new prompt without saving data, then leave the text box blank and press "Enter" or click on the "New Prompt" button above. If you choose to receive very short prompts on the "scribe less / more" slider above, the prompter may skip some portions of the audio file to give you phrases of the right length.<br>
 			If you want to adjust the segment of the audio being played to better fit the words, either drag the "scribe less / more" slider above or manually adjust the highlighted region in the audio player to the left by editing the timestamps at the top or bottom or clicking and dragging the highlighted region or its edges.
 		</p>
 		<textarea
 			class="w-full h-full px-3 py-1  mt-[2vh] border-gray-300 rounded prompter"
 			:style="{ 'font-size': fontsize + 'px' }"
-			style="overflow: scroll; height:20vh;"
+			style="overflow: scroll; height:31vh;"
 			placeholder="enter new text here"
 			v-model="new_text_unstripped"
 			ref="promptertextarea"
@@ -54,6 +54,7 @@ export default {
 			contentStartingIndex: null,
 			contentEndingIndex: null,
 			sensitivity: 0.05,
+			recursionStopper: 0,
 		};
 	},
 	computed: {
@@ -227,7 +228,6 @@ export default {
 		},
 
 		findGaps: function () {
-			// tempcurrentgapstart will be 0 if no parameter is passed in
 			if (this.$store.state.audioDuration > 0) {
 				this.associationGaps.length = 0;
 				this.usableGaps.length = 0;
@@ -367,14 +367,14 @@ export default {
 
 		newPromptsfunc() {
 			if (this.newPromptorScribingToggle == true) {
-				this.relevantGap.startTime = this.tempcurrentgapstart;
+				this.relevantGap.startTime = this.tempcurrentgapstart; // this ensures that as the user drags the scribing toggle left and right, the relevant gap is always calculated based on the baseline starttime for the gap and starttime doesn't only increase (instead, it gets reset)
 			}
-			this.new_text_unstripped = "";
+			this.new_text_unstripped = ""; // delete text previously typed by the user
 			// console.log("sensitivity " + this.sensitivity);
 			this.contentEndingIndex = 0;
 			this.contentStartingIndex = 0;
 
-			//if the audio player has loaded, and the gaps have been identified, and ???
+			//if the audio player has loaded, and the gaps have been identified
 			if (this.$store.state.audioDuration > 0 && this.usableGaps.length > 0) {
 				// a little gap to work with to generate this prompt
 				this.relevantGap.startTime = parseInt(this.usableGaps[0].startTime); // should be in hundredths of a second
@@ -508,21 +508,20 @@ export default {
 						this.scribingclean && // FLAG TIME DECISION fyi when the user sets this value too low it can prevent them from annotating some parts of the audio because it ignores them because if it is sensitive enough to detect them then the gap is too big for the user to annotate based on the length of phrase that they say they prefer to annotate.
 					this.contentEndingIndex >= 5
 				) {
-					let temp = parseInt(this.usableGaps[0].startTime);
 					this.usableGaps[0].startTime =
 						this.contentEndingIndex - 5 + this.relevantGap.startTime;
-					temp = parseInt(this.usableGaps[0].startTime);
 					this.tempcurrentgapend = this.$store.state.audioDuration;
 				} else if (
 					this.usableGaps[0].endTime -
 						(this.contentEndingIndex - 5 + this.relevantGap.startTime) <
 					this.scribingclean // FLAG TIME DECISION
 				) {
-					console.log("SHIFTING");
 					this.tempcurrentgapend = this.usableGaps[0].endTime;
 					this.usableGaps.shift();
-					console.log(this.tempcurrentgapend);
 				}
+
+				// console.log(this.contentStartingIndex + this.relevantGap.startTime);
+				// console.log(this.contentEndingIndex + this.relevantGap.startTime);
 
 				//if the portion we decided to highlight is big enough, then highlight it; otherwise, play around with the sensitivity, then run this algorithm again
 				if (this.contentEndingIndex > this.contentStartingIndex + 50) {
@@ -535,14 +534,26 @@ export default {
 						(this.contentEndingIndex + this.relevantGap.startTime) / 100
 					);
 
+					// console.log((this.contentStartingIndex + this.relevantGap.startTime) / 100)
+					// console.log((this.contentEndingIndex + this.relevantGap.startTime) / 100)
+
 					this.$store.commit("forceRegionRerender");
 				} else {
 					if (this.sensitivity > 50) {
-						//dump the first few seconds because they're all silence
-
 						this.sensitivity = 0.05;
-
-						this.newPromptsfunc();
+						if (this.recursionStopper == true) {
+							// dump the silence
+							// console.log(
+							// 	"dumped the silence.  New gaps should start at " +
+							// 		(this.relevantGap.endTime - 5)
+							// );
+							this.usableGaps[0].startTime = this.relevantGap.endTime - 5;
+							this.emitNewPrompt();
+						} else if (this.recursionStopper == false) {
+							// console.log("resetting sensitivity")
+							this.recursionStopper = true;
+							this.emitNewPrompt();
+						}
 					} else {
 						this.sensitivity += 0.05;
 						this.newPromptsfunc();
@@ -740,19 +751,6 @@ export default {
 						// console.log(this.instructions.lines[indexofchar]);
 
 						if (this.instructions.lines[indexofchar]["line"] != "\n") {
-							console.log(this.original_text.length - 1 + l);
-							console.log(
-								((this.$store.state.startTimePrompter +
-									this.$store.state.endTimePrompter) *
-									100) /
-									2
-							);
-							console.log(
-								((this.$store.state.endTimePrompter -
-									this.$store.state.startTimePrompter) *
-									100) /
-									2
-							);
 							this.new_associations[this.original_text.length - 1 + l] = {};
 							this.new_associations[this.original_text.length - 1 + l][
 								Math.round(
@@ -776,7 +774,6 @@ export default {
 			await getIdToken(this.$store.state.user)
 				.then((idToken) => {
 					this.$store.commit("SetIdToken", idToken);
-					// console.log(this.$store.state.idToken)
 				})
 				.catch((error) => {
 					// An error happened.
@@ -1246,7 +1243,6 @@ export default {
 		await getIdToken(this.$store.state.user)
 			.then((idToken) => {
 				this.$store.commit("SetIdToken", idToken);
-				// console.log(this.$store.state.idToken)
 			})
 			.catch((error) => {
 				// An error happened.
