@@ -37,7 +37,7 @@
 							@toggleStorybookStyle="toggleStorybookStylefunction($event)"
 						/>
 					</div>
-					<div v-if="styleoption==='Viewer'">
+					<div v-if="styleoption==='Viewer' && (this.interpretationStatus == 'owner' || this.interpretationStatus=='editor')">
 					<!--FLAG-->
 						<div
 							class="dropdown"
@@ -45,7 +45,7 @@
 						>
 							<button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn">Download</button>
 							<div class="dropdown-content">
-								<a v-if="this.interpretationStatus == 'owner' || this.interpretationStatus=='editor'" @click="downloadSRT()">overlapping .srt</a>
+								<a @click="downloadSRT()">overlapping .srt</a>
 							</div>
 						</div>
 					</div>
