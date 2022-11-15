@@ -48,7 +48,29 @@ export default {
 		};
 	},
 	computed: {
+		// split by carriage returns and get rid of any spaced_by characters at the beginning and end of each element
 		latest_text() {
+			if (this.spaced_by != "") {
+				let stripped = this.latest_text_intermediary.split("\n");
+				for (let j = 0; j < stripped.length; j++)
+				{
+					if (stripped[j][0]==this.spaced_by) {
+						stripped[j]=stripped[j].substring(1)
+					}
+					if (stripped[j][stripped[j].length-1]==this.spaced_by) {
+						stripped[j]=stripped[j].substring(0,stripped[j].length-1)
+					}
+				}
+				
+				console.log(stripped.join("\n"));
+				return stripped.join("\n");
+			} else if (this.spaced_by == "") {
+				return this.latest_text_intermediary;
+			}
+		},
+
+		// gets rid of streaks of spaced_by characters; replaces them with a single spaced_by character
+		latest_text_intermediary() {
 			if (this.spaced_by != "") {
 				let stripped = this.latest_text_unstripped.replace(
 					this.regexwithmultiplespacedby,
@@ -140,10 +162,16 @@ export default {
 				`${this.escapeRegex(this.spaced_by)}|(\n)`
 			);
 
+			// console.log(this.latest_text_unstripped);
+			// console.log(this.latest_text_intermediary);
+			// console.log(this.latest_text);
+
 			let original_text_cleaned = this.original_text.split(regexwithspacedby); // not cleaned yet, but about to be
 			let latest_text_cleaned = this.latest_text
 				.normalize("NFC")
 				.split(regexwithspacedby); // not cleaned yet, but about to be
+
+			// console.log(latest_text_cleaned);
 
 			for (let j = original_text_cleaned.length; j >= 0; j--) {
 				if (
@@ -163,7 +191,7 @@ export default {
 			}
 
 			// console.log(original_text_cleaned)
-			// console.log(latest_text_cleaned)
+			// console.log(latest_text_cleaned);
 
 			this.instructions = this.patienceDiffPlus(
 				original_text_cleaned,
