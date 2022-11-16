@@ -360,22 +360,26 @@ export default {
 
 				// delete the ones whose timestamps completely surround another one
 				// console.log(this.substringArray)
-				for (let j=this.substringArray.length-1; j>=0; j--) {
-					let checkAgainstStart=this.substringArray[j].starttime
-					let checkAgainstEnd=this.substringArray[j].endtime
-					let m = 0
-					this.substringArray.forEach((substring)=>{
-						if (substring.endtime < checkAgainstEnd && substring.starttime > checkAgainstStart)
-						{
+				for (let j = this.substringArray.length - 1; j >= 0; j--) {
+					let checkAgainstStart = this.substringArray[j].starttime;
+					let checkAgainstEnd = this.substringArray[j].endtime;
+					let m = 0;
+					this.substringArray.forEach((substring) => {
+						if (
+							substring.endtime < checkAgainstEnd &&
+							substring.starttime > checkAgainstStart
+						) {
 							// console.log(substring.endtime)
 							// console.log(checkAgainstEnd)
-							m++}
-					})
-					if (m>0){this.substringArray.splice(j,1)}
+							m++;
+						}
+					});
+					if (m > 0) {
+						this.substringArray.splice(j, 1);
+					}
 					// console.log(m)
 				}
 				// console.log(this.substringArray)
-
 			} else if (this.parsedAssociations.length == 1) {
 				let slice = {};
 				slice.text = this.latest_text;

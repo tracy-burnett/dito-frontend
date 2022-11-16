@@ -24,7 +24,7 @@ also, if the user clicks on the text of that substring, snap the audio player to
 					:key="substring.startingcharacter"
 					ref="highlightedwords"
 				>
-				<span
+					<span
 						v-show="highlight(substring.startingcharacter)==2"
 						class="text-blue-600"
 						style="white-space: pre-wrap"
