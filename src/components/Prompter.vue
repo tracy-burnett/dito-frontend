@@ -10,6 +10,8 @@
 			Write down the words that you hear, then press "Enter." If you want to move to a new prompt without saving data, then leave the text box blank and press "Enter" or click on the "New Prompt" button above. If you choose to receive very short prompts on the "scribe less / more" slider above, the prompter may skip some portions of the audio file to give you phrases of the right length.<br>
 			If you want to adjust the segment of the audio being played to better fit the words, either drag the "scribe less / more" slider above or manually adjust the highlighted region in the audio player to the left by editing the timestamps at the top or bottom or clicking and dragging the highlighted region or its edges.
 		</p>
+		<!-- {{usableGaps}}<br> -->
+		<!-- {{relevantGap}} -->
 		<textarea
 			class="w-full h-full px-3 py-1  mt-[2vh] border-gray-300 rounded prompter"
 			:style="{ 'font-size': fontsize + 'px' }"
@@ -55,31 +57,31 @@ export default {
 			contentEndingIndex: null,
 			sensitivity: 0.05,
 			recursionStopper: false,
+			// recursionTracker: 0,
 		};
 	},
 	computed: {
-				// split by carriage returns and get rid of any spaced_by characters at the beginning and end of each element
-				new_text() {
+		// split by carriage returns and get rid of any spaced_by characters at the beginning and end of each element
+		new_text() {
 			if (this.spaced_by != "") {
 				let stripped = this.new_text_intermediary.split("\n");
-				for (let j = 0; j < stripped.length; j++)
-				{
-					if (stripped[j][0]==this.spaced_by) {
-						stripped[j]=stripped[j].substring(1)
+				for (let j = 0; j < stripped.length; j++) {
+					if (stripped[j][0] == this.spaced_by) {
+						stripped[j] = stripped[j].substring(1);
 					}
-					if (stripped[j][stripped[j].length-1]==this.spaced_by) {
-						stripped[j]=stripped[j].substring(0,stripped[j].length-1)
+					if (stripped[j][stripped[j].length - 1] == this.spaced_by) {
+						stripped[j] = stripped[j].substring(0, stripped[j].length - 1);
 					}
 				}
-				
-				console.log(stripped.join("\n"));
+
+				// console.log(stripped.join("\n"));
 				return stripped.join("\n");
 			} else if (this.spaced_by == "") {
 				return this.new_text_intermediary;
 			}
 		},
 
-// gets rid of streaks of spaced_by characters; replaces them with a single spaced_by character
+		// gets rid of streaks of spaced_by characters; replaces them with a single spaced_by character
 		new_text_intermediary() {
 			if (this.spaced_by != "") {
 				let stripped = this.new_text_unstripped.replace(
@@ -219,10 +221,13 @@ export default {
 				this.allowSubmit = false;
 			} else {
 				// GAPS POPULATED
+				// Math.min(this.usableGaps[0].endTime, this.tempcurrentgapend) will be the end of the current gap that's being worked with
 				this.allowSubmit = true;
+				// if the end of the region is dragged lower than approximately the original end of the gap, then adjust the end of the
+				// original gap specs to reflect that, and if we are still chunking out of the same usableGap, then adjust the startTime of that too.
 				if (
 					this.$store.state.endTimePrompter * 100 <
-					this.relevantGap.endTime + 5
+					Math.min(this.usableGaps[0].endTime, this.tempcurrentgapend) + 5
 				) {
 					this.relevantGap.endTime = this.$store.state.endTimePrompter * 100;
 					if (
@@ -231,12 +236,14 @@ export default {
 						this.usableGaps[0].startTime =
 							this.$store.state.endTimePrompter * 100 - 5;
 					}
-				} else if (
-					this.$store.state.endTimePrompter * 100 >
-					this.usableGaps[0].startTime + 5
-				) {
-					this.usableGaps[0].startTime =
-						this.$store.state.endTimePrompter * 100 - 5;
+					// if the end of the region is dragged HIGHER than approximately the start of the next gap-to-be, then
+					// adjust the start of the next gap-to-be to reflect that
+					// } else if (
+					// 	this.$store.state.endTimePrompter * 100 >
+					// 	this.usableGaps[0].startTime + 5
+					// ) {
+					// 	this.usableGaps[0].startTime =
+					// 		this.$store.state.endTimePrompter * 100 - 5;
 				}
 			}
 		},
@@ -547,6 +554,7 @@ export default {
 
 				//if the portion we decided to highlight is big enough, then highlight it; otherwise, play around with the sensitivity, then run this algorithm again
 				if (this.contentEndingIndex > this.contentStartingIndex + 50) {
+					// console.log(this.recursionTracker)
 					this.$store.commit(
 						"updateStartTimePrompter",
 						(this.contentStartingIndex + this.relevantGap.startTime) / 100
@@ -561,7 +569,12 @@ export default {
 
 					this.$store.commit("forceRegionRerender");
 				} else {
+					// this.recursionTracker+=1
 					if (this.sensitivity > 50) {
+						// if (this.recursionTracker>=900)
+						// {console.log(this.recursionTracker)
+						// console.log(this.recursionStopper)}
+
 						this.sensitivity = 0.05;
 						if (this.recursionStopper == true) {
 							// dump the silence
@@ -570,11 +583,13 @@ export default {
 							// 		(this.relevantGap.endTime - 5)
 							// );
 							this.usableGaps[0].startTime = this.relevantGap.endTime - 5;
+
 							this.emitNewPrompt();
 						} else if (this.recursionStopper == false) {
 							// console.log("resetting sensitivity to .05")
 							this.recursionStopper = true;
-							this.emitNewPrompt();
+							this.newPromptorScribingToggle = false;
+							this.newPromptsfunc();
 						}
 					} else {
 						// console.log("upping the sensitivity to " + this.sensitivity)
@@ -582,7 +597,7 @@ export default {
 						this.newPromptsfunc();
 					}
 				}
-
+				// this.recursionTracker=0
 				// this.sensitivity=.1
 				this.allowSubmit = true;
 				this.$refs.promptertextarea.focus();

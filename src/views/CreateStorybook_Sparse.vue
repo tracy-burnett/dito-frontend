@@ -101,7 +101,7 @@ export default {
 					}
 				}
 				
-				console.log(stripped.join("\n"));
+				// console.log(stripped.join("\n"));
 				return stripped.join("\n");
 			} else if (this.spaced_by == "") {
 				return this.int_text_intermediary;
