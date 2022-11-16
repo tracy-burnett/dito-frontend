@@ -357,28 +357,46 @@ export default {
 					this.substringArray.push(slice);
 					this.i++;
 				}
-
+// console.log(this.substringArray)
+let indicesToDelete=[]
 				// delete the ones whose timestamps completely surround another one
-				// console.log(this.substringArray)
-				for (let j = this.substringArray.length - 1; j >= 0; j--) {
-					let checkAgainstStart = this.substringArray[j].starttime;
-					let checkAgainstEnd = this.substringArray[j].endtime;
-					let m = 0;
-					this.substringArray.forEach((substring) => {
+				let y = 0;
+				while (y < this.substringArray.length) {
+					// this is the one that we are checking against
+					// console.log(this.substringArray[y])
+					let checkExteriorStart = parseInt(this.substringArray[y].starttime);
+					let checkExteriorEnd = parseInt(this.substringArray[y].endtime);
+					let z = 0;
+					while (z < this.substringArray.length) {
+						// console.log(this.substringArray[z])
 						if (
-							substring.endtime < checkAgainstEnd &&
-							substring.starttime > checkAgainstStart
+							// if this one is exterior to the other one, then delete it
+							parseInt(this.substringArray[z].endtime) > checkExteriorEnd &&
+							parseInt(this.substringArray[z].starttime) < checkExteriorStart
 						) {
-							// console.log(substring.endtime)
-							// console.log(checkAgainstEnd)
-							m++;
-						}
-					});
-					if (m > 0) {
-						this.substringArray.splice(j, 1);
+							indicesToDelete.push(z)
+							// console.log("deleting inner")
+						} else if (
+							// if this one is interior to the other one, then break this while loop, delete the other one and do not index the other one's loop
+							parseInt(this.substringArray[z].endtime) < checkExteriorEnd &&
+							parseInt(this.substringArray[z].starttime) > checkExteriorStart
+						) {
+							// delete exterior one
+							// console.log("deleting outer")
+							indicesToDelete.push(y)
+							break;
+						} // no match; nothing gets deleted; index inner while loop
+							z++;
 					}
-					// console.log(m)
+					y++;
 				}
+				// console.log(indicesToDelete)
+				indicesToDelete = [...new Set(indicesToDelete)]
+				// console.log(indicesToDelete)
+				for (let t = indicesToDelete.length-1; t >= 0; t--)
+				{this.substringArray.splice(indicesToDelete[t],1)
+				}
+				
 				// console.log(this.substringArray)
 			} else if (this.parsedAssociations.length == 1) {
 				let slice = {};
