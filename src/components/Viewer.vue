@@ -24,26 +24,26 @@ also, if the user clicks on the text of that substring, snap the audio player to
 					:key="substring.startingcharacter"
 					ref="highlightedwords"
 				>
+
+				<span
+						v-if="highlight(substring.startingcharacter)==0"
+						class="cursor-pointer"
+						@click="snapToTimestamp(substring.startingcharacter)"
+						style="white-space: pre-wrap"
+					>{{ substring.text }}</span>
 					<span
-						v-show="highlight(substring.startingcharacter)==2"
+						v-else-if="highlight(substring.startingcharacter)==1"
+						class="text-red-600"
+						style="white-space: pre-wrap"
+						@click="snapToTimestamp(substring.startingcharacter)"
+					>{{ substring.text }}</span>
+					<span
+						v-else-if="highlight(substring.startingcharacter)==2"
 						class="text-blue-600"
 						style="white-space: pre-wrap"
 						@click="snapToTimestamp(substring.startingcharacter)"
 					>{{ substring.text }}</span>
 
-					<span
-						v-show="highlight(substring.startingcharacter)==1"
-						class="text-red-600"
-						style="white-space: pre-wrap"
-						@click="snapToTimestamp(substring.startingcharacter)"
-					>{{ substring.text }}</span>
-
-					<span
-						v-show="highlight(substring.startingcharacter)==0"
-						class="cursor-pointer"
-						@click="snapToTimestamp(substring.startingcharacter)"
-						style="white-space: pre-wrap"
-					>{{ substring.text }}</span>
 				</span>
 			</div>
 
