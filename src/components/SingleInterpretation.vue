@@ -135,7 +135,7 @@
 							v-model="scribing"
 							type="range"
 							min="20"
-							max="2000"
+							max="4000"
 							step="10"
 						/>
 					</div>
@@ -145,7 +145,7 @@
 				<div v-if="styleoption==='Studio'">
 					<!--FLAG-->
 					<div class="flex">
-						listen to less / more
+						&nbsp;&nbsp;&nbsp;phrase length
 					</div>
 					<div>
 						<input

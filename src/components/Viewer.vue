@@ -9,9 +9,9 @@
 				Click on the phrases below to skip to the part of the audio file that contains them.<br>
 				Change the slider above that says "highlight less / more" to highlight and refer to the text in shorter or longer phrases as words are being spoken.<br>When the text below is highlighted in phrases of a length that you like, then select an option from the "Download" menu to save the interpretation to your computer.
 			</p>
-			<!-- {{associations}}<br><br>
-			{{parsedAssociations}}<br><br>
-			{{substringArray}}<br><br> -->
+			<!-- {{associations}}<br><br> -->
+			<!-- {{parsedAssociations}}<br><br> -->
+			<!-- {{substringArray}}<br><br> -->
 			<!-- for each substring that would be independently highlighted, render it as highlighted or not based on running the highlight function on it whenever the current audioplayer time changes.
 also, if the user clicks on the text of that substring, snap the audio player to play the corresponding audio for that substring. -->
 			<div
@@ -305,6 +305,7 @@ export default {
 			this.substringArray = [];
 			this.relevantCharacters.length = 0;
 			this.assignRelevantCharacters();
+			// console.log(this.relevantCharacters)
 			if (this.relevantCharacters.length > 0) {
 				this.relevantCharacters.sort((a, b) => a - b);
 				this.relevantCharacters = [...new Set(this.relevantCharacters)];
@@ -343,6 +344,7 @@ export default {
 
 		// this is a helper function that helps decide at which character indices to break the text into substrings
 		assignRelevantCharacters() {
+			// console.log(this.associations)
 			Object.values(this.associations).forEach((element) => {
 				// for each character substring
 				for (let i = 0; i < element.length; i++) {
