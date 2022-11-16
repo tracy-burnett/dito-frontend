@@ -25,14 +25,14 @@ also, if the user clicks on the text of that substring, snap the audio player to
 					ref="highlightedwords"
 				>
 					<span
-						v-if="highlight(substring.startingcharacter)"
+						v-show="highlight(substring.startingcharacter)"
 						class="text-red-600"
 						style="white-space: pre-wrap"
 						@click="snapToTimestamp(substring.startingcharacter)"
 					>{{ substring.text }}</span>
 
 					<span
-						v-else
+						v-show="!highlight(substring.startingcharacter)"
 						class="cursor-pointer"
 						@click="snapToTimestamp(substring.startingcharacter)"
 						style="white-space: pre-wrap"

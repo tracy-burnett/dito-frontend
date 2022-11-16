@@ -208,6 +208,15 @@ export default {
 				let srt_instructions = caption.split("\n");
 				// console.log(srt_instructions)
 				let timestampInstructions = srt_instructions[1];
+
+				let timestampStart = timestampInstructions.split(" --> ")[0];
+				let timestampStartMilliseconds = timestampStart.slice(-3);
+				let timestampStartSecondsArray = timestampStart.slice(0, -4).split(":");
+				let timestampStartSeconds =
+					timestampStartSecondsArray[0] * 3600 +
+					timestampStartSecondsArray[1] * 60 +
+					timestampStartSecondsArray[2] * 1;
+
 				let timestampEnd = timestampInstructions.split(" --> ")[1];
 				let timestampEndMilliseconds = timestampEnd.slice(-3);
 				let timestampEndSecondsArray = timestampEnd.slice(0, -4).split(":");
@@ -215,18 +224,12 @@ export default {
 					timestampEndSecondsArray[0] * 3600 +
 					timestampEndSecondsArray[1] * 60 +
 					timestampEndSecondsArray[2] * 1;
-					// only add captions that don't exceed the maximum length of the audio file
-				if (1000 * timestampEndSeconds <= this.$store.state.audioDuration) {
-					let timestampStart = timestampInstructions.split(" --> ")[0];
-					let timestampStartMilliseconds = timestampStart.slice(-3);
-					let timestampStartSecondsArray = timestampStart
-						.slice(0, -4)
-						.split(":");
-					let timestampStartSeconds =
-						timestampStartSecondsArray[0] * 3600 +
-						timestampStartSecondsArray[1] * 60 +
-						timestampStartSecondsArray[2] * 1;
-
+					
+				// only add captions that don't exceed the maximum length of the audio file
+				if (
+					1000 * timestampEndSeconds <= this.$store.state.audioDuration &&
+					1000 * timestampStartSeconds >= 0
+				) {
 					let timestampforBackend =
 						(100 *
 							(Number(
