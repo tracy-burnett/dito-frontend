@@ -107,6 +107,7 @@ export default {
 		window.addEventListener("resize", this.myEventHandler);
 	},
 	unmounted() {
+		this.$store.commit("updateAudioDuration", 0);
 		window.removeEventListener("resize", this.myEventHandler);
 	},
 
