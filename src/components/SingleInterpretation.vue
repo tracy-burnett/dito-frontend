@@ -145,7 +145,7 @@
 				<div v-if="styleoption==='Studio'">
 					<!--FLAG-->
 					<div class="flex">
-						listen to less / more
+						&nbsp;&nbsp;&nbsp;phrase length
 					</div>
 					<div>
 						<input
