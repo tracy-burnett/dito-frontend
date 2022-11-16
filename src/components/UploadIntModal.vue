@@ -224,7 +224,7 @@ export default {
 					timestampEndSecondsArray[0] * 3600 +
 					timestampEndSecondsArray[1] * 60 +
 					timestampEndSecondsArray[2] * 1;
-					
+
 				// only add captions that don't exceed the maximum length of the audio file
 				if (
 					1000 * timestampEndSeconds <= this.$store.state.audioDuration &&
@@ -299,8 +299,8 @@ export default {
 
 			let wordindexcount = 0;
 			this.captions_cleaned.forEach((caption, captionindex) => {
-				caption.forEach((word) => {
-					if (word != "\n") {
+				for (let j = 0; j < caption.length; j++) {
+					if (caption[j] != "\n") {
 						this.new_associations[wordindexcount] = {};
 						this.new_associations[wordindexcount][
 							Math.round(this.timestampsforBackend[captionindex])
@@ -308,7 +308,7 @@ export default {
 					}
 
 					wordindexcount++;
-				});
+				}
 			});
 
 			this.create();
