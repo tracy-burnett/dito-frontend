@@ -135,7 +135,7 @@
 							v-model="scribing"
 							type="range"
 							min="20"
-							max="2000"
+							max="4000"
 							step="10"
 						/>
 					</div>
