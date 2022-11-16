@@ -102,7 +102,7 @@
 	background: #dbeafe;"
 					v-else-if="readyVerification==0"
 				>
-					<p>please be patient while the audio is prepared</p>
+					<p>please be patient while audio is prepared</p>
 				</div>
 			</div>
 
