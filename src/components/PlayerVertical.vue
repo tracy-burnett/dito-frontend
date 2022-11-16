@@ -702,7 +702,7 @@ export default {
 			// this.startTimeSeconds = this.$store.state.startTimePrompter; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
 			// this.endTimeSeconds = this.$store.state.endTimePrompter; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
 			if (!this.playing) {
-				this.play();
+				// this.play();
 			} else if (this.playing) {
 				this.play();
 				this.play();
