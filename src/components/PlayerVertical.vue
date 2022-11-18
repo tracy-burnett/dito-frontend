@@ -211,7 +211,7 @@ export default {
 		playbackspeed: function () {
 			this.wavesurfer.setPlaybackRate(this.playbackspeed);
 		},
-		"$store.state.incomingCurrentTime": function () {
+		"$store.state.currentTimeUpdated": function () {
 			if (
 				this.$store.state.incomingCurrentTime >= this.startTimeSeconds &&
 				this.$store.state.incomingCurrentTime < this.endTimeSeconds
