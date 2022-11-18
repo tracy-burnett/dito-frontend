@@ -14,6 +14,7 @@ export default new Vuex.Store({
     playerRerender: "", // ID of audio file as it finishes uploading to AWS S3
     consoles: [], // array of ID's of interpretations for which there should be a viewer column currently displayed in the browser
     incomingCurrentTime: 0, // Viewer.vue can update this, and when it is updated, Player will start playing audio from this time
+    currentTimeUpdated: 0, // tells audio player to play again from incomingCurrentTime
     audioplayertime: 0, // the current time of the audio player
     idToken: null, // the idToken of the currently logged-in user
     consoleswidth: 0,
@@ -89,14 +90,16 @@ export default new Vuex.Store({
       state.selected = selected
     },
 
-    updateIncomingCurrentTime(state, value) {
-      if (value <= 0) {
+    updateIncomingCurrentTime(state, {timestamp}) {
+      // state.substringText = text
+      if (timestamp <= 0) {
 
         state.incomingCurrentTime = 0
       }
       else {
-        state.incomingCurrentTime = value
+        state.incomingCurrentTime = timestamp
       }
+      state.currentTimeUpdated+=1
     },
 
     updateAudioTime(state, audiotime) {
