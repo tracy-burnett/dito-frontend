@@ -53,98 +53,87 @@ export default {
 			readyVerification2: 0,
 		};
 	},
+	watch: {
+		readyVerification2: function () {
+			if (this.readyVerification2 == 2) {
+				this.wavesurfer.play(0);
+				console.log(this.wavesurfer.getDuration());
+			}
+		},
+	},
+	// props: {
+	// 	audio_id: {
+	// 		default: "",
+	// 	},
+	// },
+	unmounted() {
+		this.wavesurfer.destroy();
+	},
 	mounted() {
-		this.time = this.$store.state.incomingCurrentTime*100;
+		this.time = this.$store.state.incomingCurrentTime * 100;
 		this.phrase = this.$store.state.substringText;
 		this.start = 0;
-		this.end = this.$store.state.audioDuration;
+		this.end = Math.floor(this.$store.state.audioDuration);
 		// console.log(this.$store.state.splitAudioReady)
 	},
 
 	methods: {
 		async split() {
-			// this.wavesurfer = await WaveSurfer.create({
-			// 	container: this.$refs.waveform,
-			// 	backend: "MediaElement",
-			// });
-			let returnedObject = await this.splitTechnical();
+			this.wavesurfer = await WaveSurfer.create({
+				container: this.$refs.waveform,
+				backend: "MediaElement",
+			});
+			let firstSection = await this.getRegion(this.start, this.time);
+			console.log(firstSection);
+			let audio = new Audio();
+			audio.src = URL.createObjectURL(firstSection);
+			this.wavesurfer.load(audio);
+
+			let that = this;
+			// When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
+			this.wavesurfer.on("waveform-ready", function () {
+				console.log("chapter waveform ready");
+				that.readyVerification2 += 1;
+			});
+
+			// When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
+			this.wavesurfer.on("ready", function () {
+				console.log("chapter audio ready");
+				that.readyVerification2 += 1;
+			});
+			let secondSection = await this.getRegion(this.time, this.end);
 			// let emptySegment = returnedObject.first;
-			console.log(returnedObject);
-			// let newAudioBuffer=returnedObject.second
-
-
-
-			var firstChapterWAVBlob = await this.bufferToWave(
-				returnedObject,
-				0,
-				returnedObject.length
-			);
-			// var secondChapterWAVBlob = this.bufferToWave(
-			// 	newAudioBuffer,
-			// 	0,
-			// 	newAudioBuffer.length
-			// );
-
-            // TESTING STARTS HERE
-            
-            let audio = new Audio();
-audio.src = URL.createObjectURL(firstChapterWAVBlob);
-// this.wavesurfer.load(audio);
-            
-			// let that = this;
-			// // When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
-			// this.wavesurfer.on("waveform-ready", function () {
-			// 	console.log("chapter waveform ready");
-			// 	that.readyVerification2 += 1;
-			// });
-
-			// // When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
-			// this.wavesurfer.on("ready", function () {
-			// 	console.log("chapter audio ready");
-			// 	that.readyVerification2 += 1;
-			// });
-// TESTING ENDS HERE
-
-// WHAT DO I DO WITH THESE NOW?
-
-// return{"first": firstChapterWAVBlob, "second": secondChapterWAVBlob}
-
-// END WHAT
+			console.log(secondSection);
 		},
 
-		async splitTechnical() {
-			console.log("starting splitTechnical");
-            console.log(this.$store.state.splitAudioReady.buffer)
-            console.log(this.start)
-            console.log(this.time)
-            console.log(this.end)
-            
+		async getRegion(start, end) {
+			console.log("starting getRegion");
 
-            var segmentDuration = this.time-this.start
+			var segmentDuration = end - start;
 
-var originalBuffer = this.$store.state.splitAudioReady.buffer
-var emptySegment = this.$store.state.splitAudioReady.ac.createBuffer(
-  originalBuffer.numberOfChannels,
-  segmentDuration * originalBuffer.sampleRate,
-  originalBuffer.sampleRate
-);
-for (var i = 0; i < originalBuffer.numberOfChannels; i++) {
-  var chanData = originalBuffer.getChannelData(i);
-  var emptySegmentData = emptySegment.getChannelData(i);
-  var mid_data = chanData.subarray( this.start * originalBuffer.sampleRate, this.end * originalBuffer.sampleRate);
-  emptySegmentData.set(mid_data);
-}
+			var originalBuffer = this.$store.state.splitAudioReady.buffer;
+			var emptySegment = this.$store.state.splitAudioReady.ac.createBuffer(
+				originalBuffer.numberOfChannels,
+				segmentDuration * originalBuffer.sampleRate,
+				originalBuffer.sampleRate
+			);
+			for (var i = 0; i < originalBuffer.numberOfChannels; i++) {
+				var chanData = originalBuffer.getChannelData(i);
+				var emptySegmentData = emptySegment.getChannelData(i);
+				var mid_data = chanData.subarray(
+					start * originalBuffer.sampleRate,
+					end * originalBuffer.sampleRate
+				);
+				emptySegmentData.set(mid_data);
+			}
 
+			var WAVBlob = await this.bufferToWave(
+				emptySegment,
+				0,
+				emptySegment.length
+			);
 
-
-
-
-return emptySegment
-
-
-
-
-
+			return WAVBlob;
 
 			// let originalAudioBuffer = this.$store.state.splitAudioReady.buffer;
 			// let lengthInSamples = Math.floor(
