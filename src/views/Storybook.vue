@@ -12,6 +12,14 @@
 					@addCreatedInterpretation="addCreatedInterpretation($event)"
 					@closeInterpretationModal="closeInterpretationModal()"
 				/>
+			</span>			<span
+				v-if="showNewChapterModal"
+				class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
+			>
+				<NewChapterModal
+				
+				@closeNewChapterModal="closeNewChapterModal()"
+				/>
 			</span>
 			<span
 				v-if="showUploadIntModal"
@@ -51,6 +59,7 @@
 						@returnFormerInterpretation="returnFormerInterpretation($event)"
 						@displayInterpretationID="displayInterpretationID($event)"
 						@permanentlydestroy="permanentlydestroy($event)"
+						@makeChapter="toggleNewChapterModal()"
 					/>
 				</span>
 				<!-- the AddInterpretationViewer component can tell this Storybook component to add a new column for an interpretation that it just created (addCreatedInterpretation),
@@ -76,6 +85,7 @@ import PlayerVertical from "@/components/PlayerVertical.vue";
 import SingleInterpretation from "@/components/SingleInterpretation.vue";
 import AddInterpretationViewer from "@/components/AddInterpretationViewer.vue";
 import AddInterpretationModal from "@/components/AddInterpretationModal.vue";
+import NewChapterModal from "@/components/NewChapterModal.vue";
 import UploadIntModal from "@/components/UploadIntModal.vue";
 import { getIdToken } from "firebase/auth";
 
@@ -86,6 +96,7 @@ export default {
 		PlayerVertical,
 		SingleInterpretation,
 		AddInterpretationViewer,
+		NewChapterModal,
 		AddInterpretationModal,
 		UploadIntModal,
 	},
@@ -95,6 +106,7 @@ export default {
 			interpretationsList: [], // the list of interpretations that can be selected from the dropdown menu (does not include interpretations currently being viewed by this user in this browser window)
 			formerInterpretationsList: [], // the list of interpretations currently being viewed by this user in this browser window
 			showAddInterpretationModal: false,
+			showNewChapterModal: false,
 			showUploadIntModal: false,
 		};
 	},
@@ -249,6 +261,12 @@ export default {
 		},
 		closeUploadIntModal() {
 			this.showUploadIntModal = false;
+		},
+		toggleNewChapterModal() {
+			this.showNewChapterModal = !this.showNewChapterModal;
+		},
+		closeNewChapterModal() {
+			this.showNewChapterModal = false;
 		},
 		toggleInterpretationModal() {
 			this.showAddInterpretationModal = !this.showAddInterpretationModal;

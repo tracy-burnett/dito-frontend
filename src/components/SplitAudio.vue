@@ -10,7 +10,6 @@
 			<!-- <br>{{startTimeSeconds}} -->
 			<!-- <br>{{(startTimeSeconds+endTimeSeconds)/2}}<br>{{endTimeSeconds}} -->
 		</div>
-
 		<div>
 			<input
 				id="slider"
@@ -74,10 +73,6 @@
 				/>
 			</div>
 
-			<div
-				v-show="0"
-				ref="waveform2"
-			></div>
 			<!-- waveform display -->
 			<div
 				id="waveform"
@@ -160,7 +155,6 @@ export default {
 			isLoaded: false,
 			loadingpercent: 0,
 			readyVerification: 0,
-			readyVerification2: 0,
 			// peaksData: [],
 			zoomnumber: 1,
 			sendtobackendBoolean: false,
@@ -179,13 +173,6 @@ export default {
 
 	// watch these variables to see if they change.  if they do, then call the corresponding functions.
 	watch: {
-		readyVerification2: function () {
-			if (this.readyVerification2 == 2) {
-				this.$store.commit("updateSplitAudioReady", this.wavesurfer2.backend);
-				
-			}
-		},
-
 		readyVerification: function () {
 			if (this.readyVerification == 2) {
 				// FLAG
@@ -218,15 +205,13 @@ export default {
 							that.peaksToBackend(JSON.stringify(result));
 						}
 					});
-
-				this.prepAudio();
 			}
 		},
 
 		playbackspeed: function () {
 			this.wavesurfer.setPlaybackRate(this.playbackspeed);
 		},
-		"$store.state.currentTimeUpdated": function () {
+		"$store.state.incomingCurrentTime": function () {
 			if (
 				this.$store.state.incomingCurrentTime >= this.startTimeSeconds &&
 				this.$store.state.incomingCurrentTime < this.endTimeSeconds
@@ -351,13 +336,10 @@ export default {
 	},
 
 	unmounted() {
-		this.$store.commit("updateSplitAudioReady", {});
 		this.wavesurfer.destroy();
-		this.wavesurfer2.destroy();
 	},
 
 	async mounted() {
-		this.$store.commit("updateSplitAudioReady", {});
 		this.sendtobackendBoolean = false;
 
 		// https://wavesurfer-js.org
@@ -432,6 +414,8 @@ export default {
 				console.error("Error:", error);
 			});
 
+
+
 		let that = this;
 
 		// When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
@@ -491,8 +475,8 @@ export default {
 
 			// that.startTime=that.secondsToTime(Math.round(that.$store.state.startTimePrompter))
 			// that.endTime=that.secondsToTime(Math.round(that.$store.state.endTimePrompter))
-
-			// console.log(this.wavesurfer.backend)
+			
+			console.log(this.wavesurfer.backend)
 		});
 
 		// calculate how much of the audio file has been loaded, so far
@@ -542,29 +526,6 @@ export default {
 	},
 
 	methods: {
-
-		async prepAudio() {
-			this.wavesurfer2 = await WaveSurfer.create({
-				container: this.$refs.waveform2,
-				backend: "MediaElement",
-			});
-
-			this.wavesurfer2.load(this.audioURL);
-
-			let that = this;
-			// When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
-			this.wavesurfer2.on("waveform-ready", function () {
-				console.log("waveform ready");
-				that.readyVerification2 += 1;
-			});
-
-			// When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
-			this.wavesurfer2.on("ready", function () {
-				console.log("audio ready");
-				that.readyVerification2 += 1;
-			});
-		},
-
 		peaksToBackend(generatedpeaks) {
 			fetch(
 				process.env.VUE_APP_api_URL + "audio/" + this.audio_ID + "/public/",

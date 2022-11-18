@@ -49,6 +49,10 @@
 							</div>
 						</div>
 					</div>
+					<div v-if="Object.keys($store.state.splitAudioReady).length>0 && $store.state.substringText.length>0 && styleoption==='Viewer' && (this.interpretationStatus == 'owner' || this.interpretationStatus=='editor')">
+					<!--FLAG-->
+							<button @click="makeChapter()" class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn">Divide</button>
+					</div>
 					<div v-if="styleoption==='Prompter'">
 						<button
 							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
@@ -330,6 +334,10 @@ export default {
 			} else if (publictf == true) {
 				this.interpretationStatus = "viewer";
 			}
+		},
+
+		makeChapter(){
+			this.$emit("makeChapter")
 		},
 
 		// when the user chooses to swap the interpretation they are currently viewing for a different interpretation...

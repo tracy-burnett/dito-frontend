@@ -91,16 +91,15 @@ export default {
 		int_text() {
 			if (this.spaced_by != "") {
 				let stripped = this.int_text_intermediary.split("\n");
-				for (let j = 0; j < stripped.length; j++)
-				{
-					if (stripped[j][0]==this.spaced_by) {
-						stripped[j]=stripped[j].substring(1)
+				for (let j = 0; j < stripped.length; j++) {
+					if (stripped[j][0] == this.spaced_by) {
+						stripped[j] = stripped[j].substring(1);
 					}
-					if (stripped[j][stripped[j].length-1]==this.spaced_by) {
-						stripped[j]=stripped[j].substring(0,stripped[j].length-1)
+					if (stripped[j][stripped[j].length - 1] == this.spaced_by) {
+						stripped[j] = stripped[j].substring(0, stripped[j].length - 1);
 					}
 				}
-				
+
 				// console.log(stripped.join("\n"));
 				return stripped.join("\n");
 			} else if (this.spaced_by == "") {

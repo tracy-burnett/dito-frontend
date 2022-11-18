@@ -28,20 +28,20 @@ also, if the user clicks on the text of that substring, snap the audio player to
 				<span
 						v-if="highlight(substring.startingcharacter)==0"
 						class="cursor-pointer"
-						@click="snapToTimestamp(substring.startingcharacter)"
+						@click="snapToTimestamp(substring)"
 						style="white-space: pre-wrap"
 					>{{ substring.text }}</span>
 					<span
 						v-else-if="highlight(substring.startingcharacter)==1"
 						class="text-red-600"
 						style="white-space: pre-wrap"
-						@click="snapToTimestamp(substring.startingcharacter)"
+						@click="snapToTimestamp(substring)"
 					>{{ substring.text }}</span>
 					<span
 						v-else-if="highlight(substring.startingcharacter)==2"
 						class="text-blue-600"
 						style="white-space: pre-wrap"
-						@click="snapToTimestamp(substring.startingcharacter)"
+						@click="snapToTimestamp(substring)"
 					>{{ substring.text }}</span>
 
 				</span>
@@ -402,8 +402,12 @@ export default {
 		// 					return calculated
 		// 				},
 
-		snapToTimestamp(startingcharacter) {
+		snapToTimestamp(substring) {
+			console.log(substring)
+			let startingcharacter=substring.startingcharacter
+			let text=substring.text
 			console.log(startingcharacter);
+			console.log(text)
 			let potentialSnapArray = [];
 			this.parsedAssociations.forEach((element) => {
 				if (
@@ -416,8 +420,13 @@ export default {
 			potentialSnapArray.sort((a, b) => a - b);
 			let playFromTimestamp =
 				potentialSnapArray[potentialSnapArray.length - 1] / 100;
+				
 			if (playFromTimestamp) {
-				this.$store.commit("updateIncomingCurrentTime", playFromTimestamp);
+				
+			console.log(startingcharacter);
+			console.log(text)
+			let params={"timestamp": playFromTimestamp, "text": text}
+				this.$store.commit("updateIncomingCurrentTime", params);
 			}
 			potentialSnapArray.length = 0;
 		},
