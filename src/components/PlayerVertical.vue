@@ -341,6 +341,28 @@ export default {
 
 	async mounted() {
 		this.sendtobackendBoolean = false;
+
+
+		// https://wavesurfer-js.org
+		this.wavesurfer = WaveSurfer.create({
+			container: this.$refs.waveform,
+			backend: "MediaElement",
+			waveColor: "#94a3b8",
+			cursorColor: "red",
+			progressColor: "#475569",
+			// barWidth: 2,
+			barHeight: 4,
+			// normalize: true,
+			hideScrollbar: true,
+			// barRadius: 3,
+			vertical: true,
+			plugins: [
+				WaveSurfer.regions.create({
+					maxRegions: 1,
+				}),
+			],
+		});
+
 		if (this.$store.state.user) {
 			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
 			await getIdToken(this.$store.state.user)
@@ -393,25 +415,6 @@ export default {
 				console.error("Error:", error);
 			});
 
-		// https://wavesurfer-js.org
-		this.wavesurfer = WaveSurfer.create({
-			container: this.$refs.waveform,
-			backend: "MediaElement",
-			waveColor: "#94a3b8",
-			cursorColor: "red",
-			progressColor: "#475569",
-			// barWidth: 2,
-			barHeight: 4,
-			// normalize: true,
-			hideScrollbar: true,
-			// barRadius: 3,
-			vertical: true,
-			plugins: [
-				WaveSurfer.regions.create({
-					maxRegions: 1,
-				}),
-			],
-		});
 
 		let that = this;
 
