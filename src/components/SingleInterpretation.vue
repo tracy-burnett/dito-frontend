@@ -1,17 +1,36 @@
 <template>
 	<div class="h-full singleint">
+		<span
+				v-if="showSyncingModal"
+				class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
+			>
+				<SyncingModal
+					:audio_id="audio_id"
+				:interpretation_id="interpretation_id"
+				@closeSyncingModal="closeSyncingModal()"
+				/>
+			</span>
 		<!-- this SingleInterpretation component represents what is viewable in a single interpretation column of an open storybook -->
 		<div class="flex flex-col -mt-[0vh]">
 			<div class="flex flex-row justify-center ">
 				<div class="sticky flex flex-row flex-wrap justify-around shrink ">
 
-
+					<div v-if="styleoption==='Viewer' && (this.interpretationStatus == 'owner' || this.interpretationStatus=='editor')">
+					
+					<button
+						class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
+						@click="toggleSyncingModal()"
+					>
+						Sync
+					</button>
+				</div>
 					<div>
 						<DeleteInterpretationViewer
 							:interpretation_id="interpretation_id"
 							@returnFormerInterpretation="returnFormerInterpretation($event)"
 						/>
 					</div>
+
 					<div v-if="styleoption==='Tagger'">
 						<!-- quick and dirty way to undo tags you haven't saved to the database yet -->
 						<button
@@ -193,6 +212,7 @@
 </template>
 
 <script>
+import SyncingModal from "@/components/SyncingModal.vue";
 import Viewer from "@/components/Viewer.vue";
 import Editor from "@/components/Editor.vue";
 import Tagger from "@/components/Tagger.vue";
@@ -208,6 +228,7 @@ export default {
 		Editor,
 		Viewer,
 		Tagger,
+		SyncingModal,
 		Prompter,
 		Studio,
 		StorybookStyleMenu,
@@ -232,6 +253,7 @@ export default {
 			interpretationStatus: "", // this remembers whether the currently logged-in user is a viewer, editor, or owner of the currently-displayed interpretation
 			styleoption: "Studio", // this can be Viewer, Editor, or Tagger, depending on how the user is currently interacting with the displayed interpretation
 			interpretationFull: {}, // this contains all of the information about the currently displayed interpretation
+			showSyncingModal: false,
 		};
 	},
 
@@ -269,6 +291,12 @@ export default {
 		);
 	},
 	methods: {
+		toggleSyncingModal() {
+			this.showSyncingModal = !this.showSyncingModal;
+		},
+		closeSyncingModal() {
+			this.showSyncingModal = false;
+		},
 		clearTimestamps() {
 			this.clearTimestampsvar++;
 		},

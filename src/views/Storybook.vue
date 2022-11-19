@@ -12,7 +12,7 @@
 					@addCreatedInterpretation="addCreatedInterpretation($event)"
 					@closeInterpretationModal="closeInterpretationModal()"
 				/>
-			</span>
+			</span>	
 			<span
 				v-if="showUploadIntModal"
 				class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"

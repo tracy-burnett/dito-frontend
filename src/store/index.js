@@ -34,6 +34,7 @@ export default new Vuex.Store({
     audioDuration: 0,
     cardlistscrollposition: 0,
     triggerNewText: 0, // audio player uses this to tell prompter to generate new text into the text box for the new audio range
+    renewViewer: 0, // makes Viewer load new associations, e.g. after resyncing text to audio
 
   },
   getters: {
@@ -88,6 +89,10 @@ export default new Vuex.Store({
 
     updateSelected(state, selected) {
       state.selected = selected
+    },
+
+    reloadViewer(state){
+      state.renewViewer++
     },
 
     updateIncomingCurrentTime(state, {timestamp}) {
