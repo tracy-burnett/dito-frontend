@@ -13,19 +13,18 @@
 			<h1 class="text-2xl font-bold">Adjust All Timestamps</h1>
 			<br /><br>
             
-            <br>
-            How many seconds do you want to adjust the text by?  You may use decimals and negative numbers.
+            How many seconds do you want to adjust the text by?  You may use decimals and negative numbers.<br>
+            Requests to adjust the text beyond the duration of the audio file will be ignored.
 			<input
 				class="w-full px-3 py-1 mt-12 mb-3 border border-gray-300 rounded"
                 v-model="offset"
 			/>
-			<br>
 
 			<button
 				class="w-full px-3 py-2 mt-16 text-sm font-medium text-white transition-colors border rounded bg-cyan-700 border-cyan-600 hover:bg-cyan-600"
 				@click="sendOffset()"
 			>
-				Try It
+				Adjust Text
 			</button>
 		</div>
 	</div>
