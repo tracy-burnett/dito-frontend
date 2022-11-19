@@ -105,6 +105,9 @@ export default {
 		timestep: function () {
 			this.fetchNewInterpretation();
 		},
+		"$store.state.renewViewer": function () {
+			this.fetchNewInterpretation();
+		},
 		currenthighlight: function () {
 			// if (this.$refs.highlightedwords && this.fontsize <= 16) {
 			// 	// this.$nextTick(() => {
