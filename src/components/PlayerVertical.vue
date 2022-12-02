@@ -218,38 +218,40 @@ export default {
 			) {
 				this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
 			} else if (
-				this.$store.state.incomingCurrentTime < this.startTimeSeconds
+				this.$store.state.incomingCurrentTime < this.startTimeSeconds || this.$store.state.incomingCurrentTime >= this.endTimeSeconds
 			) {
-				let tempendtime = this.endTimeSeconds;
-				this.wavesurfer.clearRegions();
-				this.updatingFromPrompter = false;
-				this.wavesurfer.addRegion({
-					start: this.$store.state.incomingCurrentTime,
-					end: tempendtime,
-					id: "region",
-					loop: false,
-				});
-				this.startTime = this.secondsToTime(
-					Math.round(this.$store.state.incomingCurrentTime)
-				);
-				this.endTime = this.secondsToTime(Math.round(tempendtime));
-				this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
-			} else if (this.$store.state.incomingCurrentTime >= this.endTimeSeconds) {
-				let tempendtime = this.endTimeSeconds;
-				this.wavesurfer.clearRegions();
-				this.updatingFromPrompter = false;
-				this.wavesurfer.addRegion({
-					start: this.$store.state.incomingCurrentTime,
-					end: this.totalDuration,
-					id: "region",
-					loop: false,
-				});
-				this.startTime = this.secondsToTime(
-					Math.round(this.$store.state.incomingCurrentTime)
-				);
-				this.endTime = this.secondsToTime(Math.round(this.totalDuration));
+				this.clearallregions()
+				// let tempendtime = this.endTimeSeconds;
+				// this.wavesurfer.clearRegions();
+				// this.updatingFromPrompter = false;
+				// this.wavesurfer.addRegion({
+				// 	start: this.$store.state.incomingCurrentTime,
+				// 	end: tempendtime,
+				// 	id: "region",
+				// 	loop: false,
+				// });
+				// this.startTime = this.secondsToTime(
+				// 	Math.round(this.$store.state.incomingCurrentTime)
+				// );
+				// this.endTime = this.secondsToTime(Math.round(tempendtime));
 				this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
 			}
+			// else if (this.$store.state.incomingCurrentTime >= this.endTimeSeconds) {
+			// 	let tempendtime = this.endTimeSeconds;
+			// 	this.wavesurfer.clearRegions();
+			// 	this.updatingFromPrompter = false;
+			// 	this.wavesurfer.addRegion({
+			// 		start: this.$store.state.incomingCurrentTime,
+			// 		end: this.totalDuration,
+			// 		id: "region",
+			// 		loop: false,
+			// 	});
+			// 	this.startTime = this.secondsToTime(
+			// 		Math.round(this.$store.state.incomingCurrentTime)
+			// 	);
+			// 	this.endTime = this.secondsToTime(Math.round(this.totalDuration));
+			// 	this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
+			// }
 			// this.startTimeSeconds = this.$store.state.startTimePrompter; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
 			// this.endTimeSeconds = this.$store.state.endTimePrompter; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
 			if (!this.playing) {
