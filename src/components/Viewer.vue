@@ -6,8 +6,8 @@
 
 			<br><br>
 			<p class="text-sm">
-				Click on the phrases below to skip to the part of the audio file that contains them.<br>
-				Change the slider above that says "highlight less / more" to highlight and refer to the text in shorter or longer phrases as words are being spoken.<br>When the text below is highlighted in phrases of a length that you like, then select an option from the "Download" menu to save the interpretation to your computer.
+				<!-- Click on the phrases below to skip to the part of the audio file that contains them.<br> -->
+				<!-- Change the slider above that says "highlight less / more" to highlight and refer to the text in shorter or longer phrases as words are being spoken.<br>When the text below is highlighted in phrases of a length that you like, then select an option from the "Download" menu to save the interpretation to your computer. -->
 			</p>
 			<!-- {{associations}}<br><br> -->
 			<!-- {{parsedAssociations}}<br><br> -->
@@ -17,7 +17,7 @@ also, if the user clicks on the text of that substring, snap the audio player to
 			<div
 				class="w-full h-full py-1 border-gray-300 rounded viewer"
 				:style="{ 'font-size': fontsize + 'px' }"
-				style="overscroll-behavior:none; height: 33vh;"
+				style="overscroll-behavior:none; height: 47vh;"
 			>
 				<span
 					v-for="substring in substringArray"
