@@ -3,7 +3,7 @@
 		class="flex flex-col items-center justify-center flex-1 flex-auto h-full backdrop"
 
 	>
-		<div class="flex flex-col items-center p-8 overflow-y-scroll bg-white border border-gray-300 shadow-md rounded-xl xl:w-2/5 lg:w-2/4 md:w-2/3">
+		<div class="flex flex-col items-center p-8 overflow-y-scroll bg-white border border-gray-300 shadow-md modal rounded-xl xl:w-2/5 lg:w-2/4 md:w-2/3">
 			<button
 				class="mx-4 my-2 text-xl text-gray-500"
 				@click.prevent="closeModal()"
@@ -103,5 +103,15 @@ sendOffset() {
 	position: fixed;
 	width: 100%;
 	height: 100%;
+}
+
+.modal {
+	-ms-overflow-style: none; /* for Internet Explorer, Edge */
+	scrollbar-width: none; /* for Firefox */
+	overflow-y: scroll;
+}
+
+.modal::-webkit-scrollbar {
+	display: none; /* for Chrome, Safari, and Opera */
 }
 </style>
