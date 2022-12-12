@@ -23,7 +23,7 @@
 				Login
 			</button>
 
-			<p class="text-xs mt-[3vh]">(Forgot Password feature not available yet)</p>
+			<p class="text-xs mt-[3vh]">(Forgot Password feature not available)</p>
 		</div>
 		<p>-or-</p>
 		<div class="flex flex-col items-center w-2/5 ">
