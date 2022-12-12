@@ -222,7 +222,8 @@ export default {
 	},
 	methods: {
 		chooseanswer(answer) {
-			this.new_text_unstripped = answer;
+			if (interpretationStatus=="owner" || interpretationStatus=="editor")
+			{this.new_text_unstripped = answer;}
 		},
 
 		escapeRegex: function (string) {
