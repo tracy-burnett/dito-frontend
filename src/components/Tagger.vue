@@ -26,7 +26,7 @@
 			>
 				<span v-if="character.value=='\n'">
 					<span style="white-space: pre-wrap">{{ character.value }}</span></span>
-				<span v-else-if="!latest_text_character_array[character.index].newtag">
+				<span v-else-if="!new_associations[character.index+deletedfrombeginningIndex.length]">
 					<span
 						@click="addNewAssociation(character.index+deletedfrombeginningIndex.length)"
 						style="white-space: pre-wrap"
@@ -297,7 +297,7 @@ export default {
 				let sample_object = {};
 				sample_object.index = i;
 				sample_object.value = character_array[i];
-				sample_object.newtag = false;
+				// sample_object.newtag = false;
 				this.latest_text_character_array.push(sample_object);
 			}
 		},
@@ -309,9 +309,9 @@ export default {
 		clearTimestamps() {
 			this.new_associations = {};
 			// console.log(JSON.stringify(this.new_associations));
-			for (let k = 0; k < this.latest_text_character_array.length; k++) {
-				this.latest_text_character_array[k].newtag = false;
-			}
+			// for (let k = 0; k < this.latest_text_character_array.length; k++) {
+			// 	this.latest_text_character_array[k].newtag = false;
+			// }
 		},
 
 		clearOldTimestamps() {
@@ -324,9 +324,9 @@ export default {
 
 		// if you click on a character that you have tagged in this session, it untags it
 		removeThisAssociation(characterindex) {
-			this.latest_text_character_array[
-				characterindex - this.deletedfrombeginningIndex.length
-			].newtag = false;
+			// this.latest_text_character_array[
+			// 	characterindex - this.deletedfrombeginningIndex.length
+			// ].newtag = false;
 			delete this.new_associations[characterindex];
 			// console.log(JSON.stringify(this.new_associations));
 		},
@@ -335,9 +335,9 @@ export default {
 		addNewAssociation(characterindex) {
 			// console.log(characterindex);
 			let clicktime = this.$store.state.audioplayertime;
-			this.latest_text_character_array[
-				characterindex - this.deletedfrombeginningIndex.length
-			].newtag = true;
+			// this.latest_text_character_array[
+			// 	characterindex - this.deletedfrombeginningIndex.length
+			// ].newtag = true;
 			this.new_associations[characterindex] = Math.round(clicktime);
 			// console.log(JSON.stringify(this.new_associations));
 		},
