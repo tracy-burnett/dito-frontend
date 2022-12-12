@@ -26,7 +26,7 @@
 			<input
 				class="w-full px-3 py-1 border border-gray-300 rounded"
 				placeholder="email address"
-				v-model="email"
+				v-model="email_mixedcase"
 			/>
 
 			<button
@@ -47,10 +47,15 @@ export default {
 	components: {},
 	data() {
 		return {
-			email: "",
+			email_mixedcase: "",
 			//   int_language: "",
 			//   int_spacing: "",
 		};
+	},
+	computed: {
+		email() {
+return this.email_mixedcase.toLowerCase()
+		},
 	},
 	props: {
 		shared_editors: {
