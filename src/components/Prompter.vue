@@ -159,7 +159,7 @@ export default {
 			default: "",
 		},
 		scribing: {
-			default: 200,
+			default: 1250,
 		},
 		newPromptscounter: {
 			default: 0,
