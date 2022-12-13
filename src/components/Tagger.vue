@@ -3,8 +3,8 @@
 		<span class="py-1 font-bold border-gray-300 rounded ">{{ title }}</span>
 		in <span class="py-1 border-gray-300 rounded">{{ language_name }}</span><br /><br>
 		<p class="text-sm">
-			Click on the words as you hear them being spoken, and they will turn green. Click on them again if you are not satisfied with your timing, and they will revert to black.<br>
-			When you are satisfied with your clicks, click the "Save" button above. To clear all of the green, click "Clear New" above. To clear all of the timestamps within this interpretation from the database and start from scratch, click "Clear Old" (this cannot be undone).
+			Highlight a region of the audio file and click the words contained in it, and they will turn green. Click on them again to undo your selection.<br>To clear all of the green, click "Clear New" above.
+			When you are satisfied with your selection, click the "Save" button above.  Then repeat.
 
 		</p>
 
@@ -18,7 +18,7 @@
 		<div
 			class="w-full h-full py-1 border-gray-300 rounded tagger"
 			:style="{ 'font-size': fontsize + 'px' }"
-			style="overflow: scroll; height:33vh;"
+			style="overflow: scroll; height:42vh;"
 		>
 			<span
 				v-for="character in latest_text_character_array"
@@ -70,9 +70,9 @@ export default {
 		clearTimestampsvar: function () {
 			this.clearTimestamps();
 		},
-		clearOldTimestampsvar: function () {
-			this.clearOldTimestamps();
-		},
+		// clearOldTimestampsvar: function () {
+		// 	this.clearOldTimestamps();
+		// },
 		updateAssociations: function () {
 			this.updateAssociationsfunc();
 		},
@@ -88,9 +88,9 @@ export default {
 			default: 0,
 		},
 		fontsize: { default: 12 },
-		clearOldTimestampsvar: {
-			default: 0,
-		},
+		// clearOldTimestampsvar: {
+		// 	default: 0,
+		// },
 		updateAssociations: {
 			default: 0,
 		},
@@ -307,20 +307,23 @@ export default {
 		},
 
 		clearTimestamps() {
-			this.new_associations = {};
+			for (let prop in this.new_associations) {
+				delete this.new_associations[prop];
+			}
+			// this.new_associations = {};
 			// console.log(JSON.stringify(this.new_associations));
 			// for (let k = 0; k < this.latest_text_character_array.length; k++) {
 			// 	this.latest_text_character_array[k].newtag = false;
 			// }
 		},
 
-		clearOldTimestamps() {
-			for (let k = 0; k < this.latest_text_character_array.length; k++) {
-				this.addNewNullAssociation(k);
-			}
+		// clearOldTimestamps() {
+		// 	for (let k = 0; k < this.latest_text_character_array.length; k++) {
+		// 		this.addNewNullAssociation(k);
+		// 	}
 
-			this.updateAssociationsfunc();
-		},
+		// 	this.updateAssociationsfunc();
+		// },
 
 		// if you click on a character that you have tagged in this session, it untags it
 		removeThisAssociation(characterindex) {
@@ -334,11 +337,25 @@ export default {
 		// if you click on a character, it gives it a new tag
 		addNewAssociation(characterindex) {
 			// console.log(characterindex);
-			let clicktime = this.$store.state.audioplayertime;
+			// let clicktime = this.$store.state.audioplayertime;
 			// this.latest_text_character_array[
 			// 	characterindex - this.deletedfrombeginningIndex.length
 			// ].newtag = true;
-			this.new_associations[characterindex] = Math.round(clicktime);
+			// this.new_associations[characterindex] = {Math.round(clicktime)};
+			this.new_associations[characterindex] = {};
+			this.new_associations[characterindex][
+				Math.round(
+					((this.$store.state.startTimePrompter +
+						this.$store.state.endTimePrompter) *
+						100) /
+						2
+				)
+			] = Math.round(
+				((this.$store.state.endTimePrompter -
+					this.$store.state.startTimePrompter) *
+					100) /
+					2
+			);
 			// console.log(JSON.stringify(this.new_associations));
 		},
 

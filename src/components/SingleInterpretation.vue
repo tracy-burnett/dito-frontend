@@ -191,7 +191,6 @@
 				:fontsize="fontsize"
 				:clearTimestampsvar="clearTimestampsvar"
 				:updateAssociations="updateAssociations"
-				:clearOldTimestampsvar="clearOldTimestampsvar"
 				:saveEditscounter="saveEditscounter"
 				:newPromptscounter="newPromptscounter"
 				:downloadSRTcounter="downloadSRTcounter"
@@ -247,7 +246,7 @@ export default {
 			newPhrasescounter: 0,
 			// submitcounter: 0,
 			saveEditscounter: 0,
-			clearOldTimestampsvar: 0,
+			// clearOldTimestampsvar: 0,
 			interpretationStatus: "", // this remembers whether the currently logged-in user is a viewer, editor, or owner of the currently-displayed interpretation
 			styleoption: "Studio", // this can be Viewer, Editor, or Tagger, depending on how the user is currently interacting with the displayed interpretation
 			interpretationFull: {}, // this contains all of the information about the currently displayed interpretation
@@ -298,9 +297,9 @@ export default {
 		clearTimestamps() {
 			this.clearTimestampsvar++;
 		},
-		clearOldTimestamps() {
-			this.clearOldTimestampsvar++;
-		},
+		// clearOldTimestamps() {
+		// 	this.clearOldTimestampsvar++;
+		// },
 		saveEditsincrease() {
 			this.saveEditscounter++;
 		},
