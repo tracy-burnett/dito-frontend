@@ -57,7 +57,7 @@
       or to add a new column for an interpretation that has previously been created (displayInterpretationID). -->
 
 			</div>
-			<div v-if="$store.state.user">
+			<div>
 				<AddInterpretationViewer
 					:audio_id="audio_ID"
 					:interpretationsList="interpretationsList"
