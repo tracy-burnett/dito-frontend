@@ -134,7 +134,7 @@
 							id="timestepslider"
 							v-model="timestep"
 							type="range"
-							min="10"
+							min="0"
 							max="2500"
 							step="10"
 						/>
@@ -154,7 +154,7 @@
 							min="20"
 							max="4000"
 							step="10"
-						/>
+						/><!-- do not let min go to less than 20, since then it will be within the margin of error of the scriber auto-segmenter -->
 					</div>
 
 				</div>
