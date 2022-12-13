@@ -11,7 +11,7 @@
 		</div>
 
 		<div class="fixed m-auto left-0 right-0 w-[70vw]">
-			<p class="text-sm text-center text-slate-100">Press "SHIFT" and left-click to play or pause the audio player at any time.</p>
+			<p class="text-sm text-center text-slate-100">{{text}}</p>
 		</div>
 
 		<div class="fixed right-0 flex flex-col items-center">

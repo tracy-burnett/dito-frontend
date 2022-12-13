@@ -1,7 +1,7 @@
 <template>
 <div
 		@click.shift.exact="playerPlayPause++">
-	<Navbar />
+	<Navbar :text=navtext />
 	<div class="relative overflow-x-hidden justify-items-center hero">
 		<div class="pt-[5vh] flex flex-row justify-between h-[100vh]">
 			<span
@@ -101,6 +101,7 @@ export default {
 			showAddInterpretationModal: false,
 			showUploadIntModal: false,
 			playerPlayPause: 0, // when this changes, play or pause Player Vertical
+			navtext: `Press "Shift" and left-click to play or pause the audio player at any time.`,
 		};
 	},
 	props: {

@@ -2,8 +2,9 @@
 	<div class="flex justify-around pt-12">
 		<div class="flex flex-col items-center w-2/5 ">
 			<h1 class="text-2xl font-bold text-slate-700">Upload Audio File</h1>
+			<p class="mt-2 text-xs">Upload any audio file.  If an .mp3 file acts strange within Dito, use VBRFix free software, then upload it again.</p>
 			<input
-				class="w-full px-3 py-1 mt-12 mb-3 border border-gray-300 rounded"
+				class="w-full px-3 py-1 mt-6 mb-3 border border-gray-300 rounded"
 				type="file"
 				accept="audio/mpeg,audio/mp4,audio-x/flac,audio/x-mpegurl,audio/x-wav,audio/x-ms-wma,audio/x-aiff,audio/x-aac,audio/ogg,audio/mp4a-latm,audio/midi,audio/mpegurl,audio/x-m4a,audio/mp3,audio/x-mp3,audio/x-mpeg,audio/3gpp,audio/3gpp2,audio/vnd.wave"
 				ref="audioInput"
