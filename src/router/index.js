@@ -65,7 +65,7 @@ const routes = [
   //   component: Profile
   // },
   {
-    path: '/storybook/',
+    path: '/storybook/:audio_ID',
     name: 'Storybook',
     component: Storybook,
     props: true

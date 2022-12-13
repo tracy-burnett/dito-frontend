@@ -17,7 +17,7 @@ also, if the user clicks on the text of that substring, snap the audio player to
 			<div
 				class="w-full h-full py-1 border-gray-300 rounded viewer"
 				:style="{ 'font-size': fontsize + 'px' }"
-				style="overscroll-behavior:none; height: 33vh;"
+				style="overscroll-behavior:none; height: 38vh;"
 			>
 				<span
 					v-for="substring in substringArray"
@@ -40,6 +40,12 @@ also, if the user clicks on the text of that substring, snap the audio player to
 					<span
 						v-else-if="highlight(substring.startingcharacter)==2"
 						class="text-blue-600"
+						style="white-space: pre-wrap"
+						@click="snapToTimestamp(substring)"
+					>{{ substring.text }}</span>
+					<span
+						v-else-if="highlight(substring.startingcharacter)==3"
+						class="text-purple-600"
 						style="white-space: pre-wrap"
 						@click="snapToTimestamp(substring)"
 					>{{ substring.text }}</span>
@@ -90,7 +96,7 @@ export default {
 			default: "",
 		},
 		downloadSRTcounter: { default: 0 },
-		timestep: { default: 500 },
+		timestep: { default: 0 },
 		fontsize: { default: 12 },
 		interpretation_id: { default: "" },
 		interpretationStatus: { default: "" }, // describes whether the currently logged-in user is a viewer, editor, or owner of the interpretation being viewed

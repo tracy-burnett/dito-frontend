@@ -1,5 +1,6 @@
 <template>
-
+<div
+		@click.shift="playerPlayPause++">
 	<Navbar />
 	<div class="relative overflow-x-hidden justify-items-center hero">
 		<div class="pt-[5vh] flex flex-row justify-between h-[100vh]">
@@ -12,7 +13,7 @@
 					@addCreatedInterpretation="addCreatedInterpretation($event)"
 					@closeInterpretationModal="closeInterpretationModal()"
 				/>
-			</span>	
+			</span>
 			<span
 				v-if="showUploadIntModal"
 				class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
@@ -26,8 +27,10 @@
 
 			<div>
 				<PlayerVertical
+				v-if="this.$store.state.authCompleted"
 					:key="playerKey"
 					:audio_ID="audio_ID"
+					:playerPlayPause="playerPlayPause"
 					@rerenderPlayer="playerKey++"
 				/>
 			</div>
@@ -57,7 +60,7 @@
       or to add a new column for an interpretation that has previously been created (displayInterpretationID). -->
 
 			</div>
-			<div v-if="$store.state.user">
+			<div>
 				<AddInterpretationViewer
 					:audio_id="audio_ID"
 					:interpretationsList="interpretationsList"
@@ -68,6 +71,7 @@
 			</div>
 		</div>
 	</div>
+</div>
 </template>
 
 <script>
@@ -96,6 +100,7 @@ export default {
 			formerInterpretationsList: [], // the list of interpretations currently being viewed by this user in this browser window
 			showAddInterpretationModal: false,
 			showUploadIntModal: false,
+			playerPlayPause: 0, // when this changes, play or pause Player Vertical
 		};
 	},
 	props: {
@@ -103,60 +108,24 @@ export default {
 	},
 	computed: {},
 
+	watch: {
+		"$store.state.authCompleted": function () {
+			if (this.$store.state.authCompleted===true)
+			{this.getInterpretations();}
+		},
+	},
+
 	created() {
 		window.addEventListener("resize", this.myEventHandler);
+	},
+
+	mounted() {
+		if (this.$store.state.authCompleted===true)
+			{this.getInterpretations();}
 	},
 	unmounted() {
 		this.$store.commit("updateAudioDuration", 0);
 		window.removeEventListener("resize", this.myEventHandler);
-	},
-
-	async mounted() {
-		//fetch the interpretations the logged-in user has access to for this audio file
-
-		if (this.$store.state.user) {
-			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
-			await getIdToken(this.$store.state.user)
-				.then((idToken) => {
-					this.$store.commit("SetIdToken", idToken);
-					// console.log(this.$store.state.idToken)
-				})
-				.catch((error) => {
-					// An error happened.
-					console.log("Oops. " + error.code + ": " + error.message);
-				});
-		}
-
-		const apiUrl =
-			process.env.VUE_APP_api_URL +
-			"interpretations/audio/" +
-			this.audio_ID +
-			"/";
-		fetch(apiUrl, {
-			method: "GET",
-
-			headers: {
-				"Content-Type": "application/json",
-
-				Authorization: this.$store.state.idToken,
-			},
-		})
-			.then((response) => response.json())
-			.then((data) => {
-				this.interpretationsList = data["interpretations"];
-				let temp_id = this.interpretationsList[0].id;
-				this.displayInterpretationID(temp_id);
-			})
-			.catch((error) => console.error("Error:", error));
-
-		this.$store.commit(
-			"updateConsolesWidth",
-			document.documentElement.clientWidth
-		);
-		this.$store.commit(
-			"updateConsolesHeight",
-			document.documentElement.clientHeight
-		);
 	},
 
 	beforeUnmount() {
@@ -166,6 +135,54 @@ export default {
 	},
 
 	methods: {
+		async getInterpretations() {
+			//fetch the interpretations the logged-in user has access to for this audio file
+
+			if (this.$store.state.user) {
+				// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+				await getIdToken(this.$store.state.user)
+					.then((idToken) => {
+						this.$store.commit("SetIdToken", idToken);
+						// console.log(this.$store.state.idToken)
+					})
+					.catch((error) => {
+						// An error happened.
+						console.log("Oops. " + error.code + ": " + error.message);
+					});
+			}
+
+			const apiUrl =
+				process.env.VUE_APP_api_URL +
+				"interpretations/audio/" +
+				this.audio_ID +
+				"/";
+			fetch(apiUrl, {
+				method: "GET",
+
+				headers: {
+					"Content-Type": "application/json",
+
+					Authorization: this.$store.state.idToken,
+				},
+			})
+				.then((response) => response.json())
+				.then((data) => {
+					this.interpretationsList = data["interpretations"];
+					let temp_id = this.interpretationsList[0].id;
+					this.displayInterpretationID(temp_id);
+				})
+				.catch((error) => console.error("Error:", error));
+
+			this.$store.commit(
+				"updateConsolesWidth",
+				document.documentElement.clientWidth
+			);
+			this.$store.commit(
+				"updateConsolesHeight",
+				document.documentElement.clientHeight
+			);
+		},
+
 		myEventHandler(e) {
 			this.$store.commit(
 				"updateConsolesWidth",

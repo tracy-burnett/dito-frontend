@@ -57,7 +57,8 @@ export default {
 			this.toggleStorybookStyle('Viewer')
 		}
 		else if (this.$store.state.infobit=="InfoRevitalize")
-		{this.toggleStorybookStyle('Studio')}
+		{this.toggleStorybookStyle('Studio')
+		this.$store.commit('toggleInfobit', 'PublicCardList');}
 	},
 };
 </script>

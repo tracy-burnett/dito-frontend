@@ -102,7 +102,7 @@
 	background: #dbeafe;"
 					v-else-if="readyVerification==0"
 				>
-					<p>please be patient while your audio is prepared</p>
+					<p>requesting permission to access audio file</p>
 				</div>
 			</div>
 
@@ -145,6 +145,9 @@ export default {
 	props: {
 		audio_ID: {
 			default: "",
+		},		
+		playerPlayPause: {
+			default: 0,
 		},
 	},
 
@@ -173,6 +176,8 @@ export default {
 
 	// watch these variables to see if they change.  if they do, then call the corresponding functions.
 	watch: {
+		playerPlayPause: function(){this.play()},
+
 		readyVerification: function () {
 			if (this.readyVerification == 2) {
 				// FLAG
@@ -218,38 +223,40 @@ export default {
 			) {
 				this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
 			} else if (
-				this.$store.state.incomingCurrentTime < this.startTimeSeconds
+				this.$store.state.incomingCurrentTime < this.startTimeSeconds || this.$store.state.incomingCurrentTime >= this.endTimeSeconds
 			) {
-				let tempendtime = this.endTimeSeconds;
-				this.wavesurfer.clearRegions();
-				this.updatingFromPrompter = false;
-				this.wavesurfer.addRegion({
-					start: this.$store.state.incomingCurrentTime,
-					end: tempendtime,
-					id: "region",
-					loop: false,
-				});
-				this.startTime = this.secondsToTime(
-					Math.round(this.$store.state.incomingCurrentTime)
-				);
-				this.endTime = this.secondsToTime(Math.round(tempendtime));
-				this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
-			} else if (this.$store.state.incomingCurrentTime >= this.endTimeSeconds) {
-				let tempendtime = this.endTimeSeconds;
-				this.wavesurfer.clearRegions();
-				this.updatingFromPrompter = false;
-				this.wavesurfer.addRegion({
-					start: this.$store.state.incomingCurrentTime,
-					end: this.totalDuration,
-					id: "region",
-					loop: false,
-				});
-				this.startTime = this.secondsToTime(
-					Math.round(this.$store.state.incomingCurrentTime)
-				);
-				this.endTime = this.secondsToTime(Math.round(this.totalDuration));
+				this.clearallregions()
+				// let tempendtime = this.endTimeSeconds;
+				// this.wavesurfer.clearRegions();
+				// this.updatingFromPrompter = false;
+				// this.wavesurfer.addRegion({
+				// 	start: this.$store.state.incomingCurrentTime,
+				// 	end: tempendtime,
+				// 	id: "region",
+				// 	loop: false,
+				// });
+				// this.startTime = this.secondsToTime(
+				// 	Math.round(this.$store.state.incomingCurrentTime)
+				// );
+				// this.endTime = this.secondsToTime(Math.round(tempendtime));
 				this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
 			}
+			// else if (this.$store.state.incomingCurrentTime >= this.endTimeSeconds) {
+			// 	let tempendtime = this.endTimeSeconds;
+			// 	this.wavesurfer.clearRegions();
+			// 	this.updatingFromPrompter = false;
+			// 	this.wavesurfer.addRegion({
+			// 		start: this.$store.state.incomingCurrentTime,
+			// 		end: this.totalDuration,
+			// 		id: "region",
+			// 		loop: false,
+			// 	});
+			// 	this.startTime = this.secondsToTime(
+			// 		Math.round(this.$store.state.incomingCurrentTime)
+			// 	);
+			// 	this.endTime = this.secondsToTime(Math.round(this.totalDuration));
+			// 	this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
+			// }
 			// this.startTimeSeconds = this.$store.state.startTimePrompter; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
 			// this.endTimeSeconds = this.$store.state.endTimePrompter; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
 			if (!this.playing) {

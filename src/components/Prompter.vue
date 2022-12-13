@@ -159,7 +159,7 @@ export default {
 			default: "",
 		},
 		scribing: {
-			default: 200,
+			default: 1250,
 		},
 		newPromptscounter: {
 			default: 0,
@@ -182,6 +182,7 @@ export default {
 			this.findGaps();
 		},
 		newPromptscounter: function () {
+			// this.sensitivity=.05
 			this.newPromptorScribingToggle = false;
 			if (this.allowSubmit == true && this.new_text != "") {
 				// this.newpromptsfunc will be called if submit is successful inside updatetext()

@@ -6,7 +6,7 @@
 			<input
 				class="w-full px-3 border border-gray-300 rounded mt-[2vh]"
 				placeholder="Email"
-				v-model="email"
+				v-model="email_mixedcase"
 				@keyup.enter="login(email, password)"
 			/>
 			<input
@@ -23,7 +23,7 @@
 				Login
 			</button>
 
-			<p class="text-xs mt-[3vh]">(Forgot Password feature not available yet)</p>
+			<p class="text-xs mt-[3vh]">(Forgot Password feature not available)</p>
 		</div>
 		<p>-or-</p>
 		<div class="flex flex-col items-center w-2/5 ">
@@ -32,7 +32,7 @@
 			<input
 				class="w-full px-3 border border-gray-300 rounded mt-[2vh]"
 				placeholder="Email"
-				v-model="reg_email"
+				v-model="reg_email_mixedcase"
 				@keyup.enter="
     register(reg_email, reg_password, reg_display_name, reg_description, reg_anonymous)
   "
@@ -95,9 +95,9 @@ export default {
 	components: {},
 	data() {
 		return {
-			email: "",
+			email_mixedcase: "",
 			password: "",
-			reg_email: "",
+			reg_email_mixedcase: "",
 			reg_password: "",
 			reg_password_verify: "",
 			reg_display_name: "",
@@ -112,6 +112,12 @@ export default {
 			{return true}
 			else
 			{return false}
+		},
+		email() {
+return this.email_mixedcase.toLowerCase()
+		},
+		reg_email() {
+return this.reg_email_mixedcase.toLowerCase()
 		},
 	},
 	methods: {

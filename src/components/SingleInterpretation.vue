@@ -1,29 +1,29 @@
 <template>
 	<div class="h-full singleint">
 		<span
-				v-if="showSyncingModal"
-				class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
-			>
-				<SyncingModal
-					:audio_id="audio_id"
+			v-if="showSyncingModal"
+			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
+		>
+			<SyncingModal
+				:audio_id="audio_id"
 				:interpretation_id="interpretation_id"
 				@closeSyncingModal="closeSyncingModal()"
-				/>
-			</span>
+			/>
+		</span>
 		<!-- this SingleInterpretation component represents what is viewable in a single interpretation column of an open storybook -->
 		<div class="flex flex-col -mt-[0vh]">
 			<div class="flex flex-row justify-center ">
 				<div class="sticky flex flex-row flex-wrap justify-around shrink ">
 
 					<div v-if="styleoption==='Viewer' && (this.interpretationStatus == 'owner' || this.interpretationStatus=='editor')">
-					
-					<button
-						class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-						@click="toggleSyncingModal()"
-					>
-						Sync
-					</button>
-				</div>
+
+						<button
+							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
+							@click="toggleSyncingModal()"
+						>
+							Sync
+						</button>
+					</div>
 					<div>
 						<DeleteInterpretationViewer
 							:interpretation_id="interpretation_id"
@@ -45,7 +45,6 @@
 						/>
 					</div>
 
-
 				</div>
 				<div class="sticky flex flex-row flex-wrap-reverse justify-around shrink top-12">
 
@@ -57,7 +56,7 @@
 						/>
 					</div>
 					<div v-if="styleoption==='Viewer' && (this.interpretationStatus == 'owner' || this.interpretationStatus=='editor')">
-					<!--FLAG-->
+						<!--FLAG-->
 						<div
 							class="dropdown"
 							style="float: right"
@@ -96,15 +95,14 @@
 						</button>
 					</div>
 
-
 					<!-- quick and dirty way to purge the database of all tags for this interpretation, mainly used for debugging purposes -->
-					<div v-if="styleoption==='Tagger'"><button
+					<!-- <div v-if="styleoption==='Tagger'"><button
 							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
 							@click="clearOldTimestamps()"
 						>
 							Clear Old
-						</button></div>
-						<div v-if="styleoption==='Tagger'"><button
+						</button></div> -->
+					<div v-if="styleoption==='Tagger'"><button
 							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
 							@click="updateAssociationsfunc()"
 						>
@@ -136,7 +134,7 @@
 							id="timestepslider"
 							v-model="timestep"
 							type="range"
-							min="10"
+							min="0"
 							max="2500"
 							step="10"
 						/>
@@ -156,7 +154,7 @@
 							min="20"
 							max="4000"
 							step="10"
-						/>
+						/><!-- do not let min go to less than 20, since then it will be within the margin of error of the scriber auto-segmenter -->
 					</div>
 
 				</div>
@@ -193,7 +191,6 @@
 				:fontsize="fontsize"
 				:clearTimestampsvar="clearTimestampsvar"
 				:updateAssociations="updateAssociations"
-				:clearOldTimestampsvar="clearOldTimestampsvar"
 				:saveEditscounter="saveEditscounter"
 				:newPromptscounter="newPromptscounter"
 				:downloadSRTcounter="downloadSRTcounter"
@@ -238,8 +235,8 @@ export default {
 
 	data: () => {
 		return {
-			timestep: 500,
-			scribing: 200,
+			timestep: 0,
+			scribing: 1250,
 			studying: 200,
 			fontsize: 16,
 			updateAssociations: 0,
@@ -249,7 +246,7 @@ export default {
 			newPhrasescounter: 0,
 			// submitcounter: 0,
 			saveEditscounter: 0,
-			clearOldTimestampsvar: 0,
+			// clearOldTimestampsvar: 0,
 			interpretationStatus: "", // this remembers whether the currently logged-in user is a viewer, editor, or owner of the currently-displayed interpretation
 			styleoption: "Studio", // this can be Viewer, Editor, or Tagger, depending on how the user is currently interacting with the displayed interpretation
 			interpretationFull: {}, // this contains all of the information about the currently displayed interpretation
@@ -300,9 +297,9 @@ export default {
 		clearTimestamps() {
 			this.clearTimestampsvar++;
 		},
-		clearOldTimestamps() {
-			this.clearOldTimestampsvar++;
-		},
+		// clearOldTimestamps() {
+		// 	this.clearOldTimestampsvar++;
+		// },
 		saveEditsincrease() {
 			this.saveEditscounter++;
 		},
@@ -388,7 +385,6 @@ export default {
 .singleint::-webkit-scrollbar {
 	display: none; /* for Chrome, Safari, and Opera */
 }
-
 
 .dropbtn {
 	/* background-color: #7833ff; */
