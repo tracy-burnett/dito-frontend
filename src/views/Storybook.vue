@@ -27,6 +27,7 @@
 
 			<div>
 				<PlayerVertical
+				v-if="this.$store.state.authCompleted"
 					:key="playerKey"
 					:audio_ID="audio_ID"
 					:playerPlayPause="playerPlayPause"
