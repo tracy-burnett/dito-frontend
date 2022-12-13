@@ -9,8 +9,8 @@ import { auth } from "./firebase";
 import { onAuthStateChanged, getIdToken } from "firebase/auth";
 
 export default {
-  created() {
-    onAuthStateChanged(auth, (user) => {
+  async created() {
+    await onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
@@ -32,6 +32,10 @@ export default {
         console.log("everybody signed out");
                   // this.$router.push("/");
       }
+
+      this.$store.commit(
+						"confirmAuth"
+					);
     });
   },
 };

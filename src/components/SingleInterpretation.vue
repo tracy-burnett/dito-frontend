@@ -235,7 +235,7 @@ export default {
 
 	data: () => {
 		return {
-			timestep: 500,
+			timestep: 0,
 			scribing: 1250,
 			studying: 200,
 			fontsize: 16,

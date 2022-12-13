@@ -2,6 +2,7 @@
 	<div
 		class="flex flex-col h-[20vh] mt-[6vh]"
 		style="position:fixed;"
+		@click.alt="play()"
 	>
 
 		<!-- playback speed slider -->

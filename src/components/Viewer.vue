@@ -96,7 +96,7 @@ export default {
 			default: "",
 		},
 		downloadSRTcounter: { default: 0 },
-		timestep: { default: 500 },
+		timestep: { default: 0 },
 		fontsize: { default: 12 },
 		interpretation_id: { default: "" },
 		interpretationStatus: { default: "" }, // describes whether the currently logged-in user is a viewer, editor, or owner of the interpretation being viewed
