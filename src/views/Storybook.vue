@@ -1,6 +1,6 @@
 <template>
 <div
-		@click.shift="playerPlayPause++">
+		@click.shift.exact="playerPlayPause++">
 	<Navbar />
 	<div class="relative overflow-x-hidden justify-items-center hero">
 		<div class="pt-[5vh] flex flex-row justify-between h-[100vh]">
