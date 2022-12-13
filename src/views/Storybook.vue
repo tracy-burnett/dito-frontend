@@ -1,5 +1,6 @@
 <template>
-
+<div
+		@click.shift="playerPlayPause++">
 	<Navbar />
 	<div class="relative overflow-x-hidden justify-items-center hero">
 		<div class="pt-[5vh] flex flex-row justify-between h-[100vh]">
@@ -28,6 +29,7 @@
 				<PlayerVertical
 					:key="playerKey"
 					:audio_ID="audio_ID"
+					:playerPlayPause="playerPlayPause"
 					@rerenderPlayer="playerKey++"
 				/>
 			</div>
@@ -68,6 +70,7 @@
 			</div>
 		</div>
 	</div>
+</div>
 </template>
 
 <script>
@@ -96,6 +99,7 @@ export default {
 			formerInterpretationsList: [], // the list of interpretations currently being viewed by this user in this browser window
 			showAddInterpretationModal: false,
 			showUploadIntModal: false,
+			playerPlayPause: 0, // when this changes, play or pause Player Vertical
 		};
 	},
 	props: {

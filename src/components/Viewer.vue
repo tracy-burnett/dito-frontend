@@ -17,7 +17,7 @@ also, if the user clicks on the text of that substring, snap the audio player to
 			<div
 				class="w-full h-full py-1 border-gray-300 rounded viewer"
 				:style="{ 'font-size': fontsize + 'px' }"
-				style="overscroll-behavior:none; height: 39vh;"
+				style="overscroll-behavior:none; height: 38vh;"
 			>
 				<span
 					v-for="substring in substringArray"

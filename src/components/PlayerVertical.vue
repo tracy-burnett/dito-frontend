@@ -2,7 +2,6 @@
 	<div
 		class="flex flex-col h-[20vh] mt-[6vh]"
 		style="position:fixed;"
-		@click.alt="play()"
 	>
 
 		<!-- playback speed slider -->
@@ -146,6 +145,9 @@ export default {
 	props: {
 		audio_ID: {
 			default: "",
+		},		
+		playerPlayPause: {
+			default: 0,
 		},
 	},
 
@@ -174,6 +176,8 @@ export default {
 
 	// watch these variables to see if they change.  if they do, then call the corresponding functions.
 	watch: {
+		playerPlayPause: function(){this.play()},
+
 		readyVerification: function () {
 			if (this.readyVerification == 2) {
 				// FLAG
