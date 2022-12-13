@@ -1,10 +1,12 @@
 <template>
-	<div class="flex-auto">
+	<div class="flex-auto"
+			@mousedown.left="mouseHighlighting=true"
+			@mouseup.left="mouseHighlighting=false">
 		<span class="py-1 font-bold border-gray-300 rounded ">{{ title }}</span>
 		in <span class="py-1 border-gray-300 rounded">{{ language_name }}</span><br /><br>
 		<p class="text-sm">
-			Highlight a region of the audio file and click the words contained in it, and they will turn green. Click on them again to undo your selection.<br>To clear all of the green, click "Clear New" above.
-			When you are satisfied with your selection, click the "Save" button above.  Then repeat.
+			Highlight a region of the audio file.  Then, click or click-and-drag on the words that represent the meaning in the audio selection, and the words will turn green. To unselect words, click on them or hold "ALT" and drag over them, and they will turn black again.  To unselect all of the words at once, click "Clear New" above.
+			When you are satisfied with your selection, click the "Save" button above.  Repeat.
 
 		</p>
 
@@ -29,6 +31,8 @@
 				<span v-else-if="!new_associations[character.index+deletedfrombeginningIndex.length]">
 					<span
 						@click="addNewAssociation(character.index+deletedfrombeginningIndex.length)"
+						@mouseover.exact="addNewAssociationDrag(character.index+deletedfrombeginningIndex.length)"
+						@mouseleave.exact="addNewAssociationDrag(character.index+deletedfrombeginningIndex.length)"
 						style="white-space: pre-wrap"
 					>{{ character.value }}{{spaced_by}}</span></span>
 				<span
@@ -36,6 +40,8 @@
 					class="font-extrabold text-green-500"
 					style="white-space: pre-wrap"
 					@click="removeThisAssociation(character.index+deletedfrombeginningIndex.length)"
+					@mouseover.alt.exact="removeThisAssociationDrag(character.index+deletedfrombeginningIndex.length)"
+					@mouseleave.alt.exact="removeThisAssociationDrag(character.index+deletedfrombeginningIndex.length)"
 				>{{ character.value }}{{spaced_by}}</span>
 			</span>
 		</div>
@@ -64,6 +70,7 @@ export default {
 			latest_text_character_array: [],
 			new_associations: {},
 			spaced_by: "",
+			mouseHighlighting: false,
 		};
 	},
 	watch: {
@@ -359,6 +366,29 @@ export default {
 			// console.log(JSON.stringify(this.new_associations));
 		},
 
+		removeThisAssociationDrag(characterindex) {
+			if (this.mouseHighlighting)
+			{delete this.new_associations[characterindex];}
+		},
+
+		addNewAssociationDrag(characterindex) {
+			if (this.mouseHighlighting)
+{			this.new_associations[characterindex] = {};
+			this.new_associations[characterindex][
+				Math.round(
+					((this.$store.state.startTimePrompter +
+						this.$store.state.endTimePrompter) *
+						100) /
+						2
+				)
+			] = Math.round(
+				((this.$store.state.endTimePrompter -
+					this.$store.state.startTimePrompter) *
+					100) /
+					2
+			);}
+		},
+
 		addNewNullAssociation(characterindex) {
 			this.new_associations[characterindex] = null;
 		},
@@ -422,6 +452,12 @@ export default {
 	-ms-overflow-style: none; /* for Internet Explorer, Edge */
 	scrollbar-width: none; /* for Firefox */
 	overflow-y: scroll;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .tagger::-webkit-scrollbar {
