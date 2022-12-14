@@ -1,5 +1,38 @@
 <template>
 	<div>
+		<span
+			v-if="prompterHelp"
+			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
+		>
+			<PrompterInstructionsModal @closePrompterModal="prompterHelp=false" />
+		</span>
+		<span
+			v-if="editorHelp"
+			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
+		>
+		<EditorInstructionsModal @closeEditorModal="editorHelp=false" />
+		</span>
+		<span
+			v-if="taggerHelp"
+			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
+		>
+			<TaggerInstructionsModal @closeTaggerModal="taggerHelp=false" />
+		</span>
+		<span
+			v-if="viewerHelp"
+			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
+		>
+			<ViewerInstructionsModal @closeViewerModal="viewerHelp=false" />
+		</span>
+		<span
+			v-if="studioHelp"
+			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
+		>
+			<StudioInstructionsModal @closeStudioModal="studioHelp=false" />
+		</span>
+
+
+
 		<div
 			class="dropdown"
 			style="float: right"
@@ -11,27 +44,27 @@
 					<img
 						class="w-[2vh] top-0 bottom-0 m-auto cursor-pointer"
 						src="@/assets/icon_help.svg"
-						@click="prompterHelp"
+						@click="prompterHelp=true"
 					/>
 					<img
 						class="w-[2vh]  top-0 bottom-0 m-auto cursor-pointer"
 						src="@/assets/icon_help.svg"
-						@click="editorHelp"
+						@click="editorHelp=true"
 					/>
 					<img
 						class=" w-[2vh] right-[1vw] top-0 bottom-0 m-auto cursor-pointer"
 						src="@/assets/icon_help.svg"
-						@click="taggerHelp"
+						@click="taggerHelp=true"
 					/>
 					<img
 						class=" w-[2vh] right-[1vw] top-0 bottom-0 m-auto cursor-pointer"
 						src="@/assets/icon_help.svg"
-						@click="viewerHelp"
+						@click="viewerHelp=true"
 					/>
 					<img
 						class=" w-[2vh] right-[1vw] top-0 bottom-0 m-auto cursor-pointer"
 						src="@/assets/icon_help.svg"
-						@click="studioHelp"
+						@click="studioHelp=true"
 					/>
 				</div>
 
@@ -61,10 +94,29 @@
 </template>
 
 <script>
+import PrompterInstructionsModal from "@/components/PrompterInstructionsModal.vue";
+import EditorInstructionsModal from "@/components/EditorInstructionsModal.vue";
+import TaggerInstructionsModal from "@/components/TaggerInstructionsModal.vue";
+import ViewerInstructionsModal from "@/components/ViewerInstructionsModal.vue";
+import StudioInstructionsModal from "@/components/StudioInstructionsModal.vue";
+
 export default {
 	name: "StorybookStyleMenu",
 	data: () => {
-		return {};
+		return {
+			prompterHelp: false,
+			editorHelp: false,
+			taggerHelp: false,
+			viewerHelp: false,
+			studioHelp: false,
+		};
+	},
+	components: {
+		PrompterInstructionsModal,
+		EditorInstructionsModal,
+		TaggerInstructionsModal,
+		ViewerInstructionsModal,
+		StudioInstructionsModal,
 	},
 	props: {
 		interpretationStatus: {

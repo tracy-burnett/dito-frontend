@@ -20,7 +20,7 @@
 <script>
 
 export default {
-	name: "PrompterInstructionsModal",
+	name: "TaggerInstructionsModal",
 	components: {},
 	data() {
 		return {
@@ -31,7 +31,7 @@ export default {
 	methods: {
 	
 		closeModal() {
-			this.$emit("closePrompterModal");
+			this.$emit("closeTaggerModal");
 		},
 	},
 };
