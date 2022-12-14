@@ -10,11 +10,12 @@
 			<h1 class="text-2xl font-bold">Studying Instructions</h1>
 			<br />
             <p class="text-sm -mt-[1vh] text-justify pb-[3vh]">
-				1. Retype exactly whichever phrase most closely matches what you are hearing.<br><br>
+				1. Press "Shift" and left-click to play or pause the audio player at any time.<br><br>
+				2. Retype exactly whichever phrase most closely matches what you are hearing.<br><br>
 				
-				2. If you are correct, you will automatically receive a new prompt (no need to press "Enter").<br><br>
-				3. Click "New Phrase" above to skip the current prompt.<br><br>
-				4. Adjust the "listen to less / more" slider above to change the length of phrase that you are prompted with (note that adjusting this slider at all will bring you back to the beginning of the audio file).<br><br>
+				3. If you are correct, you will automatically receive a new prompt (no need to press "Enter").<br><br>
+				4. Click "New Phrase" above to skip the current prompt.<br><br>
+				5. Adjust the "listen to less / more" slider above to change the length of phrase that you are prompted with (note that adjusting this slider at all will bring you back to the beginning of the audio file).<br><br>
 			</p>
 		</div>
 	</div>

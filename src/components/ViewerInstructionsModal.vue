@@ -10,10 +10,11 @@
 			<h1 class="text-2xl font-bold">Viewing Instructions</h1>
 			<br />
             <p class="text-sm -mt-[1vh] text-justify pb-[3vh]">
-				1. Click on the phrases below to skip to the part of the audio file that contains them.<br><br>
-				2. Change the slider above that says "highlight less / more" to highlight and refer to the text in shorter or longer phrases as words are being spoken.<br><br>
+				1. Press "Shift" and left-click to play or pause the audio player at any time.<br><br>
+				2. Click on the phrases below to skip to the part of the audio file that contains them.<br><br>
+				3. Change the slider above that says "highlight less / more" to highlight and refer to the text in shorter or longer phrases as words are being spoken.<br><br>
 				
-				3. When the text below is highlighted in phrases of a length that you like, then select an option from the "Download" menu to save the interpretation to your computer.
+				4. When the text below is highlighted in phrases of a length that you like, then select an option from the "Download" menu to save the interpretation to your computer.
 			</p>
 		</div>
 	</div>
