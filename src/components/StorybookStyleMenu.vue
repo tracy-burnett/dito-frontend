@@ -11,22 +11,27 @@
 					<img
 						class="w-[2vh] top-0 bottom-0 m-auto cursor-pointer"
 						src="@/assets/icon_help.svg"
+						@click="prompterHelp"
 					/>
 					<img
 						class="w-[2vh]  top-0 bottom-0 m-auto cursor-pointer"
 						src="@/assets/icon_help.svg"
+						@click="editorHelp"
 					/>
 					<img
 						class=" w-[2vh] right-[1vw] top-0 bottom-0 m-auto cursor-pointer"
 						src="@/assets/icon_help.svg"
+						@click="taggerHelp"
 					/>
 					<img
 						class=" w-[2vh] right-[1vw] top-0 bottom-0 m-auto cursor-pointer"
 						src="@/assets/icon_help.svg"
+						@click="viewerHelp"
 					/>
 					<img
 						class=" w-[2vh] right-[1vw] top-0 bottom-0 m-auto cursor-pointer"
 						src="@/assets/icon_help.svg"
+						@click="studioHelp"
 					/>
 				</div>
 

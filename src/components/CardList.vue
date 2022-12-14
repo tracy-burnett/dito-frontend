@@ -629,9 +629,9 @@ export default {
 </script>
 
 <style scoped>
-::placeholder {
+/* ::placeholder { */
 	/* vertical-align: center; */
-}
+/* } */
 
 .privatecardlist {
 	-ms-overflow-style: none; /* for Internet Explorer, Edge */
