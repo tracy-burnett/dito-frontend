@@ -33,7 +33,7 @@ export default {
     Login,
   },
   mounted() {
-		document.title = "Dito - " + window.location.hostname
+		document.title = "Dito - " + window.location.hostname.split(".")[0]
 	},
 };
 </script>
