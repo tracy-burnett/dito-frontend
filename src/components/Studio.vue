@@ -339,7 +339,7 @@ export default {
 		latest_text_slices() {
 			this.substringArray = [];
 			if (this.parsedAssociations.length > 1) {
-			console.log("here")
+			// console.log("here")
 				this.i = 0;
 				while (this.i + 1 <= this.parsedAssociations.length) {
 					let slice = {};
