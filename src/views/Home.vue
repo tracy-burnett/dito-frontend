@@ -32,5 +32,8 @@ export default {
     InfoRevitalize,
     Login,
   },
+  mounted() {
+		document.title = "Dito - " + window.location.hostname
+	},
 };
 </script>

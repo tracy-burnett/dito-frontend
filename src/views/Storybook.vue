@@ -1,10 +1,7 @@
 <template>
 <div
 		@click.shift.exact="playerPlayPause++">
-	<Navbar :text=navtext />
-	<div class="relative overflow-x-hidden justify-items-center hero">
-		<div class="pt-[5vh] flex flex-row justify-between h-[100vh]">
-			<span
+		<span
 				v-if="showAddInterpretationModal"
 				class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
 			>
@@ -24,6 +21,10 @@
 					@closeUploadIntModal="closeUploadIntModal()"
 				/>
 			</span>
+
+		<Navbar :text=navtext />
+	<div class="relative overflow-x-hidden justify-items-center hero">
+		<div class="pt-[5vh] flex flex-row justify-between h-[100vh]">
 
 			<div>
 				<PlayerVertical
@@ -106,6 +107,7 @@ export default {
 	},
 	props: {
 		audio_ID: "",
+		title: "",
 	},
 	computed: {},
 
@@ -121,6 +123,7 @@ export default {
 	},
 
 	mounted() {
+		document.title = "Dito - " + this.title + " - " + window.location.hostname
 		if (this.$store.state.authCompleted===true)
 			{this.getInterpretations();}
 	},

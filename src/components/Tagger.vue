@@ -4,11 +4,8 @@
 			@mouseup.left="mouseHighlighting=false">
 		<span class="py-1 font-bold border-gray-300 rounded ">{{ title }}</span>
 		in <span class="py-1 border-gray-300 rounded">{{ language_name }}</span><br /><br>
-		<p class="text-sm">
-			Highlight a region of the audio file.  Then, click or click-and-drag on the words that represent the meaning in the audio selection, and the words will turn green. To unselect words, click on them or hold "ALT" and drag over them, and they will turn black again.  To unselect all of the words at once, click "Clear New" above.
-			When you are satisfied with your selection, click the "Save" button above.  Repeat.
 
-		</p>
+
 
 		<!-- {{new_associations}}<br><br> -->
 		<!-- {{startingindex}}<br><br> -->
@@ -20,7 +17,7 @@
 		<div
 			class="w-full h-full py-1 border-gray-300 rounded tagger"
 			:style="{ 'font-size': fontsize + 'px' }"
-			style="overflow: scroll; height:42vh;"
+			style="overflow: scroll; height:47.5vh;"
 		>
 			<span
 				v-for="character in latest_text_character_array"

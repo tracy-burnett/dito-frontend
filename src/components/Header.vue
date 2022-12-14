@@ -23,7 +23,7 @@
 			@mouseleave="browse=false"
 			v-else
 		>
-			<p class="text-xs">Click below to use your language skills to interpret an audio file uploaded by another user. Nobody will see your interpretation unless you share or publish it.</p>
+			<p class="text-xs lg:text-sm">Click below to use your language skills to interpret an audio file uploaded by another user. Nobody will see your interpretation unless you share or publish it.</p>
 		</div>
 
 		<div
@@ -46,7 +46,7 @@
 			@mouseleave="contribute=false"
 			v-else
 		>
-			<p class="text-xs">Click below to upload an authentic recording of a language or a dialect that you speak or care about.</p>
+			<p class="text-xs md:text-sm">Click below to upload an authentic recording of a language or a dialect that you speak or care about.</p>
 		</div>
 
 		<div
@@ -69,7 +69,7 @@
 			@mouseleave="publish=false"
 			v-else
 		>
-			<p class="text-xs">Click below to review, share, and publish (or unpublish) the audio files that you uploaded and the interpretations you wrote.</p>
+			<p class="text-xs md:text-sm">Click below to review, share, and publish (or unpublish) the audio files that you uploaded and the interpretations you wrote.</p>
 		</div>
 
 		<div
@@ -92,7 +92,7 @@
 			@mouseleave="revitalize=false"
 			v-else
 		>
-			<p class="text-xs">Click below to enhance your language skills and exposure with listening comprehension, reading comprehension, and typing training exercises in the context of any published storybook.</p>
+			<p class="text-xs lg:text-sm">Click below to enhance your language skills and exposure with listening comprehension, reading comprehension, and typing training exercises in the context of any published storybook.</p>
 		</div>
 
 		<p

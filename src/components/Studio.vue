@@ -8,17 +8,13 @@
 		in <span class="py-1 border-gray-300 rounded ">{{ language_name }}</span><br />
 
 		<!-- {{parsedAssociations}}<br> -->
-		<!-- {{substringArray}}<br> -->
+		{{substringArray}}<br>
 		<!-- {{phrasechoicesArray}}<br> -->
 		<!-- {{$store.state.startTimePrompter}}<br>
 		{{$store.state.endTimePrompter}}<br> -->
 
 		<div class="w-full h-full py-[1vh] border-gray-300 rounded">
-			<p class="text-sm">
-				Retype exactly whichever phrase most closely matches what you are hearing. If you are correct, you will automatically receive a new prompt (no need to press "Enter").<br>
-				Click "New Phrase" above to skip the current prompt.<br>
-				Adjust the "listen to less / more" slider above to change the length of phrase that you are prompted with (note that adjusting this slider at all will bring you back to the beginning of the audio file).<br><br>
-			</p>
+
 			<div
 				class="-mt-[2vh] pb-[2vh]"
 				v-if="substringArray.length>0"
@@ -38,7 +34,7 @@
 		<textarea
 			class="w-full h-full px-3 py-1 border-gray-300 rounded studio"
 			:style="{ 'font-size': fontsize + 'px' }"
-			style="overflow: scroll; height:14vh;"
+			style="overflow: scroll; height:22vh;"
 			placeholder="enter new text here"
 			v-model="new_text_unstripped"
 			ref="promptertextarea"
@@ -343,6 +339,7 @@ export default {
 		latest_text_slices() {
 			this.substringArray = [];
 			if (this.parsedAssociations.length > 1) {
+			console.log("here")
 				this.i = 0;
 				while (this.i + 1 <= this.parsedAssociations.length) {
 					let slice = {};

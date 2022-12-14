@@ -1,15 +1,79 @@
 <template>
 	<div>
+		<span
+			v-if="prompterHelp"
+			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
+		>
+			<PrompterInstructionsModal @closePrompterModal="prompterHelp=false" />
+		</span>
+		<span
+			v-if="editorHelp"
+			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
+		>
+		<EditorInstructionsModal @closeEditorModal="editorHelp=false" />
+		</span>
+		<span
+			v-if="taggerHelp"
+			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
+		>
+			<TaggerInstructionsModal @closeTaggerModal="taggerHelp=false" />
+		</span>
+		<span
+			v-if="viewerHelp"
+			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
+		>
+			<ViewerInstructionsModal @closeViewerModal="viewerHelp=false" />
+		</span>
+		<span
+			v-if="studioHelp"
+			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
+		>
+			<StudioInstructionsModal @closeStudioModal="studioHelp=false" />
+		</span>
+
+
+
 		<div
 			class="dropdown"
 			style="float: right"
 		>
 			<button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn">Interaction</button>
 			<div class="dropdown-content">
+
+				<div class="absolute right-0 mr-[1vw] grid h-full">
+					<img
+						class="w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer"
+						src="@/assets/icon_help.svg"
+						@click="prompterHelp=true"
+					/>
+					<img
+						class="w-[2.2vh]  top-0 bottom-0 m-auto cursor-pointer"
+						src="@/assets/icon_help.svg"
+						@click="editorHelp=true"
+					/>
+					<img
+						class=" w-[2.2vh] right-[1vw] top-0 bottom-0 m-auto cursor-pointer"
+						src="@/assets/icon_help.svg"
+						@click="taggerHelp=true"
+					/>
+					<img
+						class=" w-[2.2vh] right-[1vw] top-0 bottom-0 m-auto cursor-pointer"
+						src="@/assets/icon_help.svg"
+						@click="viewerHelp=true"
+					/>
+					<img
+						class=" w-[2.2vh] right-[1vw] top-0 bottom-0 m-auto cursor-pointer"
+						src="@/assets/icon_help.svg"
+						@click="studioHelp=true"
+					/>
+				</div>
+
 				<a
 					v-if="($store.state.prompterID == null || $store.state.prompterID == interpretation_id) && (interpretationStatus == 'owner' || interpretationStatus == 'editor')"
 					@click="toggleStorybookStyle('Prompter')"
-				>Scribing</a>
+				>
+					Scribing
+				</a>
 				<a
 					v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'"
 					@click="toggleStorybookStyle('Editor')"
@@ -18,10 +82,7 @@
 					v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'"
 					@click="toggleStorybookStyle('Tagger')"
 				>Tagging</a>
-				<a
-					@click="toggleStorybookStyle('Viewer')"
-				>Viewing</a>
-
+				<a @click="toggleStorybookStyle('Viewer')">Viewing</a>
 				<a
 					v-if="$store.state.prompterID == null || $store.state.prompterID == interpretation_id"
 					@click="toggleStorybookStyle('Studio')"
@@ -33,10 +94,29 @@
 </template>
 
 <script>
+import PrompterInstructionsModal from "@/components/PrompterInstructionsModal.vue";
+import EditorInstructionsModal from "@/components/EditorInstructionsModal.vue";
+import TaggerInstructionsModal from "@/components/TaggerInstructionsModal.vue";
+import ViewerInstructionsModal from "@/components/ViewerInstructionsModal.vue";
+import StudioInstructionsModal from "@/components/StudioInstructionsModal.vue";
+
 export default {
 	name: "StorybookStyleMenu",
 	data: () => {
-		return {};
+		return {
+			prompterHelp: false,
+			editorHelp: false,
+			taggerHelp: false,
+			viewerHelp: false,
+			studioHelp: false,
+		};
+	},
+	components: {
+		PrompterInstructionsModal,
+		EditorInstructionsModal,
+		TaggerInstructionsModal,
+		ViewerInstructionsModal,
+		StudioInstructionsModal,
 	},
 	props: {
 		interpretationStatus: {
@@ -53,12 +133,12 @@ export default {
 		},
 	},
 	mounted() {
-		if (this.$store.state.infobit=="PublicCardList") {
-			this.toggleStorybookStyle('Viewer')
+		if (this.$store.state.infobit == "PublicCardList") {
+			this.toggleStorybookStyle("Viewer");
+		} else if (this.$store.state.infobit == "InfoRevitalize") {
+			this.toggleStorybookStyle("Studio");
+			this.$store.commit("toggleInfobit", "PublicCardList");
 		}
-		else if (this.$store.state.infobit=="InfoRevitalize")
-		{this.toggleStorybookStyle('Studio')
-		this.$store.commit('toggleInfobit', 'PublicCardList');}
 	},
 };
 </script>
