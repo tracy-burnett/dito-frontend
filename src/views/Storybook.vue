@@ -123,7 +123,7 @@ export default {
 	},
 
 	mounted() {
-		document.title = "Dito - " + this.title + " - " + window.location.hostname
+		document.title = "Dito - " + this.title + " - " + window.location.hostname.split(".")[0]
 		if (this.$store.state.authCompleted===true)
 			{this.getInterpretations();}
 	},
