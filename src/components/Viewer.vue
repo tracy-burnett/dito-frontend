@@ -5,7 +5,8 @@
 			in <span class="py-1 border-gray-300 rounded">{{ language_name }}</span>
 
 			<br><br>
-
+			<!-- {{lastTimestamp}} -->
+			<!-- {{nextTimestamp}} -->
 			<!-- {{associations}}<br><br> -->
 			<!-- {{parsedAssociations}}<br><br> -->
 			<!-- {{substringArray}}<br><br> -->
@@ -22,7 +23,7 @@ also, if the user clicks on the text of that substring, snap the audio player to
 					ref="highlightedwords"
 				>
 
-				<span
+					<span
 						v-if="highlight(substring.startingcharacter)==0"
 						class="cursor-pointer"
 						@click="snapToTimestamp(substring)"
@@ -69,8 +70,11 @@ export default {
 			language_name: "",
 			title: "",
 			srt: "",
-			currenthighlight: 0,
+			// currenthighlight: 0,
 			// fontsizeoriginal: 12,
+			relevantTimestamps: [],
+			lastTimestamp: 0,
+			nextTimestamp: 0,
 			relevantCharacters: [], // character indices in the text where highlighting might need to begin or end
 			parsedAssociations: [], // array of objects that each indicates which range of characters should be highlighted within a given range of milliseconds
 			substringArray: [], // array of objects that each includes a substring of the displayed text, with the index of the substring's starting character
@@ -111,15 +115,44 @@ export default {
 		"$store.state.renewViewer": function () {
 			this.fetchNewInterpretation();
 		},
-		currenthighlight: function () {
-			// if (this.$refs.highlightedwords && this.fontsize <= 16) {
-			// 	// this.$nextTick(() => {
-			// 	this.$refs.highlightedwords[this.currenthighlight].scrollIntoView({
-			// 		block: "start",
-			// 	});
-			// 	// });
+		"$store.state.audioplayertime": function () {
+			// if (this.$store.state.audioplayertime >= this.nextTimestamp)
+			// {
+			// 	this.lastTimestamp=this.nextTimestamp
+			// 	//rerender DOM
+			// 	if (this.nextTimestamp != this.$store.state.audioDuration)
+			// 	{this.nextTimestamp=this.relevantTimestamps[this.relevantTimestamps.indexOf(this.nextTimestamp)+1]}
+			// 	else {this.nextTimestamp = 0}
 			// }
+			// if (this.$store.state.audioplayertime < this.lastTimestamp)
+			// {}
+			if (
+				this.$store.state.audioplayertime < this.lastTimestamp ||
+				this.$store.state.audioplayertime > this.nextTimestamp
+			) {
+				let currenttime = this.$store.state.audioplayertime;
+				// REPOPULATE TIMESTAMPS
+				for (let i = 0; i < this.relevantTimestamps.length; i++) {
+					if (
+						this.relevantTimestamps[i] <= currenttime &&
+						this.relevantTimestamps[i + 1] >= currenttime
+					) {
+						this.lastTimestamp = this.relevantTimestamps[i];
+						this.nextTimestamp = this.relevantTimestamps[i + 1];
+						break;
+					}
+				}
+			}
 		},
+		// currenthighlight: function () {
+		// if (this.$refs.highlightedwords && this.fontsize <= 16) {
+		// 	// this.$nextTick(() => {
+		// 	this.$refs.highlightedwords[this.currenthighlight].scrollIntoView({
+		// 		block: "start",
+		// 	});
+		// 	// });
+		// }
+		// },
 	},
 	mounted() {
 		// this.fontsizeoriginal=this.fontsize
@@ -307,11 +340,13 @@ export default {
 			return date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
 		},
 
-		latest_text_slices() {
+		async latest_text_slices() {
 			this.substringArray = [];
 			this.relevantCharacters.length = 0;
-			this.assignRelevantCharacters();
+			await this.assignRelevantCharacters();
 			// console.log(this.relevantCharacters)
+
+			// console.log(this.relevantTimestamps);
 			if (this.relevantCharacters.length > 0) {
 				this.relevantCharacters.sort((a, b) => a - b);
 				this.relevantCharacters = [...new Set(this.relevantCharacters)];
@@ -346,6 +381,9 @@ export default {
 				slice.startingcharacter = 0;
 				this.substringArray.push(slice);
 			}
+			// console.log(this.substringArray)
+			// console.log(this.parsedAssociations)
+			// this.substringArray.forEach((element) => {highlight(element.startingcharacter)})
 		},
 
 		// this is a helper function that helps decide at which character indices to break the text into substrings
@@ -360,22 +398,37 @@ export default {
 					this.relevantCharacters.push(endCharacter);
 				}
 			});
+			// console.log(Object.keys(this.associations))
+			Object.keys(this.associations).forEach((element) => {
+				// for each character substring
+				for (let i = 0; i < element.length; i++) {
+					let startTimestamp = parseInt(element.split("-")[0]);
+					let endTimestamp = parseInt(element.split("-")[1]);
+					this.relevantTimestamps.push(startTimestamp);
+					this.relevantTimestamps.push(endTimestamp);
+				}
+			});
+			this.relevantTimestamps.push(0);
+			this.relevantTimestamps.push(this.$store.state.audioDuration); // i probably need to divide this by some multiple of 10 though FLAG
+
+			this.relevantTimestamps.sort((a, b) => a - b);
+			this.relevantTimestamps = [...new Set(this.relevantTimestamps)];
 		},
 
 		highlight(startingcharacter) {
 			let k = 0;
+			// console.log(startingcharacter)
+			// console.log(this.parsedAssociations)
 			this.parsedAssociations.forEach((element, elementindex) => {
 				if (
-					this.$store.state.audioplayertime >= element.startTime &&
-					(this.$store.state.audioplayertime < element.endTime ||
-						element.endTime == "end")
+					this.lastTimestamp == element.startTime
 				) {
 					if (
 						startingcharacter >= element.startCharacter &&
 						startingcharacter < element.endCharacter
 					) {
 						k++;
-						this.currenthighlight = elementindex;
+						// this.currenthighlight = elementindex;
 					}
 				}
 			});
@@ -410,7 +463,7 @@ export default {
 
 		snapToTimestamp(substring) {
 			// console.log(substring)
-			let startingcharacter=substring.startingcharacter
+			let startingcharacter = substring.startingcharacter;
 			// let text=substring.text
 			// console.log(startingcharacter);
 			// console.log(text)
@@ -426,14 +479,15 @@ export default {
 			potentialSnapArray.sort((a, b) => a - b);
 			let playFromTimestamp =
 				potentialSnapArray[potentialSnapArray.length - 1] / 100;
-				
-			if (playFromTimestamp || playFromTimestamp===0) {
+
+			if (playFromTimestamp || playFromTimestamp === 0) {
 				// console.log(playFromTimestamp)
-			// console.log(startingcharacter);
-			// console.log(text)
-			let params={"timestamp": playFromTimestamp,
-			// "text": text
-		}
+				// console.log(startingcharacter);
+				// console.log(text)
+				let params = {
+					timestamp: playFromTimestamp,
+					// "text": text
+				};
 				this.$store.commit("updateIncomingCurrentTime", params);
 			}
 			potentialSnapArray.length = 0;
