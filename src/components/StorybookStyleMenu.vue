@@ -82,10 +82,10 @@
 					src="@/assets/icon_help.svg"
 					style="filter: brightness(0) invert(1)"
 				/></button>
-			<button
+			<!-- <button
 				v-else
 				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn px-[.6vw] py-[1vh]"
-			>Interaction</button>
+			>Interaction</button> -->
 			<div class="dropdown-content">
 
 				<div class="absolute right-0 mr-[1vw] grid h-full">
@@ -187,6 +187,9 @@ export default {
 			this.toggleStorybookStyle("Viewer");
 		} else if (this.$store.state.infobit == "InfoRevitalize") {
 			this.toggleStorybookStyle("Studio");
+			this.$store.commit("toggleInfobit", "PublicCardList");
+		} else if (this.$store.state.infobit == "InfoPublish") {
+			this.toggleStorybookStyle("Prompter");
 			this.$store.commit("toggleInfobit", "PublicCardList");
 		}
 	},
