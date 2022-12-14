@@ -46,38 +46,42 @@
 					style="filter: brightness(0) invert(1)"
 				/>
 			</button>
-			<button				@click="editorHelp=true"
+			<button
+				@click="editorHelp=true"
 				v-else-if="styleselection=='Editor'"
 				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
 			>Editing
-			<img
+				<img
 					class="absolute w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer right-0 mr-[.5vw]"
 					src="@/assets/icon_help.svg"
 					style="filter: brightness(0) invert(1)"
 				/></button>
-			<button				@click="taggerHelp=true"
+			<button
+				@click="taggerHelp=true"
 				v-else-if="styleselection=='Tagger'"
 				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
 			>Tagging
-			<img
+				<img
 					class="absolute w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer right-0 mr-[.5vw]"
 					src="@/assets/icon_help.svg"
 					style="filter: brightness(0) invert(1)"
 				/></button>
-			<button				@click="viewerHelp=true"
+			<button
+				@click="viewerHelp=true"
 				v-else-if="styleselection=='Viewer'"
 				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
 			>Viewing
-			<img
+				<img
 					class="absolute w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer right-0 mr-[.5vw]"
 					src="@/assets/icon_help.svg"
 					style="filter: brightness(0) invert(1)"
 				/></button>
-			<button				@click="studioHelp=true"
+			<button
+				@click="studioHelp=true"
 				v-else-if="styleselection=='Studio'"
 				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
 			>Studying
-			<img
+				<img
 					class="absolute w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer right-0 mr-[.5vw]"
 					src="@/assets/icon_help.svg"
 					style="filter: brightness(0) invert(1)"
@@ -90,16 +94,19 @@
 
 				<div class="absolute right-0 mr-[1vw] grid h-full">
 					<img
+						v-if="!otherIntInPrompter && (interpretationStatus == 'owner' || interpretationStatus == 'editor')"
 						class="w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer"
 						src="@/assets/icon_help.svg"
 						@click="prompterHelp=true"
 					/>
 					<img
+						v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'"
 						class="w-[2.2vh]  top-0 bottom-0 m-auto cursor-pointer"
 						src="@/assets/icon_help.svg"
 						@click="editorHelp=true"
 					/>
 					<img
+						v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'"
 						class=" w-[2.2vh] right-[1vw] top-0 bottom-0 m-auto cursor-pointer"
 						src="@/assets/icon_help.svg"
 						@click="taggerHelp=true"
@@ -110,6 +117,7 @@
 						@click="viewerHelp=true"
 					/>
 					<img
+						v-if="!otherIntInPrompter"
 						class=" w-[2.2vh] right-[1vw] top-0 bottom-0 m-auto cursor-pointer"
 						src="@/assets/icon_help.svg"
 						@click="studioHelp=true"
@@ -117,7 +125,7 @@
 				</div>
 
 				<a
-					v-if="($store.state.prompterID == null || $store.state.prompterID == interpretation_id) && (interpretationStatus == 'owner' || interpretationStatus == 'editor')"
+					v-if="!otherIntInPrompter && (interpretationStatus == 'owner' || interpretationStatus == 'editor')"
 					@click="toggleStorybookStyle('Prompter')"
 				>
 					Scribing
@@ -132,7 +140,7 @@
 				>Tagging</a>
 				<a @click="toggleStorybookStyle('Viewer')">Viewing</a>
 				<a
-					v-if="$store.state.prompterID == null || $store.state.prompterID == interpretation_id"
+					v-if="!otherIntInPrompter"
 					@click="toggleStorybookStyle('Studio')"
 				>Studying</a>
 
@@ -159,6 +167,18 @@ export default {
 			studioHelp: false,
 			styleselection: "",
 		};
+	},
+	computed: {
+		otherIntInPrompter() {
+			if (
+				this.$store.state.prompterID == null ||
+				this.$store.state.prompterID == this.interpretation_id
+			) {
+				return false;
+			} else {
+				return true;
+			}
+		},
 	},
 	components: {
 		PrompterInstructionsModal,
