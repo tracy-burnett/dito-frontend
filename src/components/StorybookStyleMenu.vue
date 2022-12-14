@@ -42,27 +42,27 @@
 
 				<div class="absolute right-0 mr-[1vw] grid h-full">
 					<img
-						class="w-[2vh] top-0 bottom-0 m-auto cursor-pointer"
+						class="w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer"
 						src="@/assets/icon_help.svg"
 						@click="prompterHelp=true"
 					/>
 					<img
-						class="w-[2vh]  top-0 bottom-0 m-auto cursor-pointer"
+						class="w-[2.2vh]  top-0 bottom-0 m-auto cursor-pointer"
 						src="@/assets/icon_help.svg"
 						@click="editorHelp=true"
 					/>
 					<img
-						class=" w-[2vh] right-[1vw] top-0 bottom-0 m-auto cursor-pointer"
+						class=" w-[2.2vh] right-[1vw] top-0 bottom-0 m-auto cursor-pointer"
 						src="@/assets/icon_help.svg"
 						@click="taggerHelp=true"
 					/>
 					<img
-						class=" w-[2vh] right-[1vw] top-0 bottom-0 m-auto cursor-pointer"
+						class=" w-[2.2vh] right-[1vw] top-0 bottom-0 m-auto cursor-pointer"
 						src="@/assets/icon_help.svg"
 						@click="viewerHelp=true"
 					/>
 					<img
-						class=" w-[2vh] right-[1vw] top-0 bottom-0 m-auto cursor-pointer"
+						class=" w-[2.2vh] right-[1vw] top-0 bottom-0 m-auto cursor-pointer"
 						src="@/assets/icon_help.svg"
 						@click="studioHelp=true"
 					/>

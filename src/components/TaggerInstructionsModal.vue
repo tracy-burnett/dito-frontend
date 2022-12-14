@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col items-center justify-center flex-auto h-full backdrop">
+	<div class="flex flex-col items-center justify-center flex-auto h-full backdrop" @click="closeModal">
 		<div class="flex flex-col items-center p-8 overflow-y-scroll bg-white border border-gray-300 shadow-md modal rounded-xl xl:w-2/5 lg:w-2/4 md:w-2/3">
 			<button
 				class="mx-4 my-2 text-xl text-gray-500"
@@ -7,11 +7,18 @@
 			>
 				×
 			</button>
-			<h1 class="text-2xl font-bold">Scribing Instructions</h1>
+			<h1 class="text-2xl font-bold">Tagging Instructions</h1>
 			<br />
-            <p class="text-sm -mt-[1vh]">
-			Write down the words that you hear, then press "Enter." If you want to move to a new prompt without saving data, then leave the text box blank and press "Enter" or click on the "New Prompt" button above. If you choose to receive very short prompts on the "scribe less / more" slider above, the prompter may skip some portions of the audio file to give you phrases of the right length.<br>
-			If you want to adjust the segment of the audio being played to better fit the words, either drag the "scribe less / more" slider above or manually adjust the highlighted region in the audio player to the left by editing the timestamps at the top or bottom or clicking and dragging the highlighted region or its edges.
+            <p class="text-sm -mt-[1vh] text-justify pb-[3vh]">
+
+				1. Highlight a region of the audio file.<br><br>
+				
+				2. Then, click or click-and-drag on the words that represent the meaning in the audio selection, and the words will turn green.<br><br>
+				
+				3. To unselect words, click on them or hold "ALT" and drag over them, and they will turn black again.<br><br>
+				
+				4. To unselect all of the words at once, click "Clear New" above.<br><br>
+			5. When you are satisfied with your selection, click the "Save" button above.<br><br>6. Repeat.
 		</p>
 		</div>
 	</div>
