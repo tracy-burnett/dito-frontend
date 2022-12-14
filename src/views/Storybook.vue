@@ -106,6 +106,7 @@ export default {
 	},
 	props: {
 		audio_ID: "",
+		title: "",
 	},
 	computed: {},
 
@@ -121,6 +122,7 @@ export default {
 	},
 
 	mounted() {
+		document.title = "Dito - " + this.title + " - " + window.location.hostname
 		if (this.$store.state.authCompleted===true)
 			{this.getInterpretations();}
 	},
