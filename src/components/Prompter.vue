@@ -11,15 +11,15 @@
 		<textarea
 			class="w-full h-full px-3 py-1  mt-[2vh] border-gray-300 rounded prompter"
 			:style="{ 'font-size': fontsize + 'px' }"
-			style="overflow: scroll; height:41vh;"
+			style="overflow: scroll; height:45.5vh;"
 			placeholder="enter new text here"
 			v-model="new_text_unstripped"
 			ref="promptertextarea"
 			@keydown.enter.exact.prevent="emitNewPrompt()"
 			@keydown.enter.shift.exact.prevent="new_text_unstripped += '\n'"
 		></textarea>
-		<div v-if="allowSubmit==true">this text will be submitted when a new prompt is generated</div>
-		<div v-else-if="allowSubmit==false">this text WILL NOT be submitted when a new prompt is generated</div>
+		<!-- <div v-if="allowSubmit==true">this text will be submitted when a new prompt is generated</div>
+		<div v-else-if="allowSubmit==false">this text WILL NOT be submitted when a new prompt is generated</div> -->
 
 	</div>
 </template>
@@ -47,7 +47,7 @@ export default {
 			newPromptorScribingToggle: false, // when New Prompt is clicked, this becomes false.  When scribing changes, this becomes true.
 			usableGaps: [],
 			relevantGap: {},
-			allowSubmit: false,
+			// allowSubmit: false,
 			usablePeaksData: [],
 			contentStartingIndex: null,
 			contentEndingIndex: null,
@@ -180,11 +180,11 @@ export default {
 		newPromptscounter: function () {
 			// this.sensitivity=.05
 			this.newPromptorScribingToggle = false;
-			if (this.allowSubmit == true && this.new_text != "") {
+			if (this.new_text != "" && this.$store.state.audioDuration > 0 && this.usableGaps.length > 0) {
 				// this.newpromptsfunc will be called if submit is successful inside updatetext()
 				this.updateText();
 			}
-			if (this.allowSubmit == false || this.new_text == "") {
+			if (this.new_text == "") {
 				this.newPromptsfunc();
 			}
 		},
@@ -192,34 +192,36 @@ export default {
 			this.tempcurrentgapend = this.$store.state.audioDuration;
 			this.findGaps(); // populates "this.usableGaps"
 		},
-		"$store.state.startTimePrompter": function () {
-			if (
-				!(
-					this.$store.state.startTimePrompter * 100 >=
-						this.relevantGap.startTime &&
-					this.$store.state.endTimePrompter * 100 <=
-						Math.min(this.usableGaps[0].endTime, this.tempcurrentgapend)
-				)
-			) {
-				this.allowSubmit = false;
-			} else {
-				this.allowSubmit = true;
-			}
-		},
+		// "$store.state.startTimePrompter": function () {
+		// 	if (
+		// 		!(
+		// 			this.$store.state.startTimePrompter * 100 >=
+		// 				this.relevantGap.startTime &&
+		// 			this.$store.state.endTimePrompter * 100 <=
+		// 				Math.min(this.usableGaps[0].endTime, this.tempcurrentgapend)
+		// 		)
+		// 	) {
+		// 		this.allowSubmit = false;
+		// 	} else {
+		// 		this.allowSubmit = true;
+		// 	}
+		// },
 		"$store.state.endTimePrompter": function () {
 			if (
-				!(
+				(
 					this.$store.state.startTimePrompter * 100 >=
 						this.relevantGap.startTime &&
 					this.$store.state.endTimePrompter * 100 <=
 						Math.min(this.usableGaps[0].endTime, this.tempcurrentgapend)
 				) // GAPS NOT POPULATED YET
-			) {
-				this.allowSubmit = false;
-			} else {
+			)
+			//  {
+			// 	this.allowSubmit = false;
+			// } else
+			 {
 				// GAPS POPULATED
 				// Math.min(this.usableGaps[0].endTime, this.tempcurrentgapend) will be the end of the current gap that's being worked with
-				this.allowSubmit = true;
+				// this.allowSubmit = true;
 				// if the end of the region is dragged lower than approximately the original end of the gap, then adjust the end of the
 				// original gap specs to reflect that, and if we are still chunking out of the same usableGap, then adjust the startTime of that too.
 				if (
@@ -596,7 +598,7 @@ export default {
 				}
 				// this.recursionTracker=0
 				// this.sensitivity=.1
-				this.allowSubmit = true;
+				// this.allowSubmit = true;
 				this.$refs.promptertextarea.focus();
 			}
 		},

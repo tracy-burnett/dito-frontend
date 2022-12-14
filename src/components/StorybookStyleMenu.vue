@@ -10,7 +10,7 @@
 			v-if="editorHelp"
 			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
 		>
-		<EditorInstructionsModal @closeEditorModal="editorHelp=false" />
+			<EditorInstructionsModal @closeEditorModal="editorHelp=false" />
 		</span>
 		<span
 			v-if="taggerHelp"
@@ -31,13 +31,61 @@
 			<StudioInstructionsModal @closeStudioModal="studioHelp=false" />
 		</span>
 
-
-
 		<div
 			class="dropdown"
 			style="float: right"
 		>
-			<button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn">Interaction</button>
+			<button
+				@click="prompterHelp=true"
+				v-if="styleselection=='Prompter'"
+				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
+			>Scribing
+				<img
+					class="absolute w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer right-0 mr-[.5vw]"
+					src="@/assets/icon_help.svg"
+					style="filter: brightness(0) invert(1)"
+				/>
+			</button>
+			<button				@click="editorHelp=true"
+				v-else-if="styleselection=='Editor'"
+				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
+			>Editing
+			<img
+					class="absolute w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer right-0 mr-[.5vw]"
+					src="@/assets/icon_help.svg"
+					style="filter: brightness(0) invert(1)"
+				/></button>
+			<button				@click="taggerHelp=true"
+				v-else-if="styleselection=='Tagger'"
+				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
+			>Tagging
+			<img
+					class="absolute w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer right-0 mr-[.5vw]"
+					src="@/assets/icon_help.svg"
+					style="filter: brightness(0) invert(1)"
+				/></button>
+			<button				@click="viewerHelp=true"
+				v-else-if="styleselection=='Viewer'"
+				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
+			>Viewing
+			<img
+					class="absolute w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer right-0 mr-[.5vw]"
+					src="@/assets/icon_help.svg"
+					style="filter: brightness(0) invert(1)"
+				/></button>
+			<button				@click="studioHelp=true"
+				v-else-if="styleselection=='Studio'"
+				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
+			>Studying
+			<img
+					class="absolute w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer right-0 mr-[.5vw]"
+					src="@/assets/icon_help.svg"
+					style="filter: brightness(0) invert(1)"
+				/></button>
+			<button
+				v-else
+				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn px-[.6vw] py-[1vh]"
+			>Interaction</button>
 			<div class="dropdown-content">
 
 				<div class="absolute right-0 mr-[1vw] grid h-full">
@@ -109,6 +157,7 @@ export default {
 			taggerHelp: false,
 			viewerHelp: false,
 			studioHelp: false,
+			styleselection: "",
 		};
 	},
 	components: {
@@ -128,6 +177,7 @@ export default {
 	},
 	methods: {
 		toggleStorybookStyle(styleselection) {
+			this.styleselection = styleselection;
 			// tell the parent component to load Viewer, Editor, or Tagger, corresponding with what the user has selected in this dropdown menu
 			this.$emit("toggleStorybookStyle", styleselection);
 		},
@@ -148,7 +198,7 @@ export default {
 	/* background-color: #7833ff; */
 	border: none;
 	color: white;
-	padding: 1vh 1vh;
+	/* padding: 1vh 1vh; */
 	text-align: center;
 	text-decoration: none;
 	display: inline-block;

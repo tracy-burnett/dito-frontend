@@ -427,8 +427,8 @@ export default {
 			let playFromTimestamp =
 				potentialSnapArray[potentialSnapArray.length - 1] / 100;
 				
-			if (playFromTimestamp) {
-				
+			if (playFromTimestamp || playFromTimestamp===0) {
+				// console.log(playFromTimestamp)
 			// console.log(startingcharacter);
 			// console.log(text)
 			let params={"timestamp": playFromTimestamp,
