@@ -217,30 +217,31 @@ export default {
 			this.wavesurfer.setPlaybackRate(this.playbackspeed);
 		},
 		"$store.state.currentTimeUpdated": function () {
-			if (
-				this.$store.state.incomingCurrentTime >= this.startTimeSeconds &&
-				this.$store.state.incomingCurrentTime < this.endTimeSeconds
-			) {
-				this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
-			} else if (
-				this.$store.state.incomingCurrentTime < this.startTimeSeconds || this.$store.state.incomingCurrentTime >= this.endTimeSeconds
-			) {
+			// if (
+			// 	this.$store.state.incomingCurrentTime >= this.startTimeSeconds &&
+			// 	this.$store.state.incomingCurrentTime < this.endTimeSeconds
+			// ) {
+			// 	this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
+			// } else
+			//  if (
+			// 	this.$store.state.incomingCurrentTime < this.startTimeSeconds || this.$store.state.incomingCurrentTime >= this.endTimeSeconds
+			// ) {
 				this.clearallregions()
 				// let tempendtime = this.endTimeSeconds;
 				// this.wavesurfer.clearRegions();
 				// this.updatingFromPrompter = false;
-				// this.wavesurfer.addRegion({
-				// 	start: this.$store.state.incomingCurrentTime,
-				// 	end: tempendtime,
-				// 	id: "region",
-				// 	loop: false,
-				// });
-				// this.startTime = this.secondsToTime(
-				// 	Math.round(this.$store.state.incomingCurrentTime)
-				// );
-				// this.endTime = this.secondsToTime(Math.round(tempendtime));
+				this.wavesurfer.addRegion({
+					start: this.$store.state.incomingCurrentTime,
+					end: this.totalDuration,
+					id: "region",
+					loop: false,
+				});
+				this.startTime = this.secondsToTime(
+					Math.round(this.$store.state.incomingCurrentTime)
+				);
+				this.endTime = this.secondsToTime(Math.round(this.totalDuration));
 				this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
-			}
+			// }
 			// else if (this.$store.state.incomingCurrentTime >= this.endTimeSeconds) {
 			// 	let tempendtime = this.endTimeSeconds;
 			// 	this.wavesurfer.clearRegions();
