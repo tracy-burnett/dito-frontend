@@ -10,9 +10,10 @@
 			<h1 class="text-2xl font-bold">Editing Instructions</h1>
 			<br />
 			<p class="text-sm -mt-[1vh] text-justify pb-[3vh]">
-				1. Edit the title, language name, or text of the interpretation. We will make every attempt to preserve the timestamps of the words as you move them around.
-				<br><br>2. Use new lines (carriage returns) to separate words that are not separated by the language's spacing character.
-				<br><br>3. Don't forget to click the "Save" button above after you make your changes!
+				1. Press "Shift" and left-click to play or pause the audio player at any time.<br><br>
+				2. Edit the title, language name, or text of the interpretation. We will make every attempt to preserve the timestamps of the words as you move them around.
+				<br><br>3. Use new lines (carriage returns) to separate words that are not separated by the language's spacing character.
+				<br><br>4. Don't forget to click the "Save" button above after you make your changes!
 			</p>
 		</div>
 	</div>

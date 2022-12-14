@@ -102,7 +102,7 @@ export default {
 			showAddInterpretationModal: false,
 			showUploadIntModal: false,
 			playerPlayPause: 0, // when this changes, play or pause Player Vertical
-			navtext: `Press "Shift" and left-click to play or pause the audio player at any time.`,
+			navtext: "",
 		};
 	},
 	props: {
