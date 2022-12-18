@@ -116,6 +116,25 @@ export default {
 		"$store.state.renewViewer": function () {
 			this.fetchNewInterpretation();
 		},
+		"$store.state.updateHighlights": function () {
+			if (
+				this.$store.state.audioplayertime < this.lastTimestamp ||
+				this.$store.state.audioplayertime > this.nextTimestamp
+			) {
+				let currenttime = this.$store.state.audioplayertime;
+				// REPOPULATE TIMESTAMPS
+				for (let i = 0; i < this.relevantTimestamps.length; i++) {
+					if (
+						this.relevantTimestamps[i] <= currenttime &&
+						this.relevantTimestamps[i + 1] >= currenttime
+					) {
+						this.lastTimestamp = this.relevantTimestamps[i];
+						this.nextTimestamp = this.relevantTimestamps[i + 1];
+						break;
+					}
+				}
+			}
+		},
 		"$store.state.audioplayertime": function () {
 			// if (this.$store.state.audioplayertime >= this.nextTimestamp)
 			// {

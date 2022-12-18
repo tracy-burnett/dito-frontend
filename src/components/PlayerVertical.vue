@@ -503,11 +503,14 @@ export default {
 				that.isLoaded == true
 			) {
 				that.wavesurfer.seekTo(that.startTimeSeconds / that.totalDuration);
+				that.$store.commit("updateHighlights")
 			}
 		});
 
 		this.wavesurfer.on("finish", function () {
 			that.wavesurfer.seekTo(that.startTimeSeconds / that.totalDuration);
+			
+			that.$store.commit("updateHighlights")
 			that.pausePlayer();
 			that.play();
 		});
@@ -649,6 +652,8 @@ export default {
 		seekTimestampfunction(timestamp) {
 			if (this.totalDuration > 0) {
 				this.wavesurfer.seekTo(timestamp / this.totalDuration);
+				
+				this.$store.commit("updateHighlights")
 				this.currentTime = this.secondsToTime(timestamp);
 			}
 		},
@@ -656,6 +661,8 @@ export default {
 		// when the user submits a new manual input of HH:MM:SS current time, the cursor moves accordingly and the change is also communicated to the Vuex store
 		seekfunction() {
 			this.wavesurfer.seekTo(this.currentSeekNumber);
+			
+			this.$store.commit("updateHighlights")
 		},
 
 		// clear the highlighted region and reset the HH:MM:SS displays of start and end time accordingly
