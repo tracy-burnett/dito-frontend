@@ -807,11 +807,14 @@ export default {
 				// console.log(this.original_text[this.relevantGap.endCharacter])
 				// console.log(this.original_text[this.relevantGap.endCharacter + 1])
 				this.latest_text = temp_latesttext;
+				// console.log(this.latest_text)
 			} else {
+				lastGapEndCharacter=lastGapEndCharacter-1
 				let temp_latesttext = this.original_text.substring(
 					0,
 					lastGapEndCharacter
 				);
+				// console.log(temp_latesttext)
 				if (
 					this.original_text[lastGapEndCharacter - 2] == "\n" &&
 					this.original_text[lastGapEndCharacter - 1] == "\n"
@@ -1043,7 +1046,7 @@ export default {
 				.then((response) => {
 					if (response == "interpretation updated") {
 						// console.log(textLengthDifference);
-						this.usableGaps.forEach((element) => {
+						this.associationGaps.forEach((element) => {
 							element.startCharacter += textLengthDifference;
 							if (element.endCharacter != null) {
 								element.endCharacter += textLengthDifference;
