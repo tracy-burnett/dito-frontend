@@ -5,9 +5,9 @@
 			in <span class="py-1 border-gray-300 rounded">{{ language_name }}</span>
 
 			<br><br>
-			{{lastTimestamp}}
+			<!-- {{lastTimestamp}}
 			{{nextTimestamp}}
-			{{relevantTimestamps}}
+			{{relevantTimestamps}} -->
 			<!-- {{associations}}<br><br> -->
 			<!-- {{parsedAssociations}}<br><br> -->
 			<!-- {{substringArray}}<br><br> -->
