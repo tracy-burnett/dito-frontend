@@ -6,12 +6,12 @@
 
 		<span class="py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="py-1 border-gray-300 rounded ">{{ language_name }}</span><br /><br />
-		{{associations}}<br>
-		{{associationGaps}}<br>
+		<!-- {{associations}}<br> -->
+		<!-- {{associationGaps}}<br> -->
 		<!-- {{$store.state.startTimePrompter}} -->
-		{{usableGaps}}<br>
-		{{relevantGap}}
-		<textarea
+		<!-- {{usableGaps}}<br> -->
+		<!-- {{relevantGap}} -->
+		<textarea v-if="nomoregaps==false"
 			class="w-full h-full px-3 py-1  mt-[2vh] border-gray-300 rounded prompter"
 			:style="{ 'font-size': fontsize + 'px' }"
 			style="overflow: scroll; height:45.5vh;"
@@ -21,6 +21,7 @@
 			@keydown.enter.exact.prevent="emitNewPrompt()"
 			@keydown.enter.shift.exact.prevent="new_text_unstripped += '\n'"
 		></textarea>
+		<p v-else ref="promptertextarea">nothing to scribe</p>
 		<!-- <div v-if="allowSubmit==true">this text will be submitted when a new prompt is generated</div>
 		<div v-else-if="allowSubmit==false">this text WILL NOT be submitted when a new prompt is generated</div> -->
 
@@ -57,6 +58,7 @@ export default {
 			sensitivity: 0.05,
 			recursionStopper: false,
 			// recursionTracker: 0,
+			nomoregaps: false, // will be true if no scriber regions exist
 		};
 	},
 	computed: {
@@ -95,10 +97,10 @@ export default {
 
 		scribingclean() {
 			if (
-				this.$store.state.audioDuration < this.scribing &&
+				this.$store.state.audioDuration/10 < this.scribing &&
 				this.$store.state.audioDuration > 0
 			) {
-				return this.$store.state.audioDuration;
+				return this.$store.state.audioDuration/10;
 			} else {
 				return this.scribing;
 			}
@@ -174,6 +176,7 @@ export default {
 	},
 	watch: {
 		scribingclean: function () {
+			this.nomoregaps=false
 			if (this.newPromptorScribingToggle == false) {
 				this.tempcurrentgapstart = this.relevantGap.startTime;
 			}
@@ -196,7 +199,7 @@ export default {
 			}
 		},
 		"$store.state.peaksData": function () {
-			this.tempcurrentgapend = this.$store.state.audioDuration;
+			this.tempcurrentgapend = this.$store.state.audioDuration/10;
 			this.findGaps(); // populates "this.usableGaps"
 		},
 		// "$store.state.startTimePrompter": function () {
@@ -289,11 +292,13 @@ export default {
 
 					associationsObject.startCharacter = 0;
 					associationsObject.endCharacter = endCharacter;
+					// console.log(associationsObject)
 					if (
-						associationsObject.endTime >= associationsObject.startTime &&
-						(associationsObject.endCharacter >=
-							associationsObject.startCharacter ||
-							associationsObject.endCharacter == null)
+						parseInt(associationsObject.endTime) >= parseInt(associationsObject.startTime)
+						//  &&
+						// (associationsObject.endCharacter >=
+						// 	associationsObject.startCharacter ||
+						// 	associationsObject.endCharacter == null)
 					) {
 						this.associationGaps.push(associationsObject);
 					}
@@ -335,52 +340,59 @@ export default {
 						associationsObject.endCharacter = endCharacter;
 
 						if (
-							associationsObject.endTime >= associationsObject.startTime &&
-						(associationsObject.endCharacter >=
-							associationsObject.startCharacter ||
-							associationsObject.endCharacter == null)
+						parseInt(associationsObject.endTime) >= parseInt(associationsObject.startTime)
+							//  &&
+							// (associationsObject.endCharacter >=
+							// 	associationsObject.startCharacter ||
+							// 	associationsObject.endCharacter == null)
 						) {
 							this.associationGaps.push(associationsObject);
 						}
 					}
 
-					//final
-					startTime = Object.keys(this.associations)[
-						Object.keys(this.associations).length - 1
-					].split("-")[1];
-					endTime = this.$store.state.audioDuration;
-
-					intervalsCount = Object.values(this.associations)[
-						Object.keys(this.associations).length - 1
-					].length;
-
-					//all character intervals to be highlighted
-					let startCharacterArray = [];
-					for (let j = 0; j < intervalsCount; j++) {
-						//get largest character number from association i to be the startChar for the gap
-						startCharacterArray.push(
-							Object.values(this.associations)[
-								Object.keys(this.associations).length - 1
-							][j].split("-")[1]
-						);
-					}
-					let startCharacter = startCharacterArray.reduce(function (a, b) {
-						return Math.max(a, b);
-					}, -Infinity);
-
-					associationsObject = {};
-					associationsObject.startTime = startTime;
-					associationsObject.endTime = endTime;
-
-					associationsObject.startCharacter = startCharacter;
-					associationsObject.endCharacter = null;
 					if (
-						associationsObject.endTime >= associationsObject.startTime &&
-						(associationsObject.endCharacter >=
-							associationsObject.startCharacter ||
-							associationsObject.endCharacter == null)
+						this.associationGaps[this.associationGaps.length - 1].endTime <
+						Math.floor(this.$store.state.audioDuration/10)
 					) {
-						this.associationGaps.push(associationsObject);
+						//final
+						startTime = Object.keys(this.associations)[
+							Object.keys(this.associations).length - 1
+						].split("-")[1];
+						endTime = this.$store.state.audioDuration/10;
+
+						intervalsCount = Object.values(this.associations)[
+							Object.keys(this.associations).length - 1
+						].length;
+
+						//all character intervals to be highlighted
+						let startCharacterArray = [];
+						for (let j = 0; j < intervalsCount; j++) {
+							//get largest character number from association i to be the startChar for the gap
+							startCharacterArray.push(
+								Object.values(this.associations)[
+									Object.keys(this.associations).length - 1
+								][j].split("-")[1]
+							);
+						}
+						let startCharacter = startCharacterArray.reduce(function (a, b) {
+							return Math.max(a, b);
+						}, -Infinity);
+
+						associationsObject = {};
+						associationsObject.startTime = startTime;
+						associationsObject.endTime = endTime;
+
+						associationsObject.startCharacter = startCharacter;
+						associationsObject.endCharacter = null;
+						if (
+						parseInt(associationsObject.endTime) >= parseInt(associationsObject.startTime)
+							// &&
+							// (associationsObject.endCharacter >=
+							// 	associationsObject.startCharacter ||
+							// 	associationsObject.endCharacter == null)
+						) {
+							this.associationGaps.push(associationsObject);
+						}
 					}
 
 					this.associationGaps.forEach((element) => {
@@ -399,15 +411,16 @@ export default {
 				} else {
 					let associationsObject = {};
 					associationsObject.startTime = this.tempcurrentgapstart;
-					associationsObject.endTime = this.$store.state.audioDuration;
+					associationsObject.endTime = this.$store.state.audioDuration/10;
 
 					associationsObject.startCharacter = 0;
 					associationsObject.endCharacter = null;
 					if (
-						associationsObject.endTime >= associationsObject.startTime &&
-						(associationsObject.endCharacter >=
-							associationsObject.startCharacter ||
-							associationsObject.endCharacter == null)
+						parseInt(associationsObject.endTime) >= parseInt(associationsObject.startTime)
+						//  &&
+						// (associationsObject.endCharacter >=
+						// 	associationsObject.startCharacter ||
+						// 	associationsObject.endCharacter == null)
 					) {
 						this.associationGaps.push(associationsObject);
 					}
@@ -570,14 +583,24 @@ export default {
 				) {
 					this.usableGaps[0].startTime =
 						this.contentEndingIndex - 5 + this.relevantGap.startTime;
-					this.tempcurrentgapend = this.$store.state.audioDuration;
+					this.tempcurrentgapend = this.$store.state.audioDuration/10;
 				} else if (
 					this.usableGaps[0].endTime -
 						(this.contentEndingIndex - 5 + this.relevantGap.startTime) <
 					this.scribingclean // FLAG TIME DECISION
+					&& this.usableGaps.length>=2
 				) {
 					this.tempcurrentgapend = this.usableGaps[0].endTime;
 					this.usableGaps.shift();
+				} else if (
+					this.usableGaps[0].endTime -
+						(this.contentEndingIndex - 5 + this.relevantGap.startTime) <
+					this.scribingclean // FLAG TIME DECISION
+					&& this.usableGaps.length==1
+				) {
+					// console.log("help")
+// this.findGaps()
+this.nomoregaps=true
 				}
 
 				// console.log(this.contentStartingIndex + this.relevantGap.startTime);
