@@ -1,11 +1,11 @@
 <template>
-	<div class="flex-auto"
-			@mousedown.left="mouseHighlighting=true"
-			@mouseup.left="mouseHighlighting=false">
+	<div
+		class="flex-auto"
+		@mousedown.left="mouseHighlighting=true"
+		@mouseup.left="mouseHighlighting=false"
+	>
 		<span class="py-1 font-bold border-gray-300 rounded ">{{ title }}</span>
 		in <span class="py-1 border-gray-300 rounded">{{ language_name }}</span><br /><br>
-
-
 
 		<!-- {{new_associations}}<br><br> -->
 		<!-- {{startingindex}}<br><br> -->
@@ -256,14 +256,17 @@ export default {
 			}
 			// console.log("starting index is " + this.startingindex);
 			if (deletefromend.length >= 1) {
+				// console.log("hey")
 				this.endingindex = Math.min(...deletefromend);
 			} else {
-				this.endingindex = this.latest_text.length - 1;
+				// console.log("hi")
+				this.endingindex = this.latest_text.length;
 			}
 			this.latest_text_part = this.latest_text.substring(
 				this.startingindex,
 				this.endingindex
 			);
+			// console.log(this.latest_text_part)
 			let regexwithspacedby = new RegExp(
 				`${this.escapeRegex(this.spaced_by)}|(\n)`
 			);
@@ -290,6 +293,7 @@ export default {
 			// convert the remaining text into an array of single characters or words
 
 			let character_array = this.latest_text_part.split(regexwithspacedby);
+			// console.log(character_array)
 			for (let j = character_array.length; j >= 0; j--) {
 				if (character_array[j] === undefined || character_array[j] == "") {
 					character_array.splice(j, 1);
@@ -302,6 +306,7 @@ export default {
 				sample_object.index = i;
 				sample_object.value = character_array[i];
 				// sample_object.newtag = false;
+				// console.log(sample_object)
 				this.latest_text_character_array.push(sample_object);
 			}
 		},
@@ -347,7 +352,31 @@ export default {
 			// ].newtag = true;
 			// this.new_associations[characterindex] = {Math.round(clicktime)};
 			this.new_associations[characterindex] = {};
-			this.new_associations[characterindex][
+
+			// console.log(JSON.stringify(this.new_associations));
+		},
+
+		removeThisAssociationDrag(characterindex) {
+			if (this.mouseHighlighting) {
+				delete this.new_associations[characterindex];
+			}
+		},
+
+		addNewAssociationDrag(characterindex) {
+			if (this.mouseHighlighting) {
+				this.new_associations[characterindex] = {};
+
+			}
+		},
+
+		// addNewNullAssociation(characterindex) {
+		// 	this.new_associations[characterindex] = null;
+		// },
+
+		async updateAssociationsfunc() {
+
+			for (let prop in this.new_associations) {
+				this.new_associations[prop][
 				Math.round(
 					((this.$store.state.startTimePrompter +
 						this.$store.state.endTimePrompter) *
@@ -360,37 +389,11 @@ export default {
 					100) /
 					2
 			);
-			// console.log(JSON.stringify(this.new_associations));
-		},
+			}
+			
 
-		removeThisAssociationDrag(characterindex) {
-			if (this.mouseHighlighting)
-			{delete this.new_associations[characterindex];}
-		},
 
-		addNewAssociationDrag(characterindex) {
-			if (this.mouseHighlighting)
-{			this.new_associations[characterindex] = {};
-			this.new_associations[characterindex][
-				Math.round(
-					((this.$store.state.startTimePrompter +
-						this.$store.state.endTimePrompter) *
-						100) /
-						2
-				)
-			] = Math.round(
-				((this.$store.state.endTimePrompter -
-					this.$store.state.startTimePrompter) *
-					100) /
-					2
-			);}
-		},
 
-		addNewNullAssociation(characterindex) {
-			this.new_associations[characterindex] = null;
-		},
-
-		async updateAssociationsfunc() {
 			if (this.$store.state.user) {
 				// REFRESH ID TOKEN FIRST AND WAIT FOR IT
 				await getIdToken(this.$store.state.user)
@@ -449,12 +452,12 @@ export default {
 	-ms-overflow-style: none; /* for Internet Explorer, Edge */
 	scrollbar-width: none; /* for Firefox */
 	overflow-y: scroll;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .tagger::-webkit-scrollbar {

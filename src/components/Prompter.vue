@@ -6,11 +6,11 @@
 
 		<span class="py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="py-1 border-gray-300 rounded ">{{ language_name }}</span><br /><br />
-		<!-- {{associations}}<br> -->
-		<!-- {{associationGaps}}<br> -->
+		{{associations}}<br>
+		{{associationGaps}}<br>
 		<!-- {{$store.state.startTimePrompter}} -->
-		<!-- {{usableGaps}}<br> -->
-		<!-- {{relevantGap}} -->
+		{{usableGaps}}<br>
+		{{relevantGap}}
 		<textarea
 			class="w-full h-full px-3 py-1  mt-[2vh] border-gray-300 rounded prompter"
 			:style="{ 'font-size': fontsize + 'px' }"
@@ -289,7 +289,14 @@ export default {
 
 					associationsObject.startCharacter = 0;
 					associationsObject.endCharacter = endCharacter;
-					this.associationGaps.push(associationsObject);
+					if (
+						associationsObject.endTime >= associationsObject.startTime &&
+						(associationsObject.endCharacter >=
+							associationsObject.startCharacter ||
+							associationsObject.endCharacter == null)
+					) {
+						this.associationGaps.push(associationsObject);
+					}
 
 					//all bounded gaps
 					for (let i = 0; i < Object.keys(this.associations).length - 1; i++) {
@@ -327,7 +334,14 @@ export default {
 						associationsObject.startCharacter = startCharacter;
 						associationsObject.endCharacter = endCharacter;
 
-						this.associationGaps.push(associationsObject);
+						if (
+							associationsObject.endTime >= associationsObject.startTime &&
+						(associationsObject.endCharacter >=
+							associationsObject.startCharacter ||
+							associationsObject.endCharacter == null)
+						) {
+							this.associationGaps.push(associationsObject);
+						}
 					}
 
 					//final
@@ -360,7 +374,14 @@ export default {
 
 					associationsObject.startCharacter = startCharacter;
 					associationsObject.endCharacter = null;
-					this.associationGaps.push(associationsObject);
+					if (
+						associationsObject.endTime >= associationsObject.startTime &&
+						(associationsObject.endCharacter >=
+							associationsObject.startCharacter ||
+							associationsObject.endCharacter == null)
+					) {
+						this.associationGaps.push(associationsObject);
+					}
 
 					this.associationGaps.forEach((element) => {
 						if (
@@ -382,7 +403,14 @@ export default {
 
 					associationsObject.startCharacter = 0;
 					associationsObject.endCharacter = null;
-					this.associationGaps.push(associationsObject);
+					if (
+						associationsObject.endTime >= associationsObject.startTime &&
+						(associationsObject.endCharacter >=
+							associationsObject.startCharacter ||
+							associationsObject.endCharacter == null)
+					) {
+						this.associationGaps.push(associationsObject);
+					}
 
 					if (
 						this.tempcurrentgapstart <
@@ -624,8 +652,8 @@ export default {
 
 			// if (Number.isNaN(this.relevantGap.endCharacter) == false) {
 			//if the gap does have an ending
-			let lastGapEndCharacter = this.associationGaps[0].startCharacter;
-			console.log("defaulting to " + lastGapEndCharacter)
+			let lastGapEndCharacter = this.associationGaps[0].endCharacter;
+			console.log("defaulting to " + lastGapEndCharacter);
 			// if (
 			// 	this.associationGaps.length == 1 &&
 			// 	this.$store.state.startTimePrompter * 100 <
@@ -649,40 +677,65 @@ export default {
 			) {
 				// console.log("in");
 				for (let i = 0; i < this.associationGaps.length; i++) {
-
-					console.log(this.$store.state.startTimePrompter * 100 + "wants to be greater than or equal to " + this.associationGaps[i].startTime)
-
-					console.log(this.$store.state.startTimePrompter * 100 + "wants to be less than " + this.associationGaps[i+1].startTime)
+					console.log(this.associationGaps[i]);
+					console.log(
+						this.$store.state.startTimePrompter * 100 +
+							"wants to be greater than or equal to " +
+							this.associationGaps[i].startTime
+					);
+					console.log(this.associationGaps[i + 1]);
+					console.log(
+						this.$store.state.startTimePrompter * 100 +
+							"wants to be less than " +
+							this.associationGaps[i + 1].startTime
+					);
 					if (
-						// if somewhere in or just before second chunk
 						this.$store.state.startTimePrompter * 100 >=
 							this.associationGaps[i].startTime &&
 						this.$store.state.startTimePrompter * 100 <
-							this.associationGaps[i + 1].startTime
+							this.associationGaps[i + 1].startTime &&
+						this.associationGaps[i + 1].endCharacter == null
 					) {
-						// then place new text just before second chunk
 						console.log("in 1");
-						lastGapEndCharacter = this.associationGaps[i].endCharacter;
+						lastGapEndCharacter = this.associationGaps[i + 1].endCharacter;
 						break;
-					} else if (i == this.associationGaps.length-1) {
-						// console.log(
-						// 	this.associationGaps[this.associationGaps.length - 1].endCharacter
-						// );
-						console.log("in 2")
+					} else if (
+						this.$store.state.startTimePrompter * 100 >=
+							this.associationGaps[i].startTime &&
+						this.$store.state.startTimePrompter * 100 <
+							this.associationGaps[i + 1].startTime &&
+						this.associationGaps[i + 1].endCharacter != null
+					) {
+						console.log("in 2");
+						lastGapEndCharacter = this.associationGaps[i + 1].endCharacter;
+						break;
+					} // we need to do something if the last gap is bounded
+					else if (
+						this.$store.state.startTimePrompter * 100 >=
+						this.associationGaps[this.associationGaps.length - 1].endTime
+					) {
 						lastGapEndCharacter =
-							this.associationGaps[i]
+							this.associationGaps[this.associationGaps.length - 1]
 								.endCharacter;
 						break;
 					}
+					// NEED TO FINISH THIS PART, FLAG!!!!!}
+					// else if (i + 1 == this.associationGaps.length-1) {
+					// 	// console.log(
+					// 	// 	this.associationGaps[this.associationGaps.length - 1].endCharacter
+					// 	// );
+					// 	console.log("in 2")
+					// 	lastGapEndCharacter =
+					// 		this.associationGaps[i+2]
+					// 			.endCharacter;
+					// 	break;
+					// }
 				}
 			}
 
 			console.log(lastGapEndCharacter);
 
 			if (lastGapEndCharacter == null) {
-				console.log(this.original_text[this.original_text.length - 2]);
-				console.log(this.original_text[this.original_text.length - 1]);
-
 				let temp_latesttext = this.original_text;
 				if (
 					this.original_text[this.original_text.length - 2] == "\n" &&
@@ -728,9 +781,9 @@ export default {
 					temp_latesttext = temp_latesttext + "\n" + this.new_text;
 				} else if (
 					(this.original_text[lastGapEndCharacter - 2] != "\n" &&
-					this.original_text[lastGapEndCharacter - 1] != "\n") ||
+						this.original_text[lastGapEndCharacter - 1] != "\n") ||
 					(this.original_text[lastGapEndCharacter - 2] == "\n" &&
-					this.original_text[lastGapEndCharacter - 1] != "\n")
+						this.original_text[lastGapEndCharacter - 1] != "\n")
 				) {
 					// console.log("following no carriage returns; need to add two")
 					temp_latesttext = temp_latesttext + "\n" + "\n" + this.new_text;
@@ -756,9 +809,9 @@ export default {
 						this.original_text.substring(lastGapEndCharacter);
 				} else if (
 					(this.original_text[lastGapEndCharacter] != "\n" &&
-					this.original_text[lastGapEndCharacter + 1] != "\n") ||
+						this.original_text[lastGapEndCharacter + 1] != "\n") ||
 					(this.original_text[lastGapEndCharacter] != "\n" &&
-					this.original_text[lastGapEndCharacter + 1] == "\n")
+						this.original_text[lastGapEndCharacter + 1] == "\n")
 				) {
 					// console.log("preceding no carriage returns; need to add two")
 					temp_latesttext =
