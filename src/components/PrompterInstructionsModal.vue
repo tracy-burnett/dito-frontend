@@ -10,7 +10,7 @@
 			<h1 class="text-2xl font-bold">Scribing Instructions</h1>
 			<br />
             <p class="text-sm -mt-[1vh] text-justify pb-[3vh]">
-				1. Press "Shift" and left-click to play or pause the audio player at any time.<br><br>
+				1. Press "Ctrl" and left-click to play or pause the audio player at any time.<br><br>
 			2. Write down the words that you hear, then press "Enter."<br><br>
 			3. If you want to move to a new prompt without saving data, then leave the text box blank and press "Enter" or click on the "New Prompt" button above.<br><br>
 			4. If you choose to receive very short prompts on the "scribe less / more" slider above, the prompter may skip some portions of the audio file to give you phrases of the right length.<br><br>

@@ -10,7 +10,7 @@
 			<h1 class="text-2xl font-bold">Viewing Instructions</h1>
 			<br />
             <p class="text-sm -mt-[1vh] text-justify pb-[3vh]">
-				1. Press "Shift" and left-click to play or pause the audio player at any time.<br><br>
+				1. Press "Ctrl" and left-click to play or pause the audio player at any time.<br><br>
 				2. Click on the phrases below to skip to the part of the audio file that contains them.<br><br>
 				3. Change the slider above that says "highlight less / more" to highlight and refer to the text in shorter or longer phrases as words are being spoken.<br><br>
 				

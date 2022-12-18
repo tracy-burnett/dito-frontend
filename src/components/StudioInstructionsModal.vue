@@ -10,7 +10,7 @@
 			<h1 class="text-2xl font-bold">Studying Instructions</h1>
 			<br />
             <p class="text-sm -mt-[1vh] text-justify pb-[3vh]">
-				1. Press "Shift" and left-click to play or pause the audio player at any time.<br><br>
+				1. Press "Ctrl" and left-click to play or pause the audio player at any time.<br><br>
 				2. Retype exactly whichever phrase most closely matches what you are hearing.<br><br>
 				
 				3. If you are correct, you will automatically receive a new prompt (no need to press "Enter").<br><br>

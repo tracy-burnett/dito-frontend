@@ -1,6 +1,6 @@
 <template>
 <div
-		@click.shift.exact="playerPlayPause++">
+		@click.ctrl.exact="playerPlayPause++">
 		<span
 				v-if="showAddInterpretationModal"
 				class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"

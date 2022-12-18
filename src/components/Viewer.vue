@@ -42,7 +42,7 @@ also, if the user clicks on the text of that substring, snap the audio player to
 						@click="snapToTimestamp(substring)"
 					>{{ substring.text }}</span>
 					<span
-						v-else-if="highlight(substring.startingcharacter)==3"
+						v-else-if="highlight(substring.startingcharacter)>=3"
 						class="text-purple-600"
 						style="white-space: pre-wrap"
 						@click="snapToTimestamp(substring)"
