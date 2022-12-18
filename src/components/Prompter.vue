@@ -9,8 +9,10 @@
 		<!-- {{associations}}<br> -->
 		<!-- {{associationGaps}}<br> -->
 		<!-- {{$store.state.startTimePrompter}} -->
+		<!-- {{new_text}}<br> -->
 		<!-- {{usableGaps}}<br> -->
-		<!-- {{relevantGap}} -->
+		<!-- {{relevantGap}}<br> -->
+		<!-- {{nomoregaps}} -->
 		<textarea
 			class="w-full h-full px-3 py-1  mt-[2vh] border-gray-300 rounded prompter"
 			:style="{ 'font-size': fontsize + 'px' }"
@@ -21,6 +23,10 @@
 			@keydown.enter.exact.prevent="emitNewPrompt()"
 			@keydown.enter.shift.exact.prevent="new_text_unstripped += '\n'"
 		></textarea>
+		<!-- <p
+			v-else
+			ref="promptertextarea"
+		>nothing to scribe</p> -->
 		<!-- <div v-if="allowSubmit==true">this text will be submitted when a new prompt is generated</div>
 		<div v-else-if="allowSubmit==false">this text WILL NOT be submitted when a new prompt is generated</div> -->
 
@@ -57,6 +63,7 @@ export default {
 			sensitivity: 0.05,
 			recursionStopper: false,
 			// recursionTracker: 0,
+			nomoregaps: false, // will be true if no scriber regions exist
 		};
 	},
 	computed: {
@@ -95,10 +102,10 @@ export default {
 
 		scribingclean() {
 			if (
-				this.$store.state.audioDuration < this.scribing &&
+				this.$store.state.audioDuration / 10 < this.scribing &&
 				this.$store.state.audioDuration > 0
 			) {
-				return this.$store.state.audioDuration;
+				return this.$store.state.audioDuration / 10;
 			} else {
 				return this.scribing;
 			}
@@ -173,7 +180,19 @@ export default {
 		interpretationStatus: { default: "" },
 	},
 	watch: {
+		// nomoregaps: function() {
+			// if (this.nomoregaps==false) {
+				
+			// this.$emit("yesGaps");
+			// }
+			// else if (this.nomoregaps==true) {
+				
+			// this.$emit("noGaps");
+			// }
+		// },
+
 		scribingclean: function () {
+			this.nomoregaps = false;
 			if (this.newPromptorScribingToggle == false) {
 				this.tempcurrentgapstart = this.relevantGap.startTime;
 			}
@@ -186,7 +205,7 @@ export default {
 			if (
 				this.new_text != "" &&
 				this.$store.state.audioDuration > 0 &&
-				this.usableGaps.length > 0
+				this.associationGaps.length > 0
 			) {
 				// this.newpromptsfunc will be called if submit is successful inside updatetext()
 				this.updateText();
@@ -196,7 +215,7 @@ export default {
 			}
 		},
 		"$store.state.peaksData": function () {
-			this.tempcurrentgapend = this.$store.state.audioDuration;
+			this.tempcurrentgapend = this.$store.state.audioDuration / 10;
 			this.findGaps(); // populates "this.usableGaps"
 		},
 		// "$store.state.startTimePrompter": function () {
@@ -289,7 +308,17 @@ export default {
 
 					associationsObject.startCharacter = 0;
 					associationsObject.endCharacter = endCharacter;
-					this.associationGaps.push(associationsObject);
+					// console.log(associationsObject)
+					if (
+						parseInt(associationsObject.endTime) >=
+						parseInt(associationsObject.startTime)
+						//  &&
+						// (associationsObject.endCharacter >=
+						// 	associationsObject.startCharacter ||
+						// 	associationsObject.endCharacter == null)
+					) {
+						this.associationGaps.push(associationsObject);
+					}
 
 					//all bounded gaps
 					for (let i = 0; i < Object.keys(this.associations).length - 1; i++) {
@@ -327,40 +356,63 @@ export default {
 						associationsObject.startCharacter = startCharacter;
 						associationsObject.endCharacter = endCharacter;
 
-						this.associationGaps.push(associationsObject);
+						if (
+							parseInt(associationsObject.endTime) >=
+							parseInt(associationsObject.startTime)
+							//  &&
+							// (associationsObject.endCharacter >=
+							// 	associationsObject.startCharacter ||
+							// 	associationsObject.endCharacter == null)
+						) {
+							this.associationGaps.push(associationsObject);
+						}
 					}
 
-					//final
-					startTime = Object.keys(this.associations)[
-						Object.keys(this.associations).length - 1
-					].split("-")[1];
-					endTime = this.$store.state.audioDuration;
+					if (
+						this.associationGaps[this.associationGaps.length - 1].endTime <
+						Math.floor(this.$store.state.audioDuration / 10)
+					) {
+						//final
+						startTime = Object.keys(this.associations)[
+							Object.keys(this.associations).length - 1
+						].split("-")[1];
+						endTime = this.$store.state.audioDuration / 10;
 
-					intervalsCount = Object.values(this.associations)[
-						Object.keys(this.associations).length - 1
-					].length;
+						intervalsCount = Object.values(this.associations)[
+							Object.keys(this.associations).length - 1
+						].length;
 
-					//all character intervals to be highlighted
-					let startCharacterArray = [];
-					for (let j = 0; j < intervalsCount; j++) {
-						//get largest character number from association i to be the startChar for the gap
-						startCharacterArray.push(
-							Object.values(this.associations)[
-								Object.keys(this.associations).length - 1
-							][j].split("-")[1]
-						);
+						//all character intervals to be highlighted
+						let startCharacterArray = [];
+						for (let j = 0; j < intervalsCount; j++) {
+							//get largest character number from association i to be the startChar for the gap
+							startCharacterArray.push(
+								Object.values(this.associations)[
+									Object.keys(this.associations).length - 1
+								][j].split("-")[1]
+							);
+						}
+						let startCharacter = startCharacterArray.reduce(function (a, b) {
+							return Math.max(a, b);
+						}, -Infinity);
+
+						associationsObject = {};
+						associationsObject.startTime = startTime;
+						associationsObject.endTime = endTime;
+
+						associationsObject.startCharacter = startCharacter;
+						associationsObject.endCharacter = null;
+						if (
+							parseInt(associationsObject.endTime) >=
+							parseInt(associationsObject.startTime)
+							// &&
+							// (associationsObject.endCharacter >=
+							// 	associationsObject.startCharacter ||
+							// 	associationsObject.endCharacter == null)
+						) {
+							this.associationGaps.push(associationsObject);
+						}
 					}
-					let startCharacter = startCharacterArray.reduce(function (a, b) {
-						return Math.max(a, b);
-					}, -Infinity);
-
-					associationsObject = {};
-					associationsObject.startTime = startTime;
-					associationsObject.endTime = endTime;
-
-					associationsObject.startCharacter = startCharacter;
-					associationsObject.endCharacter = null;
-					this.associationGaps.push(associationsObject);
 
 					this.associationGaps.forEach((element) => {
 						if (
@@ -378,11 +430,20 @@ export default {
 				} else {
 					let associationsObject = {};
 					associationsObject.startTime = this.tempcurrentgapstart;
-					associationsObject.endTime = this.$store.state.audioDuration;
+					associationsObject.endTime = this.$store.state.audioDuration / 10;
 
 					associationsObject.startCharacter = 0;
 					associationsObject.endCharacter = null;
-					this.associationGaps.push(associationsObject);
+					if (
+						parseInt(associationsObject.endTime) >=
+						parseInt(associationsObject.startTime)
+						//  &&
+						// (associationsObject.endCharacter >=
+						// 	associationsObject.startCharacter ||
+						// 	associationsObject.endCharacter == null)
+					) {
+						this.associationGaps.push(associationsObject);
+					}
 
 					if (
 						this.tempcurrentgapstart <
@@ -398,6 +459,7 @@ export default {
 		},
 
 		newPromptsfunc() {
+
 			if (this.newPromptorScribingToggle == true) {
 				this.relevantGap.startTime = this.tempcurrentgapstart; // this ensures that as the user drags the scribing toggle left and right, the relevant gap is always calculated based on the baseline starttime for the gap and starttime doesn't only increase (instead, it gets reset)
 			}
@@ -407,7 +469,7 @@ export default {
 			this.contentStartingIndex = 0;
 
 			//if the audio player has loaded, and the gaps have been identified
-			if (this.$store.state.audioDuration > 0 && this.usableGaps.length > 0) {
+			if (this.$store.state.audioDuration > 0 && this.usableGaps.length > 0 && this.nomoregaps==false) {
 				// a little gap to work with to generate this prompt
 				this.relevantGap.startTime = parseInt(this.usableGaps[0].startTime); // should be in hundredths of a second
 				this.relevantGap.endTime = Math.min(
@@ -542,14 +604,24 @@ export default {
 				) {
 					this.usableGaps[0].startTime =
 						this.contentEndingIndex - 5 + this.relevantGap.startTime;
-					this.tempcurrentgapend = this.$store.state.audioDuration;
+					this.tempcurrentgapend = this.$store.state.audioDuration / 10;
 				} else if (
 					this.usableGaps[0].endTime -
 						(this.contentEndingIndex - 5 + this.relevantGap.startTime) <
-					this.scribingclean // FLAG TIME DECISION
+						this.scribingclean && // FLAG TIME DECISION
+					this.usableGaps.length >= 2
 				) {
 					this.tempcurrentgapend = this.usableGaps[0].endTime;
 					this.usableGaps.shift();
+				} else if (
+					this.usableGaps[0].endTime -
+						(this.contentEndingIndex - 5 + this.relevantGap.startTime) <
+						this.scribingclean && // FLAG TIME DECISION
+					this.usableGaps.length <= 1
+				) {
+					// console.log("help")
+					// this.findGaps()
+					this.nomoregaps = true;
 				}
 
 				// console.log(this.contentStartingIndex + this.relevantGap.startTime);
@@ -604,7 +676,8 @@ export default {
 				// this.sensitivity=.1
 				// this.allowSubmit = true;
 				this.$refs.promptertextarea.focus();
-			}
+			} 
+			else {this.nomoregaps=true}
 		},
 
 		emitNewPrompt() {
@@ -624,8 +697,8 @@ export default {
 
 			// if (Number.isNaN(this.relevantGap.endCharacter) == false) {
 			//if the gap does have an ending
-			let lastGapEndCharacter = this.associationGaps[0].startCharacter;
-			console.log("defaulting to " + lastGapEndCharacter)
+			let lastGapEndCharacter = this.associationGaps[0].endCharacter;
+			// console.log("defaulting to " + lastGapEndCharacter);
 			// if (
 			// 	this.associationGaps.length == 1 &&
 			// 	this.$store.state.startTimePrompter * 100 <
@@ -649,40 +722,65 @@ export default {
 			) {
 				// console.log("in");
 				for (let i = 0; i < this.associationGaps.length; i++) {
-
-					console.log(this.$store.state.startTimePrompter * 100 + "wants to be greater than or equal to " + this.associationGaps[i].startTime)
-
-					console.log(this.$store.state.startTimePrompter * 100 + "wants to be less than " + this.associationGaps[i+1].startTime)
+					// console.log(this.associationGaps[i]);
+					// console.log(
+					// 	this.$store.state.startTimePrompter * 100 +
+					// 		"wants to be greater than or equal to " +
+					// 		this.associationGaps[i].startTime
+					// );
+					// console.log(this.associationGaps[i + 1]);
+					// console.log(
+					// 	this.$store.state.startTimePrompter * 100 +
+					// 		"wants to be less than " +
+					// 		this.associationGaps[i + 1].startTime
+					// );
 					if (
-						// if somewhere in or just before second chunk
 						this.$store.state.startTimePrompter * 100 >=
 							this.associationGaps[i].startTime &&
 						this.$store.state.startTimePrompter * 100 <
-							this.associationGaps[i + 1].startTime
+							this.associationGaps[i + 1].startTime &&
+						this.associationGaps[i + 1].endCharacter == null
 					) {
-						// then place new text just before second chunk
-						console.log("in 1");
-						lastGapEndCharacter = this.associationGaps[i].endCharacter;
+						// console.log("in 1");
+						lastGapEndCharacter = this.associationGaps[i + 1].endCharacter;
 						break;
-					} else if (i == this.associationGaps.length-1) {
-						// console.log(
-						// 	this.associationGaps[this.associationGaps.length - 1].endCharacter
-						// );
-						console.log("in 2")
+					} else if (
+						this.$store.state.startTimePrompter * 100 >=
+							this.associationGaps[i].startTime &&
+						this.$store.state.startTimePrompter * 100 <
+							this.associationGaps[i + 1].startTime &&
+						this.associationGaps[i + 1].endCharacter != null
+					) {
+						// console.log("in 2");
+						lastGapEndCharacter = this.associationGaps[i + 1].endCharacter;
+						break;
+					} // we need to do something if the last gap is bounded
+					else if (
+						this.$store.state.startTimePrompter * 100 >=
+						this.associationGaps[this.associationGaps.length - 1].endTime
+					) {
 						lastGapEndCharacter =
-							this.associationGaps[i]
+							this.associationGaps[this.associationGaps.length - 1]
 								.endCharacter;
 						break;
 					}
+					// NEED TO FINISH THIS PART, FLAG!!!!!}
+					// else if (i + 1 == this.associationGaps.length-1) {
+					// 	// console.log(
+					// 	// 	this.associationGaps[this.associationGaps.length - 1].endCharacter
+					// 	// );
+					// 	console.log("in 2")
+					// 	lastGapEndCharacter =
+					// 		this.associationGaps[i+2]
+					// 			.endCharacter;
+					// 	break;
+					// }
 				}
 			}
 
-			console.log(lastGapEndCharacter);
+			// console.log(lastGapEndCharacter);
 
 			if (lastGapEndCharacter == null) {
-				console.log(this.original_text[this.original_text.length - 2]);
-				console.log(this.original_text[this.original_text.length - 1]);
-
 				let temp_latesttext = this.original_text;
 				if (
 					this.original_text[this.original_text.length - 2] == "\n" &&
@@ -728,9 +826,9 @@ export default {
 					temp_latesttext = temp_latesttext + "\n" + this.new_text;
 				} else if (
 					(this.original_text[lastGapEndCharacter - 2] != "\n" &&
-					this.original_text[lastGapEndCharacter - 1] != "\n") ||
+						this.original_text[lastGapEndCharacter - 1] != "\n") ||
 					(this.original_text[lastGapEndCharacter - 2] == "\n" &&
-					this.original_text[lastGapEndCharacter - 1] != "\n")
+						this.original_text[lastGapEndCharacter - 1] != "\n")
 				) {
 					// console.log("following no carriage returns; need to add two")
 					temp_latesttext = temp_latesttext + "\n" + "\n" + this.new_text;
@@ -756,9 +854,9 @@ export default {
 						this.original_text.substring(lastGapEndCharacter);
 				} else if (
 					(this.original_text[lastGapEndCharacter] != "\n" &&
-					this.original_text[lastGapEndCharacter + 1] != "\n") ||
+						this.original_text[lastGapEndCharacter + 1] != "\n") ||
 					(this.original_text[lastGapEndCharacter] != "\n" &&
-					this.original_text[lastGapEndCharacter + 1] == "\n")
+						this.original_text[lastGapEndCharacter + 1] == "\n")
 				) {
 					// console.log("preceding no carriage returns; need to add two")
 					temp_latesttext =
@@ -953,6 +1051,7 @@ export default {
 
 							return;
 						}); //increase every startcharacter and endcharacter
+			
 						this.newPromptsfunc();
 
 						//add in the association for the new phrase.
@@ -1378,6 +1477,8 @@ export default {
 	},
 
 	async mounted() {
+
+		// this.$emit("yesGaps");
 		if (this.$store.state.user) {
 			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
 			await getIdToken(this.$store.state.user)
