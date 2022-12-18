@@ -9,9 +9,11 @@
 		<!-- {{associations}}<br> -->
 		<!-- {{associationGaps}}<br> -->
 		<!-- {{$store.state.startTimePrompter}} -->
+		<!-- {{new_text}}<br> -->
 		<!-- {{usableGaps}}<br> -->
-		<!-- {{relevantGap}} -->
-		<textarea v-if="nomoregaps==false"
+		<!-- {{relevantGap}}<br> -->
+		<!-- {{nomoregaps}} -->
+		<textarea
 			class="w-full h-full px-3 py-1  mt-[2vh] border-gray-300 rounded prompter"
 			:style="{ 'font-size': fontsize + 'px' }"
 			style="overflow: scroll; height:45.5vh;"
@@ -21,7 +23,10 @@
 			@keydown.enter.exact.prevent="emitNewPrompt()"
 			@keydown.enter.shift.exact.prevent="new_text_unstripped += '\n'"
 		></textarea>
-		<p v-else ref="promptertextarea">nothing to scribe</p>
+		<!-- <p
+			v-else
+			ref="promptertextarea"
+		>nothing to scribe</p> -->
 		<!-- <div v-if="allowSubmit==true">this text will be submitted when a new prompt is generated</div>
 		<div v-else-if="allowSubmit==false">this text WILL NOT be submitted when a new prompt is generated</div> -->
 
@@ -97,10 +102,10 @@ export default {
 
 		scribingclean() {
 			if (
-				this.$store.state.audioDuration/10 < this.scribing &&
+				this.$store.state.audioDuration / 10 < this.scribing &&
 				this.$store.state.audioDuration > 0
 			) {
-				return this.$store.state.audioDuration/10;
+				return this.$store.state.audioDuration / 10;
 			} else {
 				return this.scribing;
 			}
@@ -175,8 +180,19 @@ export default {
 		interpretationStatus: { default: "" },
 	},
 	watch: {
+		// nomoregaps: function() {
+			// if (this.nomoregaps==false) {
+				
+			// this.$emit("yesGaps");
+			// }
+			// else if (this.nomoregaps==true) {
+				
+			// this.$emit("noGaps");
+			// }
+		// },
+
 		scribingclean: function () {
-			this.nomoregaps=false
+			this.nomoregaps = false;
 			if (this.newPromptorScribingToggle == false) {
 				this.tempcurrentgapstart = this.relevantGap.startTime;
 			}
@@ -189,7 +205,7 @@ export default {
 			if (
 				this.new_text != "" &&
 				this.$store.state.audioDuration > 0 &&
-				this.usableGaps.length > 0
+				this.associationGaps.length > 0
 			) {
 				// this.newpromptsfunc will be called if submit is successful inside updatetext()
 				this.updateText();
@@ -199,7 +215,7 @@ export default {
 			}
 		},
 		"$store.state.peaksData": function () {
-			this.tempcurrentgapend = this.$store.state.audioDuration/10;
+			this.tempcurrentgapend = this.$store.state.audioDuration / 10;
 			this.findGaps(); // populates "this.usableGaps"
 		},
 		// "$store.state.startTimePrompter": function () {
@@ -294,7 +310,8 @@ export default {
 					associationsObject.endCharacter = endCharacter;
 					// console.log(associationsObject)
 					if (
-						parseInt(associationsObject.endTime) >= parseInt(associationsObject.startTime)
+						parseInt(associationsObject.endTime) >=
+						parseInt(associationsObject.startTime)
 						//  &&
 						// (associationsObject.endCharacter >=
 						// 	associationsObject.startCharacter ||
@@ -340,7 +357,8 @@ export default {
 						associationsObject.endCharacter = endCharacter;
 
 						if (
-						parseInt(associationsObject.endTime) >= parseInt(associationsObject.startTime)
+							parseInt(associationsObject.endTime) >=
+							parseInt(associationsObject.startTime)
 							//  &&
 							// (associationsObject.endCharacter >=
 							// 	associationsObject.startCharacter ||
@@ -352,13 +370,13 @@ export default {
 
 					if (
 						this.associationGaps[this.associationGaps.length - 1].endTime <
-						Math.floor(this.$store.state.audioDuration/10)
+						Math.floor(this.$store.state.audioDuration / 10)
 					) {
 						//final
 						startTime = Object.keys(this.associations)[
 							Object.keys(this.associations).length - 1
 						].split("-")[1];
-						endTime = this.$store.state.audioDuration/10;
+						endTime = this.$store.state.audioDuration / 10;
 
 						intervalsCount = Object.values(this.associations)[
 							Object.keys(this.associations).length - 1
@@ -385,7 +403,8 @@ export default {
 						associationsObject.startCharacter = startCharacter;
 						associationsObject.endCharacter = null;
 						if (
-						parseInt(associationsObject.endTime) >= parseInt(associationsObject.startTime)
+							parseInt(associationsObject.endTime) >=
+							parseInt(associationsObject.startTime)
 							// &&
 							// (associationsObject.endCharacter >=
 							// 	associationsObject.startCharacter ||
@@ -411,12 +430,13 @@ export default {
 				} else {
 					let associationsObject = {};
 					associationsObject.startTime = this.tempcurrentgapstart;
-					associationsObject.endTime = this.$store.state.audioDuration/10;
+					associationsObject.endTime = this.$store.state.audioDuration / 10;
 
 					associationsObject.startCharacter = 0;
 					associationsObject.endCharacter = null;
 					if (
-						parseInt(associationsObject.endTime) >= parseInt(associationsObject.startTime)
+						parseInt(associationsObject.endTime) >=
+						parseInt(associationsObject.startTime)
 						//  &&
 						// (associationsObject.endCharacter >=
 						// 	associationsObject.startCharacter ||
@@ -439,6 +459,7 @@ export default {
 		},
 
 		newPromptsfunc() {
+
 			if (this.newPromptorScribingToggle == true) {
 				this.relevantGap.startTime = this.tempcurrentgapstart; // this ensures that as the user drags the scribing toggle left and right, the relevant gap is always calculated based on the baseline starttime for the gap and starttime doesn't only increase (instead, it gets reset)
 			}
@@ -448,7 +469,7 @@ export default {
 			this.contentStartingIndex = 0;
 
 			//if the audio player has loaded, and the gaps have been identified
-			if (this.$store.state.audioDuration > 0 && this.usableGaps.length > 0) {
+			if (this.$store.state.audioDuration > 0 && this.usableGaps.length > 0 && this.nomoregaps==false) {
 				// a little gap to work with to generate this prompt
 				this.relevantGap.startTime = parseInt(this.usableGaps[0].startTime); // should be in hundredths of a second
 				this.relevantGap.endTime = Math.min(
@@ -583,24 +604,24 @@ export default {
 				) {
 					this.usableGaps[0].startTime =
 						this.contentEndingIndex - 5 + this.relevantGap.startTime;
-					this.tempcurrentgapend = this.$store.state.audioDuration/10;
+					this.tempcurrentgapend = this.$store.state.audioDuration / 10;
 				} else if (
 					this.usableGaps[0].endTime -
 						(this.contentEndingIndex - 5 + this.relevantGap.startTime) <
-					this.scribingclean // FLAG TIME DECISION
-					&& this.usableGaps.length>=2
+						this.scribingclean && // FLAG TIME DECISION
+					this.usableGaps.length >= 2
 				) {
 					this.tempcurrentgapend = this.usableGaps[0].endTime;
 					this.usableGaps.shift();
 				} else if (
 					this.usableGaps[0].endTime -
 						(this.contentEndingIndex - 5 + this.relevantGap.startTime) <
-					this.scribingclean // FLAG TIME DECISION
-					&& this.usableGaps.length==1
+						this.scribingclean && // FLAG TIME DECISION
+					this.usableGaps.length <= 1
 				) {
 					// console.log("help")
-// this.findGaps()
-this.nomoregaps=true
+					// this.findGaps()
+					this.nomoregaps = true;
 				}
 
 				// console.log(this.contentStartingIndex + this.relevantGap.startTime);
@@ -655,7 +676,8 @@ this.nomoregaps=true
 				// this.sensitivity=.1
 				// this.allowSubmit = true;
 				this.$refs.promptertextarea.focus();
-			}
+			} 
+			else {this.nomoregaps=true}
 		},
 
 		emitNewPrompt() {
@@ -676,7 +698,7 @@ this.nomoregaps=true
 			// if (Number.isNaN(this.relevantGap.endCharacter) == false) {
 			//if the gap does have an ending
 			let lastGapEndCharacter = this.associationGaps[0].endCharacter;
-			console.log("defaulting to " + lastGapEndCharacter);
+			// console.log("defaulting to " + lastGapEndCharacter);
 			// if (
 			// 	this.associationGaps.length == 1 &&
 			// 	this.$store.state.startTimePrompter * 100 <
@@ -700,18 +722,18 @@ this.nomoregaps=true
 			) {
 				// console.log("in");
 				for (let i = 0; i < this.associationGaps.length; i++) {
-					console.log(this.associationGaps[i]);
-					console.log(
-						this.$store.state.startTimePrompter * 100 +
-							"wants to be greater than or equal to " +
-							this.associationGaps[i].startTime
-					);
-					console.log(this.associationGaps[i + 1]);
-					console.log(
-						this.$store.state.startTimePrompter * 100 +
-							"wants to be less than " +
-							this.associationGaps[i + 1].startTime
-					);
+					// console.log(this.associationGaps[i]);
+					// console.log(
+					// 	this.$store.state.startTimePrompter * 100 +
+					// 		"wants to be greater than or equal to " +
+					// 		this.associationGaps[i].startTime
+					// );
+					// console.log(this.associationGaps[i + 1]);
+					// console.log(
+					// 	this.$store.state.startTimePrompter * 100 +
+					// 		"wants to be less than " +
+					// 		this.associationGaps[i + 1].startTime
+					// );
 					if (
 						this.$store.state.startTimePrompter * 100 >=
 							this.associationGaps[i].startTime &&
@@ -719,7 +741,7 @@ this.nomoregaps=true
 							this.associationGaps[i + 1].startTime &&
 						this.associationGaps[i + 1].endCharacter == null
 					) {
-						console.log("in 1");
+						// console.log("in 1");
 						lastGapEndCharacter = this.associationGaps[i + 1].endCharacter;
 						break;
 					} else if (
@@ -729,7 +751,7 @@ this.nomoregaps=true
 							this.associationGaps[i + 1].startTime &&
 						this.associationGaps[i + 1].endCharacter != null
 					) {
-						console.log("in 2");
+						// console.log("in 2");
 						lastGapEndCharacter = this.associationGaps[i + 1].endCharacter;
 						break;
 					} // we need to do something if the last gap is bounded
@@ -756,7 +778,7 @@ this.nomoregaps=true
 				}
 			}
 
-			console.log(lastGapEndCharacter);
+			// console.log(lastGapEndCharacter);
 
 			if (lastGapEndCharacter == null) {
 				let temp_latesttext = this.original_text;
@@ -1029,6 +1051,7 @@ this.nomoregaps=true
 
 							return;
 						}); //increase every startcharacter and endcharacter
+			
 						this.newPromptsfunc();
 
 						//add in the association for the new phrase.
@@ -1454,6 +1477,8 @@ this.nomoregaps=true
 	},
 
 	async mounted() {
+
+		// this.$emit("yesGaps");
 		if (this.$store.state.user) {
 			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
 			await getIdToken(this.$store.state.user)

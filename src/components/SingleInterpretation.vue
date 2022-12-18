@@ -189,6 +189,7 @@
 				:scribing="scribing"
 				:studying="studying"
 				:fontsize="fontsize"
+				:key="prompterReloadCounter"
 				:clearTimestampsvar="clearTimestampsvar"
 				:updateAssociations="updateAssociations"
 				:saveEditscounter="saveEditscounter"
@@ -200,6 +201,7 @@
 				@permanentlydestroy="permanentlydestroy($event)"
 				@increasePhrasesCounter="newPhrase()"
 				@generateNewPrompt="newPrompt()"
+				@reloadPrompter="prompterReloadCounter++"
 			>
 
 			</component>
@@ -251,6 +253,7 @@ export default {
 			styleoption: "Studio", // this can be Viewer, Editor, or Tagger, depending on how the user is currently interacting with the displayed interpretation
 			interpretationFull: {}, // this contains all of the information about the currently displayed interpretation
 			showSyncingModal: false,
+			prompterReloadCounter: 0, // reloads prompter component
 		};
 	},
 
