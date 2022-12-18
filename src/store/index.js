@@ -35,6 +35,7 @@ export default new Vuex.Store({
     cardlistscrollposition: 0,
     triggerNewText: 0, // audio player uses this to tell prompter to generate new text into the text box for the new audio range
     renewViewer: 0, // makes Viewer load new associations, e.g. after resyncing text to audio
+    checkViewerHighlight: 0, // makes Viewer redo current highlighting scheme
     authCompleted: false,
 
   },
@@ -98,6 +99,10 @@ export default new Vuex.Store({
 
     reloadViewer(state){
       state.renewViewer++
+    },
+
+    updateHighlights(state){
+      state.checkViewerHighlight++
     },
 
     updateIncomingCurrentTime(state, {timestamp}) {

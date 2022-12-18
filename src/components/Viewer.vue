@@ -116,6 +116,25 @@ export default {
 		"$store.state.renewViewer": function () {
 			this.fetchNewInterpretation();
 		},
+		"$store.state.updateHighlights": function () {
+			if (
+				this.$store.state.audioplayertime < this.lastTimestamp ||
+				this.$store.state.audioplayertime > this.nextTimestamp
+			) {
+				let currenttime = this.$store.state.audioplayertime;
+				// REPOPULATE TIMESTAMPS
+				for (let i = 0; i < this.relevantTimestamps.length; i++) {
+					if (
+						this.relevantTimestamps[i] <= currenttime &&
+						this.relevantTimestamps[i + 1] >= currenttime
+					) {
+						this.lastTimestamp = this.relevantTimestamps[i];
+						this.nextTimestamp = this.relevantTimestamps[i + 1];
+						break;
+					}
+				}
+			}
+		},
 		"$store.state.audioplayertime": function () {
 			// if (this.$store.state.audioplayertime >= this.nextTimestamp)
 			// {
@@ -418,8 +437,8 @@ export default {
 
 		highlight(startingcharacter) {
 			let k = 0;
-			console.log(startingcharacter)
-			console.log(this.parsedAssociations)
+			// console.log(startingcharacter)
+			// console.log(this.parsedAssociations)
 			this.parsedAssociations.forEach((element, elementindex) => {
 				if (
 					this.lastTimestamp >= element.startTime && this.lastTimestamp < element.endTime
@@ -440,7 +459,7 @@ export default {
 			// 		}
 
 			// }
-			console.log(k)
+			// console.log(k)
 			return k; // any value of k greater than 0 will cause the substring to be highlighted at this moment in the audio player time
 		},
 
