@@ -5,8 +5,9 @@
 			in <span class="py-1 border-gray-300 rounded">{{ language_name }}</span>
 
 			<br><br>
-			<!-- {{lastTimestamp}} -->
-			<!-- {{nextTimestamp}} -->
+			{{lastTimestamp}}
+			{{nextTimestamp}}
+			{{relevantTimestamps}}
 			<!-- {{associations}}<br><br> -->
 			<!-- {{parsedAssociations}}<br><br> -->
 			<!-- {{substringArray}}<br><br> -->
@@ -417,11 +418,11 @@ export default {
 
 		highlight(startingcharacter) {
 			let k = 0;
-			// console.log(startingcharacter)
-			// console.log(this.parsedAssociations)
+			console.log(startingcharacter)
+			console.log(this.parsedAssociations)
 			this.parsedAssociations.forEach((element, elementindex) => {
 				if (
-					this.lastTimestamp == element.startTime
+					this.lastTimestamp >= element.startTime && this.lastTimestamp < element.endTime
 				) {
 					if (
 						startingcharacter >= element.startCharacter &&
@@ -439,6 +440,7 @@ export default {
 			// 		}
 
 			// }
+			console.log(k)
 			return k; // any value of k greater than 0 will cause the substring to be highlighted at this moment in the audio player time
 		},
 
