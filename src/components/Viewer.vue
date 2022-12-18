@@ -418,8 +418,8 @@ export default {
 
 		highlight(startingcharacter) {
 			let k = 0;
-			console.log(startingcharacter)
-			console.log(this.parsedAssociations)
+			// console.log(startingcharacter)
+			// console.log(this.parsedAssociations)
 			this.parsedAssociations.forEach((element, elementindex) => {
 				if (
 					this.lastTimestamp >= element.startTime && this.lastTimestamp < element.endTime
@@ -440,7 +440,7 @@ export default {
 			// 		}
 
 			// }
-			console.log(k)
+			// console.log(k)
 			return k; // any value of k greater than 0 will cause the substring to be highlighted at this moment in the audio player time
 		},
 
