@@ -203,12 +203,16 @@ export default {
 		},
 	},
 	mounted() {
-		if (this.$store.state.infobit == "PublicCardList") {
+		console.log(this.$store.state.infobit)
+		if (this.$store.state.infobit == "PublicCardList" || this.$store.state.infobit == "Login") {
+			console.log("1")
 			this.toggleStorybookStyle("Viewer");
 		} else if (this.$store.state.infobit == "InfoRevitalize") {
+			console.log("2")
 			this.toggleStorybookStyle("Studio");
 			this.$store.commit("toggleInfobit", "PublicCardList");
 		} else if (this.$store.state.infobit == "InfoPublish") {
+			console.log("3")
 			this.toggleStorybookStyle("Prompter");
 			this.$store.commit("toggleInfobit", "PublicCardList");
 		}
