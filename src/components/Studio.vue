@@ -218,7 +218,7 @@ export default {
 	},
 	methods: {
 		chooseanswer(answer) {
-			if (interpretationStatus=="owner" || interpretationStatus=="editor")
+			if (this.interpretationStatus=="owner" || this.interpretationStatus=="editor")
 			{this.new_text_unstripped = answer;}
 		},
 

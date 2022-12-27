@@ -286,6 +286,9 @@ export default {
 
 		downloadSRT() {
 			this.srt = "";
+
+			
+			this.parsedAssociations.sort((a, b) => a.startTime - b.startTime);
 			this.parsedAssociations.forEach((value, index) => {
 				let tempStartTimeMilliseconds = value.startTime.slice(-2) + "0";
 				while (tempStartTimeMilliseconds.length < 3) {
