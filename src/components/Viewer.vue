@@ -71,7 +71,6 @@ export default {
 			language_name: "",
 			title: "",
 			srt: "",
-			srtArray: [],
 			// currenthighlight: 0,
 			// fontsizeoriginal: 12,
 			relevantTimestamps: [],
@@ -286,12 +285,10 @@ export default {
 		},
 
 		downloadSRT() {
-			this.srtArray = [];
+			this.srt = "";
 
-
-
+			
 			this.parsedAssociations.sort((a, b) => a.startTime - b.startTime);
-
 			this.parsedAssociations.forEach((value, index) => {
 				let tempStartTimeMilliseconds = value.startTime.slice(-2) + "0";
 				while (tempStartTimeMilliseconds.length < 3) {
@@ -316,13 +313,7 @@ export default {
 
 				tempSubstring = tempSubstringSplit.join("");
 
-				let tempInfo = {};
-				// tempInfo.tempSubstring = tempSubstring;
-				// tempInfo.tempStartTimeSeconds = tempStartTimeSeconds;
-				// tempInfo.tempStartTimeMilliseconds = tempStartTimeMilliseconds;
-				// tempInfo.tempEndTimeSeconds = tempEndTimeSeconds;
-				// tempInfo.tempEndTimeMilliseconds = tempEndTimeMilliseconds;
-				tempInfo.addToFile =
+				this.srt +=
 					index +
 					1 +
 					"\n" +
@@ -336,24 +327,7 @@ export default {
 					"\n" +
 					tempSubstring +
 					"\n\n";
-				
-				this.srtArray.push(tempInfo);
 			});
-
-			for (let i = 0; i < 10; i++) {
-				console.log(this.srtArray[i]);
-			}
-			this.arrayToString()
-		},
-
-		arrayToString() {
-			this.srt = "";
-			for (let i = 0; i < this.srtArray.length; i++) {
-				// console.log(this.srtArray[i])
-				this.srt += this.srtArray[i].addToFile
-			}
-			console.log(this.srt)
-
 			// console.log(this.srt)
 			if (this.srt.slice(-2) == "\n\n") {
 				this.srt = this.srt.slice(0, -2);
@@ -470,8 +444,7 @@ export default {
 			// console.log(this.parsedAssociations)
 			this.parsedAssociations.forEach((element, elementindex) => {
 				if (
-					this.lastTimestamp >= element.startTime &&
-					this.lastTimestamp < element.endTime
+					this.lastTimestamp >= element.startTime && this.lastTimestamp < element.endTime
 				) {
 					if (
 						startingcharacter >= element.startCharacter &&
