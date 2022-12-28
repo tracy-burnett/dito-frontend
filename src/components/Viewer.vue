@@ -8,7 +8,7 @@
 			<!-- {{lastTimestamp}}
 			{{nextTimestamp}}
 			{{relevantTimestamps}} -->
-			<!-- {{associations}}<br><br> -->
+			<!-- {{associations}}<br><br> --> 
 			{{parsedAssociations}}<br><br>
 			<!-- {{substringArray}}<br><br> -->
 			<!-- for each substring that would be independently highlighted, render it as highlighted or not based on running the highlight function on it whenever the current audioplayer time changes.
