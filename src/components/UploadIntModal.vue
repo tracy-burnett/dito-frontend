@@ -210,7 +210,7 @@ export default {
 				// console.log(caption)
 				let srt_instructions = caption.split("\n");
 				// console.log(srt_instructions)
-				// if (srt_instructions[0]=="") {srt_instructions.splice(0,1)}
+				if (srt_instructions[0]=="") {srt_instructions.splice(0,1)}
 				let timestampInstructions = srt_instructions[1];
 
 				let timestampStart = timestampInstructions.split(" --> ")[0];
