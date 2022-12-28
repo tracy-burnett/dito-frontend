@@ -292,10 +292,10 @@ export default {
 			this.substringArray.forEach((value, index) => {
 				// console.log(this.populateSRT(value.startingcharacter));
 				let info = this.populateSRT(value.startingcharacter);
-				console.log(info);
+				// console.log(info);
 
 				if (Object.keys(info).length > 0) {
-					console.log("HIT");
+					// console.log("HIT");
 					let tempStartTimeMilliseconds = info.startTime.slice(-2) + "0";
 					while (tempStartTimeMilliseconds.length < 3) {
 						tempStartTimeMilliseconds += 0;
