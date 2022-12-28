@@ -8,9 +8,9 @@
 			<!-- {{lastTimestamp}}
 			{{nextTimestamp}}
 			{{relevantTimestamps}} -->
-			<!-- {{associations}}<br><br> --> 
-			{{parsedAssociations}}<br><br>
-			{{substringArray}}<br><br>
+			<!-- {{associations}}<br><br> -->
+			<!-- {{parsedAssociations}}<br><br> -->
+			<!-- {{substringArray}}<br><br> -->
 			<!-- for each substring that would be independently highlighted, render it as highlighted or not based on running the highlight function on it whenever the current audioplayer time changes.
 also, if the user clicks on the text of that substring, snap the audio player to play the corresponding audio for that substring. -->
 			<div
@@ -287,46 +287,54 @@ export default {
 		downloadSRT() {
 			this.srt = "";
 
-			
-			this.parsedAssociations.sort((a, b) => a.startCharacter - b.startCharacter);
-			this.parsedAssociations.forEach((value, index) => {
-				let tempStartTimeMilliseconds = value.startTime.slice(-2) + "0";
-				while (tempStartTimeMilliseconds.length < 3) {
-					tempStartTimeMilliseconds += 0;
-				}
-				let tempStartTimeSeconds = this.secondsToTime(
-					value.startTime.slice(0, -2)
-				);
-				let tempEndTimeMilliseconds = value.endTime.slice(-2) + "0";
-				while (tempEndTimeMilliseconds.length < 3) {
-					tempEndTimeMilliseconds += 0;
-				}
-				let tempEndTimeSeconds = this.secondsToTime(value.endTime.slice(0, -2));
-				let tempSubstring = this.getTempSubstring(value.startCharacter);
-				// console.log(tempSubstring)
-				let tempSubstringSplit = tempSubstring.split("");
-				tempSubstringSplit.forEach((character, index) => {
-					if (character === "\n") {
-						tempSubstringSplit[index] = "\\n";
+			this.parsedAssociations.sort((a, b) => a.endCharacter - b.endCharacter);
+			this.substringArray.forEach((value, index) => {
+				// console.log(this.populateSRT(value.startingcharacter));
+				let info = this.populateSRT(value.startingcharacter);
+				console.log(info);
+
+				if (Object.keys(info).length > 0) {
+					console.log("HIT");
+					let tempStartTimeMilliseconds = info.startTime.slice(-2) + "0";
+					while (tempStartTimeMilliseconds.length < 3) {
+						tempStartTimeMilliseconds += 0;
 					}
-				});
+					let tempStartTimeSeconds = this.secondsToTime(
+						info.startTime.slice(0, -2)
+					);
+					let tempEndTimeMilliseconds = info.endTime.slice(-2) + "0";
+					while (tempEndTimeMilliseconds.length < 3) {
+						tempEndTimeMilliseconds += 0;
+					}
+					let tempEndTimeSeconds = this.secondsToTime(
+						info.endTime.slice(0, -2)
+					);
+					let tempSubstring = value.text;
+					// console.log(tempSubstring)
+					let tempSubstringSplit = tempSubstring.split("");
+					tempSubstringSplit.forEach((character, index) => {
+						if (character === "\n") {
+							tempSubstringSplit[index] = "\\n";
+						}
+					});
 
-				tempSubstring = tempSubstringSplit.join("");
+					tempSubstring = tempSubstringSplit.join("");
 
-				this.srt +=
-					index +
-					1 +
-					"\n" +
-					tempStartTimeSeconds +
-					"," +
-					tempStartTimeMilliseconds +
-					" --> " +
-					tempEndTimeSeconds +
-					"," +
-					tempEndTimeMilliseconds +
-					"\n" +
-					tempSubstring +
-					"\n\n";
+					this.srt +=
+						index +
+						1 +
+						"\n" +
+						tempStartTimeSeconds +
+						"," +
+						tempStartTimeMilliseconds +
+						" --> " +
+						tempEndTimeSeconds +
+						"," +
+						tempEndTimeMilliseconds +
+						"\n" +
+						tempSubstring +
+						"\n\n";
+				}
 			});
 			// console.log(this.srt)
 			if (this.srt.slice(-2) == "\n\n") {
@@ -345,16 +353,16 @@ export default {
 			);
 		},
 
-		getTempSubstring(startcharacter) {
-			let tempSubstring = "";
-			this.substringArray.forEach((substring) => {
-				if (substring.startingcharacter == startcharacter) {
-					tempSubstring = substring.text;
-				}
-			});
+		// getTempSubstring(startcharacter) {
+		// 	let tempSubstring = "";
+		// 	this.substringArray.forEach((substring) => {
+		// 		if (substring.startingcharacter == startcharacter) {
+		// 			tempSubstring = substring.text;
+		// 		}
+		// 	});
 
-			return tempSubstring;
-		},
+		// 	return tempSubstring;
+		// },
 
 		// convert a value from seconds to HH:MM:SS
 		secondsToTime(seconds) {
@@ -444,7 +452,8 @@ export default {
 			// console.log(this.parsedAssociations)
 			this.parsedAssociations.forEach((element, elementindex) => {
 				if (
-					this.lastTimestamp >= element.startTime && this.lastTimestamp < element.endTime
+					this.lastTimestamp >= element.startTime &&
+					this.lastTimestamp < element.endTime
 				) {
 					if (
 						startingcharacter >= element.startCharacter &&
@@ -464,6 +473,20 @@ export default {
 			// }
 			// console.log(k)
 			return k; // any value of k greater than 0 will cause the substring to be highlighted at this moment in the audio player time
+		},
+
+		populateSRT(startingcharacter) {
+			let tempassociation = {};
+			for (let i = 0; i < this.parsedAssociations.length; i++) {
+				if (
+					startingcharacter >= this.parsedAssociations[i].startCharacter &&
+					startingcharacter < this.parsedAssociations[i].endCharacter
+				) {
+					tempassociation = this.parsedAssociations[i];
+					break;
+				}
+			}
+			return tempassociation;
 		},
 
 		// 				calculateScrollTopMargin(substring) {

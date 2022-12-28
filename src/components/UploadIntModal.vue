@@ -136,6 +136,7 @@ export default {
 				this.int_text != "" ||
 				this.int_language != ""
 			) {
+			// console.log(this.int_text.normalize("NFC"))
 				fetch(
 					process.env.VUE_APP_api_URL +
 						"interpretations/audio/" +
@@ -163,6 +164,7 @@ export default {
 					.then((response) => {
 						// console.log(response)
 						//add in the association for the new phrase.
+						// console.log(this.new_associations)
 						fetch(
 							process.env.VUE_APP_api_URL +
 								"content/" +
@@ -205,8 +207,10 @@ export default {
 			// console.log(this.fileloaded)
 			let arrayToParse = this.fileloaded.split("\n\n");
 			arrayToParse.forEach((caption) => {
+				// console.log(caption)
 				let srt_instructions = caption.split("\n");
 				// console.log(srt_instructions)
+				// if (srt_instructions[0]=="") {srt_instructions.splice(0,1)}
 				let timestampInstructions = srt_instructions[1];
 
 				let timestampStart = timestampInstructions.split(" --> ")[0];
