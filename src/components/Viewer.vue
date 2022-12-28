@@ -288,6 +288,7 @@ export default {
 			this.srt = "";
 
 			this.parsedAssociations.sort((a, b) => a.endCharacter - b.endCharacter);
+			let captionNumber=0
 			this.substringArray.forEach((value, index) => {
 				// console.log(this.populateSRT(value.startingcharacter));
 				let info = this.populateSRT(value.startingcharacter);
@@ -319,10 +320,10 @@ export default {
 					});
 
 					tempSubstring = tempSubstringSplit.join("");
+					captionNumber++
 
 					this.srt +=
-						index +
-						1 +
+						captionNumber +
 						"\n" +
 						tempStartTimeSeconds +
 						"," +
