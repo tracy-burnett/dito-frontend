@@ -1,8 +1,5 @@
 <template>
-	<div
-		class="flex flex-col items-center justify-center flex-auto h-full backdrop"
-
-	>
+	<div class="flex flex-col items-center justify-center flex-auto h-full backdrop">
 		<div class="flex flex-col items-center p-8 overflow-y-scroll bg-white border border-gray-300 shadow-md modal rounded-xl xl:w-2/5 lg:w-2/4 md:w-2/3">
 			<button
 				class="mx-4 my-2 text-xl text-gray-500"
@@ -185,12 +182,14 @@ export default {
 								},
 							}
 						)
-							.then((response) => response)
+							.then(() =>{
+							this.$emit("addCreatedInterpretation", response.interpretation);
+						this.$emit("closeUploadIntModal");}
+						)
 							// .then((data) => console.log(data))
 							.catch((error) => console.error("Error:", error));
 						// if the interpretation was created successfully, then tell the parent component to add it to the list of interpretations potentially displayed in the dropdown menu, and tell the Vuex store that we need to add another column to the main screen for viewing the new interpretation
-						this.$emit("addCreatedInterpretation", response.interpretation);
-						this.$emit("closeUploadIntModal");
+
 						return;
 					})
 
@@ -210,7 +209,7 @@ export default {
 				// console.log(caption)
 				let srt_instructions = caption.split("\n");
 				// console.log(srt_instructions)
-				// if (srt_instructions[0]=="") {srt_instructions.splice(0,1)}
+				if (srt_instructions[0]=="") {srt_instructions.splice(0,1)}
 				let timestampInstructions = srt_instructions[1];
 
 				let timestampStart = timestampInstructions.split(" --> ")[0];
