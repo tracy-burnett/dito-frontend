@@ -9,7 +9,7 @@
 			{{nextTimestamp}}
 			{{relevantTimestamps}} -->
 			<!-- {{associations}}<br><br> -->
-			<!-- {{parsedAssociations}}<br><br> -->
+			{{parsedAssociations}}<br><br>
 			<!-- {{substringArray}}<br><br> -->
 			<!-- for each substring that would be independently highlighted, render it as highlighted or not based on running the highlight function on it whenever the current audioplayer time changes.
 also, if the user clicks on the text of that substring, snap the audio player to play the corresponding audio for that substring. -->
@@ -288,7 +288,7 @@ export default {
 			this.srt = "";
 
 			
-			this.parsedAssociations.sort((a, b) => a.startTime - b.startTime);
+			// this.parsedAssociations.sort((a, b) => a.startCharacter - b.startCharacter);
 			this.parsedAssociations.forEach((value, index) => {
 				let tempStartTimeMilliseconds = value.startTime.slice(-2) + "0";
 				while (tempStartTimeMilliseconds.length < 3) {
