@@ -8,7 +8,7 @@
 		in <span class="py-1 border-gray-300 rounded ">{{ language_name }}</span><br /><br />
 		<!-- {{associations}}<br> -->
 		<!-- {{associationGaps}}<br> -->
-		<!-- {{$store.state.startTimePrompter}} -->
+		<!-- {{$store.state.startTimePrompter*100}}<br> -->
 		<!-- {{new_text}}<br> -->
 		<!-- {{usableGaps}}<br> -->
 		<!-- {{relevantGap}}<br> -->
@@ -181,14 +181,14 @@ export default {
 	},
 	watch: {
 		// nomoregaps: function() {
-			// if (this.nomoregaps==false) {
-				
-			// this.$emit("yesGaps");
-			// }
-			// else if (this.nomoregaps==true) {
-				
-			// this.$emit("noGaps");
-			// }
+		// if (this.nomoregaps==false) {
+
+		// this.$emit("yesGaps");
+		// }
+		// else if (this.nomoregaps==true) {
+
+		// this.$emit("noGaps");
+		// }
 		// },
 
 		scribingclean: function () {
@@ -459,7 +459,6 @@ export default {
 		},
 
 		newPromptsfunc() {
-
 			if (this.newPromptorScribingToggle == true) {
 				this.relevantGap.startTime = this.tempcurrentgapstart; // this ensures that as the user drags the scribing toggle left and right, the relevant gap is always calculated based on the baseline starttime for the gap and starttime doesn't only increase (instead, it gets reset)
 			}
@@ -469,7 +468,11 @@ export default {
 			this.contentStartingIndex = 0;
 
 			//if the audio player has loaded, and the gaps have been identified
-			if (this.$store.state.audioDuration > 0 && this.usableGaps.length > 0 && this.nomoregaps==false) {
+			if (
+				this.$store.state.audioDuration > 0 &&
+				this.usableGaps.length > 0 &&
+				this.nomoregaps == false
+			) {
 				// a little gap to work with to generate this prompt
 				this.relevantGap.startTime = parseInt(this.usableGaps[0].startTime); // should be in hundredths of a second
 				this.relevantGap.endTime = Math.min(
@@ -676,8 +679,9 @@ export default {
 				// this.sensitivity=.1
 				// this.allowSubmit = true;
 				this.$refs.promptertextarea.focus();
-			} 
-			else {this.nomoregaps=true}
+			} else {
+				this.nomoregaps = true;
+			}
 		},
 
 		emitNewPrompt() {
@@ -698,6 +702,7 @@ export default {
 			// if (Number.isNaN(this.relevantGap.endCharacter) == false) {
 			//if the gap does have an ending
 			let lastGapEndCharacter = this.associationGaps[0].endCharacter;
+			// console.log(this.new_text);
 			// console.log("defaulting to " + lastGapEndCharacter);
 			// if (
 			// 	this.associationGaps.length == 1 &&
@@ -715,6 +720,11 @@ export default {
 			// if there are at least two chunks, and we are already past the end of the first chunk, then update lastGapEndCharacter
 			// console.log(this.associationGaps.length + " is greater than 1")
 			// console.log(this.$store.state.startTimePrompter*100 + " is greater than or equal to " + this.associationGaps[1].startTime)
+
+			// if there is only one gap where text could go, or if we are in the first chunk before any of the gaps start (this second standard is almost impossible to meet)
+			// then put new text after the first chunk
+			// otherwise:
+
 			if (
 				this.associationGaps.length > 1 &&
 				this.$store.state.startTimePrompter * 100 >=
@@ -722,6 +732,14 @@ export default {
 			) {
 				// console.log("in");
 				for (let i = 0; i < this.associationGaps.length; i++) {
+					// console.log(i);
+					// console.log(
+					// 	"is " +
+					// 		this.$store.state.startTimePrompter * 100 +
+					// 		" less than " +
+					// 		this.associationGaps[i + 1].startTime +
+					// 		"?"
+					// );
 					// console.log(this.associationGaps[i]);
 					// console.log(
 					// 	this.$store.state.startTimePrompter * 100 +
@@ -735,30 +753,67 @@ export default {
 					// 		this.associationGaps[i + 1].startTime
 					// );
 					if (
+						// if it's in the gap before the last chunk
 						this.$store.state.startTimePrompter * 100 >=
 							this.associationGaps[i].startTime &&
 						this.$store.state.startTimePrompter * 100 <
-							this.associationGaps[i + 1].startTime &&
+							this.associationGaps[i].endTime &&
 						this.associationGaps[i + 1].endCharacter == null
 					) {
+						// place the new text before the last chunk
 						// console.log("in 1");
+						// console.log(
+						// 	this.$store.state.startTimePrompter * 100 +
+						// 		"is less than " +
+						// 		this.associationGaps[i + 1].startTime
+						// );
+						lastGapEndCharacter = this.associationGaps[i].endCharacter;
+						break;
+					} else if (
+						// if it's in the last chunk
+						this.$store.state.startTimePrompter * 100 >=
+							this.associationGaps[i].endTime &&
+						this.associationGaps[i + 1].endCharacter == null
+					) {
+						// place the new text at the end of all of the old text
+						// console.log("in 1.3");
+						// console.log(
+						// 	this.$store.state.startTimePrompter * 100 +
+						// 		"is less than " +
+						// 		this.associationGaps[i + 1].startTime
+						// );
 						lastGapEndCharacter = this.associationGaps[i + 1].endCharacter;
 						break;
 					} else if (
+						// if it's in a gap that is not the last-gap section of the audio file
 						this.$store.state.startTimePrompter * 100 >=
 							this.associationGaps[i].startTime &&
 						this.$store.state.startTimePrompter * 100 <
-							this.associationGaps[i + 1].startTime &&
-						this.associationGaps[i + 1].endCharacter != null
+							this.associationGaps[i].endTime &&
+						this.associationGaps[i].endCharacter != null
 					) {
+						// place the new text after the gap (before the next chunk)
+						// console.log("in 1.6");
+						lastGapEndCharacter = this.associationGaps[i].endCharacter;
+						break;
+					} else if (
+						// if it's in a chunk that is not the last chunk
+						this.$store.state.startTimePrompter * 100 >=
+							this.associationGaps[i].endTime &&
+						this.$store.state.startTimePrompter * 100 <
+							this.associationGaps[i + 1].startTime &&
+						this.associationGaps[i + 1].startCharacter != null
+					) {
+						// place the new text after the chunk
 						// console.log("in 2");
 						lastGapEndCharacter = this.associationGaps[i + 1].endCharacter;
 						break;
-					} // we need to do something if the last gap is bounded
-					else if (
+					} else if (
+						// if it's after the last gap (so it's in the last chunk, which stretches to the end)
 						this.$store.state.startTimePrompter * 100 >=
 						this.associationGaps[this.associationGaps.length - 1].endTime
 					) {
+						// console.log("in 3"); // place the new text before the last chunk
 						lastGapEndCharacter =
 							this.associationGaps[this.associationGaps.length - 1]
 								.endCharacter;
@@ -809,12 +864,12 @@ export default {
 				this.latest_text = temp_latesttext;
 				// console.log(this.latest_text)
 			} else {
-				lastGapEndCharacter=lastGapEndCharacter-1
+				lastGapEndCharacter = lastGapEndCharacter - 1;
 				let temp_latesttext = this.original_text.substring(
 					0,
 					lastGapEndCharacter
 				);
-				// console.log(temp_latesttext)
+				// console.log(temp_latesttext);
 				if (
 					this.original_text[lastGapEndCharacter - 2] == "\n" &&
 					this.original_text[lastGapEndCharacter - 1] == "\n"
@@ -1054,7 +1109,7 @@ export default {
 
 							return;
 						}); //increase every startcharacter and endcharacter
-			
+
 						this.newPromptsfunc();
 
 						//add in the association for the new phrase.
@@ -1480,7 +1535,6 @@ export default {
 	},
 
 	async mounted() {
-
 		// this.$emit("yesGaps");
 		if (this.$store.state.user) {
 			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
