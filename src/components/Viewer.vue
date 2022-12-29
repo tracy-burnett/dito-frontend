@@ -84,6 +84,7 @@ export default {
 			startslice: 0, // helper variable for latest_text_slices function, never accessed outside of that function
 			endslice: 0, // helper variable for latest_text_slices function, never accessed outside of that function
 			i: 0, // helper variable for latest_text_slices function, never accessed outside of that function
+			spaced_by: "",
 		};
 	},
 
@@ -220,6 +221,7 @@ export default {
 					this.title = data.interpretation.title;
 					this.language_name = data.interpretation.language_name;
 					this.latest_text = data.interpretation.latest_text;
+				this.spaced_by = data.interpretation.spaced_by;
 				})
 
 				// access the information about what to highlight, and when, for the interpretation that is to be displayed
@@ -320,6 +322,25 @@ export default {
 					});
 
 					tempSubstring = tempSubstringSplit.join("");
+					// console.log(tempSubstring)
+
+					if (this.spaced_by != "") {
+				let tempSubstringArray = tempSubstring.split("\\n");
+				for (let j = 0; j < tempSubstringArray.length; j++) {
+					if (tempSubstringArray[j][0] == this.spaced_by) {
+						tempSubstringArray[j] = tempSubstringArray[j].substring(1);
+					}
+					if (tempSubstringArray[j][tempSubstringArray[j].length - 1] == this.spaced_by) {
+						tempSubstringArray[j] = tempSubstringArray[j].substring(0, tempSubstringArray[j].length - 1);
+					}
+				}
+
+				// console.log(stripped.join("\n"));
+				tempSubstring= tempSubstringArray.join("\\n");
+				// console.log(tempSubstring)
+			}
+
+
 					captionNumber++
 
 					this.srt +=
