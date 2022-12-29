@@ -133,7 +133,7 @@ export default {
 				this.int_text != "" ||
 				this.int_language != ""
 			) {
-			// console.log(this.int_text.normalize("NFC"))
+				// console.log(this.int_text.normalize("NFC"))
 				fetch(
 					process.env.VUE_APP_api_URL +
 						"interpretations/audio/" +
@@ -182,10 +182,10 @@ export default {
 								},
 							}
 						)
-							.then(() =>{
-							this.$emit("addCreatedInterpretation", response.interpretation);
-						this.$emit("closeUploadIntModal");}
-						)
+							.then(() => {
+								this.$emit("addCreatedInterpretation", response.interpretation);
+								this.$emit("closeUploadIntModal");
+							})
 							// .then((data) => console.log(data))
 							.catch((error) => console.error("Error:", error));
 						// if the interpretation was created successfully, then tell the parent component to add it to the list of interpretations potentially displayed in the dropdown menu, and tell the Vuex store that we need to add another column to the main screen for viewing the new interpretation
@@ -209,7 +209,9 @@ export default {
 				// console.log(caption)
 				let srt_instructions = caption.split("\n");
 				// console.log(srt_instructions)
-				if (srt_instructions[0]=="") {srt_instructions.splice(0,1)}
+				if (srt_instructions[0] == "") {
+					srt_instructions.splice(0, 1);
+				}
 				let timestampInstructions = srt_instructions[1];
 
 				let timestampStart = timestampInstructions.split(" --> ")[0];
@@ -230,8 +232,9 @@ export default {
 
 				// only add captions that don't exceed the maximum length of the audio file
 				if (
-					(1000 * timestampEndSeconds <= this.$store.state.audioDuration &&
-					1000 * timestampStartSeconds >= 0) && srt_instructions[2] != undefined
+					1000 * timestampEndSeconds <= this.$store.state.audioDuration &&
+					1000 * timestampStartSeconds >= 0 &&
+					srt_instructions[2] != undefined
 				) {
 					let timestampforBackend =
 						(100 *
@@ -269,6 +272,36 @@ export default {
 				});
 				// console.log(tempSplitCaption)
 				this.captions[captionindex] = tempSplitCaption.join("");
+			});
+
+			this.captions.forEach((caption, captionindex) => {
+				// console.log(caption);
+				if (this.int_spacing != "") {
+					caption = caption.replace(
+						this.regexwithmultiplespacedby,
+						this.int_spacing
+					);
+
+					let tempCaptionArray = caption.split("\n");
+					for (let j = 0; j < tempCaptionArray.length; j++) {
+						if (tempCaptionArray[j][0] == this.int_spacing) {
+							tempCaptionArray[j] = tempCaptionArray[j].substring(1);
+						}
+						if (
+							tempCaptionArray[j][tempCaptionArray[j].length - 1] ==
+							this.int_spacing
+						) {
+							tempCaptionArray[j] = tempCaptionArray[j].substring(
+								0,
+								tempCaptionArray[j].length - 1
+							);
+						}
+					}
+
+					// console.log(stripped.join("\n"));
+					this.captions[captionindex] = tempCaptionArray.join("\n");
+				}
+				// console.log(this.captions[captionindex]);
 			});
 			this.int_text_unstripped = this.captions.join("");
 			// console.log(this.int_text_unstripped)
