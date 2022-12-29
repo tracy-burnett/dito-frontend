@@ -232,14 +232,14 @@ export default {
 				// this.updatingFromPrompter = false;
 				this.wavesurfer.addRegion({
 					start: this.$store.state.incomingCurrentTime,
-					end: this.totalDuration,
+					end: this.$store.state.incomingEndTime,
 					id: "region",
 					loop: false,
 				});
 				this.startTime = this.secondsToTime(
 					Math.round(this.$store.state.incomingCurrentTime)
 				);
-				this.endTime = this.secondsToTime(Math.round(this.totalDuration));
+				this.endTime = this.secondsToTime(this.$store.state.incomingEndTime);
 				this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
 			// }
 			// else if (this.$store.state.incomingCurrentTime >= this.endTimeSeconds) {
