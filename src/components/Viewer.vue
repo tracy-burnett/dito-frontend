@@ -542,12 +542,12 @@ export default {
 					startingcharacter >= element.startCharacter &&
 					startingcharacter < element.endCharacter
 				) {
-					potentialSnapArray.push(element.startTime);
+					potentialSnapArray.push(element);
 				}
 			});
-			potentialSnapArray.sort((a, b) => a - b);
+			potentialSnapArray.sort((a, b) => a.startTime - b.startTime);
 			let playFromTimestamp =
-				potentialSnapArray[potentialSnapArray.length - 1] / 100;
+				potentialSnapArray[potentialSnapArray.length - 1].startTime / 100;
 
 			if (playFromTimestamp || playFromTimestamp === 0) {
 				// console.log(playFromTimestamp)
@@ -555,6 +555,7 @@ export default {
 				// console.log(text)
 				let params = {
 					timestamp: playFromTimestamp,
+					timestampEnd: potentialSnapArray[potentialSnapArray.length - 1].endTime / 100
 					// "text": text
 				};
 				this.$store.commit("updateIncomingCurrentTime", params);
