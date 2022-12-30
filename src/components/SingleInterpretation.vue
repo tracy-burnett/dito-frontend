@@ -169,7 +169,7 @@
 							id="studyingslider"
 							v-model="studying"
 							type="range"
-							min="10"
+							min="0"
 							max="2000"
 							step="10"
 						/>

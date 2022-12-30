@@ -8,7 +8,7 @@
 		in <span class="py-1 border-gray-300 rounded ">{{ language_name }}</span><br />
 
 		<!-- {{parsedAssociations}}<br> -->
-		<!-- {{substringArray}}<br> -->
+		<!-- {{substringArray}}<br><br> -->
 		<!-- {{phrasechoicesArray}}<br> -->
 		<!-- {{$store.state.startTimePrompter}}<br>
 		{{$store.state.endTimePrompter}}<br> -->
@@ -178,7 +178,7 @@ export default {
 				this.substringArray.length > 0
 			) {
 				// console.log(this.substringArray[this.substringindex].text);
-
+				this.phrasechoicesArray=[]
 				//populate answers array
 				this.phrasechoicesArray = [
 					this.substringArray[this.substringindex].text,
@@ -276,6 +276,8 @@ export default {
 
 				// access the information about what to highlight, and when, for the interpretation that is to be displayed
 				.then(() => {
+// console.log(this.scribingclean)
+
 					fetch(
 						process.env.VUE_APP_api_URL +
 							"content/" +
