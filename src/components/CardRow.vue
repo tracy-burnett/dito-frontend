@@ -157,6 +157,7 @@
 					:audio_ID="audio_ID"
 					:shared_editors="interpretation.shared_editors"
 					:shared_viewers="interpretation.shared_viewers"
+					@permanentlydestroy="permanentlydelete($event)"
 				/>
 			</div>
 		</div>
@@ -238,6 +239,11 @@ export default {
 	},
 
 	methods: {
+		permanentlydelete(deletedInterpretation){
+			let deleteIndex=this.interpretationsList.map((interpretation) => (interpretation.id)).indexOf(deletedInterpretation)
+			this.interpretationsList.splice(deleteIndex,1)
+		},
+
 		selectrow() {
 			this.$emit("SelectRow", this.audio_ID);
 		},
