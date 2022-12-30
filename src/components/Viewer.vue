@@ -226,6 +226,8 @@ export default {
 
 				// access the information about what to highlight, and when, for the interpretation that is to be displayed
 				.then(() => {
+// console.log(this.timestep)
+
 					fetch(
 						process.env.VUE_APP_api_URL +
 							"content/" +
