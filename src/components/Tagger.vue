@@ -9,7 +9,7 @@
 
 		<!-- {{new_associations}}<br><br> -->
 		<!-- {{startingindex}}<br><br> -->
-		<!-- {{parsedAssociations}}<br><br> -->
+		{{parsedAssociations}}<br><br>
 		<!-- {{latest_text}}<br><br> -->
 		<!-- {{latest_text_part}}<br><br> -->
 		<!-- {{latest_text_character_array}} -->
@@ -247,8 +247,8 @@ export default {
 					deletefromend.push(group.endCharacter);
 				}
 			});
-			// console.log(deletefrombeginning)
-			// console.log(deletefromend)
+			console.log(deletefrombeginning)
+			console.log(deletefromend)
 			if (deletefrombeginning.length >= 1) {
 				this.startingindex = Math.max(...deletefrombeginning);
 			} else {
