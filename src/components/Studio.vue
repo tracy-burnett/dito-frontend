@@ -8,8 +8,8 @@
 		in <span class="py-1 border-gray-300 rounded ">{{ language_name }}</span><br />
 
 		<!-- {{parsedAssociations}}<br> -->
-		{{substringArray}}<br><br>
-		{{phrasechoicesArray}}<br>
+		<!-- {{substringArray}}<br><br> -->
+		<!-- {{phrasechoicesArray}}<br> -->
 		<!-- {{$store.state.startTimePrompter}}<br>
 		{{$store.state.endTimePrompter}}<br> -->
 
