@@ -7,7 +7,7 @@
 		<span class="py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="py-1 border-gray-300 rounded ">{{ language_name }}</span><br />
 
-		<!-- {{parsedAssociations}}<br> -->
+		<!-- {{parsedAssociations}}<br><br> -->
 		<!-- {{substringArray}}<br><br> -->
 		<!-- {{phrasechoicesArray}}<br> -->
 		<!-- {{$store.state.startTimePrompter}}<br>
@@ -363,25 +363,28 @@ let indicesToDelete=[]
 				let y = 0;
 				while (y < this.substringArray.length) {
 					// this is the one that we are checking against
-					// console.log(this.substringArray[y])
 					let checkExteriorStart = parseInt(this.substringArray[y].starttime);
 					let checkExteriorEnd = parseInt(this.substringArray[y].endtime);
 					let z = 0;
 					while (z < this.substringArray.length) {
-						// console.log(this.substringArray[z])
 						if (
 							// if this one is exterior to the other one, then delete it
-							parseInt(this.substringArray[z].endtime) > checkExteriorEnd &&
-							parseInt(this.substringArray[z].starttime) < checkExteriorStart
+							parseInt(this.substringArray[z].endtime) >= checkExteriorEnd &&
+							parseInt(this.substringArray[z].starttime) <= checkExteriorStart && y != z
 						) {
+					// console.log(this.substringArray[y])
+					// 	console.log(this.substringArray[z])
 							indicesToDelete.push(z)
 							// console.log("deleting inner")
 						} else if (
 							// if this one is interior to the other one, then break this while loop, delete the other one and do not index the other one's loop
-							parseInt(this.substringArray[z].endtime) < checkExteriorEnd &&
-							parseInt(this.substringArray[z].starttime) > checkExteriorStart
+							parseInt(this.substringArray[z].endtime) <= checkExteriorEnd &&
+							parseInt(this.substringArray[z].starttime) >= checkExteriorStart && y != z
 						) {
 							// delete exterior one
+					// console.log(this.substringArray[y])
+					// 	console.log(this.substringArray[z])
+							indicesToDelete.push(z)
 							// console.log("deleting outer")
 							indicesToDelete.push(y)
 							break;
@@ -418,6 +421,7 @@ let indicesToDelete=[]
 	},
 
 	mounted() {
+		this.parsedAssociations.length=0
 		if (this.interpretationStatus) {
 			this.fetchNewInterpretation();
 		}
