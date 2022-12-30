@@ -52,7 +52,10 @@
 				<p>
 					{{ status }} access
 				</p>
-				<p></p>
+				<p><button v-if="this.status=='owner' || this.status=='editor'"
+						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+						@click="deletefunc(interpretation.id)"
+					>Delete</button></p>
 				<p v-if="status == 'owner'"><button
 						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 						@click="showIntCollabModal(interpretation.id)"
@@ -123,6 +126,61 @@ export default {
 	},
 
 	methods: {
+
+		async deletefunc(id){
+			if (this.$store.state.user) {
+				// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+				await getIdToken(this.$store.state.user)
+					.then((idToken) => {
+						this.$store.commit("SetIdToken", idToken);
+						// console.log(this.$store.state.idToken)
+					})
+					.catch((error) => {
+						// An error happened.
+						console.log("Oops. " + error.code + ": " + error.message);
+					});
+			}
+
+
+			fetch(
+				process.env.VUE_APP_api_URL +
+					"interpretations/" +
+					id +
+					"/audio/" +
+					this.audio_ID +
+					"/" +
+					this.status +
+					"/",
+				{
+					method: "PATCH",
+					body: JSON.stringify({
+						latest_text: "",
+						title: "",
+						language_name: "",
+					}),
+					headers: {
+						"Content-Type": "application/json",
+
+						Authorization: this.$store.state.idToken,
+					},
+				}
+			)
+				.then((response) => {
+					return response.json();
+				})
+				.then((response) => {
+					if (response == "interpretation deleted") {
+
+						this.$emit("permanentlydestroy", id);
+					}
+				})
+				.catch((error) => console.error("Error:", error));
+			
+
+
+
+		},
+
 		showIntCollabModal(int_id) {
 			this.$store.commit("showIntCollabModal", int_id);
 		},
