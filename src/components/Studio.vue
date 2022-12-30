@@ -7,7 +7,7 @@
 		<span class="py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="py-1 border-gray-300 rounded ">{{ language_name }}</span><br />
 
-		<!-- {{parsedAssociations}}<br> -->
+		{{parsedAssociations}}<br>
 		<!-- {{substringArray}}<br><br> -->
 		<!-- {{phrasechoicesArray}}<br> -->
 		<!-- {{$store.state.startTimePrompter}}<br>
