@@ -231,37 +231,54 @@ export default {
 
 		clipText() {
 			this.latest_text_character_array = [];
-			let deletefrombeginning = [];
-			let deletefromend = [];
+			// let deletefrombeginning = [];
+			// let deletefromend = [];
+			let donotdelete = [];
 			this.parsedAssociations.forEach((group) => {
 				//if the time in the parsed association is wholly before the current highlighted audio region
 				// console.log(group.endTime)
 				// console.log(this.$store.state.startTimePrompter*100)
-				if (group.endTime < this.$store.state.startTimePrompter * 100) {
-					deletefrombeginning.push(group.startCharacter);
-					deletefrombeginning.push(group.endCharacter);
-				}
-				//if the time in the parsed association is wholly after the current highlighted audio region
-				if (group.startTime > this.$store.state.endTimePrompter * 100) {
-					deletefromend.push(group.startCharacter);
-					deletefromend.push(group.endCharacter);
+				// if (group.endTime < this.$store.state.startTimePrompter * 100) {
+				// 	deletefrombeginning.push(group.startCharacter);
+				// 	deletefrombeginning.push(group.endCharacter);
+				// }
+				// //if the time in the parsed association is wholly after the current highlighted audio region
+				// else if (group.startTime > this.$store.state.endTimePrompter * 100) {
+				// 	deletefromend.push(group.startCharacter);
+				// 	deletefromend.push(group.endCharacter);
+				// }
+				if (
+					!(group.startTime >= this.$store.state.endTimePrompter * 100) &&
+					!(group.endTime <= this.$store.state.startTimePrompter * 100)
+				) {
+					donotdelete.push(group.startCharacter);
+					donotdelete.push(group.endCharacter);
 				}
 			});
 			// console.log(deletefrombeginning)
 			// console.log(deletefromend)
-			if (deletefrombeginning.length >= 1) {
-				this.startingindex = Math.max(...deletefrombeginning);
+
+			if (donotdelete.length >= 2) {
+				this.startingindex = Math.min(...donotdelete);
+				this.endingindex = Math.max(...donotdelete);
 			} else {
 				this.startingindex = 0;
-			}
-			// console.log("starting index is " + this.startingindex);
-			if (deletefromend.length >= 1) {
-				// console.log("hey")
-				this.endingindex = Math.min(...deletefromend);
-			} else {
-				// console.log("hi")
 				this.endingindex = this.latest_text.length;
 			}
+			console.log(donotdelete);
+			// if (deletefrombeginning.length >= 1) {
+			// 	this.startingindex = Math.max(...deletefrombeginning);
+			// } else {
+			// 	this.startingindex = 0;
+			// }
+			// // console.log("starting index is " + this.startingindex);
+			// if (deletefromend.length >= 1) {
+			// 	// console.log("hey")
+			// 	this.endingindex = Math.min(...deletefromend);
+			// } else {
+			// 	// console.log("hi")
+			// 	this.endingindex = this.latest_text.length;
+			// }
 			this.latest_text_part = this.latest_text.substring(
 				this.startingindex,
 				this.endingindex
@@ -365,7 +382,6 @@ export default {
 		addNewAssociationDrag(characterindex) {
 			if (this.mouseHighlighting) {
 				this.new_associations[characterindex] = {};
-
 			}
 		},
 
@@ -374,25 +390,21 @@ export default {
 		// },
 
 		async updateAssociationsfunc() {
-
 			for (let prop in this.new_associations) {
 				this.new_associations[prop][
-				Math.round(
-					((this.$store.state.startTimePrompter +
-						this.$store.state.endTimePrompter) *
+					Math.round(
+						((this.$store.state.startTimePrompter +
+							this.$store.state.endTimePrompter) *
+							100) /
+							2
+					)
+				] = Math.round(
+					((this.$store.state.endTimePrompter -
+						this.$store.state.startTimePrompter) *
 						100) /
 						2
-				)
-			] = Math.round(
-				((this.$store.state.endTimePrompter -
-					this.$store.state.startTimePrompter) *
-					100) /
-					2
-			);
+				);
 			}
-			
-
-
 
 			if (this.$store.state.user) {
 				// REFRESH ID TOKEN FIRST AND WAIT FOR IT
