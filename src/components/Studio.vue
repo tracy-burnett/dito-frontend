@@ -375,7 +375,7 @@ let indicesToDelete=[]
 					console.log(this.substringArray[y])
 						console.log(this.substringArray[z])
 							indicesToDelete.push(z)
-							console.log("deleting inner")
+							console.log("deleting second of above")
 						} else if (
 							// if this one is interior to the other one, then break this while loop, delete the other one and do not index the other one's loop
 							parseInt(this.substringArray[z].endtime) <= checkExteriorEnd &&
@@ -384,8 +384,7 @@ let indicesToDelete=[]
 							// delete exterior one
 					console.log(this.substringArray[y])
 						console.log(this.substringArray[z])
-							indicesToDelete.push(z)
-							console.log("deleting outer")
+							console.log("deleting first of above")
 							indicesToDelete.push(y)
 							break;
 						} // no match; nothing gets deleted; index inner while loop
