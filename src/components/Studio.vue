@@ -7,7 +7,7 @@
 		<span class="py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="py-1 border-gray-300 rounded ">{{ language_name }}</span><br />
 
-		<!-- {{parsedAssociations}}<br><br> -->
+		{{parsedAssociations}}<br><br>
 		<!-- {{substringArray}}<br><br> -->
 		<!-- {{phrasechoicesArray}}<br> -->
 		<!-- {{$store.state.startTimePrompter}}<br>
@@ -372,20 +372,20 @@ let indicesToDelete=[]
 							parseInt(this.substringArray[z].endtime) >= checkExteriorEnd &&
 							parseInt(this.substringArray[z].starttime) <= checkExteriorStart && y != z
 						) {
-					// console.log(this.substringArray[y])
-					// 	console.log(this.substringArray[z])
+					console.log(this.substringArray[y])
+						console.log(this.substringArray[z])
 							indicesToDelete.push(z)
-							// console.log("deleting inner")
+							console.log("deleting inner")
 						} else if (
 							// if this one is interior to the other one, then break this while loop, delete the other one and do not index the other one's loop
 							parseInt(this.substringArray[z].endtime) <= checkExteriorEnd &&
 							parseInt(this.substringArray[z].starttime) >= checkExteriorStart && y != z
 						) {
 							// delete exterior one
-					// console.log(this.substringArray[y])
-					// 	console.log(this.substringArray[z])
+					console.log(this.substringArray[y])
+						console.log(this.substringArray[z])
 							indicesToDelete.push(z)
-							// console.log("deleting outer")
+							console.log("deleting outer")
 							indicesToDelete.push(y)
 							break;
 						} // no match; nothing gets deleted; index inner while loop
