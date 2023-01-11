@@ -971,9 +971,9 @@ export default {
 
 			// console.log(this.instructions.lines)
 
-			let instructionsmapped = this.instructions.lines.map(
-				(item) => item.bIndex
-			);
+			// let instructionsmapped = this.instructions.lines.map(
+			// 	(item) => item.bIndex
+			// );
 			// console.log(instructionsmapped)
 
 			// if (this.spaced_by != "") {
