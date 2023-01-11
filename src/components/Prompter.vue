@@ -926,7 +926,7 @@ export default {
 				this.latest_text = temp_latesttext;
 			}
 			// }
-			// shouldn't need this anymore because backend should always send bounded regions now
+			// shouldn't need this anymore
 			// else if (Number.isNaN(this.relevantGap.endCharacter) == true) {
 			// 	// if the gap does not have an ending
 			// 	let temp_latesttext = this.original_text;
@@ -971,94 +971,94 @@ export default {
 
 			// console.log(this.instructions.lines)
 
-			let instructionsmapped = this.instructions.lines.map(
-				(item) => item.bIndex
-			);
+			// let instructionsmapped = this.instructions.lines.map(
+			// 	(item) => item.bIndex
+			// );
 			// console.log(instructionsmapped)
 
-			if (this.spaced_by != "") {
-				this.instructions.lines.forEach((element) => {
-					// console.log(element['bIndex'])
-					// console.log(element)
-					if (
-						element["bIndex"] >= 0 &&
-						element["aIndex"] == -1 &&
-						element["line"] != "\n"
-					) {
-						this.new_associations[element["bIndex"]] = {};
-						this.new_associations[element["bIndex"]][
-							Math.round(
-								((this.$store.state.startTimePrompter +
-									this.$store.state.endTimePrompter) *
-									100) /
-									2
-							)
-						] = Math.round(
-							((this.$store.state.endTimePrompter -
-								this.$store.state.startTimePrompter) *
+			// if (this.spaced_by != "") {
+			this.instructions.lines.forEach((element) => {
+				// console.log(element['bIndex'])
+				// console.log(element)
+				if (
+					element["bIndex"] >= 0 &&
+					element["aIndex"] == -1 &&
+					element["line"] != "\n"
+				) {
+					this.new_associations[element["bIndex"]] = {};
+					this.new_associations[element["bIndex"]][
+						Math.round(
+							((this.$store.state.startTimePrompter +
+								this.$store.state.endTimePrompter) *
 								100) /
 								2
-						);
-					}
-				});
-			} else if (this.spaced_by == "") {
-				//if gap ends in other text
-				if (Number.isNaN(this.relevantGap.endCharacter) == false) {
-					for (let l = 0; l < textLengthDifference - 1; l++) {
-						let indexofchar = instructionsmapped.indexOf(
-							this.relevantGap.endCharacter + l
-						);
-						// console.log(indexofchar)
-						// console.log(this.instructions.lines[indexofchar]);
-
-						if (this.instructions.lines[indexofchar]["line"] != "\n") {
-							this.new_associations[this.relevantGap.endCharacter + l] = {};
-							this.new_associations[this.relevantGap.endCharacter + l][
-								Math.round(
-									((this.$store.state.startTimePrompter +
-										this.$store.state.endTimePrompter) *
-										100) /
-										2
-								)
-							] = Math.round(
-								((this.$store.state.endTimePrompter -
-									this.$store.state.startTimePrompter) *
-									100) /
-									2
-							);
-						}
-					}
+						)
+					] = Math.round(
+						((this.$store.state.endTimePrompter -
+							this.$store.state.startTimePrompter) *
+							100) /
+							2
+					);
 				}
+			});
+			// } else if (this.spaced_by == "") {
+			// 	//if gap ends in other text
+			// 	if (Number.isNaN(this.relevantGap.endCharacter) == false) {
+			// 		for (let l = 0; l < textLengthDifference - 1; l++) {
+			// 			let indexofchar = instructionsmapped.indexOf(
+			// 				this.relevantGap.endCharacter + l
+			// 			);
+			// 			// console.log(indexofchar)
+			// 			// console.log(this.instructions.lines[indexofchar]);
 
-				// if no text following the "gap"
-				// shouldn't need this anymore because backend should always send bounded regions now
-				// else if (Number.isNaN(this.relevantGap.endCharacter) == true) {
-				// 	for (let l = 1; l < textLengthDifference; l++) {
-				// 		let indexofchar = instructionsmapped.indexOf(
-				// 			this.original_text.length - 1 + l
-				// 		);
-				// 		// console.log(indexofchar)
-				// 		// console.log(this.instructions.lines[indexofchar]);
+			// 			if (this.instructions.lines[indexofchar]["line"] != "\n") {
+			// 				this.new_associations[this.relevantGap.endCharacter + l] = {};
+			// 				this.new_associations[this.relevantGap.endCharacter + l][
+			// 					Math.round(
+			// 						((this.$store.state.startTimePrompter +
+			// 							this.$store.state.endTimePrompter) *
+			// 							100) /
+			// 							2
+			// 					)
+			// 				] = Math.round(
+			// 					((this.$store.state.endTimePrompter -
+			// 						this.$store.state.startTimePrompter) *
+			// 						100) /
+			// 						2
+			// 				);
+			// 			}
+			// 		}
+			// 	}
 
-				// 		if (this.instructions.lines[indexofchar]["line"] != "\n") {
-				// 			this.new_associations[this.original_text.length - 1 + l] = {};
-				// 			this.new_associations[this.original_text.length - 1 + l][
-				// 				Math.round(
-				// 					((this.$store.state.startTimePrompter +
-				// 						this.$store.state.endTimePrompter) *
-				// 						100) /
-				// 						2
-				// 				)
-				// 			] = Math.round(
-				// 				((this.$store.state.endTimePrompter -
-				// 					this.$store.state.startTimePrompter) *
-				// 					100) /
-				// 					2
-				// 			);
-				// 		}
-				// 	}
-				// }
-			}
+			// 	// if no text following the "gap"
+			// 	// shouldn't need this anymore
+			// 	// else if (Number.isNaN(this.relevantGap.endCharacter) == true) {
+			// 	// 	for (let l = 1; l < textLengthDifference; l++) {
+			// 	// 		let indexofchar = instructionsmapped.indexOf(
+			// 	// 			this.original_text.length - 1 + l
+			// 	// 		);
+			// 	// 		// console.log(indexofchar)
+			// 	// 		// console.log(this.instructions.lines[indexofchar]);
+
+			// 	// 		if (this.instructions.lines[indexofchar]["line"] != "\n") {
+			// 	// 			this.new_associations[this.original_text.length - 1 + l] = {};
+			// 	// 			this.new_associations[this.original_text.length - 1 + l][
+			// 	// 				Math.round(
+			// 	// 					((this.$store.state.startTimePrompter +
+			// 	// 						this.$store.state.endTimePrompter) *
+			// 	// 						100) /
+			// 	// 						2
+			// 	// 				)
+			// 	// 			] = Math.round(
+			// 	// 				((this.$store.state.endTimePrompter -
+			// 	// 					this.$store.state.startTimePrompter) *
+			// 	// 					100) /
+			// 	// 					2
+			// 	// 			);
+			// 	// 		}
+			// 	// 	}
+			// 	// }
+			// }
 
 			if (this.$store.state.user) {
 				// REFRESH ID TOKEN FIRST AND WAIT FOR IT
