@@ -7,13 +7,6 @@
 		<span class="py-1 font-bold border-gray-300 rounded ">{{ title }}</span>
 		in <span class="py-1 border-gray-300 rounded">{{ language_name }}</span><br /><br>
 
-		<!-- {{new_associations}}<br><br> -->
-		<!-- {{startingindex}}<br><br> -->
-		<!-- {{parsedAssociations}}<br><br> -->
-		<!-- {{latest_text}}<br><br> -->
-		<!-- {{latest_text_part}}<br><br> -->
-		<!-- {{latest_text_character_array}} -->
-		<!-- for each character in the array of characters for the text, display it and if the user clicks on it, tag or untag it, depending on whether it has already been tagged in this session or not -->
 		<div
 			class="w-full h-full py-1 border-gray-300 rounded tagger"
 			:style="{ 'font-size': fontsize + 'px' }"

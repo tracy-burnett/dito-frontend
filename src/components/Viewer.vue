@@ -5,14 +5,6 @@
 			in <span class="py-1 border-gray-300 rounded">{{ language_name }}</span>
 
 			<br><br>
-			<!-- {{lastTimestamp}}
-			{{nextTimestamp}}
-			{{relevantTimestamps}} -->
-			<!-- {{associations}}<br><br> -->
-			<!-- {{parsedAssociations}}<br><br> -->
-			<!-- {{substringArray}}<br><br> -->
-			<!-- for each substring that would be independently highlighted, render it as highlighted or not based on running the highlight function on it whenever the current audioplayer time changes.
-also, if the user clicks on the text of that substring, snap the audio player to play the corresponding audio for that substring. -->
 			<div
 				class="w-full h-full py-1 border-gray-300 rounded viewer"
 				:style="{ 'font-size': fontsize + 'px' }"
@@ -221,12 +213,12 @@ export default {
 					this.title = data.interpretation.title;
 					this.language_name = data.interpretation.language_name;
 					this.latest_text = data.interpretation.latest_text;
-				this.spaced_by = data.interpretation.spaced_by;
+					this.spaced_by = data.interpretation.spaced_by;
 				})
 
 				// access the information about what to highlight, and when, for the interpretation that is to be displayed
 				.then(() => {
-// console.log(this.timestep)
+					// console.log(this.timestep)
 
 					fetch(
 						process.env.VUE_APP_api_URL +
@@ -292,7 +284,7 @@ export default {
 			this.srt = "";
 
 			this.parsedAssociations.sort((a, b) => a.endCharacter - b.endCharacter);
-			let captionNumber=0
+			let captionNumber = 0;
 			this.substringArray.forEach((value, index) => {
 				// console.log(this.populateSRT(value.startingcharacter));
 				let info = this.populateSRT(value.startingcharacter);
@@ -327,23 +319,28 @@ export default {
 					// console.log(tempSubstring)
 
 					if (this.spaced_by != "") {
-				let tempSubstringArray = tempSubstring.split("\\n");
-				for (let j = 0; j < tempSubstringArray.length; j++) {
-					if (tempSubstringArray[j][0] == this.spaced_by) {
-						tempSubstringArray[j] = tempSubstringArray[j].substring(1);
+						let tempSubstringArray = tempSubstring.split("\\n");
+						for (let j = 0; j < tempSubstringArray.length; j++) {
+							if (tempSubstringArray[j][0] == this.spaced_by) {
+								tempSubstringArray[j] = tempSubstringArray[j].substring(1);
+							}
+							if (
+								tempSubstringArray[j][tempSubstringArray[j].length - 1] ==
+								this.spaced_by
+							) {
+								tempSubstringArray[j] = tempSubstringArray[j].substring(
+									0,
+									tempSubstringArray[j].length - 1
+								);
+							}
+						}
+
+						// console.log(stripped.join("\n"));
+						tempSubstring = tempSubstringArray.join("\\n");
+						// console.log(tempSubstring)
 					}
-					if (tempSubstringArray[j][tempSubstringArray[j].length - 1] == this.spaced_by) {
-						tempSubstringArray[j] = tempSubstringArray[j].substring(0, tempSubstringArray[j].length - 1);
-					}
-				}
 
-				// console.log(stripped.join("\n"));
-				tempSubstring= tempSubstringArray.join("\\n");
-				// console.log(tempSubstring)
-			}
-
-
-					captionNumber++
+					captionNumber++;
 
 					this.srt +=
 						captionNumber +
@@ -557,7 +554,8 @@ export default {
 				// console.log(text)
 				let params = {
 					timestamp: playFromTimestamp,
-					timestampEnd: potentialSnapArray[potentialSnapArray.length - 1].endTime / 100
+					timestampEnd:
+						potentialSnapArray[potentialSnapArray.length - 1].endTime / 100,
 					// "text": text
 				};
 				this.$store.commit("updateIncomingCurrentTime", params);

@@ -4,7 +4,6 @@
 		style="overflow: scroll; height:44vh;"
 	>
 
-		<!-- <h1 class="mt-8 mb-6 text-2xl font-bold">Active Storybooks</h1> -->
 
 		<div class="fixed z-[8] flex flex-row justify-around w-full -mt-[5vh]">
 
@@ -53,7 +52,6 @@
 					/>
 					<label for="public"> other</label>
 				</div>
-				<!-- {{audioArray}} -->
 
 				<div>
 					<input
@@ -74,7 +72,6 @@
 					@keyup.enter="search"
 				/>
 			</div>
-			<!-- {{audioArray}} -->
 
 		</div>
 
@@ -86,7 +83,6 @@
 			<p class="font-bold">Title</p>
 			<p class="">Description</p>
 			<p class="">created by</p>
-			<!-- <p>created at</p> -->
 			<p>last edited at</p>
 			<p>Public?</p>
 			<p>Access</p>
@@ -123,14 +119,6 @@
 							@SelectRow="uncheck(audio.id)"
 						>
 
-							<!-- <input
-							type="radio"
-							:id="audio.id"
-							:value="audio.id"
-							v-model="selected"
-							@click="uncheck(audio.id)"
-						/>
-						<label :for="audio.id"> edit</label> -->
 						</CardRow>
 					</span>
 				</span><span v-else>
@@ -153,15 +141,7 @@
 							:audio_ID="audio.id"
 							@SelectRow="uncheck(audio.id)"
 						>
-
-							<!-- <input
-							type="radio"
-							:id="audio.id"
-							:value="audio.id"
-							v-model="selected"
-							@click="uncheck(audio.id)"
-						/>
-						<label :for="audio.id"> edit</label> -->
+						
 						</CardRow>
 					</span></span>
 			</span>
@@ -315,7 +295,6 @@
 							<p class="font-bold">Title</p>
 							<p class="">Description</p>
 							<p class="">created by</p>
-							<!-- <p>created at</p> -->
 							<p>last edited at</p>
 							<p></p>
 							<p></p>
@@ -352,7 +331,6 @@
 							<p class="font-bold">Title</p>
 							<p class="">Description</p>
 							<p class="">created by</p>
-							<!-- <p>created at</p> -->
 							<p>last edited at</p>
 							<p></p>
 							<p></p>
@@ -630,7 +608,7 @@ export default {
 
 <style scoped>
 /* ::placeholder { */
-	/* vertical-align: center; */
+/* vertical-align: center; */
 /* } */
 
 .privatecardlist {

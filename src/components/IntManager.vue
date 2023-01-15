@@ -52,7 +52,8 @@
 				<p>
 					{{ status }} access
 				</p>
-				<p><button v-if="this.status=='owner' || this.status=='editor'"
+				<p><button
+						v-if="this.status=='owner' || this.status=='editor'"
 						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 						@click="deletefunc(interpretation.id)"
 					>Delete</button></p>
@@ -64,7 +65,6 @@
 						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 						@click="showIntViewersModal(interpretation.id)"
 					>Add Viewers</button></p>
-				<!-- <p v-else-if="status == 'viewer' || status == 'public'"><button>Request to Collaborate</button></p> -->
 			</div>
 		</div>
 	</div>
@@ -126,8 +126,7 @@ export default {
 	},
 
 	methods: {
-
-		async deletefunc(id){
+		async deletefunc(id) {
 			if (this.$store.state.user) {
 				// REFRESH ID TOKEN FIRST AND WAIT FOR IT
 				await getIdToken(this.$store.state.user)
@@ -140,7 +139,6 @@ export default {
 						console.log("Oops. " + error.code + ": " + error.message);
 					});
 			}
-
 
 			fetch(
 				process.env.VUE_APP_api_URL +
@@ -170,15 +168,10 @@ export default {
 				})
 				.then((response) => {
 					if (response == "interpretation deleted") {
-
 						this.$emit("permanentlydestroy", id);
 					}
 				})
 				.catch((error) => console.error("Error:", error));
-			
-
-
-
 		},
 
 		showIntCollabModal(int_id) {

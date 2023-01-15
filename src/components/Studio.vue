@@ -7,12 +7,6 @@
 		<span class="py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="py-1 border-gray-300 rounded ">{{ language_name }}</span><br />
 
-		<!-- {{parsedAssociations}}<br><br> -->
-		<!-- {{substringArray}}<br><br> -->
-		<!-- {{phrasechoicesArray}}<br> -->
-		<!-- {{$store.state.startTimePrompter}}<br>
-		{{$store.state.endTimePrompter}}<br> -->
-
 		<div class="w-full h-full py-[1vh] border-gray-300 rounded">
 
 			<div
@@ -178,7 +172,7 @@ export default {
 				this.substringArray.length > 0
 			) {
 				// console.log(this.substringArray[this.substringindex].text);
-				this.phrasechoicesArray=[]
+				this.phrasechoicesArray = [];
 				//populate answers array
 				this.phrasechoicesArray = [
 					this.substringArray[this.substringindex].text,
@@ -218,8 +212,12 @@ export default {
 	},
 	methods: {
 		chooseanswer(answer) {
-			if (this.interpretationStatus=="owner" || this.interpretationStatus=="editor")
-			{this.new_text_unstripped = answer;}
+			if (
+				this.interpretationStatus == "owner" ||
+				this.interpretationStatus == "editor"
+			) {
+				this.new_text_unstripped = answer;
+			}
 		},
 
 		escapeRegex: function (string) {
@@ -276,7 +274,7 @@ export default {
 
 				// access the information about what to highlight, and when, for the interpretation that is to be displayed
 				.then(() => {
-// console.log(this.scribingclean)
+					// console.log(this.scribingclean)
 
 					fetch(
 						process.env.VUE_APP_api_URL +
@@ -341,7 +339,7 @@ export default {
 		latest_text_slices() {
 			this.substringArray = [];
 			if (this.parsedAssociations.length > 1) {
-			// console.log("here")
+				// console.log("here")
 				this.i = 0;
 				while (this.i + 1 <= this.parsedAssociations.length) {
 					let slice = {};
@@ -357,8 +355,8 @@ export default {
 					this.substringArray.push(slice);
 					this.i++;
 				}
-// console.log(this.substringArray)
-let indicesToDelete=[]
+				// console.log(this.substringArray)
+				let indicesToDelete = [];
 				// delete the ones whose timestamps completely surround another one
 				let y = 0;
 				while (y < this.substringArray.length) {
@@ -370,35 +368,39 @@ let indicesToDelete=[]
 						if (
 							// if this one is exterior to the other one, then delete it
 							parseInt(this.substringArray[z].endtime) >= checkExteriorEnd &&
-							parseInt(this.substringArray[z].starttime) <= checkExteriorStart && y != z
+							parseInt(this.substringArray[z].starttime) <=
+								checkExteriorStart &&
+							y != z
 						) {
-					// console.log(this.substringArray[y])
-					// 	console.log(this.substringArray[z])
-							indicesToDelete.push(z)
+							// console.log(this.substringArray[y])
+							// 	console.log(this.substringArray[z])
+							indicesToDelete.push(z);
 							// console.log("deleting second of above")
 						} else if (
 							// if this one is interior to the other one, then break this while loop, delete the other one and do not index the other one's loop
 							parseInt(this.substringArray[z].endtime) <= checkExteriorEnd &&
-							parseInt(this.substringArray[z].starttime) >= checkExteriorStart && y != z
+							parseInt(this.substringArray[z].starttime) >=
+								checkExteriorStart &&
+							y != z
 						) {
 							// delete exterior one
-					// console.log(this.substringArray[y])
-					// 	console.log(this.substringArray[z])
+							// console.log(this.substringArray[y])
+							// 	console.log(this.substringArray[z])
 							// console.log("deleting first of above")
-							indicesToDelete.push(y)
+							indicesToDelete.push(y);
 							break;
 						} // no match; nothing gets deleted; index inner while loop
-							z++;
+						z++;
 					}
 					y++;
 				}
 				// console.log(indicesToDelete)
-				indicesToDelete = [...new Set(indicesToDelete)]
+				indicesToDelete = [...new Set(indicesToDelete)];
 				// console.log(indicesToDelete)
-				for (let t = indicesToDelete.length-1; t >= 0; t--)
-				{this.substringArray.splice(indicesToDelete[t],1)
+				for (let t = indicesToDelete.length - 1; t >= 0; t--) {
+					this.substringArray.splice(indicesToDelete[t], 1);
 				}
-				
+
 				// console.log(this.substringArray)
 			} else if (this.parsedAssociations.length == 1) {
 				let slice = {};
@@ -412,15 +414,13 @@ let indicesToDelete=[]
 	},
 
 	unmounted() {
-		if (
-				this.$store.state.prompterID == this.interpretation_id
-			) {
-		this.$store.commit("removePrompterID");
-							}
+		if (this.$store.state.prompterID == this.interpretation_id) {
+			this.$store.commit("removePrompterID");
+		}
 	},
 
 	mounted() {
-		this.parsedAssociations.length=0
+		this.parsedAssociations.length = 0;
 		if (this.interpretationStatus) {
 			this.fetchNewInterpretation();
 		}

@@ -1,7 +1,8 @@
 <template>
 	<div class="fixed right-0 w-[100px] flex flex-col  justify-center top-[23vh]">
 		<!-- this is a button for creating a new Interpretation and having it displayed in its own column -->
-		<div  v-if="$store.state.user"
+		<div
+			v-if="$store.state.user"
 			class="flex flex-col items-left py-[2vh]"
 			id="create"
 			@click="show"
@@ -13,7 +14,8 @@
 			<p class="text-sm text-left md:text-base">Create New<br>Interpretation</p>
 		</div>
 		<!-- this is a button for creating a new Interpretation and having it displayed in its own column -->
-		<div  v-if="$store.state.user && $store.state.audioDuration>0"
+		<div
+			v-if="$store.state.user && $store.state.audioDuration>0"
 			class="flex flex-col items-left py-[2vh]"
 			id="upload"
 			@click="upload"

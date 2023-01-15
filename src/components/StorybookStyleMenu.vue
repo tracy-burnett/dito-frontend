@@ -203,7 +203,10 @@ export default {
 		},
 	},
 	mounted() {
-		if (this.$store.state.infobit == "PublicCardList" || this.$store.state.infobit == "Login") {
+		if (
+			this.$store.state.infobit == "PublicCardList" ||
+			this.$store.state.infobit == "Login"
+		) {
 			this.toggleStorybookStyle("Viewer");
 		} else if (this.$store.state.infobit == "InfoRevitalize") {
 			this.toggleStorybookStyle("Studio");

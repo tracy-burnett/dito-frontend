@@ -2,7 +2,7 @@
 	<div class="flex justify-around pt-12">
 		<div class="flex flex-col items-center w-2/5 ">
 			<h1 class="text-2xl font-bold text-slate-700">Upload Audio File</h1>
-			<p class="mt-2 text-xs">Upload any audio file.  If an .mp3 file acts strange within Dito, use VBRFix free software, then upload it again.</p>
+			<p class="mt-2 text-xs">Upload any audio file. If a .mp3 file acts strange within Dito, use VBRFix free software, then upload it again.</p>
 			<input
 				class="w-full px-3 py-1 mt-6 mb-3 border border-gray-300 rounded"
 				type="file"
@@ -92,16 +92,15 @@ export default {
 		int_text() {
 			if (this.spaced_by != "") {
 				let stripped = this.int_text_intermediary.split("\n");
-				for (let j = 0; j < stripped.length; j++)
-				{
-					if (stripped[j][0]==this.spaced_by) {
-						stripped[j]=stripped[j].substring(1)
+				for (let j = 0; j < stripped.length; j++) {
+					if (stripped[j][0] == this.spaced_by) {
+						stripped[j] = stripped[j].substring(1);
 					}
-					if (stripped[j][stripped[j].length-1]==this.spaced_by) {
-						stripped[j]=stripped[j].substring(0,stripped[j].length-1)
+					if (stripped[j][stripped[j].length - 1] == this.spaced_by) {
+						stripped[j] = stripped[j].substring(0, stripped[j].length - 1);
 					}
 				}
-				
+
 				// console.log(stripped.join("\n"));
 				return stripped.join("\n");
 			} else if (this.spaced_by == "") {

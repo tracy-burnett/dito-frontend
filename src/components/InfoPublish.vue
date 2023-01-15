@@ -1,60 +1,41 @@
 <template>
-  <!-- <div class="flex flex-col items-center justify-center mt-32">
-    
-    <router-link  to="/user/">
-    <button
-					class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-				>
-					Manage Your Existing Audio & Interpretations
-				</button></router-link>
-  </div> -->
-  <div>
+	<div>
 		<div class="flex items-center mt-[7vh]">
-			<CardList
-				:key="$store.state.dashboardRerender"
-			/>
+			<CardList :key="$store.state.dashboardRerender" />
 		</div>
-  </div>
+	</div>
 </template>
 
 <script>
 import CardList from "@/components/CardList.vue";
 
 export default {
-  data() {
-    return {
-    };
-  },
-  
+	data() {
+		return {};
+	},
+
 	components: {
 		CardList,
 	},
-  name: "InfoPublish",
-  computed: {
+	name: "InfoPublish",
+	computed: {
 		// usernameStorybooks() {
 		// 		return this.$store.state.user.email + "'s Storybooks";
-
 		// },
 	},
-  props: {
+	props: {},
+	// watch: {
+	//   "$store.state.idToken": function () {
+	//     this.getStorybooks();
+	//   },
 
-
-},
-  // watch: {
-  //   "$store.state.idToken": function () {
-  //     this.getStorybooks();
-  //   },
-    
-  // },
-  mounted() {
-
-  },
-  methods: {},
+	// },
+	mounted() {},
+	methods: {},
 };
 </script>
 
 <style scoped>
-
 .dropbtn {
 	/* background-color: #7833ff; */
 	border: none;

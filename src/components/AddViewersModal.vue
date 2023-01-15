@@ -1,8 +1,5 @@
 <template>
-	<div
-		class="flex flex-col items-center justify-center flex-auto h-full mt-10 overflow-hidden backdrop"
-
-	>
+	<div class="flex flex-col items-center justify-center flex-auto h-full mt-10 overflow-hidden backdrop">
 		<div class="flex flex-col items-center p-8 bg-white border border-gray-300 shadow-md modal rounded-xl xl:w-2/5 lg:w-2/4 md:w-2/3">
 			<button
 				class="mx-4 my-2 text-xl text-gray-500"
@@ -54,7 +51,7 @@ export default {
 	},
 	computed: {
 		email() {
-return this.email_mixedcase.toLowerCase()
+			return this.email_mixedcase.toLowerCase();
 		},
 	},
 	props: {

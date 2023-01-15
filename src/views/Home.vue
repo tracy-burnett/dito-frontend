@@ -1,15 +1,13 @@
 <template>
-  <div class="flex-auto">
-    <div class="flex flex-col">
-      <Navbar />
-      <Header />
-      <!-- <PublicCardList /> -->
-      <div >
-      <component
-				v-bind:is="$store.state.infobit"
-			></component></div>
-    </div>
-  </div>
+	<div class="flex-auto">
+		<div class="flex flex-col">
+			<Navbar />
+			<Header />
+			<div>
+				<component v-bind:is="$store.state.infobit"></component>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -22,18 +20,18 @@ import InfoRevitalize from "@/components/InfoRevitalize.vue";
 import Login from "@/views/LoginOrRegister.vue";
 
 export default {
-  name: "Home",
-  components: {
-    Navbar,
-    Header,
-    PublicCardList,
-    CreateStorybook,
-    InfoPublish,
-    InfoRevitalize,
-    Login,
-  },
-  mounted() {
-		document.title = "Dito - " + window.location.hostname.split(".")[0]
+	name: "Home",
+	components: {
+		Navbar,
+		Header,
+		PublicCardList,
+		CreateStorybook,
+		InfoPublish,
+		InfoRevitalize,
+		Login,
+	},
+	mounted() {
+		document.title = "Dito - " + window.location.hostname.split(".")[0];
 	},
 };
 </script>
