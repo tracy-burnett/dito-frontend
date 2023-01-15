@@ -59,6 +59,7 @@ export default {
 		return {
 			audioArray: [], // the list of audio files owned by, or shared with, the logged-in user
 			searchResultAudioArray: [],
+			audioArrayTemp: [],
 			searchterm: "",
 			processingStorybooks: false,
 		};
@@ -138,6 +139,8 @@ export default {
 
 		async getStorybooks() {
 			this.processingStorybooks = true;
+			this.audioArray=[]
+			this.audioArrayTemp=[]
 
 			if (this.$store.state.user) {
 				// REFRESH ID TOKEN FIRST AND WAIT FOR IT
@@ -162,8 +165,11 @@ export default {
 			})
 				.then((response) => response.json()) // json to object
 				.then((data) => {
-					this.audioArray = data["audio files"]; // collect the list of audio files that are owned by, or shared with, the logged-in user
-
+					this.audioArrayTemp = data["audio files"]; // collect the list of audio files that are owned by, or shared with, the logged-in user
+					this.audioArrayTemp.forEach((audio) => {
+						if (audio.archived==false)
+						{this.audioArray.push(audio)}
+					})
 					this.processingStorybooks = false;
 				})
 				.catch((error) => console.error("Error:", error));
