@@ -111,7 +111,7 @@ export default {
 					this.fileloaded = event.target.result;
 				});
 				reader.readAsText(this.file);
-			}
+			} 
 		},
 
 		async create() {
