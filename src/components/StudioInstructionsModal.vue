@@ -18,7 +18,7 @@
 
 				3. If you are correct, you will automatically receive a new prompt (no need to press "Enter").<br><br>
 				4. Click "New Phrase" above to skip the current prompt.<br><br>
-				5. Adjust the "listen to less / more" slider above to change the length of phrase that you are prompted with (note that adjusting this slider at all will bring you back to the beginning of the audio file).<br><br>
+				5. Adjust the "listen to less / more" slider above to change the length of phrase that you are prompted with (note that adjusting this slider will always bring you back to the beginning of the audio file).<br><br>
 			</p>
 		</div>
 	</div>
