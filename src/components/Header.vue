@@ -20,7 +20,7 @@
 			@mouseleave="browse=false"
 			v-else
 		>
-			<p class="text-xs lg:text-sm">Click below to use your language skills to interpret an audio file uploaded by another user. Nobody will see your interpretation unless you share or publish it.</p>
+			<p class="text-xs lg:text-sm">Click below to use your language skills to interpret an audio file uploaded by yourself or another user. Nobody will see your interpretation unless you share or publish it.</p>
 		</div>
 
 		<div
