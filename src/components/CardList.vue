@@ -548,7 +548,7 @@ export default {
 						} // collect the list of audio files that are owned by, or shared with, the logged-in user
 					)
 					.then((data) => {
-						if (this.audioArray.length > 0) {
+						if (this.audioArray) {
 							this.audioArray.forEach((element) => {
 								// console.log(element.uploaded_by.shared_editors)
 								if (

@@ -166,7 +166,7 @@ export default {
 				.then((response) => response.json()) // json to object
 				.then((data) => {
 					this.audioArrayTemp = data["audio files"]; // collect the list of audio files that are owned by, or shared with, the logged-in user
-					if (this.audioArrayTemp.length > 0) {
+					if (this.audioArrayTemp.length) {
 						this.audioArrayTemp.forEach((audio) => {
 							if (audio.archived == false) {
 								this.audioArray.push(audio);
