@@ -258,7 +258,7 @@ export default {
 				this.startingindex = 0;
 				this.endingindex = this.latest_text.length;
 			}
-			console.log(donotdelete);
+			// console.log(donotdelete);
 			// if (deletefrombeginning.length >= 1) {
 			// 	this.startingindex = Math.max(...deletefrombeginning);
 			// } else {
@@ -440,7 +440,7 @@ export default {
 				}
 			)
 				.then((response) => response)
-				.then((data) => console.log(data))
+				.then((data) => data)
 				.then(() => {
 					this.clearTimestamps();
 					this.adulterateText();

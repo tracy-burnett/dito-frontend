@@ -238,7 +238,7 @@ export default {
 			saveEditscounter: 0,
 			// clearOldTimestampsvar: 0,
 			interpretationStatus: "", // this remembers whether the currently logged-in user is a viewer, editor, or owner of the currently-displayed interpretation
-			styleoption: "Studio", // this can be Viewer, Editor, or Tagger, depending on how the user is currently interacting with the displayed interpretation
+			styleoption: "", // this can be Viewer, Editor, or Tagger, depending on how the user is currently interacting with the displayed interpretation
 			interpretationFull: {}, // this contains all of the information about the currently displayed interpretation
 			showSyncingModal: false,
 			prompterReloadCounter: 0, // reloads prompter component
