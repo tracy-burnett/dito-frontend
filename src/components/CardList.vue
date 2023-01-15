@@ -4,7 +4,6 @@
 		style="overflow: scroll; height:44vh;"
 	>
 
-
 		<div class="fixed z-[8] flex flex-row justify-around w-full -mt-[5vh]">
 
 			<div class="flex flex-row flex-wrap justify-between basis-full lg:basis-2/5">
@@ -141,7 +140,7 @@
 							:audio_ID="audio.id"
 							@SelectRow="uncheck(audio.id)"
 						>
-						
+
 						</CardRow>
 					</span></span>
 			</span>
@@ -549,38 +548,40 @@ export default {
 						} // collect the list of audio files that are owned by, or shared with, the logged-in user
 					)
 					.then((data) => {
-						this.audioArray.forEach((element) => {
-							// console.log(element.uploaded_by.shared_editors)
-							if (
-								element.uploaded_by.user_ID == this.$store.state.user.uid &&
-								!element.archived
-							) {
-								// console.log("1")
-								this.audioArrayOwner.push(element);
-							} else if (
-								element.shared_editors.some(
-									(e) => e.user_ID === this.$store.state.user.uid
-								)
-							) {
-								// console.log("2")
-								this.audioArrayEditor.push(element);
-							} else if (
-								element.shared_viewers.some(
-									(e) => e.user_ID === this.$store.state.user.uid
-								)
-							) {
-								// console.log("3")
-								this.audioArrayViewer.push(element);
-							} else if (element.public) {
-								// console.log("4")
-								this.audioArrayPublic.push(element);
-							} else if (
-								element.archived &&
-								element.uploaded_by.user_ID == this.$store.state.user.uid
-							) {
-								this.audioArrayArchive.push(element);
-							}
-						});
+						if (this.audioArray.length > 0) {
+							this.audioArray.forEach((element) => {
+								// console.log(element.uploaded_by.shared_editors)
+								if (
+									element.uploaded_by.user_ID == this.$store.state.user.uid &&
+									!element.archived
+								) {
+									// console.log("1")
+									this.audioArrayOwner.push(element);
+								} else if (
+									element.shared_editors.some(
+										(e) => e.user_ID === this.$store.state.user.uid
+									)
+								) {
+									// console.log("2")
+									this.audioArrayEditor.push(element);
+								} else if (
+									element.shared_viewers.some(
+										(e) => e.user_ID === this.$store.state.user.uid
+									)
+								) {
+									// console.log("3")
+									this.audioArrayViewer.push(element);
+								} else if (element.public) {
+									// console.log("4")
+									this.audioArrayPublic.push(element);
+								} else if (
+									element.archived &&
+									element.uploaded_by.user_ID == this.$store.state.user.uid
+								) {
+									this.audioArrayArchive.push(element);
+								}
+							});
+						}
 						this.processingStorybooks = false;
 						this.$nextTick(function () {
 							// console.log(this.$store.state.cardlistscrollposition)
