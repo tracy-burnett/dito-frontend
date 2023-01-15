@@ -37,14 +37,6 @@
     register(reg_email, reg_password, reg_display_name, reg_description, reg_anonymous)
   "
 			/>
-			<!-- <input
-  class="w-full px-3 py-1 border border-gray-300 rounded"
-  placeholder="Blurb"
-  v-model="reg_description"
-  @keyup.enter="
-    register(reg_email, reg_password, reg_display_name, reg_description, reg_anonymous)
-  "
-/> -->
 			<input
 				class="w-full px-3 border border-gray-300 rounded"
 				placeholder="Display Name"
@@ -72,17 +64,24 @@
     register(reg_email, reg_password, reg_display_name, reg_description, reg_anonymous)
   "
 			/>
-			<div v-if="allowRegister==true" class="w-full">
-			<button
-				type="submit"
-				class="w-full px-3 py-1 mt-[2vh] font-medium text-white transition-colors border rounded border-cyan-600 bg-cyan-700 hover:bg-cyan-600"
-				@click="
+			<div
+				v-if="allowRegister==true"
+				class="w-full"
+			>
+				<button
+					type="submit"
+					class="w-full px-3 py-1 mt-[2vh] font-medium text-white transition-colors border rounded border-cyan-600 bg-cyan-700 hover:bg-cyan-600"
+					@click="
     register(reg_email, reg_password, reg_display_name, reg_description, reg_anonymous)
   "
+				>
+					Register
+				</button>
+			</div>
+			<div
+				v-else
+				class="w-full px-3 py-1 mt-[2vh] font-medium text-white transition-colors border rounded border-cyan-600 bg-cyan-700"
 			>
-				Register
-			</button></div>
-			<div v-else class="w-full px-3 py-1 mt-[2vh] font-medium text-white transition-colors border rounded border-cyan-600 bg-cyan-700">
 				<p class="text-xs text-center sm:text-base">(passwords do not match; re-enter your password and try again)</p>
 			</div>
 		</div>
@@ -105,19 +104,20 @@ export default {
 			reg_anonymous: false,
 		};
 	},
-	
+
 	computed: {
 		allowRegister() {
-			if (this.reg_password === this.reg_password_verify)
-			{return true}
-			else
-			{return false}
+			if (this.reg_password === this.reg_password_verify) {
+				return true;
+			} else {
+				return false;
+			}
 		},
 		email() {
-return this.email_mixedcase.toLowerCase()
+			return this.email_mixedcase.toLowerCase();
 		},
 		reg_email() {
-return this.reg_email_mixedcase.toLowerCase()
+			return this.reg_email_mixedcase.toLowerCase();
 		},
 	},
 	methods: {
@@ -128,21 +128,22 @@ return this.reg_email_mixedcase.toLowerCase()
 			reg_description,
 			reg_anonymous
 		) {
-			if (this.allowRegister == true)
-{			let newinfobit = this.$store.state.infobitToBe;
-			this.$store
-				.dispatch("Register_User", {
-					reg_email,
-					reg_password,
-					reg_display_name,
-					reg_description,
-					reg_anonymous,
-					newinfobit,
-				})
-				.catch((error) => {
-					// An error happened.
-					console.log("Oops. " + error.code + ": " + error.message);
-				});}
+			if (this.allowRegister == true) {
+				let newinfobit = this.$store.state.infobitToBe;
+				this.$store
+					.dispatch("Register_User", {
+						reg_email,
+						reg_password,
+						reg_display_name,
+						reg_description,
+						reg_anonymous,
+						newinfobit,
+					})
+					.catch((error) => {
+						// An error happened.
+						console.log("Oops. " + error.code + ": " + error.message);
+					});
+			}
 		},
 		login: function (email, password) {
 			this.$store

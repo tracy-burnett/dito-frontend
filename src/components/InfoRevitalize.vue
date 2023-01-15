@@ -6,8 +6,6 @@
 			v-model="searchterm"
 			@keyup.enter="search"
 		/>
-		<!-- <h1 class="mt-8 mb-6 text-2xl font-bold text-center">{{ title }}</h1> -->
-		<!-- <div class="pt-[3vh] flex flex-row items-center"> -->
 		<!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
 
 		<div
@@ -42,7 +40,6 @@
 					:title="audio.title"
 					:audio_ID="audio.id"
 				/>
-				<!-- </div> -->
 			</div>
 		</div>
 		<div

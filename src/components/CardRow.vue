@@ -74,7 +74,6 @@
 					<p>{{ description }}</p>
 				</div>
 				<p>{{ uploader }}</p>
-				<!-- <p>{{ date }}</p> -->
 				<p>{{ last_edited }}</p>
 				<span v-if="!archived && status == 'owner'">
 					<input
@@ -92,9 +91,6 @@
 				<span v-else>
 					<span v-if="publictf"> yes</span>
 					<span v-else> no</span></span>
-				<!-- <p class="">
-        {{ publictf }}
-      </p> -->
 				<div>
 					<div v-if="!archived && status == 'owner'">
 
@@ -144,7 +140,6 @@
 						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 						@click="showAddViewersModal(audio_ID)"
 					>Manage Viewers</button></p>
-				<!-- <p v-else-if="status == 'viewer'"><button>Request to Collaborate</button></p> -->
 			</div>
 		</div>
 		<div v-if="dropdown == true">
@@ -239,9 +234,11 @@ export default {
 	},
 
 	methods: {
-		permanentlydelete(deletedInterpretation){
-			let deleteIndex=this.interpretationsList.map((interpretation) => (interpretation.id)).indexOf(deletedInterpretation)
-			this.interpretationsList.splice(deleteIndex,1)
+		permanentlydelete(deletedInterpretation) {
+			let deleteIndex = this.interpretationsList
+				.map((interpretation) => interpretation.id)
+				.indexOf(deletedInterpretation);
+			this.interpretationsList.splice(deleteIndex, 1);
 		},
 
 		selectrow() {

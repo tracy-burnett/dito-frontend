@@ -6,13 +6,6 @@
 
 		<span class="py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="py-1 border-gray-300 rounded ">{{ language_name }}</span><br /><br />
-		<!-- {{associations}}<br> -->
-		<!-- {{associationGaps}}<br> -->
-		<!-- {{$store.state.startTimePrompter*100}}<br> -->
-		<!-- {{new_text}}<br> -->
-		<!-- {{usableGaps}}<br> -->
-		<!-- {{relevantGap}}<br> -->
-		<!-- {{nomoregaps}} -->
 		<textarea
 			class="w-full h-full px-3 py-1  mt-[2vh] border-gray-300 rounded prompter"
 			:style="{ 'font-size': fontsize + 'px' }"
@@ -23,13 +16,6 @@
 			@keydown.enter.exact.prevent="emitNewPrompt()"
 			@keydown.enter.shift.exact.prevent="new_text_unstripped += '\n'"
 		></textarea>
-		<!-- <p
-			v-else
-			ref="promptertextarea"
-		>nothing to scribe</p> -->
-		<!-- <div v-if="allowSubmit==true">this text will be submitted when a new prompt is generated</div>
-		<div v-else-if="allowSubmit==false">this text WILL NOT be submitted when a new prompt is generated</div> -->
-
 	</div>
 </template>
 

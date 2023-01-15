@@ -14,7 +14,7 @@
 			<br />
 			<p class="text-sm -mt-[1vh] text-justify pb-[3vh]">
 				1. Press "Ctrl" and left-click to play or pause the audio player at any time.<br><br>
-				
+
 				2. Highlight a region of the audio file.<br><br>
 
 				3. Then, click or click-and-drag on the words that represent the meaning in the audio selection, and the words will turn green.<br><br>

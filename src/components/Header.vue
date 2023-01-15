@@ -1,9 +1,6 @@
 <template>
-	<!-- <div class="beforehero"></div> -->
 	<div class="grid grid-cols-4 mx-[3vw] overflow-hidden justify-items-center hero">
 
-		<!-- <h1 class="mb-5 text-5xl font-extrabold text-gray-400">{{ title }}</h1> -->
-		<!-- <p class="w-full text-sm font-light text-gray-900 lg:w-3/5 md:w-3/5" style="white-space:pre-wrap">{{ body }}</p> -->
 		<div
 			class="cursor-pointer contents"
 			v-if="browse==false"

@@ -10,7 +10,7 @@
 				@closeSyncingModal="closeSyncingModal()"
 			/>
 		</span>
-		<!-- this SingleInterpretation component represents what is viewable in a single interpretation column of an open storybook -->
+		<!-- the current component represents what is viewable in a single interpretation column of an open storybook -->
 		<div class="flex flex-col -mt-[0vh]">
 			<div class="flex flex-row justify-center ">
 				<div class="sticky flex flex-row flex-wrap justify-around shrink ">
@@ -56,7 +56,7 @@
 						/>
 					</div>
 					<div v-if="styleoption==='Viewer' && (this.interpretationStatus == 'owner' || this.interpretationStatus=='editor')">
-						<!--FLAG-->
+
 						<div
 							class="dropdown"
 							style="float: right"
@@ -86,7 +86,6 @@
 					</div>
 
 					<div v-if="styleoption==='Editor'">
-						<!-- this is where should allow user to choose other punctuating characters or strings to always be their own word and not accidentally joining two other words -->
 						<button
 							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
 							@click="saveEditsincrease()"
@@ -95,13 +94,6 @@
 						</button>
 					</div>
 
-					<!-- quick and dirty way to purge the database of all tags for this interpretation, mainly used for debugging purposes -->
-					<!-- <div v-if="styleoption==='Tagger'"><button
-							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-							@click="clearOldTimestamps()"
-						>
-							Clear Old
-						</button></div> -->
 					<div v-if="styleoption==='Tagger'"><button
 							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
 							@click="updateAssociationsfunc()"
@@ -142,7 +134,6 @@
 				</div>
 
 				<div v-if="styleoption==='Prompter'">
-					<!--FLAG-->
 					<div class="flex">
 						scribe less / more
 					</div>
@@ -160,7 +151,6 @@
 				</div>
 
 				<div v-if="styleoption==='Studio'">
-					<!--FLAG-->
 					<div class="flex">
 						&nbsp;&nbsp;&nbsp;phrase length
 					</div>
@@ -179,9 +169,7 @@
 			</div>
 		</div>
 		<div class="mt-[6vh]">
-			<!-- this component will be Viewer, Tagger, or Editor, depending on the user's selection of "styleoption" via the StorybookStyleMenu -->
-			<!-- {{interpretationStatus}} -->
-			<!-- {{$store.state.user}} -->
+			<!-- this component will depend on the user's selection of component to vue via a menu in a different component -->
 			<component
 				v-bind:is="styleoption"
 				:audio_id="audio_id"

@@ -7,8 +7,6 @@
 		<!-- playback speed slider -->
 		<div class="flex justify-center text-xs">
 			playback speed {{playbackspeed}}x
-			<!-- <br>{{startTimeSeconds}} -->
-			<!-- <br>{{(startTimeSeconds+endTimeSeconds)/2}}<br>{{endTimeSeconds}} -->
 		</div>
 		<div>
 			<input
@@ -21,7 +19,6 @@
 				style="width: 105px"
 			/>
 		</div>
-		<!-- <div class="flex justify-center text-xs">{{playbackspeed}}</div> -->
 		<!-- audio player body -->
 		<div class="container flex flex-col shadow-xl rounded-xl">
 			<!-- top-most time entry box (for start of view window) -->
@@ -145,7 +142,7 @@ export default {
 	props: {
 		audio_ID: {
 			default: "",
-		},		
+		},
 		playerPlayPause: {
 			default: 0,
 		},
@@ -176,7 +173,9 @@ export default {
 
 	// watch these variables to see if they change.  if they do, then call the corresponding functions.
 	watch: {
-		playerPlayPause: function(){this.play()},
+		playerPlayPause: function () {
+			this.play();
+		},
 
 		readyVerification: function () {
 			if (this.readyVerification == 2) {
@@ -226,21 +225,21 @@ export default {
 			//  if (
 			// 	this.$store.state.incomingCurrentTime < this.startTimeSeconds || this.$store.state.incomingCurrentTime >= this.endTimeSeconds
 			// ) {
-				this.clearallregions()
-				// let tempendtime = this.endTimeSeconds;
-				// this.wavesurfer.clearRegions();
-				// this.updatingFromPrompter = false;
-				this.wavesurfer.addRegion({
-					start: this.$store.state.incomingCurrentTime,
-					end: this.$store.state.incomingEndTime,
-					id: "region",
-					loop: false,
-				});
-				this.startTime = this.secondsToTime(
-					Math.round(this.$store.state.incomingCurrentTime)
-				);
-				this.endTime = this.secondsToTime(this.$store.state.incomingEndTime);
-				this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
+			this.clearallregions();
+			// let tempendtime = this.endTimeSeconds;
+			// this.wavesurfer.clearRegions();
+			// this.updatingFromPrompter = false;
+			this.wavesurfer.addRegion({
+				start: this.$store.state.incomingCurrentTime,
+				end: this.$store.state.incomingEndTime,
+				id: "region",
+				loop: false,
+			});
+			this.startTime = this.secondsToTime(
+				Math.round(this.$store.state.incomingCurrentTime)
+			);
+			this.endTime = this.secondsToTime(this.$store.state.incomingEndTime);
+			this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
 			// }
 			// else if (this.$store.state.incomingCurrentTime >= this.endTimeSeconds) {
 			// 	let tempendtime = this.endTimeSeconds;
@@ -350,7 +349,6 @@ export default {
 	async mounted() {
 		this.sendtobackendBoolean = false;
 
-
 		// https://wavesurfer-js.org
 		this.wavesurfer = WaveSurfer.create({
 			container: this.$refs.waveform,
@@ -422,7 +420,6 @@ export default {
 			.catch((error) => {
 				console.error("Error:", error);
 			});
-
 
 		let that = this;
 
@@ -503,14 +500,14 @@ export default {
 				that.isLoaded == true
 			) {
 				that.wavesurfer.seekTo(that.startTimeSeconds / that.totalDuration);
-				that.$store.commit("updateHighlights")
+				that.$store.commit("updateHighlights");
 			}
 		});
 
 		this.wavesurfer.on("finish", function () {
 			that.wavesurfer.seekTo(that.startTimeSeconds / that.totalDuration);
-			
-			that.$store.commit("updateHighlights")
+
+			that.$store.commit("updateHighlights");
 			that.pausePlayer();
 			that.play();
 		});
@@ -652,8 +649,8 @@ export default {
 		seekTimestampfunction(timestamp) {
 			if (this.totalDuration > 0) {
 				this.wavesurfer.seekTo(timestamp / this.totalDuration);
-				
-				this.$store.commit("updateHighlights")
+
+				this.$store.commit("updateHighlights");
 				this.currentTime = this.secondsToTime(timestamp);
 			}
 		},
@@ -661,8 +658,8 @@ export default {
 		// when the user submits a new manual input of HH:MM:SS current time, the cursor moves accordingly and the change is also communicated to the Vuex store
 		seekfunction() {
 			this.wavesurfer.seekTo(this.currentSeekNumber);
-			
-			this.$store.commit("updateHighlights")
+
+			this.$store.commit("updateHighlights");
 		},
 
 		// clear the highlighted region and reset the HH:MM:SS displays of start and end time accordingly

@@ -1,78 +1,75 @@
 <template>
-<div
-		@click.ctrl.exact="playerPlayPause++">
+	<div @click.ctrl.exact="playerPlayPause++">
 		<span
-				v-if="showAddInterpretationModal"
-				class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
-			>
-				<AddInterpretationModal
-					:audio_id="audio_ID"
-					@addCreatedInterpretation="addCreatedInterpretation($event)"
-					@closeInterpretationModal="closeInterpretationModal()"
-				/>
-			</span>
-			<span
-				v-if="showUploadIntModal"
-				class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
-			>
-				<UploadIntModal
-					:audio_id="audio_ID"
-					@addCreatedInterpretation="addCreatedInterpretation($event)"
-					@closeUploadIntModal="closeUploadIntModal()"
-				/>
-			</span>
+			v-if="showAddInterpretationModal"
+			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
+		>
+			<AddInterpretationModal
+				:audio_id="audio_ID"
+				@addCreatedInterpretation="addCreatedInterpretation($event)"
+				@closeInterpretationModal="closeInterpretationModal()"
+			/>
+		</span>
+		<span
+			v-if="showUploadIntModal"
+			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
+		>
+			<UploadIntModal
+				:audio_id="audio_ID"
+				@addCreatedInterpretation="addCreatedInterpretation($event)"
+				@closeUploadIntModal="closeUploadIntModal()"
+			/>
+		</span>
 
 		<Navbar :text=navtext />
-	<div class="relative overflow-x-hidden justify-items-center hero">
-		<div class="pt-[5vh] flex flex-row justify-between h-[100vh]">
+		<div class="relative overflow-x-hidden justify-items-center hero">
+			<div class="pt-[5vh] flex flex-row justify-between h-[100vh]">
 
-			<div>
-				<PlayerVertical
-				v-if="this.$store.state.authCompleted"
-					:key="playerKey"
-					:audio_ID="audio_ID"
-					:playerPlayPause="playerPlayPause"
-					@rerenderPlayer="playerKey++"
-				/>
-			</div>
-			<div class="flex flex-row w-full ml-[105px] mr-[105px]">
+				<div>
+					<PlayerVertical
+						v-if="this.$store.state.authCompleted"
+						:key="playerKey"
+						:audio_ID="audio_ID"
+						:playerPlayPause="playerPlayPause"
+						@rerenderPlayer="playerKey++"
+					/>
+				</div>
+				<div class="flex flex-row w-full ml-[105px] mr-[105px]">
 
-				<!-- given the Vuex store's list of interpretation ID's that the user wants displayed in columns in the browser window, create a column for each one -->
+					<span
+						v-for="interpretation in $store.state.consoles"
+						:key="interpretation"
+						class="w-full box-border px-[.5vw]"
+					>
+						<!-- tell the column which audio ID we are working with, which interpretations to put in the dropdown menu for viewing, which interpretations are currently being viewed,
+      and the id of the interpretation to be displayed in this column in the browser window.  The interpretation component can use events
+      to tell the current component to delete this interpretation column and add a new one for a different interpretation ID. -->
+						<SingleInterpretation
+							:audio_id="audio_ID"
+							:interpretationsList="interpretationsList"
+							:formerInterpretationsList="formerInterpretationsList"
+							:interpretation_id="interpretation"
+							@returnFormerInterpretation="returnFormerInterpretation($event)"
+							@displayInterpretationID="displayInterpretationID($event)"
+							@permanentlydestroy="permanentlydestroy($event)"
+						/>
+					</span>
+					<!-- the following component can tell the current component to add a new column for an interpretation that it just created,
+      or to add a new column for an interpretation that has previously been created. -->
 
-				<span
-					v-for="interpretation in $store.state.consoles"
-					:key="interpretation"
-					class="w-full box-border px-[.5vw]"
-				>
-					<!-- tell the column which audio ID we are working with, which interpretations to put in the dropdown menu for viewing, which interpretations are currently being viewed (formerInterpretationsList),
-      and the id of the interpretation to be displayed in this column in the browser window.  The SingleInterpretation component can use events
-      to tell this Storybook component to delete this interpretation column and add a new one for a different interpretation ID. -->
-					<SingleInterpretation
+				</div>
+				<div>
+					<AddInterpretationViewer
 						:audio_id="audio_ID"
 						:interpretationsList="interpretationsList"
-						:formerInterpretationsList="formerInterpretationsList"
-						:interpretation_id="interpretation"
-						@returnFormerInterpretation="returnFormerInterpretation($event)"
+						@toggleInterpretationModal="toggleInterpretationModal()"
+						@toggleUploadIntModal="toggleUploadIntModal()"
 						@displayInterpretationID="displayInterpretationID($event)"
-						@permanentlydestroy="permanentlydestroy($event)"
 					/>
-				</span>
-				<!-- the AddInterpretationViewer component can tell this Storybook component to add a new column for an interpretation that it just created (addCreatedInterpretation),
-      or to add a new column for an interpretation that has previously been created (displayInterpretationID). -->
-
-			</div>
-			<div>
-				<AddInterpretationViewer
-					:audio_id="audio_ID"
-					:interpretationsList="interpretationsList"
-					@toggleInterpretationModal="toggleInterpretationModal()"
-					@toggleUploadIntModal="toggleUploadIntModal()"
-					@displayInterpretationID="displayInterpretationID($event)"
-				/>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 </template>
 
 <script>
@@ -113,8 +110,9 @@ export default {
 
 	watch: {
 		"$store.state.authCompleted": function () {
-			if (this.$store.state.authCompleted===true)
-			{this.getInterpretations();}
+			if (this.$store.state.authCompleted === true) {
+				this.getInterpretations();
+			}
 		},
 	},
 
@@ -123,9 +121,11 @@ export default {
 	},
 
 	mounted() {
-		document.title = "Dito - " + this.title + " - " + window.location.hostname.split(".")[0]
-		if (this.$store.state.authCompleted===true)
-			{this.getInterpretations();}
+		document.title =
+			"Dito - " + this.title + " - " + window.location.hostname.split(".")[0];
+		if (this.$store.state.authCompleted === true) {
+			this.getInterpretations();
+		}
 	},
 	unmounted() {
 		this.$store.commit("updateAudioDuration", 0);

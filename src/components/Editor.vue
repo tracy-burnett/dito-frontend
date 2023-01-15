@@ -11,9 +11,6 @@
 			v-model="language_name"
 			:size="languagesize"
 		/><br>
-		<!-- {{title.length}} -->
-		<!-- {{$store.getters.maxsize}} -->
-
 
 		<textarea
 			class="w-full px-[.5vw] border-gray-300 rounded editor"
@@ -21,9 +18,6 @@
 			:style="{ 'font-size': fontsize + 'px' } "
 			v-model="latest_text_unstripped"
 		></textarea>
-		<!-- {{latest_text.length}}
-{{$store.state.consoleswidth}}
-{{$store.state.consoles.length}} -->
 
 	</div>
 </template>
@@ -48,16 +42,15 @@ export default {
 		latest_text() {
 			if (this.spaced_by != "") {
 				let stripped = this.latest_text_intermediary.split("\n");
-				for (let j = 0; j < stripped.length; j++)
-				{
-					if (stripped[j][0]==this.spaced_by) {
-						stripped[j]=stripped[j].substring(1)
+				for (let j = 0; j < stripped.length; j++) {
+					if (stripped[j][0] == this.spaced_by) {
+						stripped[j] = stripped[j].substring(1);
 					}
-					if (stripped[j][stripped[j].length-1]==this.spaced_by) {
-						stripped[j]=stripped[j].substring(0,stripped[j].length-1)
+					if (stripped[j][stripped[j].length - 1] == this.spaced_by) {
+						stripped[j] = stripped[j].substring(0, stripped[j].length - 1);
 					}
 				}
-				
+
 				// console.log(stripped.join("\n"));
 				return stripped.join("\n");
 			} else if (this.spaced_by == "") {
