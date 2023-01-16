@@ -20,6 +20,7 @@
 			/>
 		</div>
 		<!-- audio player body -->
+
 		<div class="container flex flex-col shadow-xl rounded-xl">
 			<!-- top-most time entry box (for start of view window) -->
 			<div
@@ -71,12 +72,19 @@
 			</div>
 
 			<!-- waveform display -->
-			<div
-				id="waveform"
-				ref="waveform"
-				class="flex waveform"
-				@wheel.prevent="getzoomnumber($event)"
-			>
+			<div class="flex flex-row">
+				<div
+					id="miniwaveform"
+					ref="miniwaveform"
+					class="miniwaveform"
+				></div>
+				<div class="midwaveform"></div>
+				<div
+					id="waveform"
+					ref="waveform"
+					class="flex waveform"
+					@wheel.prevent="getzoomnumber($event)"
+				></div>
 				<div
 					class="absolute h-[40vh] z-10 content-center w-full flex flex-col py-[14vh] px-[1vw] text-sm"
 					style="background: #dbeafe;"
@@ -117,32 +125,61 @@
 
 			<!-- clear highlight button -->
 			<div class="mb-[1.5vh]">
-				<button v-if="hasRegion==true"
+				<button
+					v-if="hasRegion==true"
 					class="rounded-full clear"
 					@click="clearallregions()"
 				>
 					Clear Selection
-				</button>				<button v-else
-					class="rounded-full cursor-default disabled" style="opacity:0.3;"
+				</button> <button
+					v-else
+					class="rounded-full cursor-default disabled"
+					style="opacity:0.3;"
 				>
 					Clear Selection
 				</button>
-				<button v-if="readyVerification<2"
-					class="rounded-full cursor-default disabled" style="opacity:0.3;"
+				<button
+					v-if="readyVerification<2"
+					class="rounded-full cursor-default disabled"
+					style="opacity:0.3;"
 				>
 					Repeat On / Off
 				</button>
-				<button v-else-if="repeat==true"
+				<button
+					v-else-if="repeat==true"
 					class="rounded-full clear"
 					@click="toggleRepeat()"
 				>
 					Repeat <b>On</b> / Off
-				</button>				<button v-else
+				</button> <button
+					v-else
 					class="rounded-full clear"
 					@click="toggleRepeat()"
 				>
 					Repeat On / <b>Off</b>
 				</button>
+
+				<button
+					v-if="readyVerification<2"
+					class="rounded-full cursor-default disabled"
+					style="opacity:0.3;"
+				>
+					Autoscroll On / Off
+				</button>
+				<button
+					v-else-if="autoscroll==true"
+					class="rounded-full clear"
+					@click="toggleAutoscroll()"
+				>
+					Autoscroll <b>On</b> / Off
+				</button> <button
+					v-else
+					class="rounded-full clear"
+					@click="toggleAutoscroll()"
+				>
+					Autoscroll On / <b>Off</b>
+				</button>
+
 			</div>
 		</div>
 	</div>
@@ -187,6 +224,7 @@ export default {
 			updatingFromPrompter: false,
 			repeat: false,
 			hasRegion: false,
+			autoscroll: false,
 		};
 	},
 
@@ -205,12 +243,13 @@ export default {
 				this.$store.commit("updateAudioDuration", this.totalDuration * 1000);
 				this.endTimeSeconds = this.totalDuration;
 				this.endTime = this.secondsToTime(this.endTimeSeconds);
-				this.wavesurfer.addRegion({
-					start: 0,
-					end: this.totalDuration,
-					id: "initialregion",
-					loop: false,
-				});
+				// this.wavesurfer.addRegion({
+				// 	start: 0,
+				// 	end: this.totalDuration,
+				// 	id: "initialregion",
+				// 	loop: false,
+				// });
+				this.wavesurfer.drawer.params.autoCenter = false;
 				this.wavesurfer.enableDragSelection({
 					id: "initialregion",
 					loop: false,
@@ -374,6 +413,7 @@ export default {
 			backend: "MediaElement",
 			waveColor: "#94a3b8",
 			cursorColor: "red",
+			// autoCenter: false,
 			progressColor: "#475569",
 			// barWidth: 2,
 			barHeight: 4,
@@ -384,6 +424,14 @@ export default {
 			plugins: [
 				WaveSurfer.regions.create({
 					maxRegions: 1,
+				}),
+				WaveSurfer.minimap.create({
+					container: this.$refs.miniwaveform,
+					waveColor: "#777",
+					progressColor: "#222",
+					showOverview: true,
+					// showRegions: true,
+					// height: 50
 				}),
 			],
 		});
@@ -496,7 +544,7 @@ export default {
 				that.endTimeSeconds = that.$store.state.endTimePrompter;
 				that.updatingFromPrompter = false;
 			}
-			that.hasRegion=true
+			that.hasRegion = true;
 			// that.startTime=that.secondsToTime(Math.round(that.$store.state.startTimePrompter))
 			// that.endTime=that.secondsToTime(Math.round(that.$store.state.endTimePrompter))
 		});
@@ -602,14 +650,23 @@ export default {
 		zoom() {
 			this.wavesurfer.zoom(Number(this.zoomnumber));
 		},
-		
+
 		toggleRepeat() {
 			if (this.repeat == true) {
 				this.repeat = false;
 			} else if (this.repeat == false) {
 				this.repeat = true;
 			}
-			this.playWithoutPause()
+			this.playWithoutPause();
+		},
+		toggleAutoscroll() {
+			if (this.autoscroll == true) {
+				this.wavesurfer.drawer.params.autoCenter = false;
+				this.autoscroll = false;
+			} else if (this.autoscroll == false) {
+				this.wavesurfer.drawer.params.autoCenter = true;
+				this.autoscroll = true;
+			}
 		},
 
 		getzoomnumber(event) {
@@ -729,7 +786,7 @@ export default {
 			this.endTimeSeconds = this.totalDuration; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here			this.$store.commit(
 			this.$store.commit("updateStartTimePrompter", 0);
 			this.$store.commit("updateEndTimePrompter", this.totalDuration);
-			this.hasRegion=false
+			this.hasRegion = false;
 		},
 
 		// change the highlighted region based on manual HH:MM:SS inputs of start and end times by the user
@@ -784,7 +841,6 @@ export default {
 </script>
 
 <style scoped>
-
 .disabled {
 	font-size: 70%;
 	color: white;
@@ -792,7 +848,7 @@ export default {
 	position: relative;
 	top: 1vh;
 	height: 22px;
-	width: 94%;
+	width: 99%;
 	/* margin-bottom: 2vh; */
 	/*background: radial-gradient(#798597, #616977);*/
 	background: #475569;
@@ -804,7 +860,7 @@ export default {
 	position: relative;
 	top: 1vh;
 	height: 22px;
-	width: 94%;
+	width: 99%;
 	/* margin-bottom: 2vh; */
 	/*background: radial-gradient(#798597, #616977);*/
 	background: #475569;
@@ -822,7 +878,7 @@ export default {
 }
 
 .container {
-	height: 80vh;
+	/* height: 80vh; */
 	/* min-height: 600px; */
 	/* width: 7vw; */
 	width: 100px;
@@ -842,11 +898,45 @@ export default {
 	/* flex: 1; */
 	display: flex;
 	height: 40vh;
+	width: 75px;
+	/* margin-left: 10px; */
 	background: #dbeafe;
 
 	/* background: linear-gradient(90deg, #155E75, #64748B, #155E75) */
 	/* margin-left: 10px; */
 	/* margin-right: 10px; */
+}
+
+.midwaveform {
+	display: flex;
+	/* height: 79vh; */
+	width: 1px;
+	height: 40vh;
+	background: #dbeafe;
+}
+
+.miniwaveform {
+	/* flex: 1; */
+	display: flex;
+	/* height: 79vh; */
+	width: 24px;
+	background: #dbeafe;
+
+	/* background: linear-gradient(90deg, #155E75, #64748B, #155E75) */
+	/* margin-left: 10px; */
+	/* margin-right: 10px; *
+		height: 80vh;
+	/* min-height: 600px; */
+	/* width: 7vw; */
+	/* position: relative; */
+	/* left: 10px; */
+	/* margin-top: 1vh; */
+	/* margin-left: 0.2vw; */
+	/* top: 5px; */
+	/* display: inline; */
+	/*max-width: 7%;*/
+	/* text-align: center; */
+	/*background: linear-gradient(90deg, #164e63, 30%, #1e293b, 70%, #164e63);*/
 }
 
 /* .loading { */
