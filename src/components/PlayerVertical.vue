@@ -180,6 +180,13 @@
 					Autoscroll On / <b>Off</b>
 				</button>
 				<button
+					v-if="readyVerification<2"
+					class="rounded-full cursor-default disabled"
+					style="opacity:0.3;"
+				>
+					Zoom Out
+				</button>
+				<button v-else
 					class="rounded-full clear"
 					@click="wavesurfer.zoom(false)"
 				>
