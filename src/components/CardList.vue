@@ -461,43 +461,43 @@ export default {
 		},
 
 		populateSubArraysAfterSearch() {
-			(this.audioArrayOwnerAfterSearch = []), // the list of audio files owned by the logged-in user
-				(this.audioArrayEditorAfterSearch = []),
-				(this.audioArrayViewerAfterSearch = []),
-				(this.audioArrayPublicAfterSearch = []),
-				(this.audioArrayArchiveAfterSearch = []),
-				this.searchResultAudioArray.forEach((element) => {
-					// console.log(element.uploaded_by.shared_editors)
-					if (
-						element.uploaded_by.user_ID == this.$store.state.user.uid &&
-						!element.archived
-					) {
-						// console.log("1")
-						this.audioArrayOwnerAfterSearch.push(element);
-					} else if (
-						element.shared_editors.some(
-							(e) => e.user_ID === this.$store.state.user.uid
-						)
-					) {
-						// console.log("2")
-						this.audioArrayEditorAfterSearch.push(element);
-					} else if (
-						element.shared_viewers.some(
-							(e) => e.user_ID === this.$store.state.user.uid
-						)
-					) {
-						// console.log("3")
-						this.audioArrayViewerAfterSearch.push(element);
-					} else if (element.public) {
-						// console.log("4")
-						this.audioArrayPublicAfterSearch.push(element);
-					} else if (
-						element.archived &&
-						element.uploaded_by.user_ID == this.$store.state.user.uid
-					) {
-						this.audioArrayArchiveAfterSearch.push(element);
-					}
-				});
+			this.audioArrayOwnerAfterSearch = []; // the list of audio files owned by the logged-in user
+			this.audioArrayEditorAfterSearch = [];
+			this.audioArrayViewerAfterSearch = [];
+			this.audioArrayPublicAfterSearch = [];
+			this.audioArrayArchiveAfterSearch = [];
+			this.searchResultAudioArray.forEach((element) => {
+				// console.log(element.uploaded_by.shared_editors)
+				if (
+					element.uploaded_by.user_ID == this.$store.state.user.uid &&
+					!element.archived
+				) {
+					// console.log("1")
+					this.audioArrayOwnerAfterSearch.push(element);
+				} else if (
+					element.shared_editors.some(
+						(e) => e.user_ID === this.$store.state.user.uid
+					)
+				) {
+					// console.log("2")
+					this.audioArrayEditorAfterSearch.push(element);
+				} else if (
+					element.shared_viewers.some(
+						(e) => e.user_ID === this.$store.state.user.uid
+					)
+				) {
+					// console.log("3")
+					this.audioArrayViewerAfterSearch.push(element);
+				} else if (element.public) {
+					// console.log("4")
+					this.audioArrayPublicAfterSearch.push(element);
+				} else if (
+					element.archived &&
+					element.uploaded_by.user_ID == this.$store.state.user.uid
+				) {
+					this.audioArrayArchiveAfterSearch.push(element);
+				}
+			});
 		},
 
 		uncheck(id) {
@@ -527,71 +527,68 @@ export default {
 			}
 
 			this.audioArray = [];
-			(this.audioArrayOwner = []), // the list of audio files owned by the logged-in user
-				(this.audioArrayEditor = []),
-				(this.audioArrayViewer = []),
-				(this.audioArrayPublic = []),
-				(this.audioArrayArchive = []),
-				fetch(process.env.VUE_APP_api_URL + "audio/user/", {
-					method: "GET",
+			this.audioArrayOwner = []; // the list of audio files owned by the logged-in user
+			this.audioArrayEditor = [];
+			this.audioArrayViewer = [];
+			this.audioArrayPublic = [];
+			this.audioArrayArchive = [];
+			fetch(process.env.VUE_APP_api_URL + "audio/user/", {
+				method: "GET",
 
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: this.$store.state.idToken,
-					},
-				})
-					.then((response) => response.json()) // json to object
-					.then(
-						(data) => {
-							this.audioArray = data["audio files"];
-							// console.log(this.audioArray)
-						} // collect the list of audio files that are owned by, or shared with, the logged-in user
-					)
-					.then((data) => {
-						if (this.audioArray) {
-							this.audioArray.forEach((element) => {
-								// console.log(element.uploaded_by.shared_editors)
-								if (
-									element.uploaded_by.user_ID == this.$store.state.user.uid &&
-									!element.archived
-								) {
-									// console.log("1")
-									this.audioArrayOwner.push(element);
-								} else if (
-									element.shared_editors.some(
-										(e) => e.user_ID === this.$store.state.user.uid
-									)
-								) {
-									// console.log("2")
-									this.audioArrayEditor.push(element);
-								} else if (
-									element.shared_viewers.some(
-										(e) => e.user_ID === this.$store.state.user.uid
-									)
-								) {
-									// console.log("3")
-									this.audioArrayViewer.push(element);
-								} else if (element.public) {
-									// console.log("4")
-									this.audioArrayPublic.push(element);
-								} else if (
-									element.archived &&
-									element.uploaded_by.user_ID == this.$store.state.user.uid
-								) {
-									this.audioArrayArchive.push(element);
-								}
-							});
-						}
-						this.processingStorybooks = false;
-						this.$nextTick(function () {
-							// console.log(this.$store.state.cardlistscrollposition)
-							window.scrollTo(
-								0,
-								this.$store.state.cardlistscrollposition * 14.3
-							);
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: this.$store.state.idToken,
+				},
+			})
+				.then((response) => response.json()) // json to object
+				.then(
+					(data) => {
+						this.audioArray = data["audio files"];
+						// console.log(this.audioArray)
+					} // collect the list of audio files that are owned by, or shared with, the logged-in user
+				)
+				.then((data) => {
+					if (this.audioArray) {
+						this.audioArray.forEach((element) => {
+							// console.log(element.uploaded_by.shared_editors)
+							if (
+								element.uploaded_by.user_ID == this.$store.state.user.uid &&
+								!element.archived
+							) {
+								// console.log("1")
+								this.audioArrayOwner.push(element);
+							} else if (
+								element.shared_editors.some(
+									(e) => e.user_ID === this.$store.state.user.uid
+								)
+							) {
+								// console.log("2")
+								this.audioArrayEditor.push(element);
+							} else if (
+								element.shared_viewers.some(
+									(e) => e.user_ID === this.$store.state.user.uid
+								)
+							) {
+								// console.log("3")
+								this.audioArrayViewer.push(element);
+							} else if (element.public) {
+								// console.log("4")
+								this.audioArrayPublic.push(element);
+							} else if (
+								element.archived &&
+								element.uploaded_by.user_ID == this.$store.state.user.uid
+							) {
+								this.audioArrayArchive.push(element);
+							}
 						});
-					})
-					.catch((error) => console.error("Error:", error));
+					}
+					this.processingStorybooks = false;
+					this.$nextTick(function () {
+						// console.log(this.$store.state.cardlistscrollposition)
+						window.scrollTo(0, this.$store.state.cardlistscrollposition * 14.3);
+					});
+				})
+				.catch((error) => console.error("Error:", error));
 		},
 
 		myEventHandler() {
