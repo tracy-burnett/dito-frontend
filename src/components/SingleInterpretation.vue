@@ -46,7 +46,17 @@
 					</div>
 
 				</div>
+
 				<div class="sticky flex flex-row flex-wrap-reverse justify-around shrink top-12">
+
+					<div v-if="styleoption==='Prompter'">
+						<button
+							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
+							@click="resetSensitivity()"
+						>
+							Reset Sensitivity
+						</button>
+					</div>
 
 					<div>
 						<StorybookStyleMenu
@@ -67,21 +77,13 @@
 							</div>
 						</div>
 					</div>
+
 					<div v-if="styleoption==='Prompter'">
 						<button
 							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
 							@click="newPrompt()"
 						>
 							New Prompt
-						</button>
-					</div>
-
-					<div v-if="styleoption==='Prompter'">
-						<button
-							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-							@click="resetSensitivity()"
-						>
-							Reset Sensitivity
 						</button>
 					</div>
 
@@ -315,7 +317,9 @@ export default {
 		newPrompt() {
 			this.newPromptscounter++;
 		},
-		resetSensitivity() {this.resetSensitivitycounter++},
+		resetSensitivity() {
+			this.resetSensitivitycounter++;
+		},
 		newPhrase() {
 			this.newPhrasescounter++;
 		},
