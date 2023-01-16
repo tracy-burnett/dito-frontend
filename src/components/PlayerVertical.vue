@@ -79,24 +79,21 @@
 			>
 				<div
 					class="absolute h-[40vh] z-10 content-center w-full flex flex-col py-[14vh] px-[1vw] text-sm"
-					style="
-	background: #dbeafe;"
+					style="background: #dbeafe;"
 					v-if="loadingpercent > 0 && loadingpercent < 100"
 				>
 					<p>waveform {{ loadingpercent }}% completed</p>
 				</div>
 				<div
 					class="absolute h-[40vh] z-10 content-center w-full flex flex-col py-[9vh] px-[1vw] text-sm"
-					style="
-	background: #dbeafe;"
+					style="background: #dbeafe;"
 					v-else-if="readyVerification==1 && totalDuration==0"
 				>
 					<p>please be patient while your audio file finishes loading</p>
 				</div>
 				<div
 					class="absolute h-[40vh] z-10 content-center w-full flex flex-col py-[9vh] px-[1vw] text-sm"
-					style="
-	background: #dbeafe;"
+					style="background: #dbeafe;"
 					v-else-if="readyVerification==0"
 				>
 					<p>requesting permission to access audio file</p>
@@ -119,12 +116,27 @@
 			</div>
 
 			<!-- clear highlight button -->
-			<div>
-				<button
+			<div class="mb-[1.5vh]">
+				<button v-if="hasRegion==true"
 					class="rounded-full clear"
 					@click="clearallregions()"
 				>
-					Clear Highlight
+					Clear Selection
+				</button>				<button v-else
+					class="rounded-full cursor-default disabled" style="opacity:0.3;"
+				>
+					Clear Selection
+				</button>
+				<button v-if="repeat==true"
+					class="rounded-full clear"
+					@click="toggleRepeat()"
+				>
+					Repeat <b>On</b> / Off
+				</button>				<button v-else
+					class="rounded-full clear"
+					@click="toggleRepeat()"
+				>
+					Repeat On / <b>Off</b>
 				</button>
 			</div>
 		</div>
@@ -168,6 +180,8 @@ export default {
 			playing: false,
 			audioURL: "",
 			updatingFromPrompter: false,
+			repeat: false,
+			hasRegion: false,
 		};
 	},
 
@@ -477,7 +491,7 @@ export default {
 				that.endTimeSeconds = that.$store.state.endTimePrompter;
 				that.updatingFromPrompter = false;
 			}
-
+			that.hasRegion=true
 			// that.startTime=that.secondsToTime(Math.round(that.$store.state.startTimePrompter))
 			// that.endTime=that.secondsToTime(Math.round(that.$store.state.endTimePrompter))
 		});
@@ -499,17 +513,26 @@ export default {
 				that.currentTimeSeconds >= that.endTimeSeconds &&
 				that.isLoaded == true
 			) {
-				that.wavesurfer.seekTo(that.startTimeSeconds / that.totalDuration);
-				that.$store.commit("updateHighlights");
+				// console.log(that.currentTimeSeconds + " is greater than or equal to " + that.endTimeSeconds + " out of " + that.totalDuration)
+				if (that.repeat == true) {
+					that.wavesurfer.seekTo(that.startTimeSeconds / that.totalDuration);
+					that.$store.commit("updateHighlights");
+				} else {
+					that.pausePlayer();
+				}
 			}
 		});
 
 		this.wavesurfer.on("finish", function () {
-			that.wavesurfer.seekTo(that.startTimeSeconds / that.totalDuration);
+			if (that.repeat == true) {
+				that.wavesurfer.seekTo(that.startTimeSeconds / that.totalDuration);
 
-			that.$store.commit("updateHighlights");
-			that.pausePlayer();
-			that.play();
+				that.$store.commit("updateHighlights");
+				that.pausePlayer();
+				that.play();
+			} else {
+				that.pausePlayer();
+			}
 		});
 
 		// whenever the audio jumps from one position to another for whatever reason, if the audio is playing but the cursor is now out of bounds of the highlighted region, then pause the player
@@ -574,6 +597,15 @@ export default {
 		zoom() {
 			this.wavesurfer.zoom(Number(this.zoomnumber));
 		},
+		
+		toggleRepeat() {
+			if (this.repeat == true) {
+				this.repeat = false;
+			} else if (this.repeat == false) {
+				this.repeat = true;
+			}
+			this.playWithoutPause()
+		},
 
 		getzoomnumber(event) {
 			if (
@@ -616,11 +648,11 @@ export default {
 			if (!this.playing) {
 				// when the player starts playing, make sure it plays from whenever is currently displayed in the "current time" box that the user is also able to manually inpput into, unless of course that value is outside of the highlighted region
 				if (
-					this.currentTimeNumber <= this.endTimeSeconds &&
-					this.currentTimeNumber >= this.startTimeSeconds
+					this.currentTimeSeconds <= this.endTimeSeconds &&
+					this.currentTimeSeconds >= this.startTimeSeconds
 				) {
 					// console.log("playing inside region");
-					this.wavesurfer.play(this.currentTimeNumber);
+					this.wavesurfer.play(this.currentTimeSeconds);
 					this.playing = !this.playing;
 				} else {
 					// console.log("playing from start of region");
@@ -630,6 +662,24 @@ export default {
 			} else if (this.playing) {
 				// if you click "pause," then pause the player
 				this.pausePlayer();
+			}
+		},
+
+		playWithoutPause() {
+			if (!this.playing) {
+				// when the player starts playing, make sure it plays from whenever is currently displayed in the "current time" box that the user is also able to manually inpput into, unless of course that value is outside of the highlighted region
+				if (
+					this.currentTimeSeconds <= this.endTimeSeconds &&
+					this.currentTimeSeconds >= this.startTimeSeconds
+				) {
+					// console.log("playing inside region");
+					this.wavesurfer.play(this.currentTimeSeconds);
+					this.playing = !this.playing;
+				} else {
+					// console.log("playing from start of region");
+					this.wavesurfer.play(this.startTimeSeconds);
+					this.playing = !this.playing;
+				}
 			}
 		},
 
@@ -674,6 +724,7 @@ export default {
 			this.endTimeSeconds = this.totalDuration; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here			this.$store.commit(
 			this.$store.commit("updateStartTimePrompter", 0);
 			this.$store.commit("updateEndTimePrompter", this.totalDuration);
+			this.hasRegion=false
 		},
 
 		// change the highlighted region based on manual HH:MM:SS inputs of start and end times by the user
@@ -728,6 +779,19 @@ export default {
 </script>
 
 <style scoped>
+
+.disabled {
+	font-size: 70%;
+	color: white;
+	text-align: center;
+	position: relative;
+	top: 1vh;
+	height: 22px;
+	width: 94%;
+	/* margin-bottom: 2vh; */
+	/*background: radial-gradient(#798597, #616977);*/
+	background: #475569;
+}
 .clear {
 	font-size: 70%;
 	color: white;
@@ -736,7 +800,7 @@ export default {
 	top: 1vh;
 	height: 22px;
 	width: 94%;
-	margin-bottom: 2vh;
+	/* margin-bottom: 2vh; */
 	/*background: radial-gradient(#798597, #616977);*/
 	background: #475569;
 }
