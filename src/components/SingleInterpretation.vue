@@ -76,6 +76,15 @@
 						</button>
 					</div>
 
+					<div v-if="styleoption==='Prompter'">
+						<button
+							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
+							@click="resetSensitivity()"
+						>
+							Reset Sensitivity
+						</button>
+					</div>
+
 					<div v-if="styleoption==='Studio'">
 						<button
 							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
@@ -182,6 +191,7 @@
 				:updateAssociations="updateAssociations"
 				:saveEditscounter="saveEditscounter"
 				:newPromptscounter="newPromptscounter"
+				:resetSensitivitycounter="resetSensitivitycounter"
 				:downloadSRTcounter="downloadSRTcounter"
 				:newPhrasescounter="newPhrasescounter"
 				:interpretationStatus="interpretationStatus"
@@ -232,6 +242,7 @@ export default {
 			updateAssociations: 0,
 			clearTimestampsvar: 0,
 			newPromptscounter: 0,
+			resetSensitivitycounter: 0,
 			downloadSRTcounter: 0,
 			newPhrasescounter: 0,
 			// submitcounter: 0,
@@ -304,6 +315,7 @@ export default {
 		newPrompt() {
 			this.newPromptscounter++;
 		},
+		resetSensitivity() {this.resetSensitivitycounter++},
 		newPhrase() {
 			this.newPhrasescounter++;
 		},

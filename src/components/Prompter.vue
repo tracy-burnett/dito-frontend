@@ -156,6 +156,9 @@ export default {
 		newPromptscounter: {
 			default: 0,
 		},
+		resetSensitivitycounter: {
+			default: 0,
+		},
 
 		fontsize: { default: 12 },
 
@@ -184,6 +187,10 @@ export default {
 			}
 			this.newPromptorScribingToggle = true;
 			this.findGaps();
+		},
+		resetSensitivitycounter: function () {
+			this.sensitivity=.05
+
 		},
 		newPromptscounter: function () {
 			// this.sensitivity=.05
