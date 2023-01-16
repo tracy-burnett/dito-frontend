@@ -127,7 +127,12 @@
 				>
 					Clear Selection
 				</button>
-				<button v-if="repeat==true"
+				<button v-if="readyVerification<2"
+					class="rounded-full cursor-default disabled" style="opacity:0.3;"
+				>
+					Repeat On / Off
+				</button>
+				<button v-else-if="repeat==true"
 					class="rounded-full clear"
 					@click="toggleRepeat()"
 				>
