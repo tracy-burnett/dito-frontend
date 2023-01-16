@@ -179,6 +179,12 @@
 				>
 					Autoscroll On / <b>Off</b>
 				</button>
+				<button
+					class="rounded-full clear"
+					@click="wavesurfer.zoom(false)"
+				>
+					Zoom Out
+				</button>
 
 			</div>
 		</div>
@@ -411,6 +417,7 @@ export default {
 		this.wavesurfer = WaveSurfer.create({
 			container: this.$refs.waveform,
 			backend: "MediaElement",
+			responsive: true,
 			waveColor: "#94a3b8",
 			cursorColor: "red",
 			// autoCenter: false,
