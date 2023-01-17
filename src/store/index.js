@@ -38,6 +38,7 @@ export default new Vuex.Store({
     renewViewer: 0, // makes Viewer load new associations, e.g. after resyncing text to audio
     checkViewerHighlight: 0, // makes Viewer redo current highlighting scheme
     authCompleted: false,
+    playnoPausecounter: 0, // used to play audio player
 
   },
   getters: {
@@ -189,6 +190,7 @@ export default new Vuex.Store({
 
     forceRegionRerender(state) {
       state.regionRerender++
+      state.playnoPausecounter++
     },
 
 
@@ -237,6 +239,7 @@ export default new Vuex.Store({
     updatescrollposition(state, scrollpos) {
       state.cardlistscrollposition = scrollpos
     },
+
   },
   actions: {
 
