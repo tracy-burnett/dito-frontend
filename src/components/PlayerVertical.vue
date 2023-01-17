@@ -93,14 +93,14 @@
 					<p>waveform {{ loadingpercent }}% completed</p>
 				</div>
 				<div
-					class="absolute h-[30vh] z-10 content-center w-full flex flex-col py-[9vh] px-[1vw] text-sm"
+					class="absolute h-[30vh] z-10 content-center w-full flex flex-col py-[6vh] px-[1vw] text-sm"
 					style="background: #dbeafe;"
 					v-else-if="readyVerification==1 && totalDuration==0"
 				>
 					<p>please be patient while your audio file finishes loading</p>
 				</div>
 				<div
-					class="absolute h-[30vh] z-10 content-center w-full flex flex-col py-[9vh] px-[1vw] text-sm"
+					class="absolute h-[30vh] z-10 content-center w-full flex flex-col py-[6vh] px-[1vw] text-sm"
 					style="background: #dbeafe;"
 					v-else-if="readyVerification==0"
 				>
