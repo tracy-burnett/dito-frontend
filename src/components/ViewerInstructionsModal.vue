@@ -15,10 +15,10 @@
 			<p class="text-sm -mt-[1vh] text-justify pb-[3vh]">
 				1. Press "Ctrl" and left-click to play or pause the audio player at any time.<br><br>
 				2. Click on the phrases below to skip to the part of the audio file that contains them.<br><br>
-				3. Click the "Clear Highlight" button at the bottom of the audio player to make the audio play continuously and not loop the currently highlighted words.<br><br>
+				3. Click the "Clear Selection" button at the bottom of the audio player to make the audio play continuously and not loop the currently highlighted words.<br><br>
 				4. Change the slider above that says "highlight less / more" to highlight the text in shorter or longer phrases as words are being spoken.<br><br>
-
-				5. When the text below is highlighted in phrases of a length that you like, then select an option from the "Download" menu to save the interpretation to your computer.
+				5. Click the "Sync" button if the highlights are not lining up correctly with the audio.<br><br>
+				6. When the text below is highlighted in phrases of a length that you like, then select an option from the "Download" menu to save the interpretation to your computer.
 			</p>
 		</div>
 	</div>
