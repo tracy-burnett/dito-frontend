@@ -403,11 +403,13 @@ export default {
 				this.relevantCharacters.sort((a, b) => a - b);
 				this.relevantCharacters = [...new Set(this.relevantCharacters)];
 
-				let firstslice = {};
-				this.endslice = this.relevantCharacters[0];
-				firstslice.text = this.latest_text.substring(0, this.endslice);
-				firstslice.startingcharacter = 0;
-				this.substringArray.push(firstslice);
+				if (this.relevantCharacters[0] != 0) {
+					let firstslice = {};
+					this.endslice = this.relevantCharacters[0];
+					firstslice.text = this.latest_text.substring(0, this.endslice);
+					firstslice.startingcharacter = 0;
+					this.substringArray.push(firstslice);
+				}
 
 				this.i = 0;
 				while (this.i + 1 < this.relevantCharacters.length) {
