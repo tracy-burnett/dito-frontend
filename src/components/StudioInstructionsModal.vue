@@ -17,8 +17,9 @@
 				2. Retype exactly whichever phrase most closely matches what you are hearing.<br><br>
 
 				3. If you are correct, you will automatically receive a new prompt (no need to press "Enter").<br><br>
-				4. Click "New Phrase" above to skip the current prompt.<br><br>
-				5. Adjust the "listen to less / more" slider above to change the length of phrase that you are prompted with (note that adjusting this slider will always bring you back to the beginning of the audio file).<br><br>
+				4. If you are the owner or editor of the interpretation, you may click directly on the written answer instead of retyping it.<br><br>
+				5. Click "New Phrase" above to skip the current prompt.<br><br>
+				6. Adjust the "listen to less / more" slider above to change the length of phrase that you are prompted with (note that adjusting this slider will always bring you back to the beginning of the audio file).<br><br>
 			</p>
 		</div>
 	</div>

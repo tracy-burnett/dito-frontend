@@ -22,7 +22,7 @@
 				4. To unselect words, click on them or hold "ALT" and drag over them, and they will turn black again.<br><br>
 
 				5. To unselect all of the words at once, click "Clear New" above.<br><br>
-				6. When you are satisfied with your selection, click the "Save" button above.<br><br>
+				6. When you are satisfied with your selections, click the "Save" button above.<br><br>
 				7. Repeat.
 			</p>
 		</div>
