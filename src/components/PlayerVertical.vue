@@ -24,7 +24,7 @@
 		<div class="flex justify-center text-xs -mt-[1vh]">
 			zoom {{zoomnumber}}x
 		</div>
-		<div class="-mt-[.6vh]">
+		<div class="-mt-[.6vh]" @mouseup="zoom()">
 			<input
 				id="slider"
 				v-model="zoomnumber"
@@ -262,9 +262,9 @@ export default {
 			this.playWithoutPause()
 		},
 
-		zoomnumber: function () {
-			this.zoom();
-		},
+		// zoomnumber: function () {
+		// 	this.zoom();
+		// },
 
 		playerPlayPause: function () {
 			this.play();
