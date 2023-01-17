@@ -139,7 +139,7 @@
 			</div>
 
 			<!-- clear highlight button -->
-			<div class="-mt-[3.2vh] mb-[0vh]">
+			<div class="-mt-[3.2vh] mb-[.1vh]">
 				<button
 					v-if="hasRegion==true"
 					class="rounded-full clear mt-[4.3vh]"
@@ -258,6 +258,10 @@ export default {
 
 	// watch these variables to see if they change.  if they do, then call the corresponding functions.
 	watch: {
+		"$store.state.playnoPausecounter": function () {
+			this.playWithoutPause()
+		},
+
 		zoomnumber: function () {
 			this.zoom();
 		},
