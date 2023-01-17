@@ -19,9 +19,25 @@
 				style="width: 105px"
 			/>
 		</div>
+
+		<!-- zoom in / out slider -->
+		<div class="flex justify-center text-xs -mt-[1vh]">
+			zoom {{zoomnumber}}x
+		</div>
+		<div class="-mt-[.6vh]">
+			<input
+				id="slider"
+				v-model="zoomnumber"
+				type="range"
+				min="0"
+				max="150"
+				step=".10"
+				style="width: 105px"
+			/>
+		</div>
 		<!-- audio player body -->
 
-		<div class="container flex flex-col shadow-xl rounded-xl">
+		<div class="container flex flex-col shadow-xl rounded-xl -mt-[.5vh]">
 			<!-- top-most time entry box (for start of view window) -->
 			<div
 				id="start"
@@ -83,7 +99,6 @@
 					id="waveform"
 					ref="waveform"
 					class="flex waveform"
-					@wheel.prevent="getzoomnumber($event)"
 				></div>
 				<div
 					class="absolute h-[30vh] z-10 content-center w-full flex flex-col py-[14vh] px-[1vw] text-sm"
@@ -124,16 +139,16 @@
 			</div>
 
 			<!-- clear highlight button -->
-			<div class="-mt-[3vh] mb-[0.3vh]">
+			<div class="-mt-[3.2vh] mb-[0vh]">
 				<button
 					v-if="hasRegion==true"
-					class="rounded-full clear mt-[4vh]"
+					class="rounded-full clear mt-[4.3vh]"
 					@click="clearallregions()"
 				>
 					Clear Selection
 				</button> <button
 					v-else
-					class="rounded-full cursor-default disabled mt-[4vh]"
+					class="rounded-full cursor-default disabled mt-[4.3vh]"
 					style="opacity:0.3;"
 				>
 					Clear Selection
@@ -179,7 +194,7 @@
 				>
 					Autoscroll On / <b>Off</b>
 				</button>
-				<button
+				<!-- <button
 					v-if="readyVerification<2"
 					class="rounded-full cursor-default disabled"
 					style="opacity:0.3;"
@@ -191,7 +206,7 @@
 					@click="wavesurfer.zoom(false)"
 				>
 					Zoom Out
-				</button>
+				</button> -->
 
 			</div>
 		</div>
@@ -223,7 +238,7 @@ export default {
 			loadingpercent: 0,
 			readyVerification: 0,
 			// peaksData: [],
-			zoomnumber: 1,
+			zoomnumber: 0,
 			sendtobackendBoolean: false,
 			startTime: "00:00:00", // the beginning of the highlighted region as calculated by wavesurfer OR manually input by the user, in HH:MM:SS
 			currentTime: "00:00:00", // wherever the audio is currently playing as calculated by wavesurfer OR manually input by the user, in HH:MM:SS
@@ -243,6 +258,10 @@ export default {
 
 	// watch these variables to see if they change.  if they do, then call the corresponding functions.
 	watch: {
+		zoomnumber: function () {
+			this.zoom();
+		},
+
 		playerPlayPause: function () {
 			this.play();
 		},
@@ -683,42 +702,42 @@ export default {
 			}
 		},
 
-		getzoomnumber(event) {
-			if (
-				(event.deltaY <= 0 && this.zoomnumber >= 150) ||
-				(event.deltaY >= 0 && this.zoomnumber <= 1)
-			) {
-				return;
-			} else {
-				// console.log(event.deltaY);
-				let isPinch = Math.abs(event.deltaY) < 50;
-				// console.log("start pinch");
-				if (isPinch) {
-					// This is a pinch on a trackpad
-					let factor = 1 - 0.01 * event.deltaY;
-					this.zoomnumber *= factor;
-					// console.log(this.zoomnumber);
-				} else {
-					// This is a mouse wheel
-					let strength = 1.4;
-					let factor = event.deltaY < 0 ? strength : 1.0 / strength;
-					this.zoomnumber *= factor;
-					// console.log(this.zoomnumber);
+		// getzoomnumber(event) {
+		// 	if (
+		// 		(event.deltaY <= 0 && this.zoomnumber >= 150) ||
+		// 		(event.deltaY >= 0 && this.zoomnumber <= 1)
+		// 	) {
+		// 		return;
+		// 	} else {
+		// 		// console.log(event.deltaY);
+		// 		let isPinch = Math.abs(event.deltaY) < 50;
+		// 		// console.log("start pinch");
+		// 		if (isPinch) {
+		// 			// This is a pinch on a trackpad
+		// 			let factor = 1 - 0.01 * event.deltaY;
+		// 			this.zoomnumber *= factor;
+		// 			// console.log(this.zoomnumber);
+		// 		} else {
+		// 			// This is a mouse wheel
+		// 			let strength = 1.4;
+		// 			let factor = event.deltaY < 0 ? strength : 1.0 / strength;
+		// 			this.zoomnumber *= factor;
+		// 			// console.log(this.zoomnumber);
 
-					if (this.zoomnumber <= 1) {
-						this.zoomnumber = 1;
-					}
-					if (this.zoomnumber >= 150) {
-						this.zoomnumber = 150;
-					}
-				}
-				this.zoom();
-			}
-			//   // This is an empirically determined heuristic.
-			//   // Unfortunately I don't know of any way to do this better.
-			//   // Typical deltaY values from a trackpad pinch are under 1.0
-			//   // Typical deltaY values from a mouse wheel are more than 100.
-		},
+		// 			if (this.zoomnumber <= 1) {
+		// 				this.zoomnumber = 1;
+		// 			}
+		// 			if (this.zoomnumber >= 150) {
+		// 				this.zoomnumber = 150;
+		// 			}
+		// 		}
+		// 		this.zoom();
+		// 	}
+		// 	//   // This is an empirically determined heuristic.
+		// 	//   // Unfortunately I don't know of any way to do this better.
+		// 	//   // Typical deltaY values from a trackpad pinch are under 1.0
+		// 	//   // Typical deltaY values from a mouse wheel are more than 100.
+		// },
 
 		play() {
 			if (!this.playing) {
