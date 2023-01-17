@@ -86,21 +86,21 @@
 					@wheel.prevent="getzoomnumber($event)"
 				></div>
 				<div
-					class="absolute h-[40vh] z-10 content-center w-full flex flex-col py-[14vh] px-[1vw] text-sm"
+					class="absolute h-[30vh] z-10 content-center w-full flex flex-col py-[14vh] px-[1vw] text-sm"
 					style="background: #dbeafe;"
 					v-if="loadingpercent > 0 && loadingpercent < 100"
 				>
 					<p>waveform {{ loadingpercent }}% completed</p>
 				</div>
 				<div
-					class="absolute h-[40vh] z-10 content-center w-full flex flex-col py-[9vh] px-[1vw] text-sm"
+					class="absolute h-[30vh] z-10 content-center w-full flex flex-col py-[9vh] px-[1vw] text-sm"
 					style="background: #dbeafe;"
 					v-else-if="readyVerification==1 && totalDuration==0"
 				>
 					<p>please be patient while your audio file finishes loading</p>
 				</div>
 				<div
-					class="absolute h-[40vh] z-10 content-center w-full flex flex-col py-[9vh] px-[1vw] text-sm"
+					class="absolute h-[30vh] z-10 content-center w-full flex flex-col py-[9vh] px-[1vw] text-sm"
 					style="background: #dbeafe;"
 					v-else-if="readyVerification==0"
 				>
@@ -124,7 +124,7 @@
 			</div>
 
 			<!-- clear highlight button -->
-			<div class="mb-[1.5vh]">
+			<div class="-mt-[1vh] mb-[1.3vh]">
 				<button
 					v-if="hasRegion==true"
 					class="rounded-full clear"
@@ -911,7 +911,7 @@ export default {
 .waveform {
 	/* flex: 1; */
 	display: flex;
-	height: 40vh;
+	height: 30vh;
 	width: 75px;
 	/* margin-left: 10px; */
 	background: #dbeafe;
@@ -925,7 +925,7 @@ export default {
 	display: flex;
 	/* height: 79vh; */
 	width: 1px;
-	height: 40vh;
+	height: 30vh;
 	background: #dbeafe;
 }
 
