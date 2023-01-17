@@ -59,7 +59,7 @@
 			<div
 				id="current"
 				ref="current"
-				class="current -mt-[2vh] pb-[4vh]"
+				class="current -mt-[2vh] pb-[5vh]"
 			>
 				<input
 					type="string"
@@ -124,16 +124,16 @@
 			</div>
 
 			<!-- clear highlight button -->
-			<div class="-mt-[1vh] mb-[1.3vh]">
+			<div class="-mt-[3vh] mb-[0.3vh]">
 				<button
 					v-if="hasRegion==true"
-					class="rounded-full clear"
+					class="rounded-full clear mt-[4vh]"
 					@click="clearallregions()"
 				>
 					Clear Selection
 				</button> <button
 					v-else
-					class="rounded-full cursor-default disabled"
+					class="rounded-full cursor-default disabled mt-[4vh]"
 					style="opacity:0.3;"
 				>
 					Clear Selection
@@ -860,8 +860,8 @@ export default {
 	color: white;
 	text-align: center;
 	position: relative;
-	top: 1vh;
-	height: 22px;
+	/* margin-top: -1vh; */
+	height: 18px;
 	width: 99%;
 	/* margin-bottom: 2vh; */
 	/*background: radial-gradient(#798597, #616977);*/
@@ -872,8 +872,8 @@ export default {
 	color: white;
 	text-align: center;
 	position: relative;
-	top: 1vh;
-	height: 22px;
+	/* margin-top: -1vh; */
+	height: 18px;
 	width: 99%;
 	/* margin-bottom: 2vh; */
 	/*background: radial-gradient(#798597, #616977);*/
@@ -898,7 +898,7 @@ export default {
 	width: 100px;
 	position: relative;
 	/* left: 10px; */
-	margin-top: 1vh;
+	/* margin-top: 1vh; */
 	margin-left: 0.2vw;
 	/* top: 5px; */
 	display: inline;
