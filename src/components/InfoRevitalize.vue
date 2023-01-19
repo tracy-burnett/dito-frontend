@@ -101,11 +101,11 @@ export default {
 		},
 
 		search() {
-			console.log(this.searchterm);
+			// console.log(this.searchterm);
 			this.searchResultAudioArray = [...this.audioArray];
 			let i = 0;
 			while (i < this.searchResultAudioArray.length) {
-				let audio = this.audioArray[i];
+				let audio = this.searchResultAudioArray[i];
 				let k = 0;
 				if (audio.description.match(this.regexwithsearchterm)) {
 					k++;
@@ -135,6 +135,12 @@ export default {
 				} else {
 					i += 1;
 				}
+			}
+
+			if (this.searchResultAudioArray.length > 0) {
+				this.audioArrayCurrent = [...this.searchResultAudioArray];
+			} else {
+				this.audioArrayCurrent = [...this.audioArray];
 			}
 		},
 
