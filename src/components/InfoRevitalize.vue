@@ -69,7 +69,11 @@ export default {
 	},
 	computed: {
 		regexwithsearchterm() {
-			return new RegExp(`${this.escapeRegex(this.searchterm)}+`, "g");
+			if (this.searchterm != "") {
+				return new RegExp(`${this.escapeRegex(this.searchterm)}+`, "g");
+			} else {
+				return "";
+			}
 		},
 	},
 	// watch: {
@@ -97,11 +101,11 @@ export default {
 		},
 
 		search() {
-			console.log(this.searchterm);
+			// console.log(this.searchterm);
 			this.searchResultAudioArray = [...this.audioArray];
 			let i = 0;
 			while (i < this.searchResultAudioArray.length) {
-				let audio = this.audioArray[i];
+				let audio = this.searchResultAudioArray[i];
 				let k = 0;
 				if (audio.description.match(this.regexwithsearchterm)) {
 					k++;
@@ -132,6 +136,7 @@ export default {
 					i += 1;
 				}
 			}
+
 		},
 
 		getStorybooks() {

@@ -14,7 +14,6 @@
 						id="owner"
 						value="owner"
 						v-model="checkedFilters"
-						@change="getStorybooks()"
 					/>
 					<label for="owner"> owner</label>
 				</div>
@@ -25,7 +24,6 @@
 						id="editor"
 						value="editor"
 						v-model="checkedFilters"
-						@change="getStorybooks()"
 					/>
 					<label for="editor"> editor</label>
 				</div>
@@ -36,7 +34,6 @@
 						id="viewer"
 						value="viewer"
 						v-model="checkedFilters"
-						@change="getStorybooks()"
 					/>
 					<label for="viewer"> viewer</label>
 				</div>
@@ -47,7 +44,6 @@
 						id="public"
 						value="public"
 						v-model="checkedFilters"
-						@change="getStorybooks()"
 					/>
 					<label for="public"> other</label>
 				</div>
@@ -58,7 +54,6 @@
 						id="archived"
 						value="archived"
 						v-model="checkedFilters"
-						@change="getStorybooks()"
 					/>
 					<label for="archived"> archived</label>
 				</div>
@@ -79,11 +74,20 @@
 			style="grid-template-columns: repeat(9, minmax(150px,1fr));"
 		>
 			<p></p>
-			<p class="font-bold">Title</p>
-			<p class="">Description</p>
-			<p class="">created by</p>
-			<p>last edited at</p>
-			<p>Public?</p>
+			<p
+				class="font-bold"
+				@click="sortBy('1')"
+			>Title</p>
+			<p
+				class=""
+				@click="sortBy('2')"
+			>Description</p>
+			<p
+				class=""
+				@click="sortBy('3')"
+			>created by</p>
+			<p @click="sortBy('4')">last edited at</p>
+			<p @click="sortBy('5')">Public?</p>
 			<p>Access</p>
 			<p></p>
 			<p></p>
@@ -96,263 +100,102 @@
 
 		<div style="overscroll-behavior:none;">
 			<!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
-			<span v-if="checkedFilters.includes('owner')">
-				<span v-if="searchResultAudioArray.length>0">
-					<span
-						v-for="audio in audioArrayOwnerAfterSearch"
-						:key="audio.id"
-					>
-						<CardRow
-							:date="audio.uploaded_at.substring(0, 10) + ' UTC'"
-							:description="audio.description"
-							:uploader="audio.uploaded_by.display_name"
-							:publictf="audio.public"
-							:shared_editors="audio.shared_editors"
-							:shared_viewers="audio.shared_viewers"
-							:picked="selected"
-							:archived="audio.archived"
-							status="owner"
-							:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
-							:title="audio.title"
-							:audio_ID="audio.id"
-							@SelectRow="uncheck(audio.id)"
-						>
-
-						</CardRow>
-					</span>
-				</span><span v-else>
-					<span
-						v-for="audio in audioArrayOwner"
-						:key="audio.id"
-					>
-						<CardRow
-							:date="audio.uploaded_at.substring(0, 10) + ' UTC'"
-							:description="audio.description"
-							:uploader="audio.uploaded_by.display_name"
-							:publictf="audio.public"
-							:shared_editors="audio.shared_editors"
-							:shared_viewers="audio.shared_viewers"
-							:picked="selected"
-							:archived="audio.archived"
-							status="owner"
-							:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
-							:title="audio.title"
-							:audio_ID="audio.id"
-							@SelectRow="uncheck(audio.id)"
-						>
-
-						</CardRow>
-					</span></span>
+			<span
+				v-for="audio in audioArrayCurrent"
+				:key="audio.id"
+			>
+				<CardRow
+					v-if="audio.uploaded_by.user_ID==$store.state.user.uid && !audio.archived && checkedFilters.includes('owner')"
+					:date="audio.uploaded_at.substring(0, 10) + ' UTC'"
+					:description="audio.description"
+					:uploader="audio.uploaded_by.display_name"
+					:publictf="audio.public"
+					:shared_editors="audio.shared_editors"
+					:shared_viewers="audio.shared_viewers"
+					:picked="selected"
+					:archived="audio.archived"
+					status="owner"
+					:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
+					:title="audio.title"
+					:audio_ID="audio.id"
+					@SelectRow="uncheck(audio.id)"
+				></CardRow>
+				<CardRow
+					v-else-if="audio.shared_editors.some((e) => e.user_ID === $store.state.user.uid) && checkedFilters.includes('editor')"
+					:date="audio.uploaded_at.substring(0, 10) + ' UTC'"
+					:description="audio.description"
+					:uploader="audio.uploaded_by.display_name"
+					status="editor"
+					:picked="selected"
+					:shared_viewers="audio.shared_viewers"
+					:publictf="audio.public"
+					:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
+					:title="audio.title"
+					:audio_ID="audio.id"
+					@SelectRow="uncheck(audio.id)"
+				></CardRow>
+				<CardRow
+					v-else-if="audio.shared_viewers.some((e) => e.user_ID === $store.state.user.uid) && checkedFilters.includes('viewer')"
+					:date="audio.uploaded_at.substring(0, 10) + ' UTC'"
+					:uploader="audio.uploaded_by.display_name"
+					:description="audio.description"
+					:publictf="audio.public"
+					:picked="selected"
+					status="viewer"
+					:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
+					:title="audio.title"
+					:audio_ID="audio.id"
+					@SelectRow="uncheck(audio.id)"
+				></CardRow>
+				<CardRow
+					v-else-if="audio.public && checkedFilters.includes('public')"
+					:date="audio.uploaded_at.substring(0, 10) + ' UTC'"
+					:description="audio.description"
+					:uploader="audio.uploaded_by.display_name"
+					:picked="selected"
+					status="public"
+					:publictf="audio.public"
+					:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
+					:title="audio.title"
+					:audio_ID="audio.id"
+					@SelectRow="uncheck(audio.id)"
+				>
+				</CardRow>
 			</span>
-			<span v-if="checkedFilters.includes('editor')">
 
-				<span v-if="searchResultAudioArray.length>0">
-					<div
-						v-for="audio in audioArrayEditorAfterSearch"
-						:key="audio.id"
-					>
-						<CardRow
-							:date="audio.uploaded_at.substring(0, 10) + ' UTC'"
-							:description="audio.description"
-							:uploader="audio.uploaded_by.display_name"
-							status="editor"
-							:picked="selected"
-							:shared_viewers="audio.shared_viewers"
-							:publictf="audio.public"
-							:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
-							:title="audio.title"
-							:audio_ID="audio.id"
-							@SelectRow="uncheck(audio.id)"
-						>
-						</CardRow>
-					</div>
-				</span><span v-else>
+			<span v-if="checkedFilters.includes('archived') && displayArchived">
+				<h1 class="mt-8 mb-6 text-2xl font-bold">Archived Storybooks (deleted, but can be restored)</h1>
+				<br />
+				<div
+					class="grid"
+					style="grid-template-columns: repeat(9, minmax(150px,1fr));"
+				>
+					<div></div>
 
-					<div
-						v-for="audio in audioArrayEditor"
-						:key="audio.id"
-					>
-						<CardRow
-							:date="audio.uploaded_at.substring(0, 10) + ' UTC'"
-							:description="audio.description"
-							:uploader="audio.uploaded_by.display_name"
-							status="editor"
-							:picked="selected"
-							:shared_viewers="audio.shared_viewers"
-							:publictf="audio.public"
-							:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
-							:title="audio.title"
-							:audio_ID="audio.id"
-							@SelectRow="uncheck(audio.id)"
-						>
-						</CardRow>
-					</div>
-				</span>
-			</span>
-			<span v-if="checkedFilters.includes('viewer')">
-
-				<span v-if="searchResultAudioArray.length>0">
-					<div
-						v-for="audio in audioArrayViewerAfterSearch"
-						:key="audio.id"
-					>
-						<CardRow
-							:date="audio.uploaded_at.substring(0, 10) + ' UTC'"
-							:uploader="audio.uploaded_by.display_name"
-							:description="audio.description"
-							:publictf="audio.public"
-							:picked="selected"
-							status="viewer"
-							:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
-							:title="audio.title"
-							:audio_ID="audio.id"
-							@SelectRow="uncheck(audio.id)"
-						>
-						</CardRow>
-					</div>
-				</span><span v-else>
-
-					<div
-						v-for="audio in audioArrayViewer"
-						:key="audio.id"
-					>
-						<CardRow
-							:date="audio.uploaded_at.substring(0, 10) + ' UTC'"
-							:uploader="audio.uploaded_by.display_name"
-							:description="audio.description"
-							:publictf="audio.public"
-							:picked="selected"
-							status="viewer"
-							:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
-							:title="audio.title"
-							:audio_ID="audio.id"
-							@SelectRow="uncheck(audio.id)"
-						>
-						</CardRow>
-					</div>
-				</span></span>
-			<span v-if="checkedFilters.includes('public')">
-
-				<span v-if="searchResultAudioArray.length>0">
-					<div
-						v-for="audio in audioArrayPublicAfterSearch"
-						:key="audio.id"
-					>
-						<CardRow
-							:date="audio.uploaded_at.substring(0, 10) + ' UTC'"
-							:description="audio.description"
-							:uploader="audio.uploaded_by.display_name"
-							:picked="selected"
-							status="public"
-							:publictf="audio.public"
-							:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
-							:title="audio.title"
-							:audio_ID="audio.id"
-							@SelectRow="uncheck(audio.id)"
-						>
-							<div>
-							</div>
-						</CardRow>
-					</div>
-				</span><span v-else>
-					<div
-						v-for="audio in audioArrayPublic"
-						:key="audio.id"
-					>
-						<CardRow
-							:date="audio.uploaded_at.substring(0, 10) + ' UTC'"
-							:description="audio.description"
-							:uploader="audio.uploaded_by.display_name"
-							:picked="selected"
-							status="public"
-							:publictf="audio.public"
-							:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
-							:title="audio.title"
-							:audio_ID="audio.id"
-							@SelectRow="uncheck(audio.id)"
-						>
-							<div>
-							</div>
-						</CardRow>
-					</div>
-				</span>
-			</span><br /><br />
-
-			<span v-if="checkedFilters.includes('archived')">
-
-				<span v-if="searchResultAudioArray.length>0">
-
-					<span v-if="(audioArrayArchiveAfterSearch.length > 0)">
-						<h1 class="mt-8 mb-6 text-2xl font-bold">Archived Storybooks (deleted, but can be restored)</h1>
-						<br />
-						<div
-							class="grid"
-							style="grid-template-columns: repeat(9, minmax(150px,1fr));"
-						>
-							<div></div>
-
-							<p class="font-bold">Title</p>
-							<p class="">Description</p>
-							<p class="">created by</p>
-							<p>last edited at</p>
-							<p></p>
-							<p></p>
-						</div>
-					</span>
-
-					<div
-						v-for="audio in audioArrayArchiveAfterSearch"
-						:key="audio.id"
-					>
-						<CardRow
-							:date="audio.uploaded_at.substring(0, 10) + ' UTC'"
-							:description="audio.description"
-							:uploader="audio.uploaded_by.display_name"
-							:publictf="audio.public"
-							status="owner"
-							:archived="audio.archived"
-							:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
-							:title="audio.title"
-							:audio_ID="audio.id"
-						/>
-					</div>
-				</span><span v-else>
-
-					<span v-if="(audioArrayArchive.length > 0)">
-						<h1 class="mt-8 mb-6 text-2xl font-bold">Archived Storybooks (these have been removed from the app, but can be restored)</h1>
-						<br />
-						<div
-							class="grid"
-							style="grid-template-columns: repeat(9, minmax(150px,1fr));"
-						>
-							<div></div>
-
-							<p class="font-bold">Title</p>
-							<p class="">Description</p>
-							<p class="">created by</p>
-							<p>last edited at</p>
-							<p></p>
-							<p></p>
-						</div>
-					</span>
-
-					<div
-						v-for="audio in audioArrayArchive"
-						:key="audio.id"
-					>
-						<CardRow
-							:date="audio.uploaded_at.substring(0, 10) + ' UTC'"
-							:description="audio.description"
-							:uploader="audio.uploaded_by.display_name"
-							:publictf="audio.public"
-							status="owner"
-							:archived="audio.archived"
-							:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
-							:title="audio.title"
-							:audio_ID="audio.id"
-						/>
-					</div>
-				</span>
+					<p class="font-bold">Title</p>
+					<p class="">Description</p>
+					<p class="">created by</p>
+					<p>last edited at</p>
+					<p></p>
+					<p></p>
+				</div>
+				<div
+					v-for="audio in audioArrayCurrent"
+					:key="audio.id"
+				>
+					<CardRow
+						v-if="audio.archived && audio.uploaded_by.user_ID == $store.state.user.uid"
+						:date="audio.uploaded_at.substring(0, 10) + ' UTC'"
+						:description="audio.description"
+						:uploader="audio.uploaded_by.display_name"
+						:publictf="audio.public"
+						status="owner"
+						:archived="audio.archived"
+						:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
+						:title="audio.title"
+						:audio_ID="audio.id"
+					/>
+				</div>
 			</span>
 		</div>
 	</div>
@@ -366,20 +209,33 @@ export default {
 	data() {
 		return {
 			audioArray: [],
-			audioArrayOwner: [], // the list of audio files owned by the logged-in user
-			audioArrayEditor: [],
-			audioArrayViewer: [],
-			audioArrayPublic: [],
-			audioArrayArchive: [],
+			audioArrayCurrent: [],
 			lastknownscrollposition: 0,
 			searchResultAudioArray: [],
 			searchterm: "",
 			processingStorybooks: false,
+			lastParam: "last_updated_at",
+			sortOrder: true,
 		};
 	},
 	computed: {
+		displayArchived() {
+			return this.audioArrayCurrent.reduce(
+				(a, c) =>
+					c.archived === true &&
+					c.uploaded_by.user_ID == this.$store.state.user.uid
+						? ++a
+						: a,
+				0
+			);
+		},
+
 		regexwithsearchterm() {
-			return new RegExp(`${this.escapeRegex(this.searchterm)}+`, "g");
+			if (this.searchterm != "") {
+				return new RegExp(`${this.escapeRegex(this.searchterm)}+`, "g");
+			} else {
+				return "";
+			}
 		},
 
 		selected: {
@@ -411,12 +267,46 @@ export default {
 		CardRow,
 	},
 	mounted() {
-		// if (this.$store.state.idToken) {
 		this.getStorybooks();
 		window.addEventListener("scroll", this.myEventHandler);
-		// }
 	},
 	methods: {
+		sortBy(param) {
+			if (param == "1") {param = "title"}
+			else if (param == "2") {param = "description"}
+			else if (param == "3") {param = "uploaded_by.display_name"}
+			else if (param == "4") {param = "last_updated_at"}
+			else if (param == "5") {param = "public"}
+
+			if (param == this.lastParam) {
+				// console.log(this.sortOrder)
+				this.sortOrder = this.sortOrder ? false : true;
+			}
+			this.lastParam = param;
+			// console.log(this.sortOrder)
+			if (this.sortOrder) {
+				this.audioArrayCurrent.sort(function (a, b) {
+					if (a[param] < b[param]) {
+						return -1;
+					}
+					if (a[param] > b[param]) {
+						return 1;
+					}
+					return 0;
+				});
+			} else {
+				this.audioArrayCurrent.sort(function (a, b) {
+					if (a[param] < b[param]) {
+						return 1;
+					}
+					if (a[param] > b[param]) {
+						return -1;
+					}
+					return 0;
+				});
+			}
+		},
+
 		escapeRegex: function (string) {
 			return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 		},
@@ -456,48 +346,12 @@ export default {
 					i += 1;
 				}
 			}
-			console.log(this.searchResultAudioArray);
-			this.populateSubArraysAfterSearch();
-		},
-
-		populateSubArraysAfterSearch() {
-			this.audioArrayOwnerAfterSearch = []; // the list of audio files owned by the logged-in user
-			this.audioArrayEditorAfterSearch = [];
-			this.audioArrayViewerAfterSearch = [];
-			this.audioArrayPublicAfterSearch = [];
-			this.audioArrayArchiveAfterSearch = [];
-			this.searchResultAudioArray.forEach((element) => {
-				// console.log(element.uploaded_by.shared_editors)
-				if (
-					element.uploaded_by.user_ID == this.$store.state.user.uid &&
-					!element.archived
-				) {
-					// console.log("1")
-					this.audioArrayOwnerAfterSearch.push(element);
-				} else if (
-					element.shared_editors.some(
-						(e) => e.user_ID === this.$store.state.user.uid
-					)
-				) {
-					// console.log("2")
-					this.audioArrayEditorAfterSearch.push(element);
-				} else if (
-					element.shared_viewers.some(
-						(e) => e.user_ID === this.$store.state.user.uid
-					)
-				) {
-					// console.log("3")
-					this.audioArrayViewerAfterSearch.push(element);
-				} else if (element.public) {
-					// console.log("4")
-					this.audioArrayPublicAfterSearch.push(element);
-				} else if (
-					element.archived &&
-					element.uploaded_by.user_ID == this.$store.state.user.uid
-				) {
-					this.audioArrayArchiveAfterSearch.push(element);
-				}
-			});
+			// console.log(this.searchResultAudioArray);
+			if (this.searchResultAudioArray.length > 0) {
+				this.audioArrayCurrent = [...this.searchResultAudioArray];
+			} else {
+				this.audioArrayCurrent = [...this.audioArray];
+			}
 		},
 
 		uncheck(id) {
@@ -527,11 +381,7 @@ export default {
 			}
 
 			this.audioArray = [];
-			this.audioArrayOwner = []; // the list of audio files owned by the logged-in user
-			this.audioArrayEditor = [];
-			this.audioArrayViewer = [];
-			this.audioArrayPublic = [];
-			this.audioArrayArchive = [];
+			this.audioArrayCurrent = [];
 			fetch(process.env.VUE_APP_api_URL + "audio/user/", {
 				method: "GET",
 
@@ -549,40 +399,19 @@ export default {
 				)
 				.then((data) => {
 					if (this.audioArray) {
-						this.audioArray.forEach((element) => {
-							// console.log(element.uploaded_by.shared_editors)
-							if (
-								element.uploaded_by.user_ID == this.$store.state.user.uid &&
-								!element.archived
-							) {
-								// console.log("1")
-								this.audioArrayOwner.push(element);
-							} else if (
-								element.shared_editors.some(
-									(e) => e.user_ID === this.$store.state.user.uid
-								)
-							) {
-								// console.log("2")
-								this.audioArrayEditor.push(element);
-							} else if (
-								element.shared_viewers.some(
-									(e) => e.user_ID === this.$store.state.user.uid
-								)
-							) {
-								// console.log("3")
-								this.audioArrayViewer.push(element);
-							} else if (element.public) {
-								// console.log("4")
-								this.audioArrayPublic.push(element);
-							} else if (
-								element.archived &&
-								element.uploaded_by.user_ID == this.$store.state.user.uid
-							) {
-								this.audioArrayArchive.push(element);
+						this.audioArray.sort(function (a, b) {
+							if (a.last_updated_at < b.last_updated_at) {
+								return 1;
 							}
+							if (a.last_updated_at > b.last_updated_at) {
+								return -1;
+							}
+							return 0;
 						});
+						this.processingStorybooks = false;
+
+						this.audioArrayCurrent = [...this.audioArray];
 					}
-					this.processingStorybooks = false;
 					this.$nextTick(function () {
 						// console.log(this.$store.state.cardlistscrollposition)
 						window.scrollTo(0, this.$store.state.cardlistscrollposition * 14.3);
