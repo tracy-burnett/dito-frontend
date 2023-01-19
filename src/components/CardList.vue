@@ -75,19 +75,19 @@
 		>
 			<p></p>
 			<p
-				class="font-bold"
+				class="font-bold cursor-pointer"
 				@click="sortBy('1')"
 			>Title</p>
 			<p
-				class=""
+				class="cursor-pointer"
 				@click="sortBy('2')"
 			>Description</p>
 			<p
-				class=""
+				class="cursor-pointer"
 				@click="sortBy('3')"
 			>created by</p>
-			<p @click="sortBy('4')">last edited at</p>
-			<p @click="sortBy('5')">Public?</p>
+			<p class="cursor-pointer" @click="sortBy('4')">last edited at</p>
+			<p class="cursor-pointer" @click="sortBy('5')">Public?</p>
 			<p>Access</p>
 			<p></p>
 			<p></p>
