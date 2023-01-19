@@ -74,11 +74,20 @@
 			style="grid-template-columns: repeat(9, minmax(150px,1fr));"
 		>
 			<p></p>
-			<p class="font-bold">Title</p>
-			<p class="">Description</p>
-			<p class="">created by</p>
-			<p>last edited at</p>
-			<p>Public?</p>
+			<p
+				class="font-bold"
+				@click="sortBy('1')"
+			>Title</p>
+			<p
+				class=""
+				@click="sortBy('2')"
+			>Description</p>
+			<p
+				class=""
+				@click="sortBy('3')"
+			>created by</p>
+			<p @click="sortBy('4')">last edited at</p>
+			<p @click="sortBy('5')">Public?</p>
 			<p>Access</p>
 			<p></p>
 			<p></p>
@@ -205,6 +214,8 @@ export default {
 			searchResultAudioArray: [],
 			searchterm: "",
 			processingStorybooks: false,
+			lastParam: "last_updated_at",
+			sortOrder: true,
 		};
 	},
 	computed: {
@@ -260,6 +271,42 @@ export default {
 		window.addEventListener("scroll", this.myEventHandler);
 	},
 	methods: {
+		sortBy(param) {
+			if (param == "1") {param = "title"}
+			else if (param == "2") {param = "description"}
+			else if (param == "3") {param = "uploaded_by.display_name"}
+			else if (param == "4") {param = "last_updated_at"}
+			else if (param == "5") {param = "public"}
+
+			if (param == this.lastParam) {
+				// console.log(this.sortOrder)
+				this.sortOrder = this.sortOrder ? false : true;
+			}
+			this.lastParam = param;
+			// console.log(this.sortOrder)
+			if (this.sortOrder) {
+				this.audioArrayCurrent.sort(function (a, b) {
+					if (a[param] < b[param]) {
+						return -1;
+					}
+					if (a[param] > b[param]) {
+						return 1;
+					}
+					return 0;
+				});
+			} else {
+				this.audioArrayCurrent.sort(function (a, b) {
+					if (a[param] < b[param]) {
+						return 1;
+					}
+					if (a[param] > b[param]) {
+						return -1;
+					}
+					return 0;
+				});
+			}
+		},
+
 		escapeRegex: function (string) {
 			return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 		},
@@ -352,6 +399,15 @@ export default {
 				)
 				.then((data) => {
 					if (this.audioArray) {
+						this.audioArray.sort(function (a, b) {
+							if (a.last_updated_at < b.last_updated_at) {
+								return 1;
+							}
+							if (a.last_updated_at > b.last_updated_at) {
+								return -1;
+							}
+							return 0;
+						});
 						this.processingStorybooks = false;
 
 						this.audioArrayCurrent = [...this.audioArray];

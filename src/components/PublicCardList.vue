@@ -140,11 +140,7 @@ export default {
 				}
 			}
 
-			if (this.searchResultAudioArray.length > 0) {
-				this.audioArrayCurrent = [...this.searchResultAudioArray];
-			} else {
-				this.audioArrayCurrent = [...this.audioArray];
-			}
+
 		},
 
 		async getStorybooks() {
