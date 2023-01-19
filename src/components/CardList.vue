@@ -366,7 +366,7 @@ export default {
 
 		async getStorybooks() {
 			this.processingStorybooks = true;
-
+			console.log("benchmark 1")
 			if (this.$store.state.user) {
 				// REFRESH ID TOKEN FIRST AND WAIT FOR IT
 				await getIdToken(this.$store.state.user)
@@ -379,7 +379,7 @@ export default {
 						console.log("Oops. " + error.code + ": " + error.message);
 					});
 			}
-
+			console.log("benchmark 2")
 			this.audioArray = [];
 			this.audioArrayCurrent = [];
 			fetch(process.env.VUE_APP_api_URL + "audio/user/", {
@@ -394,11 +394,12 @@ export default {
 				.then(
 					(data) => {
 						this.audioArray = data["audio files"];
+						console.log("benchmark 3")
 						// console.log(this.audioArray)
 					} // collect the list of audio files that are owned by, or shared with, the logged-in user
 				)
 				.then((data) => {
-					if (this.audioArray) {
+					if (this.audioArray) {			console.log("benchmark 4")
 						this.audioArray.sort(function (a, b) {
 							if (a.last_updated_at < b.last_updated_at) {
 								return 1;
@@ -408,6 +409,7 @@ export default {
 							}
 							return 0;
 						});
+						console.log("benchmark 5")
 						this.processingStorybooks = false;
 
 						this.audioArrayCurrent = [...this.audioArray];
