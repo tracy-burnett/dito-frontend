@@ -72,7 +72,11 @@ export default {
 	},
 	computed: {
 		regexwithsearchterm() {
-			return new RegExp(`${this.escapeRegex(this.searchterm)}+`, "g");
+			if (this.searchterm != "") {
+				return new RegExp(`${this.escapeRegex(this.searchterm)}+`, "g");
+			} else {
+				return "";
+			}
 		},
 	},
 	// watch: {
