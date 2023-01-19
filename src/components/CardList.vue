@@ -76,18 +76,24 @@
 			<p></p>
 			<p
 				class="font-bold cursor-pointer"
-				@click="sortBy('1')"
+				@click="$store.commit('sortBy','1')"
 			>Title</p>
 			<p
 				class="cursor-pointer"
-				@click="sortBy('2')"
+				@click="$store.commit('sortBy','2')"
 			>Description</p>
 			<p
 				class="cursor-pointer"
-				@click="sortBy('3')"
+				@click="$store.commit('sortBy','3')"
 			>created by</p>
-			<p class="cursor-pointer" @click="sortBy('4')">last edited at</p>
-			<p class="cursor-pointer" @click="sortBy('5')">Public?</p>
+			<p
+				class="cursor-pointer"
+				@click="$store.commit('sortBy','4')"
+			>last edited at</p>
+			<p
+				class="cursor-pointer"
+				@click="$store.commit('sortBy','5')"
+			>Public?</p>
 			<p>Access</p>
 			<p></p>
 			<p></p>
@@ -203,7 +209,6 @@
 
 <script>
 import CardRow from "@/components/CardRow.vue";
-import { getIdToken } from "firebase/auth";
 
 export default {
 	data() {
@@ -214,8 +219,6 @@ export default {
 			searchResultAudioArray: [],
 			searchterm: "",
 			processingStorybooks: false,
-			lastParam: "last_updated_at",
-			sortOrder: true,
 		};
 	},
 	computed: {
@@ -259,7 +262,7 @@ export default {
 	},
 	name: "CardList",
 	watch: {
-		"$store.state.idToken": function () {
+		"$store.state.audioArrayChanged": function () {
 			this.getStorybooks();
 		},
 	},
@@ -271,48 +274,12 @@ export default {
 		window.addEventListener("scroll", this.myEventHandler);
 	},
 	methods: {
-		sortBy(param) {
-			if (param == "1") {param = "title"}
-			else if (param == "2") {param = "description"}
-			else if (param == "3") {param = "uploaded_by.display_name"}
-			else if (param == "4") {param = "last_updated_at"}
-			else if (param == "5") {param = "public"}
-
-			if (param == this.lastParam) {
-				// console.log(this.sortOrder)
-				this.sortOrder = this.sortOrder ? false : true;
-			}
-			this.lastParam = param;
-			// console.log(this.sortOrder)
-			if (this.sortOrder) {
-				this.audioArrayCurrent.sort(function (a, b) {
-					if (a[param] < b[param]) {
-						return -1;
-					}
-					if (a[param] > b[param]) {
-						return 1;
-					}
-					return 0;
-				});
-			} else {
-				this.audioArrayCurrent.sort(function (a, b) {
-					if (a[param] < b[param]) {
-						return 1;
-					}
-					if (a[param] > b[param]) {
-						return -1;
-					}
-					return 0;
-				});
-			}
-		},
-
 		escapeRegex: function (string) {
 			return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 		},
 
 		search() {
-			this.searchResultAudioArray = [...this.audioArray];
+			this.searchResultAudioArray = [...this.$store.state.audioArray];
 			let i = 0;
 			while (i < this.searchResultAudioArray.length) {
 				let audio = this.searchResultAudioArray[i];
@@ -350,7 +317,7 @@ export default {
 			if (this.searchResultAudioArray.length > 0) {
 				this.audioArrayCurrent = [...this.searchResultAudioArray];
 			} else {
-				this.audioArrayCurrent = [...this.audioArray];
+				this.audioArrayCurrent = [...this.$store.state.audioArray];
 			}
 		},
 
@@ -366,60 +333,18 @@ export default {
 
 		async getStorybooks() {
 			this.processingStorybooks = true;
-			console.log("benchmark 1")
-			if (this.$store.state.user) {
-				// REFRESH ID TOKEN FIRST AND WAIT FOR IT
-				await getIdToken(this.$store.state.user)
-					.then((idToken) => {
-						this.$store.commit("SetIdToken", idToken);
-						// console.log(this.$store.state.idToken)
-					})
-					.catch((error) => {
-						// An error happened.
-						console.log("Oops. " + error.code + ": " + error.message);
-					});
-			}
-			console.log("benchmark 2")
-			this.audioArray = [];
 			this.audioArrayCurrent = [];
-			fetch(process.env.VUE_APP_api_URL + "audio/user/", {
-				method: "GET",
-
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: this.$store.state.idToken,
-				},
-			})
-				.then((response) => response.json()) // json to object
-				.then(
-					(data) => {
-						this.audioArray = data["audio files"];
-						console.log("benchmark 3")
-						// console.log(this.audioArray)
-					} // collect the list of audio files that are owned by, or shared with, the logged-in user
-				)
-				.then((data) => {
-					if (this.audioArray) {			console.log("benchmark 4")
-						this.audioArray.sort(function (a, b) {
-							if (a.last_updated_at < b.last_updated_at) {
-								return 1;
-							}
-							if (a.last_updated_at > b.last_updated_at) {
-								return -1;
-							}
-							return 0;
-						});
-						console.log("benchmark 5")
-						this.processingStorybooks = false;
-
-						this.audioArrayCurrent = [...this.audioArray];
-					}
-					this.$nextTick(function () {
-						// console.log(this.$store.state.cardlistscrollposition)
-						window.scrollTo(0, this.$store.state.cardlistscrollposition * 14.3);
-					});
-				})
-				.catch((error) => console.error("Error:", error));
+			if (
+				this.$store.state.audioArray &&
+				this.$store.state.audioArray.length > 0
+			) {
+				this.processingStorybooks = false;
+				this.audioArrayCurrent = [...this.$store.state.audioArray];
+			}
+			this.$nextTick(function () {
+				// console.log(this.$store.state.cardlistscrollposition)
+				window.scrollTo(0, this.$store.state.cardlistscrollposition * 14.3);
+			});
 		},
 
 		myEventHandler() {

@@ -39,6 +39,10 @@ export default new Vuex.Store({
     checkViewerHighlight: 0, // makes Viewer redo current highlighting scheme
     authCompleted: false,
     playnoPausecounter: 0, // used to play audio player
+    audioArray: [],
+    audioArrayChanged: 0,
+    lastParam: "last_updated_at",
+    sortOrder: true,
 
   },
   getters: {
@@ -51,7 +55,61 @@ export default new Vuex.Store({
     //Can be tracked by Vue dev tools in (at least Chrome) browser.
     //Try to avoid using asynchronous code in here.  If you want to use one of these functions asynchronously, call it from actions.
 
+		sortBy(state, param) {
+			if (param == "1") {
+				param = "title";
+			} else if (param == "2") {
+				param = "description";
+			} else if (param == "3") {
+				param = "uploaded_by.display_name";
+			} else if (param == "4") {
+				param = "last_updated_at";
+			} else if (param == "5") {
+				param = "public";
+			}
 
+			if (param == state.lastParam) {
+				// console.log(this.sortOrder)
+				state.sortOrder = state.sortOrder ? false : true;
+			}
+			state.lastParam = param;
+			// console.log(this.sortOrder)
+			if (state.sortOrder) {
+				state.audioArray.sort(function (a, b) {
+					if (a[param] < b[param]) {
+						return -1;
+					}
+					if (a[param] > b[param]) {
+						return 1;
+					}
+					return 0;
+				});
+			} else {
+				state.audioArray.sort(function (a, b) {
+					if (a[param] < b[param]) {
+						return 1;
+					}
+					if (a[param] > b[param]) {
+						return -1;
+					}
+					return 0;
+				});
+			}
+      state.audioArrayChanged++
+		},
+
+    setAudioArray(state, array) {
+      state.audioArray = array
+      state.audioArray.sort(function (a, b) {
+        if (a.last_updated_at < b.last_updated_at) {
+          return 1;
+        }
+        if (a.last_updated_at > b.last_updated_at) {
+          return -1;
+        }
+        return 0;
+      });
+    },
 
     Logout_User(state) {
       state.user = null

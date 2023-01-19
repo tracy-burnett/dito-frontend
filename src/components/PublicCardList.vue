@@ -52,7 +52,6 @@
 
 <script>
 import Card from "@/components/Card.vue";
-import { getIdToken } from "firebase/auth";
 
 export default {
 	data() {
@@ -79,12 +78,12 @@ export default {
 			}
 		},
 	},
-	// watch: {
-	//   "$store.state.idToken": function () {
-	//     this.getStorybooks();
-	//   },
+	watch: {
+	  "$store.state.audioArrayChanged": function () {
+	    this.getStorybooks();
+	  },
 
-	// },
+	},
 	components: {
 		Card,
 	},
@@ -105,7 +104,7 @@ export default {
 
 		search() {
 			// console.log(this.regexwithsearchterm);
-			this.searchResultAudioArray = [...this.audioArray];
+			this.searchResultAudioArray = [...this.$store.state.audioArray];
 			let i = 0;
 			while (i < this.searchResultAudioArray.length) {
 				let audio = this.searchResultAudioArray[i];
@@ -139,49 +138,26 @@ export default {
 					i += 1;
 				}
 			}
-
-
 		},
 
 		async getStorybooks() {
 			this.processingStorybooks = true;
 			this.audioArray = [];
 			this.audioArrayTemp = [];
-
-			if (this.$store.state.user) {
-				// REFRESH ID TOKEN FIRST AND WAIT FOR IT
-				await getIdToken(this.$store.state.user)
-					.then((idToken) => {
-						this.$store.commit("SetIdToken", idToken);
-						// console.log(this.$store.state.idToken)
-					})
-					.catch((error) => {
-						// An error happened.
-						console.log("Oops. " + error.code + ": " + error.message);
+			if (
+				this.$store.state.audioArray &&
+				this.$store.state.audioArray.length > 0
+			) {
+				this.processingStorybooks = false;
+				this.audioArrayTemp = [...this.$store.state.audioArray];
+				if (this.audioArrayTemp) {
+					this.audioArrayTemp.forEach((audio) => {
+						if (audio.archived == false) {
+							this.audioArray.push(audio);
+						}
 					});
+				}
 			}
-
-			fetch(process.env.VUE_APP_api_URL + "audio/user/", {
-				method: "GET",
-
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: this.$store.state.idToken,
-				},
-			})
-				.then((response) => response.json()) // json to object
-				.then((data) => {
-					this.audioArrayTemp = data["audio files"]; // collect the list of audio files that are owned by, or shared with, the logged-in user
-					if (this.audioArrayTemp) {
-						this.audioArrayTemp.forEach((audio) => {
-							if (audio.archived == false) {
-								this.audioArray.push(audio);
-							}
-						});
-					}
-					this.processingStorybooks = false;
-				})
-				.catch((error) => console.error("Error:", error));
 		},
 	},
 };
