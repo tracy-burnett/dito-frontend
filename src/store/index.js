@@ -43,6 +43,7 @@ export default new Vuex.Store({
     audioArrayChanged: 0,
     lastParam: "last_updated_at",
     sortOrder: true,
+    getNewStorybooks: 0,
 
   },
   getters: {
@@ -55,48 +56,74 @@ export default new Vuex.Store({
     //Can be tracked by Vue dev tools in (at least Chrome) browser.
     //Try to avoid using asynchronous code in here.  If you want to use one of these functions asynchronously, call it from actions.
 
-		sortBy(state, param) {
-			if (param == "1") {
-				param = "title";
-			} else if (param == "2") {
-				param = "description";
-			} else if (param == "3") {
-				param = "uploaded_by.display_name";
-			} else if (param == "4") {
-				param = "last_updated_at";
-			} else if (param == "5") {
-				param = "public";
-			}
+    mutateAudioArray(state, params) {
+      let audioIndex = state.audioArray.map((audio) => audio.id).indexOf(params.audio_id)
+      // console.log(state.audioArray[audioIndex],title,description,publictf)
 
-			if (param == state.lastParam) {
-				// console.log(this.sortOrder)
-				state.sortOrder = state.sortOrder ? false : true;
-			}
-			state.lastParam = param;
-			// console.log(this.sortOrder)
-			if (state.sortOrder) {
-				state.audioArray.sort(function (a, b) {
-					if (a[param] < b[param]) {
-						return -1;
-					}
-					if (a[param] > b[param]) {
-						return 1;
-					}
-					return 0;
-				});
-			} else {
-				state.audioArray.sort(function (a, b) {
-					if (a[param] < b[param]) {
-						return 1;
-					}
-					if (a[param] > b[param]) {
-						return -1;
-					}
-					return 0;
-				});
-			}
+      state.audioArray[audioIndex].title = params.title
+      state.audioArray[audioIndex].description = params.description
+      state.audioArray[audioIndex].public = params.publictf
+      // console.log(state.audioArray)
+      state.dashboardRerender++
+    },
+
+    mutateAudioArrayArchive(state, params) {
+      // console.log(state.audioArray)
+      let audioIndex = state.audioArray.map((audio) => audio.id).indexOf(params.audio_id)
+
+      // console.log(state.audioArray)
+      // console.log(audioIndex)
+      state.audioArray[audioIndex].archived = params.archived
+      state.audioArray[audioIndex].public = false
+      
+      state.dashboardRerender++
+    },
+
+    getNewStorybooks(state) { state.getNewStorybooks++ },
+
+    sortBy(state, param) {
+      // console.log("sorting by " + param)
+      if (param == "1") {
+        param = "title";
+      } else if (param == "2") {
+        param = "description";
+      } else if (param == "3") {
+        param = "uploaded_by.display_name";
+      } else if (param == "4") {
+        param = "last_updated_at";
+      } else if (param == "5") {
+        param = "public";
+      }
+
+      if (param == state.lastParam) {
+        // console.log(this.sortOrder)
+        state.sortOrder = state.sortOrder ? false : true;
+      }
+      state.lastParam = param;
+      // console.log(this.sortOrder)
+      if (state.sortOrder) {
+        state.audioArray.sort(function (a, b) {
+          if (a[param] < b[param]) {
+            return -1;
+          }
+          if (a[param] > b[param]) {
+            return 1;
+          }
+          return 0;
+        });
+      } else {
+        state.audioArray.sort(function (a, b) {
+          if (a[param] < b[param]) {
+            return 1;
+          }
+          if (a[param] > b[param]) {
+            return -1;
+          }
+          return 0;
+        });
+      }
       state.audioArrayChanged++
-		},
+    },
 
     setAudioArray(state, array) {
       state.audioArray = array
@@ -109,6 +136,7 @@ export default new Vuex.Store({
         }
         return 0;
       });
+      state.dashboardRerender++
     },
 
     Logout_User(state) {
@@ -136,8 +164,10 @@ export default new Vuex.Store({
 
     toggleInfobit(state, infobit) {
       if (infobit == "InfoRevitalize") { state.infobit = infobit; }
-      else if (infobit=="Login") {state.infobit="Login"
-    state.infobitToBe="PublicCardList"}
+      else if (infobit == "Login") {
+        state.infobit = "Login"
+        state.infobitToBe = "PublicCardList"
+      }
       else if (!state.user) {
         state.infobit = "Login"
         state.infobitToBe = infobit
@@ -154,18 +184,18 @@ export default new Vuex.Store({
     },
 
     confirmAuth(state) {
-      state.authCompleted=true
+      state.authCompleted = true
     },
 
-    reloadViewer(state){
+    reloadViewer(state) {
       state.renewViewer++
     },
 
-    updateHighlights(state){
+    updateHighlights(state) {
       state.checkViewerHighlight++
     },
 
-    updateIncomingCurrentTime(state, {timestamp,timestampEnd}) {
+    updateIncomingCurrentTime(state, { timestamp, timestampEnd }) {
       // state.substringText = text
       if (timestamp <= 0) {
 
@@ -174,8 +204,8 @@ export default new Vuex.Store({
       else {
         state.incomingCurrentTime = timestamp
       }
-      state.incomingEndTime=timestampEnd
-      state.currentTimeUpdated+=1
+      state.incomingEndTime = timestampEnd
+      state.currentTimeUpdated += 1
     },
 
     updateAudioTime(state, audiotime) {
@@ -327,12 +357,11 @@ export default new Vuex.Store({
         // onAuthStateChanged listener will handle user assignment
         // context.commit('Logout_User')
         // })
-        .then(() =>
+        .then(() => {
+          context.commit('toggleInfobit', "InfoRevitalize")
 
-      {    context.commit('toggleInfobit', "InfoRevitalize")
-          
-			// this.$router.replace("/");
-      })
+          // this.$router.replace("/");
+        })
         .catch((error) => {
           // An error happened.
           console.log("Oops. " + error.code + ": " + error.message);
@@ -369,10 +398,10 @@ export default new Vuex.Store({
               .then((response) => response.json())
               .then((response) => {
                 console.log(response)
-                
-			// this.$router.replace("/");
+
+                // this.$router.replace("/");
                 context.commit('toggleInfobit', newinfobit)
-                
+
               })
               .catch(function (error) {
                 console.log("Oops. " + error.code + ": " + error.message);

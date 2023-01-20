@@ -79,10 +79,9 @@ export default {
 		},
 	},
 	watch: {
-	  "$store.state.audioArrayChanged": function () {
-	    this.getStorybooks();
-	  },
-
+		"$store.state.audioArrayChanged": function () {
+			this.getStorybooks();
+		},
 	},
 	components: {
 		Card,

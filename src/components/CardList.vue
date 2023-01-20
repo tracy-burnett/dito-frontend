@@ -334,6 +334,7 @@ export default {
 		async getStorybooks() {
 			this.processingStorybooks = true;
 			this.audioArrayCurrent = [];
+			// console.log(this.$store.state.audioArray)
 			if (
 				this.$store.state.audioArray &&
 				this.$store.state.audioArray.length > 0
@@ -345,6 +346,7 @@ export default {
 				// console.log(this.$store.state.cardlistscrollposition)
 				window.scrollTo(0, this.$store.state.cardlistscrollposition * 14.3);
 			});
+			// console.log(this.audioArrayCurrent)
 		},
 
 		myEventHandler() {

@@ -336,9 +336,13 @@ export default {
 				}
 			)
 				.then((response) => {
-					return response.json();
+					response.json();
 				})
-				.then((response) => {
+				.then((answer) => {
+					this.$store.commit("mutateAudioArrayArchive", {
+						audio_id: this.audio_ID,
+						archived: false,
+					});
 					this.$store.commit("forceDashboardRerender");
 				})
 				.catch((error) => {
@@ -385,9 +389,13 @@ export default {
 				}
 			)
 				.then((response) => {
-					return response.json();
+					response.json();
 				})
 				.then((response) => {
+					this.$store.commit("mutateAudioArrayArchive", {
+						audio_id: this.audio_ID,
+						archived: true,
+					});
 					this.$store.commit("forceDashboardRerender");
 				})
 				.catch((error) => {
@@ -433,12 +441,17 @@ export default {
 				}
 			)
 				.then((response) => {
-					return response.json();
+					response.json();
 				})
 
-				// .then((response) => {
-				//   this.$store.commit("forceDashboardRerender");
-				// })
+				.then((response) => {
+					this.$store.commit("mutateAudioArray", {
+						audio_id: this.audio_ID,
+						title: this.title.normalize("NFC"),
+						description: this.description.normalize("NFC"),
+						publictf: this.publictf,
+					});
+				})
 				.catch((error) => {
 					console.error("Error:", error);
 				});

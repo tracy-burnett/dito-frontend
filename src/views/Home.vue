@@ -35,10 +35,13 @@ export default {
 		"$store.state.idToken": function () {
 			this.getStorybooks();
 		},
+		"$store.state.getNewStorybooks": function () {
+			this.getStorybooks();
+		},
 	},
 	mounted() {
 		document.title = "Dito - " + window.location.hostname.split(".")[0];
-		// this.getStorybooks()
+		this.getStorybooks()
 	},
 	methods: {
 		async getStorybooks() {
