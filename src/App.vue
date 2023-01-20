@@ -38,6 +38,57 @@ export default {
 					);
     });
   },
+
+
+
+	watch: {
+		"$store.state.user": function () {
+			this.getStorybooks();
+		},
+		"$store.state.getNewStorybooks": function () {
+			this.getStorybooks();
+		},
+	},
+	mounted() {
+		document.title = "Dito - " + window.location.hostname.split(".")[0];
+		this.getStorybooks()
+	},
+	methods: {
+		async getStorybooks() {
+			if (this.$store.state.user) {
+				// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+				await getIdToken(this.$store.state.user)
+					.then((idToken) => {
+						this.$store.commit("SetIdToken", idToken);
+						// console.log(this.$store.state.idToken)
+					})
+					.catch((error) => {
+						// An error happened.
+						console.log("Oops. " + error.code + ": " + error.message);
+					});
+			}
+			
+			this.$store.commit("setAudioArray", []);
+			fetch(process.env.VUE_APP_api_URL + "audio/user/", {
+				method: "GET",
+
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: this.$store.state.idToken,
+				},
+			})
+				.then((response) => response.json()) // json to object
+				.then(
+					(data) => {
+						// console.log(data["audio files"])
+						this.$store.commit("setAudioArray", data["audio files"]);
+					} // collect the list of audio files that are owned by, or shared with, the logged-in user
+				)
+				.catch((error) => console.error("Error:", error));
+		},
+	},
+
+
 };
 </script>
 
