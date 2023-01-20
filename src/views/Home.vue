@@ -32,7 +32,7 @@ export default {
 		Login,
 	},
 	watch: {
-		"$store.state.idToken": function () {
+		"$store.state.user": function () {
 			this.getStorybooks();
 		},
 		"$store.state.getNewStorybooks": function () {
@@ -45,7 +45,6 @@ export default {
 	},
 	methods: {
 		async getStorybooks() {
-			this.processingStorybooks = true;
 			if (this.$store.state.user) {
 				// REFRESH ID TOKEN FIRST AND WAIT FOR IT
 				await getIdToken(this.$store.state.user)
@@ -58,6 +57,7 @@ export default {
 						console.log("Oops. " + error.code + ": " + error.message);
 					});
 			}
+			
 			this.$store.commit("setAudioArray", []);
 			fetch(process.env.VUE_APP_api_URL + "audio/user/", {
 				method: "GET",
@@ -70,6 +70,7 @@ export default {
 				.then((response) => response.json()) // json to object
 				.then(
 					(data) => {
+						// console.log(data["audio files"])
 						this.$store.commit("setAudioArray", data["audio files"]);
 					} // collect the list of audio files that are owned by, or shared with, the logged-in user
 				)

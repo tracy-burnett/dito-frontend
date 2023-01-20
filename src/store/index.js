@@ -64,7 +64,7 @@ export default new Vuex.Store({
       state.audioArray[audioIndex].description = params.description
       state.audioArray[audioIndex].public = params.publictf
       // console.log(state.audioArray)
-      state.dashboardRerender++
+      state.audioArrayChanged++
     },
 
     mutateAudioArrayArchive(state, params) {
@@ -76,10 +76,11 @@ export default new Vuex.Store({
       state.audioArray[audioIndex].archived = params.archived
       state.audioArray[audioIndex].public = false
       
-      state.dashboardRerender++
+      state.audioArrayChanged++
     },
 
-    getNewStorybooks(state) { state.getNewStorybooks++ },
+    getNewStorybooks(state) {
+      state.getNewStorybooks++ },
 
     sortBy(state, param) {
       // console.log("sorting by " + param)
@@ -137,7 +138,7 @@ export default new Vuex.Store({
         }
         return 0;
       });}
-      state.dashboardRerender++
+      state.audioArrayChanged++
     },
 
     Logout_User(state) {
@@ -148,7 +149,6 @@ export default new Vuex.Store({
 
       state.user = user
       state.infobit = state.infobitToBe
-      state.getNewStorybooks++
     },
 
     SetIdToken(state, token) {
