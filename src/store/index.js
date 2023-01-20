@@ -63,7 +63,7 @@ export default new Vuex.Store({
 
       // console.log(state.audioArray[audioIndex])
       state.audioArray[audioIndex] = params
-      console.log(state.audioArray)
+      // console.log(state.audioArray)
       state.audioArrayChanged++
     },
 
