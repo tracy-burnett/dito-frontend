@@ -2,7 +2,7 @@
 	<div class="flex flex-col items-center  pt-[2.2vh] hover:overflow-x-auto cardlist">
 		<input
 			class="px-3 fixed py-.5 text-sm border border-gray-300 rounded w-[70vw] md:w-[70vw] lg:w-[30vw]"
-			placeholder="Search Storybooks (not perfect yet)"
+			placeholder="Search Storybooks (case-sensitive)"
 			v-model="searchterm"
 			@keyup.enter="search"
 		/>
