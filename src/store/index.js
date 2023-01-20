@@ -44,6 +44,7 @@ export default new Vuex.Store({
     lastParam: "last_updated_at",
     sortOrder: true,
     getNewStorybooks: 0,
+    searchterm: "",
 
   },
   getters: {
@@ -183,6 +184,9 @@ export default new Vuex.Store({
 
     updateSelected(state, selected) {
       state.selected = selected
+    },
+    updateSearchTerm(state, searchterm) {
+      state.searchterm = searchterm
     },
 
     confirmAuth(state) {

@@ -217,7 +217,7 @@ export default {
 			audioArrayCurrent: [],
 			lastknownscrollposition: 0,
 			searchResultAudioArray: [],
-			searchterm: "",
+			// searchterm: "",
 			processingStorybooks: false,
 		};
 	},
@@ -248,6 +248,17 @@ export default {
 			},
 			set(selected) {
 				this.$store.commit("updateSelected", selected);
+			},
+		},
+
+
+		searchterm: {
+			// getter
+			get() {
+				return this.$store.state.searchterm; // in the store
+			},
+			set(searchterm) {
+				this.$store.commit("updateSearchTerm", searchterm);
 			},
 		},
 		checkedFilters: {
@@ -342,6 +353,7 @@ export default {
 				this.processingStorybooks = false;
 				this.audioArrayCurrent = [...this.$store.state.audioArray];
 			}
+			if (this.searchterm != ""){this.search()}
 			this.$nextTick(function () {
 				// console.log(this.$store.state.cardlistscrollposition)
 				window.scrollTo(0, this.$store.state.cardlistscrollposition * 14.3);
