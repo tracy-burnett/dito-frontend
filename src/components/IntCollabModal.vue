@@ -152,7 +152,7 @@ export default {
 				})
 
 				.then((response) => {
-					this.$store.commit("forceDashboardRerender");
+					this.$store.commit("getNewStorybooks");
 				})
 				.catch((error) => {
 					console.error("Error:", error);
@@ -203,7 +203,7 @@ export default {
 				})
 
 				.then((response) => {
-					this.$store.commit("forceDashboardRerender");
+					this.$store.commit("getNewStorybooks");
 				})
 				.catch((error) => {
 					console.error("Error:", error);
@@ -255,7 +255,7 @@ export default {
 				})
 
 				.then((response) => {
-					this.$store.commit("forceDashboardRerender");
+					this.$store.commit("getNewStorybooks");
 				})
 				.catch((error) => {
 					console.error("Error:", error);

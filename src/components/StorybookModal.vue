@@ -148,7 +148,7 @@ export default {
 				})
 
 				.then((response) => {
-					this.$store.commit("forceDashboardRerender");
+					this.$store.commit("getNewStorybooks");
 				})
 				.catch((error) => {
 					console.error("Error:", error);
@@ -197,7 +197,7 @@ export default {
 				})
 
 				.then((response) => {
-					this.$store.commit("forceDashboardRerender");
+					this.$store.commit("getNewStorybooks");
 				})
 				.catch((error) => {
 					console.error("Error:", error);
@@ -217,7 +217,6 @@ export default {
 						console.log("Oops. " + error.code + ": " + error.message);
 					});
 			}
-
 			fetch(
 				process.env.VUE_APP_api_URL +
 					"audio/" +
@@ -247,7 +246,7 @@ export default {
 				})
 
 				.then((response) => {
-					this.$store.commit("forceDashboardRerender");
+					this.$store.commit("getNewStorybooks");
 				})
 				.catch((error) => {
 					console.error("Error:", error);

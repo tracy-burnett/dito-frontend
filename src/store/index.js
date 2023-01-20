@@ -127,7 +127,8 @@ export default new Vuex.Store({
 
     setAudioArray(state, array) {
       state.audioArray = array
-      state.audioArray.sort(function (a, b) {
+      if (state.audioArray && state.audioArray.length>0)
+      {state.audioArray.sort(function (a, b) {
         if (a.last_updated_at < b.last_updated_at) {
           return 1;
         }
@@ -135,7 +136,7 @@ export default new Vuex.Store({
           return -1;
         }
         return 0;
-      });
+      });}
       state.dashboardRerender++
     },
 
