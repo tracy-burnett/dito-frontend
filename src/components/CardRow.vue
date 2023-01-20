@@ -343,7 +343,6 @@ export default {
 					this.$store.commit("mutateAudioArray", 
 						answer,
 					);
-					this.$store.commit("forceDashboardRerender");
 				})
 				.catch((error) => {
 					console.error("Error:", error);
@@ -396,7 +395,6 @@ export default {
 					this.$store.commit("mutateAudioArray", 
 						answer,
 					);
-					this.$store.commit("forceDashboardRerender");
 				})
 				.catch((error) => {
 					console.error("Error:", error);
@@ -448,7 +446,6 @@ export default {
 					this.$store.commit("mutateAudioArray", 
 						answer,
 					);
-					this.$store.commit("forceDashboardRerender");
 				})
 				.catch((error) => {
 					console.error("Error:", error);
