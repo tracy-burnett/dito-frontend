@@ -336,14 +336,16 @@ export default {
 				}
 			)
 				.then((response) => {
-					response.json();
+					return response;
 				})
 				.then((answer) => {
-					this.$store.commit("mutateAudioArrayArchive", {
-						audio_id: this.audio_ID,
-						archived: false,
-					});
-					this.$store.commit("forceDashboardRerender");
+					if (answer.status === 200) {
+						this.$store.commit("mutateAudioArrayArchive", {
+							audio_id: this.audio_ID,
+							archived: false,
+						});
+						this.$store.commit("forceDashboardRerender");
+					}
 				})
 				.catch((error) => {
 					console.error("Error:", error);
@@ -389,14 +391,16 @@ export default {
 				}
 			)
 				.then((response) => {
-					response.json();
+					return response;
 				})
-				.then((response) => {
-					this.$store.commit("mutateAudioArrayArchive", {
-						audio_id: this.audio_ID,
-						archived: true,
-					});
-					this.$store.commit("forceDashboardRerender");
+				.then((answer) => {
+					if (answer.status === 200) {
+						this.$store.commit("mutateAudioArrayArchive", {
+							audio_id: this.audio_ID,
+							archived: true,
+						});
+						this.$store.commit("forceDashboardRerender");
+					}
 				})
 				.catch((error) => {
 					console.error("Error:", error);
@@ -441,16 +445,18 @@ export default {
 				}
 			)
 				.then((response) => {
-					response.json();
+					return response;
 				})
 
-				.then((response) => {
-					this.$store.commit("mutateAudioArray", {
-						audio_id: this.audio_ID,
-						title: this.title.normalize("NFC"),
-						description: this.description.normalize("NFC"),
-						publictf: this.publictf,
-					});
+				.then((answer) => {
+					if (answer.status === 200) {
+						this.$store.commit("mutateAudioArray", {
+							audio_id: this.audio_ID,
+							title: this.title.normalize("NFC"),
+							description: this.description.normalize("NFC"),
+							publictf: this.publictf,
+						});
+					}
 				})
 				.catch((error) => {
 					console.error("Error:", error);
