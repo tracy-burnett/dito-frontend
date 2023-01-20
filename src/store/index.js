@@ -148,6 +148,7 @@ export default new Vuex.Store({
 
       state.user = user
       state.infobit = state.infobitToBe
+      state.getNewStorybooks++
     },
 
     SetIdToken(state, token) {
