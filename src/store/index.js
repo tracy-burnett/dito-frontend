@@ -58,27 +58,26 @@ export default new Vuex.Store({
     //Try to avoid using asynchronous code in here.  If you want to use one of these functions asynchronously, call it from actions.
 
     mutateAudioArray(state, params) {
-      let audioIndex = state.audioArray.map((audio) => audio.id).indexOf(params.audio_id)
+      let audioIndex = state.audioArray.map((audio) => audio.id).indexOf(params.id)
       // console.log(state.audioArray[audioIndex],title,description,publictf)
 
-      state.audioArray[audioIndex].title = params.title
-      state.audioArray[audioIndex].description = params.description
-      state.audioArray[audioIndex].public = params.publictf
-      // console.log(state.audioArray)
+      // console.log(state.audioArray[audioIndex])
+      state.audioArray[audioIndex] = params
+      console.log(state.audioArray)
       state.audioArrayChanged++
     },
 
-    mutateAudioArrayArchive(state, params) {
-      // console.log(state.audioArray)
-      let audioIndex = state.audioArray.map((audio) => audio.id).indexOf(params.audio_id)
+    // mutateAudioArrayArchive(state, params) {
+    //   // console.log(state.audioArray)
+    //   let audioIndex = state.audioArray.map((audio) => audio.id).indexOf(params.audio_id)
 
-      // console.log(state.audioArray)
-      // console.log(audioIndex)
-      state.audioArray[audioIndex].archived = params.archived
-      state.audioArray[audioIndex].public = false
+    //   // console.log(state.audioArray)
+    //   // console.log(audioIndex)
+    //   state.audioArray[audioIndex].archived = params.archived
+    //   state.audioArray[audioIndex].public = false
       
-      state.audioArrayChanged++
-    },
+    //   state.audioArrayChanged++
+    // },
 
     getNewStorybooks(state) {
       state.getNewStorybooks++ },
