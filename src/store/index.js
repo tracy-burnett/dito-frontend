@@ -39,6 +39,12 @@ export default new Vuex.Store({
     checkViewerHighlight: 0, // makes Viewer redo current highlighting scheme
     authCompleted: false,
     playnoPausecounter: 0, // used to play audio player
+    audioArray: [],
+    audioArrayChanged: 0,
+    lastParam: "last_updated_at",
+    sortOrder: true,
+    // getNewStorybooks: 0,
+    searchterm: "",
 
   },
   getters: {
@@ -51,7 +57,91 @@ export default new Vuex.Store({
     //Can be tracked by Vue dev tools in (at least Chrome) browser.
     //Try to avoid using asynchronous code in here.  If you want to use one of these functions asynchronously, call it from actions.
 
+    mutateAudioArray(state, params) {
+      let audioIndex = state.audioArray.map((audio) => audio.id).indexOf(params.id)
+      // console.log(state.audioArray[audioIndex],title,description,publictf)
 
+      // console.log(state.audioArray[audioIndex])
+      state.audioArray[audioIndex] = params
+      // console.log(state.audioArray)
+      state.audioArrayChanged++
+    },
+
+    // mutateAudioArrayArchive(state, params) {
+    //   // console.log(state.audioArray)
+    //   let audioIndex = state.audioArray.map((audio) => audio.id).indexOf(params.audio_id)
+
+    //   // console.log(state.audioArray)
+    //   // console.log(audioIndex)
+    //   state.audioArray[audioIndex].archived = params.archived
+    //   state.audioArray[audioIndex].public = false
+
+    //   state.audioArrayChanged++
+    // },
+
+    // getNewStorybooks(state) {
+    //   state.getNewStorybooks++
+    // },
+
+    sortBy(state, param) {
+      // console.log("sorting by " + param)
+      if (param == "1") {
+        param = "title";
+      } else if (param == "2") {
+        param = "description";
+      } else if (param == "3") {
+        param = "uploaded_by.display_name";
+      } else if (param == "4") {
+        param = "last_updated_at";
+      } else if (param == "5") {
+        param = "public";
+      }
+
+      if (param == state.lastParam) {
+        // console.log(this.sortOrder)
+        state.sortOrder = state.sortOrder ? false : true;
+      }
+      state.lastParam = param;
+      // console.log(this.sortOrder)
+      if (state.sortOrder) {
+        state.audioArray.sort(function (a, b) {
+          if (a[param] < b[param]) {
+            return -1;
+          }
+          if (a[param] > b[param]) {
+            return 1;
+          }
+          return 0;
+        });
+      } else {
+        state.audioArray.sort(function (a, b) {
+          if (a[param] < b[param]) {
+            return 1;
+          }
+          if (a[param] > b[param]) {
+            return -1;
+          }
+          return 0;
+        });
+      }
+      state.audioArrayChanged++
+    },
+
+    setAudioArray(state, array) {
+      state.audioArray = array
+      if (state.audioArray && state.audioArray.length > 0) {
+        state.audioArray.sort(function (a, b) {
+          if (a.last_updated_at < b.last_updated_at) {
+            return 1;
+          }
+          if (a.last_updated_at > b.last_updated_at) {
+            return -1;
+          }
+          return 0;
+        });
+      }
+      state.audioArrayChanged++
+    },
 
     Logout_User(state) {
       state.user = null
@@ -78,8 +168,10 @@ export default new Vuex.Store({
 
     toggleInfobit(state, infobit) {
       if (infobit == "InfoRevitalize") { state.infobit = infobit; }
-      else if (infobit=="Login") {state.infobit="Login"
-    state.infobitToBe="PublicCardList"}
+      else if (infobit == "Login") {
+        state.infobit = "Login"
+        state.infobitToBe = "PublicCardList"
+      }
       else if (!state.user) {
         state.infobit = "Login"
         state.infobitToBe = infobit
@@ -94,20 +186,23 @@ export default new Vuex.Store({
     updateSelected(state, selected) {
       state.selected = selected
     },
-
-    confirmAuth(state) {
-      state.authCompleted=true
+    updateSearchTerm(state, searchterm) {
+      state.searchterm = searchterm
     },
 
-    reloadViewer(state){
+    confirmAuth(state) {
+      state.authCompleted = true
+    },
+
+    reloadViewer(state) {
       state.renewViewer++
     },
 
-    updateHighlights(state){
+    updateHighlights(state) {
       state.checkViewerHighlight++
     },
 
-    updateIncomingCurrentTime(state, {timestamp,timestampEnd}) {
+    updateIncomingCurrentTime(state, { timestamp, timestampEnd }) {
       // state.substringText = text
       if (timestamp <= 0) {
 
@@ -116,8 +211,8 @@ export default new Vuex.Store({
       else {
         state.incomingCurrentTime = timestamp
       }
-      state.incomingEndTime=timestampEnd
-      state.currentTimeUpdated+=1
+      state.incomingEndTime = timestampEnd
+      state.currentTimeUpdated += 1
     },
 
     updateAudioTime(state, audiotime) {
@@ -263,18 +358,16 @@ export default new Vuex.Store({
     },
 
     Logout_User: (context) => {
-
+      context.commit('setAudioArray', [])
       signOut(auth)
         // .then(() => {
         // onAuthStateChanged listener will handle user assignment
         // context.commit('Logout_User')
         // })
-        .then(() =>
-
-      {    context.commit('toggleInfobit', "InfoRevitalize")
-          
-			// this.$router.replace("/");
-      })
+        .then(() => {
+          context.commit('toggleInfobit', "InfoRevitalize")
+          // this.$router.replace("/");
+        })
         .catch((error) => {
           // An error happened.
           console.log("Oops. " + error.code + ": " + error.message);
@@ -311,10 +404,10 @@ export default new Vuex.Store({
               .then((response) => response.json())
               .then((response) => {
                 console.log(response)
-                
-			// this.$router.replace("/");
+
+                // this.$router.replace("/");
                 context.commit('toggleInfobit', newinfobit)
-                
+
               })
               .catch(function (error) {
                 console.log("Oops. " + error.code + ": " + error.message);

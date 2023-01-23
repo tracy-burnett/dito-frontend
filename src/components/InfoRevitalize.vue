@@ -1,13 +1,14 @@
 <template>
-	<div class="flex flex-col items-center  pt-[2.2vh] hover:overflow-x-auto cardlist">
+	<div class="flex flex-col items-center  pt-[2.2vh]">
 		<input
 			class="px-3 fixed py-.5 text-sm border border-gray-300 rounded w-[70vw] md:w-[70vw] lg:w-[30vw]"
-			placeholder="Search Storybooks (not perfect yet)"
+			placeholder="Search Storybooks (case-sensitive)"
 			v-model="searchterm"
 			@keyup.enter="search"
 		/>
-		<!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
-
+	</div>
+	<!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
+	<div class="flex flex-col items-start hover:overflow-x-auto cardlist">
 		<div
 			v-if="searchResultAudioArray.length>0"
 			class="pt-[9vh]  flex flex-row items-center"
@@ -42,11 +43,11 @@
 				/>
 			</div>
 		</div>
+	</div>
 		<div
 			v-if="processingStorybooks==true"
 			class="flex flex-row flex-wrap justify-around basis-full pt-[10vh] lg:basis-2/5"
 		>processing information from server; please wait...</div>
-	</div>
 </template>
 
 <script>
@@ -136,7 +137,6 @@ export default {
 					i += 1;
 				}
 			}
-
 		},
 
 		getStorybooks() {

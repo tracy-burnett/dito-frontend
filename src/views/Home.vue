@@ -30,8 +30,6 @@ export default {
 		InfoRevitalize,
 		Login,
 	},
-	mounted() {
-		document.title = "Dito - " + window.location.hostname.split(".")[0];
-	},
+
 };
 </script>

@@ -111,8 +111,12 @@ export default {
 					return response.json();
 				})
 
-				.then((response) => {
-					this.$store.commit("forceDashboardRerender");
+				.then((answer) => {
+					if (answer.id == this.audio_id) {
+						this.$store.commit("mutateAudioArray", answer);
+					} else {
+						alert("error; please restart app");
+					}
 				})
 				.catch((error) => {
 					console.error("Error:", error);
@@ -160,8 +164,12 @@ export default {
 					return response.json();
 				})
 
-				.then((response) => {
-					this.$store.commit("forceDashboardRerender");
+				.then((answer) => {
+					if (answer.id == this.audio_id) {
+						this.$store.commit("mutateAudioArray", answer);
+					} else {
+						alert("error; please restart app");
+					}
 				})
 				.catch((error) => {
 					console.error("Error:", error);

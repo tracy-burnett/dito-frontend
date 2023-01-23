@@ -147,8 +147,12 @@ export default {
 					return response.json();
 				})
 
-				.then((response) => {
-					this.$store.commit("forceDashboardRerender");
+				.then((answer) => {
+					if (answer.id == this.audio_id) {
+						this.$store.commit("mutateAudioArray", answer);
+					} else {
+						alert("error; please restart app");
+					}
 				})
 				.catch((error) => {
 					console.error("Error:", error);
@@ -196,8 +200,12 @@ export default {
 					return response.json();
 				})
 
-				.then((response) => {
-					this.$store.commit("forceDashboardRerender");
+				.then((answer) => {
+					if (answer.id == this.audio_id) {
+						this.$store.commit("mutateAudioArray", answer);
+					} else {
+						alert("error; please restart app");
+					}
 				})
 				.catch((error) => {
 					console.error("Error:", error);
@@ -217,7 +225,6 @@ export default {
 						console.log("Oops. " + error.code + ": " + error.message);
 					});
 			}
-
 			fetch(
 				process.env.VUE_APP_api_URL +
 					"audio/" +
@@ -245,9 +252,12 @@ export default {
 				.then((response) => {
 					return response.json();
 				})
-
-				.then((response) => {
-					this.$store.commit("forceDashboardRerender");
+				.then((answer) => {
+					if (answer.id == this.audio_id) {
+						this.$store.commit("mutateAudioArray", answer);
+					} else {
+						alert("error; please restart app");
+					}
 				})
 				.catch((error) => {
 					console.error("Error:", error);
