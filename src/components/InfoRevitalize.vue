@@ -7,8 +7,8 @@
 			@keyup.enter="search"
 		/>
 	</div>
-		<!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
-<div class="flex flex-col items-start hover:overflow-x-auto cardlist">
+	<!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
+	<div class="flex flex-col items-start hover:overflow-x-auto cardlist">
 		<div
 			v-if="searchResultAudioArray.length>0"
 			class="pt-[9vh]  flex flex-row items-center"
@@ -43,11 +43,11 @@
 				/>
 			</div>
 		</div>
+	</div>
 		<div
 			v-if="processingStorybooks==true"
 			class="flex flex-row flex-wrap justify-around basis-full pt-[10vh] lg:basis-2/5"
 		>processing information from server; please wait...</div>
-	</div>
 </template>
 
 <script>
@@ -137,7 +137,6 @@ export default {
 					i += 1;
 				}
 			}
-
 		},
 
 		getStorybooks() {

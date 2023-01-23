@@ -44,12 +44,12 @@
 				/>
 			</div>
 		</div>
-		<div
-			v-if="processingStorybooks==true"
-			class="flex flex-row flex-wrap justify-around basis-full pt-[10vh] lg:basis-2/5"
-		>processing information from server; please wait...</div>
-
 	</div>
+	<div
+		v-if="processingStorybooks==true"
+		class="flex flex-row flex-wrap justify-around basis-full pt-[10vh] lg:basis-2/5"
+	>processing information from server; please wait...</div>
+
 </template>
 
 <script>

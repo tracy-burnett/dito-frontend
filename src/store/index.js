@@ -75,12 +75,13 @@ export default new Vuex.Store({
     //   // console.log(audioIndex)
     //   state.audioArray[audioIndex].archived = params.archived
     //   state.audioArray[audioIndex].public = false
-      
+
     //   state.audioArrayChanged++
     // },
 
     getNewStorybooks(state) {
-      state.getNewStorybooks++ },
+      state.getNewStorybooks++
+    },
 
     sortBy(state, param) {
       // console.log("sorting by " + param)
@@ -128,16 +129,17 @@ export default new Vuex.Store({
 
     setAudioArray(state, array) {
       state.audioArray = array
-      if (state.audioArray && state.audioArray.length>0)
-      {state.audioArray.sort(function (a, b) {
-        if (a.last_updated_at < b.last_updated_at) {
-          return 1;
-        }
-        if (a.last_updated_at > b.last_updated_at) {
-          return -1;
-        }
-        return 0;
-      });}
+      if (state.audioArray && state.audioArray.length > 0) {
+        state.audioArray.sort(function (a, b) {
+          if (a.last_updated_at < b.last_updated_at) {
+            return 1;
+          }
+          if (a.last_updated_at > b.last_updated_at) {
+            return -1;
+          }
+          return 0;
+        });
+      }
       state.audioArrayChanged++
     },
 
@@ -356,7 +358,7 @@ export default new Vuex.Store({
     },
 
     Logout_User: (context) => {
-
+      context.commit('setAudioArray', [])
       signOut(auth)
         // .then(() => {
         // onAuthStateChanged listener will handle user assignment
@@ -364,7 +366,6 @@ export default new Vuex.Store({
         // })
         .then(() => {
           context.commit('toggleInfobit', "InfoRevitalize")
-
           // this.$router.replace("/");
         })
         .catch((error) => {
