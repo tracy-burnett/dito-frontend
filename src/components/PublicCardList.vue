@@ -1,11 +1,13 @@
 <template>
-	<div class="flex flex-col items-center pt-[2.2vh] hover:overflow-x-auto cardlist">
+	<div class="flex flex-col items-center pt-[2.2vh] ">
 		<input
 			class="px-3 fixed py-.5 text-sm border border-gray-300 rounded w-[70vw] md:w-[70vw] lg:w-[30vw]"
 			placeholder="Search Storybooks (case-sensitive)"
 			v-model="searchterm"
 			@keyup.enter="search"
 		/>
+	</div>
+	<div class="flex flex-col items-start hover:overflow-x-auto cardlist">
 		<!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
 
 		<div
