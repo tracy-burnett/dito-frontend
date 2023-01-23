@@ -83,7 +83,7 @@ export default {
 	},
 	data() {
 		return {
-			email_mixeccase: "",
+			email_mixedcase: "",
 			coll_type: "",
 			//   int_language: "",
 			//   int_spacing: "",
@@ -152,7 +152,7 @@ export default {
 				})
 
 				.then((response) => {
-					this.$store.commit("getNewStorybooks");
+					this.$emit("refreshInterpretations");
 				})
 				.catch((error) => {
 					console.error("Error:", error);
@@ -203,7 +203,7 @@ export default {
 				})
 
 				.then((response) => {
-					this.$store.commit("getNewStorybooks");
+					this.$emit("refreshInterpretations");
 				})
 				.catch((error) => {
 					console.error("Error:", error);
@@ -255,7 +255,7 @@ export default {
 				})
 
 				.then((response) => {
-					this.$store.commit("getNewStorybooks");
+					this.$emit("refreshInterpretations");
 				})
 				.catch((error) => {
 					console.error("Error:", error);

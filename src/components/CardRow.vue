@@ -147,7 +147,7 @@
 				v-for="interpretation in interpretationsList"
 				:key="interpretation.id"
 			>
-				<IntManager
+				<IntManager @refreshInts="getInterpretations()"
 					:interpretation="interpretation"
 					:audio_ID="audio_ID"
 					:shared_editors="interpretation.shared_editors"
@@ -339,10 +339,11 @@ export default {
 					return response.json();
 				})
 				.then((answer) => {
-					// console.log(answer)
-					this.$store.commit("mutateAudioArray", 
-						answer,
-					);
+					if (answer.id == this.audio_ID) {
+						this.$store.commit("mutateAudioArray", answer);
+					} else {
+						alert("error; please restart app");
+					}
 				})
 				.catch((error) => {
 					console.error("Error:", error);
@@ -391,10 +392,11 @@ export default {
 					return response.json();
 				})
 				.then((answer) => {
-					// console.log(answer)
-					this.$store.commit("mutateAudioArray", 
-						answer,
-					);
+					if (answer.id == this.audio_ID) {
+						this.$store.commit("mutateAudioArray", answer);
+					} else {
+						alert("error; please restart app");
+					}
 				})
 				.catch((error) => {
 					console.error("Error:", error);
@@ -442,10 +444,11 @@ export default {
 					return response.json();
 				})
 				.then((answer) => {
-					// console.log(answer)
-					this.$store.commit("mutateAudioArray", 
-						answer,
-					);
+					if (answer.id == this.audio_ID) {
+						this.$store.commit("mutateAudioArray", answer);
+					} else {
+						alert("error; please restart app");
+					}
 				})
 				.catch((error) => {
 					console.error("Error:", error);

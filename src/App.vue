@@ -45,9 +45,9 @@ export default {
 		"$store.state.user": function () {
 			this.getStorybooks();
 		},
-		"$store.state.getNewStorybooks": function () {
-			this.getStorybooks();
-		},
+		// "$store.state.getNewStorybooks": function () {
+		// 	this.getStorybooks();
+		// },
 	},
 	mounted() {
 		document.title = "Dito - " + window.location.hostname.split(".")[0];

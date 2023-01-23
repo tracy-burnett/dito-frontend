@@ -118,7 +118,7 @@ export default {
 				})
 
 				.then((response) => {
-					this.$store.commit("getNewStorybooks");
+					this.$emit("refreshInterpretations");
 				})
 				.catch((error) => {
 					console.error("Error:", error);
@@ -169,7 +169,7 @@ export default {
 				})
 
 				.then((response) => {
-					this.$store.commit("getNewStorybooks");
+					this.$emit("refreshInterpretations");
 				})
 				.catch((error) => {
 					console.error("Error:", error);

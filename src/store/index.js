@@ -43,7 +43,7 @@ export default new Vuex.Store({
     audioArrayChanged: 0,
     lastParam: "last_updated_at",
     sortOrder: true,
-    getNewStorybooks: 0,
+    // getNewStorybooks: 0,
     searchterm: "",
 
   },
@@ -79,9 +79,9 @@ export default new Vuex.Store({
     //   state.audioArrayChanged++
     // },
 
-    getNewStorybooks(state) {
-      state.getNewStorybooks++
-    },
+    // getNewStorybooks(state) {
+    //   state.getNewStorybooks++
+    // },
 
     sortBy(state, param) {
       // console.log("sorting by " + param)

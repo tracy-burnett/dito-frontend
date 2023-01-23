@@ -6,6 +6,7 @@
 			class="fixed inset-0 z-10 flex items-center justify-center w-full h-screen"
 		>
 			<IntCollabModal
+				@refreshInterpretations="$emit('refreshInts')"
 				:interpretation_id="interpretation.id"
 				:audio_id="audio_ID"
 				:status="status"
@@ -18,6 +19,7 @@
 			class="fixed inset-0 z-10 flex items-center justify-center w-full h-screen"
 		>
 			<IntViewersModal
+				@refreshInterpretations="$emit('refreshInts')"
 				:interpretation_id="interpretation.id"
 				:audio_id="audio_ID"
 				:status="status"
