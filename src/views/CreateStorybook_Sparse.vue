@@ -15,7 +15,7 @@
 				placeholder="Storybook/Audio Title"
 				v-model="title"
 				@keyup.enter="upload"
-			/>
+			/> 
 			<input
 				class="w-full px-3 py-1 border border-gray-300 rounded"
 				placeholder="Description of Content"
