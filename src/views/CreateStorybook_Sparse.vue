@@ -202,7 +202,7 @@ export default {
 								return response.json();
 							})
 							.then((response) => {
-								console.log(response);
+								this.$store.commit("addToAudioArray",response)
 							})
 
 							.then(() =>

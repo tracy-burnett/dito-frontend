@@ -67,6 +67,9 @@ export default new Vuex.Store({
       state.audioArrayChanged++
     },
 
+    addToAudioArray(state,params) {
+      state.audioArray.unshift(params)
+    },
     // mutateAudioArrayArchive(state, params) {
     //   // console.log(state.audioArray)
     //   let audioIndex = state.audioArray.map((audio) => audio.id).indexOf(params.audio_id)
