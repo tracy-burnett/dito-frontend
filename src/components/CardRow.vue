@@ -52,7 +52,7 @@
 						class="w-full font-bold border-gray-300 rounded edittext"
 						rows="1"
 						style="overflow: scroll"
-						v-model="title"
+						v-model="localTitle"
 						@focusout="savechanges()"
 					></textarea>
 				</div>
@@ -66,7 +66,7 @@
 						class="w-full border-gray-300 rounded edittext"
 						rows="1"
 						style="overflow: scroll"
-						v-model="description"
+						v-model="localDescription"
 						@focusout="savechanges()"
 					></textarea>
 				</div>
@@ -80,7 +80,7 @@
 						type="checkbox"
 						id="publictf"
 						value="publictf"
-						v-model="publictf"
+						v-model="localPublictf"
 						@change="savechanges()"
 					/>
 
@@ -181,6 +181,9 @@ export default {
 	},
 	data: () => {
 		return {
+			localTitle: "",
+			localDescription: "",
+			localPublictf: "",
 			interpretationsList: [],
 			// random: "12345"
 		};
@@ -230,6 +233,9 @@ export default {
 	},
 
 	mounted() {
+		this.localTitle=this.title
+		this.localDescription=this.description
+		this.localPublictf=this.publictf
 		this.getInterpretations();
 	},
 
@@ -433,9 +439,9 @@ export default {
 					},
 					body: JSON.stringify({
 						// url: "coverimage.jpg",
-						title: this.title.normalize("NFC"),
-						description: this.description.normalize("NFC"),
-						public: this.publictf,
+						title: this.localTitle.normalize("NFC"),
+						description: this.localDescription.normalize("NFC"),
+						public: this.localPublictf,
 						// shared_with: [],
 					}),
 				}
