@@ -104,7 +104,7 @@ export default {
 	},
 	props: {
 		audio_ID: "",
-		title: "",
+		// title: "",
 	},
 	computed: {},
 
@@ -122,10 +122,11 @@ export default {
 
 	mounted() {
 		document.title =
-			"Dito - " + this.title + " - " + window.location.hostname.split(".")[0];
+			"Dito - " + window.location.hostname.split(".")[0];
 		if (this.$store.state.authCompleted === true) {
 			this.getInterpretations();
 		}
+		// console.log(this.$route.params)
 	},
 	unmounted() {
 		this.$store.commit("updateAudioDuration", 0);
