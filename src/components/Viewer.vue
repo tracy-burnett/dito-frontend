@@ -529,7 +529,7 @@ export default {
 
 		// // 					console.log(calculated)}
 		// 					return calculated
-		// 				},
+		// 				}, 
 
 		snapToTimestamp(substring) {
 			// console.log(substring)
