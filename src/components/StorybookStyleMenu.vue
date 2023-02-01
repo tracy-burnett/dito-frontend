@@ -209,7 +209,7 @@ export default {
 		) {
 			this.toggleStorybookStyle("Viewer");
 		} else if (this.$store.state.infobit == "InfoRevitalize") {
-			this.toggleStorybookStyle("Studio");
+			this.toggleStorybookStyle("Viewer");
 			this.$store.commit("toggleInfobit", "PublicCardList");
 		} else if (this.$store.state.infobit == "InfoPublish") {
 			this.toggleStorybookStyle("Prompter");
