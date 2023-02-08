@@ -24,13 +24,16 @@
 		<div class="flex justify-center text-xs -mt-[1vh]">
 			zoom {{zoomnumber}}x
 		</div>
-		<div class="-mt-[.6vh]" @mouseup="zoom()">
+		<div
+			class="-mt-[.6vh]"
+			@mouseup="zoom()"
+		>
 			<input
 				id="slider"
 				v-model="zoomnumber"
 				type="range"
 				min="0"
-				max="150"
+				max="500"
 				step=".10"
 				style="width: 105px"
 			/>
@@ -259,7 +262,7 @@ export default {
 	// watch these variables to see if they change.  if they do, then call the corresponding functions.
 	watch: {
 		"$store.state.playnoPausecounter": function () {
-			this.playWithoutPause()
+			this.playWithoutPause();
 		},
 
 		// zoomnumber: function () {
@@ -629,10 +632,11 @@ export default {
 		this.wavesurfer.on("seek", function (position) {
 			that.currentTimeSeconds = position * that.totalDuration;
 			if (
-				that.playing &&
-				(that.currentTimeSeconds < that.startTimeSeconds ||
-					that.currentTimeSeconds > that.endTimeSeconds)
+				// that.playing &&
+				that.currentTimeSeconds < that.startTimeSeconds ||
+				that.currentTimeSeconds > that.endTimeSeconds
 			) {
+				that.clearallregions();
 				that.pausePlayer();
 			}
 			// regardless whether the cursor is dropped inside or outside of the highlighted region, update the data about where we are in the audio file, both within this component and in the Vuex store.
