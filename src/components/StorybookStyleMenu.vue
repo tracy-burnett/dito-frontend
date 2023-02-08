@@ -109,12 +109,12 @@
 						v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'"
 						class=" w-[2.2vh] right-[1vw] top-0 bottom-0 m-auto cursor-pointer"
 						src="@/assets/icon_help.svg"
-						@click="taggerHelp=true"
+						@click="viewerHelp=true"
 					/>
 					<img
 						class=" w-[2.2vh] right-[1vw] top-0 bottom-0 m-auto cursor-pointer"
 						src="@/assets/icon_help.svg"
-						@click="viewerHelp=true"
+						@click="taggerHelp=true"
 					/>
 					<img
 						v-if="!otherIntInPrompter"
@@ -134,11 +134,12 @@
 					v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'"
 					@click="toggleStorybookStyle('Editor')"
 				>Editing</a>
+				
+				<a @click="toggleStorybookStyle('Viewer')">Viewing</a>
 				<a
 					v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'"
 					@click="toggleStorybookStyle('Tagger')"
-				>Tagging</a>
-				<a @click="toggleStorybookStyle('Viewer')">Viewing</a>
+				>Refining</a>
 				<a
 					v-if="!otherIntInPrompter"
 					@click="toggleStorybookStyle('Studio')"

@@ -30,7 +30,7 @@
 				v-model="zoomnumber"
 				type="range"
 				min="0"
-				max="150"
+				max="1000"
 				step=".10"
 				style="width: 105px"
 			/>

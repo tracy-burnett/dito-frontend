@@ -10,7 +10,7 @@
 			>
 				×
 			</button>
-			<h1 class="text-2xl font-bold">Tagging Instructions</h1>
+			<h1 class="text-2xl font-bold">Refining Instructions</h1>
 			<br />
 			<p class="text-sm -mt-[1vh] text-justify pb-[3vh]">
 				1. Press "Ctrl" and left-click to play or pause the audio player at any time.<br><br>
