@@ -255,7 +255,7 @@ export default {
 			updatingFromPrompter: false,
 			repeat: false,
 			hasRegion: false,
-			autoscroll: false,
+			autoscroll: true,
 		};
 	},
 
@@ -288,7 +288,7 @@ export default {
 				// 	id: "initialregion",
 				// 	loop: false,
 				// });
-				this.wavesurfer.drawer.params.autoCenter = false;
+				this.wavesurfer.drawer.params.autoCenter = true;
 				this.wavesurfer.enableDragSelection({
 					id: "initialregion",
 					loop: false,
