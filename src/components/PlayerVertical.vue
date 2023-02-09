@@ -607,12 +607,11 @@ export default {
 				that.isLoaded == true
 			) {
 				// console.log(that.currentTimeSeconds + " is greater than or equal to " + that.endTimeSeconds + " out of " + that.totalDuration)
-				if (that.repeat == true) {
-					that.wavesurfer.seekTo(that.startTimeSeconds / that.totalDuration);
-					that.$store.commit("updateHighlights");
-				} else {
+				if (that.repeat == false) {
 					that.pausePlayer();
 				}
+				that.wavesurfer.seekTo(that.startTimeSeconds / that.totalDuration);
+				that.$store.commit("updateHighlights");
 			}
 		});
 
