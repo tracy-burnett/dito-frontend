@@ -109,7 +109,7 @@ export default {
 		"$store.state.renewViewer": function () {
 			this.fetchNewInterpretation();
 		},
-		"$store.state.updateHighlights": function () {
+		"$store.state.checkViewerHighlight": function () {
 			if (
 				this.$store.state.audioplayertime < this.lastTimestamp ||
 				this.$store.state.audioplayertime > this.nextTimestamp
@@ -148,7 +148,7 @@ export default {
 				for (let i = 0; i < this.relevantTimestamps.length; i++) {
 					if (
 						this.relevantTimestamps[i] <= currenttime &&
-						this.relevantTimestamps[i + 1] >= currenttime
+						this.relevantTimestamps[i + 1] > currenttime
 					) {
 						this.lastTimestamp = this.relevantTimestamps[i];
 						this.nextTimestamp = this.relevantTimestamps[i + 1];
