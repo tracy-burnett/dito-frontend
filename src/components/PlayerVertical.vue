@@ -753,7 +753,7 @@ export default {
 			if (!this.playing) {
 				// when the player starts playing, make sure it plays from whenever is currently displayed in the "current time" box that the user is also able to manually inpput into, unless of course that value is outside of the highlighted region
 				if (
-					this.currentTimeSeconds <= this.endTimeSeconds &&
+					this.currentTimeSeconds < this.endTimeSeconds &&
 					this.currentTimeSeconds >= this.startTimeSeconds
 				) {
 					// console.log("playing inside region");
