@@ -609,9 +609,12 @@ export default {
 				// console.log(that.currentTimeSeconds + " is greater than or equal to " + that.endTimeSeconds + " out of " + that.totalDuration)
 				if (that.repeat == false) {
 					that.pausePlayer();
+					that.wavesurfer.seekTo(that.endTimeSeconds / that.totalDuration);
+					that.$store.commit("updateHighlights");
+				} else {
+					that.wavesurfer.seekTo(that.startTimeSeconds / that.totalDuration);
+					that.$store.commit("updateHighlights");
 				}
-				that.wavesurfer.seekTo(that.startTimeSeconds / that.totalDuration);
-				that.$store.commit("updateHighlights");
 			}
 		});
 
