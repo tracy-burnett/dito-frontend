@@ -757,6 +757,9 @@ export default {
 					this.currentTimeSeconds >= this.startTimeSeconds
 				) {
 					console.log("playing inside region");
+					console.log(this.startTimeSeconds)
+					console.log(this.currentTimeSeconds)
+					console.log(this.endTimeSeconds)
 					this.wavesurfer.play(this.currentTimeSeconds);
 					this.playing = !this.playing;
 				} else {
