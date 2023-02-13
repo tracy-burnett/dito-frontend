@@ -326,6 +326,8 @@ export default {
 			// let tempendtime = this.endTimeSeconds;
 			// this.wavesurfer.clearRegions();
 			// this.updatingFromPrompter = false;
+			// console.log(this.$store.state.incomingCurrentTime)
+			// console.log(this.$store.state.incomingEndTime)
 			this.wavesurfer.addRegion({
 				start: this.$store.state.incomingCurrentTime,
 				end: this.$store.state.incomingEndTime,
@@ -633,10 +635,13 @@ export default {
 		// whenever the audio jumps from one position to another for whatever reason, if the audio is playing but the cursor is now out of bounds of the highlighted region, then pause the player
 		this.wavesurfer.on("seek", function (position) {
 			that.currentTimeSeconds = position * that.totalDuration;
+			// console.log(that.startTimeSeconds)
+			// console.log(that.currentTimeSeconds)
+			// console.log(that.endTimeSeconds)
 			if (
 				// that.playing &&
-				that.currentTimeSeconds < that.startTimeSeconds ||
-				that.currentTimeSeconds > that.endTimeSeconds
+				Math.round(that.currentTimeSeconds*100)/100 < that.startTimeSeconds ||
+				Math.round(that.currentTimeSeconds*100)/100 > that.endTimeSeconds
 			) {
 				that.clearallregions();
 				that.pausePlayer();
