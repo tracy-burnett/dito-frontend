@@ -754,16 +754,16 @@ export default {
 				// when the player starts playing, make sure it plays from whenever is currently displayed in the "current time" box that the user is also able to manually inpput into, unless of course that value is outside of the highlighted region
 				if (
 					this.currentTimeSeconds < this.endTimeSeconds &&
-					this.currentTimeSeconds >= this.startTimeSeconds
+					Math.round(this.currentTimeSeconds)/100 >= this.startTimeSeconds
 				) {
-					console.log("playing inside region");
-					console.log(this.startTimeSeconds)
-					console.log(this.currentTimeSeconds)
-					console.log(this.endTimeSeconds)
+					// console.log("playing inside region");
+					// console.log(this.startTimeSeconds)
+					// console.log(this.currentTimeSeconds)
+					// console.log(this.endTimeSeconds)
 					this.wavesurfer.play(this.currentTimeSeconds);
 					this.playing = !this.playing;
 				} else {
-					console.log("playing from start of region");
+					// console.log("playing from start of region");
 					this.wavesurfer.play(this.startTimeSeconds);
 					this.playing = !this.playing;
 				}
