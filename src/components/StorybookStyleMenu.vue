@@ -60,7 +60,7 @@
 				@click="taggerHelp=true"
 				v-else-if="styleselection=='Tagger'"
 				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
-			>Tagging
+			>Refining
 				<img
 					class="absolute w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer right-0 mr-[.5vw]"
 					src="@/assets/icon_help.svg"

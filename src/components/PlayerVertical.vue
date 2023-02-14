@@ -326,6 +326,8 @@ export default {
 			// let tempendtime = this.endTimeSeconds;
 			// this.wavesurfer.clearRegions();
 			// this.updatingFromPrompter = false;
+			// console.log(this.$store.state.incomingCurrentTime)
+			// console.log(this.$store.state.incomingEndTime)
 			this.wavesurfer.addRegion({
 				start: this.$store.state.incomingCurrentTime,
 				end: this.$store.state.incomingEndTime,
@@ -633,10 +635,13 @@ export default {
 		// whenever the audio jumps from one position to another for whatever reason, if the audio is playing but the cursor is now out of bounds of the highlighted region, then pause the player
 		this.wavesurfer.on("seek", function (position) {
 			that.currentTimeSeconds = position * that.totalDuration;
+			// console.log(that.startTimeSeconds)
+			// console.log(that.currentTimeSeconds)
+			// console.log(that.endTimeSeconds)
 			if (
 				// that.playing &&
-				that.currentTimeSeconds < that.startTimeSeconds ||
-				that.currentTimeSeconds > that.endTimeSeconds
+				Math.round(that.currentTimeSeconds*100)/100 < that.startTimeSeconds ||
+				Math.round(that.currentTimeSeconds*100)/100 > that.endTimeSeconds
 			) {
 				that.clearallregions();
 				that.pausePlayer();
@@ -754,13 +759,19 @@ export default {
 				// when the player starts playing, make sure it plays from whenever is currently displayed in the "current time" box that the user is also able to manually inpput into, unless of course that value is outside of the highlighted region
 				if (
 					this.currentTimeSeconds < this.endTimeSeconds &&
-					this.currentTimeSeconds >= this.startTimeSeconds
+					Math.round(this.currentTimeSeconds*100)/100 >= this.startTimeSeconds
 				) {
 					// console.log("playing inside region");
+					// console.log(this.startTimeSeconds)
+					// console.log(Math.round(this.currentTimeSeconds*100)/100)
+					// console.log(this.endTimeSeconds)
 					this.wavesurfer.play(this.currentTimeSeconds);
 					this.playing = !this.playing;
 				} else {
 					// console.log("playing from start of region");
+					// console.log(this.startTimeSeconds)
+					// console.log(Math.round(this.currentTimeSeconds*100)/100)
+					// console.log(this.endTimeSeconds)
 					this.wavesurfer.play(this.startTimeSeconds);
 					this.playing = !this.playing;
 				}
