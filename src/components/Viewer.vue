@@ -532,7 +532,7 @@ export default {
 		// 				}, 
 
 		snapToTimestamp(substring) {
-			console.log(substring)
+			// console.log(substring)
 			let startingcharacter = substring.startingcharacter;
 			// let text=substring.text
 			// console.log(startingcharacter);
@@ -546,7 +546,6 @@ export default {
 					potentialSnapArray.push(element);
 				}
 			});
-			console.log(potentialSnapArray)
 			potentialSnapArray.sort((a, b) => a.startTime - b.startTime);
 			let playFromTimestamp =
 				potentialSnapArray[potentialSnapArray.length - 1].startTime / 100;

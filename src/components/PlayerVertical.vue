@@ -635,9 +635,9 @@ export default {
 		// whenever the audio jumps from one position to another for whatever reason, if the audio is playing but the cursor is now out of bounds of the highlighted region, then pause the player
 		this.wavesurfer.on("seek", function (position) {
 			that.currentTimeSeconds = position * that.totalDuration;
-			// console.log(that.startTimeSeconds)
-			// console.log(that.currentTimeSeconds)
-			// console.log(that.endTimeSeconds)
+			console.log(that.startTimeSeconds)
+			console.log(that.currentTimeSeconds)
+			console.log(that.endTimeSeconds)
 			if (
 				// that.playing &&
 				Math.round(that.currentTimeSeconds*100)/100 < that.startTimeSeconds ||
