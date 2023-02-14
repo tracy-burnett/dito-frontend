@@ -635,13 +635,13 @@ export default {
 		// whenever the audio jumps from one position to another for whatever reason, if the audio is playing but the cursor is now out of bounds of the highlighted region, then pause the player
 		this.wavesurfer.on("seek", function (position) {
 			that.currentTimeSeconds = position * that.totalDuration;
-			console.log(that.startTimeSeconds)
-			console.log(that.currentTimeSeconds)
-			console.log(that.endTimeSeconds)
+			// console.log(that.startTimeSeconds)
+			// console.log(that.currentTimeSeconds)
+			// console.log(that.endTimeSeconds)
 			if (
 				// that.playing &&
-				Math.round(that.currentTimeSeconds*100)/100 < that.startTimeSeconds ||
-				Math.round(that.currentTimeSeconds*100)/100 > that.endTimeSeconds
+				Math.round(that.currentTimeSeconds*100)/100 < Math.round(that.startTimeSeconds*100)/100 ||
+				Math.round(that.currentTimeSeconds*100)/100 > Math.round(that.endTimeSeconds*100)/100
 			) {
 				that.clearallregions();
 				that.pausePlayer();
@@ -758,8 +758,8 @@ export default {
 			if (!this.playing) {
 				// when the player starts playing, make sure it plays from whenever is currently displayed in the "current time" box that the user is also able to manually inpput into, unless of course that value is outside of the highlighted region
 				if (
-					Math.round(this.currentTimeSeconds*100)/100 < this.endTimeSeconds &&
-					Math.round(this.currentTimeSeconds*100)/100 >= this.startTimeSeconds
+					Math.round(this.currentTimeSeconds*100)/100 < Math.round(this.endTimeSeconds*100)/100 &&
+					Math.round(this.currentTimeSeconds*100)/100 >= Math.round(this.startTimeSeconds*100)/100
 				) {
 					// console.log("playing inside region");
 					// console.log(this.startTimeSeconds)
