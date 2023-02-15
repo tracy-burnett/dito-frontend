@@ -204,7 +204,9 @@ export default {
 			this.offsetsforBackend.length = 0;
 			this.captions.length = 0;
 			// console.log(this.fileloaded)
-			let arrayToParse = this.fileloaded.split("\n\n");
+			let arrayToParse = this.fileloaded.replaceAll("\r\n","\n").split("\n\n");
+			
+			
 			arrayToParse.forEach((caption) => {
 				// console.log(caption)
 				let srt_instructions = caption.split("\n");
@@ -214,23 +216,33 @@ export default {
 				}
 				let timestampInstructions = srt_instructions[1];
 
-				let timestampStart = timestampInstructions.split(" --> ")[0];
+				let timestampStart = timestampInstructions.split(" --> ")[0].trim();
+				// console.log(timestampStart)
 				let timestampStartMilliseconds = timestampStart.slice(-3);
+				// console.log(timestampStartMilliseconds)
 				let timestampStartSecondsArray = timestampStart.slice(0, -4).split(":");
 				let timestampStartSeconds =
 					timestampStartSecondsArray[0] * 3600 +
 					timestampStartSecondsArray[1] * 60 +
 					timestampStartSecondsArray[2] * 1;
+				// console.log(timestampStartSeconds)
 
-				let timestampEnd = timestampInstructions.split(" --> ")[1];
+				let timestampEnd = timestampInstructions.split(" --> ")[1].trim();
+				// console.log(timestampEnd)
 				let timestampEndMilliseconds = timestampEnd.slice(-3);
+				// console.log(timestampEndMilliseconds)
 				let timestampEndSecondsArray = timestampEnd.slice(0, -4).split(":");
+				// console.log(timestampEndSecondsArray)
 				let timestampEndSeconds =
 					timestampEndSecondsArray[0] * 3600 +
 					timestampEndSecondsArray[1] * 60 +
 					timestampEndSecondsArray[2] * 1;
+				// console.log(timestampEndSeconds)
 
 				// only add captions that don't exceed the maximum length of the audio file
+				// console.log((1000 * timestampEndSeconds) + " should be less than or equal to " + this.$store.state.audioDuration)
+				// console.log((1000*timestampStartSeconds + " should ge greater than or equal to 0"))
+				// console.log(srt_instructions[2] + " should not be undefined")
 				if (
 					1000 * timestampEndSeconds <= this.$store.state.audioDuration &&
 					1000 * timestampStartSeconds >= 0 &&
@@ -252,7 +264,12 @@ export default {
 								))) /
 						2;
 					this.offsetsforBackend.push(offsetforBackend);
-					let caption_text = srt_instructions[2] + "\n\n";
+					// console.log(srt_instructions)
+					srt_instructions.shift()
+					srt_instructions.shift()
+					let caption_text=""
+					srt_instructions.forEach(part => caption_text = caption_text + "\n" + part)
+					caption_text = caption_text.substring(1) + "\n\n";
 					this.captions.push(caption_text);
 				}
 			});
