@@ -196,7 +196,7 @@ export default {
 			} else {
 				document
 					.getElementById(number)
-					.scrollIntoView({ behavior: "instant", block: "start" });
+					.scrollIntoView({ block: "start" });
 			}
 		},
 
