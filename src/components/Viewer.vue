@@ -15,9 +15,9 @@
 					v-for="substring in arrayForRenderingHighlights"
 					:key="substring.startingcharacter"
 					:id="substring.scrollTo"
-					style="scroll-margin-bottom: 23vh;"
 				>
 
+				<!-- style="scroll-margin-bottom: 23vh;" -->
 					<!-- :ref="el => {functionRef(el)}" -->
 					<span
 						v-if="substring.scrollTo==0"
@@ -221,9 +221,9 @@ export default {
 				if (this.$store.state.consoles.length == 1) {
 					document
 						.getElementById(number)
-						.scrollIntoView({ behavior: "smooth", block: "center" });
+						.scrollIntoView({ behavior: "smooth", block: "start" });
 				} else {
-					document.getElementById(number).scrollIntoView({ block: "center" });
+					document.getElementById(number).scrollIntoView({ block: "start" });
 				}
 			}
 		},
