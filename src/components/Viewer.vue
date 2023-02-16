@@ -7,7 +7,6 @@
 			<br>
 			<br>
 			<div
-				:ref="interpretation_id"
 				class="w-full h-full py-1 border-gray-300 rounded viewer"
 				:style="{ 'font-size': fontsize + 'px' }"
 				style="overscroll-behavior:none; height: 47.5vh;"
@@ -190,10 +189,15 @@ export default {
 		// },
 
 		scrollToElement(number) {
-			// console.log(this.$refs)
-			this.$refs[this.interpretation_id]
-				.querySelector(`#${CSS.escape(number)}`)
-				.scrollIntoView({ behavior: "instant", block: "start" });
+			if (this.$store.state.consoles.length == 1) {
+				document
+					.getElementById(number)
+					.scrollIntoView({ behavior: "smooth", block: "start" });
+			} else {
+				document
+					.getElementById(number)
+					.scrollIntoView({ behavior: "instant", block: "start" });
+			}
 		},
 
 		// access the interpretation that needs to be displayed
