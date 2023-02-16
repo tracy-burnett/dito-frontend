@@ -15,6 +15,7 @@
 					v-for="substring in substringArray"
 					:key="substring.startingcharacter"
 					:id="substring.startingcharacter"
+					style="scroll-margin-bottom: 22vh;"
 				>
 
 					<!-- :ref="el => {functionRef(el)}" -->
