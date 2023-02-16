@@ -212,12 +212,13 @@ export default {
 	},
 	methods: {
 		chooseanswer(answer) {
-			if (
-				this.interpretationStatus == "owner" ||
-				this.interpretationStatus == "editor"
-			) {
-				this.new_text_unstripped = answer;
-			}
+			this.new_text_unstripped = answer;
+			// if (
+			// 	this.interpretationStatus == "owner" ||
+			// 	this.interpretationStatus == "editor"
+			// ) {
+			// 	this.new_text_unstripped = answer;
+			// }
 		},
 
 		escapeRegex: function (string) {
