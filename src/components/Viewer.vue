@@ -7,6 +7,7 @@
 			<br>
 			<br>
 			<div
+				:ref="interpretation_id"
 				class="w-full h-full py-1 border-gray-300 rounded viewer"
 				:style="{ 'font-size': fontsize + 'px' }"
 				style="overscroll-behavior:none; height: 47.5vh;"
@@ -189,8 +190,9 @@ export default {
 		// },
 
 		scrollToElement(number) {
-			document
-				.getElementById(number)
+			// console.log(this.$refs)
+			this.$refs[this.interpretation_id]
+				.querySelector(`#${CSS.escape(number)}`)
 				.scrollIntoView({ behavior: "smooth", block: "start" });
 		},
 
