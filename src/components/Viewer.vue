@@ -218,8 +218,11 @@ export default {
 		},
 
 		scrollToElement(number) {
-			if (this.$refs[this.interpretation_id]
-						.querySelector(`#${CSS.escape(number)}`) !== null) {
+			if (
+				this.$refs[this.interpretation_id].querySelector(
+					`#${CSS.escape(number)}`
+				) !== null
+			) {
 				if (this.$store.state.consoles.length == 1) {
 					this.$refs[this.interpretation_id]
 						.querySelector(`#${CSS.escape(number)}`)
@@ -492,6 +495,8 @@ export default {
 				slice.startingcharacter = 0;
 				this.substringArray.push(slice);
 			}
+
+			this.rerenderHighlights();
 			// console.log(this.substringArray)
 			// console.log(this.parsedAssociations)
 			// this.substringArray.forEach((element) => {highlight(element.startingcharacter)})
