@@ -506,11 +506,12 @@ export default {
 						startingcharacter < element.endCharacter
 					) {
 						k++;
-						if (k == 1) {
-							this.targetId = startingcharacter;
-						}
 						// this.currenthighlight = elementindex;
 					}
+				}
+
+				if (k == 1) {
+					this.targetId = startingcharacter;
 				}
 			});
 			// if (this.$refs.highlightedwords) {
