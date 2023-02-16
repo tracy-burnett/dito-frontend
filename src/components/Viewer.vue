@@ -193,7 +193,7 @@ export default {
 			// console.log(this.$refs)
 			this.$refs[this.interpretation_id]
 				.querySelector(`#${CSS.escape(number)}`)
-				.scrollIntoView({ behavior: "smooth", block: "start" });
+				.scrollIntoView({ behavior: "instant", block: "start" });
 		},
 
 		// access the interpretation that needs to be displayed
