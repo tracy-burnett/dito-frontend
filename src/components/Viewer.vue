@@ -10,6 +10,7 @@
 				class="w-full h-full py-1 border-gray-300 rounded viewer"
 				:style="{ 'font-size': fontsize + 'px' }"
 				style="overscroll-behavior:none; height: 47.5vh;"
+				:ref="interpretation_id"
 			>
 				<span
 					v-for="substring in arrayForRenderingHighlights"
@@ -17,7 +18,7 @@
 					:id="substring.scrollTo"
 				>
 
-				<!-- style="scroll-margin-bottom: 23vh;" -->
+					<!-- style="scroll-margin-bottom: 23vh;" -->
 					<!-- :ref="el => {functionRef(el)}" -->
 					<span
 						v-if="substring.scrollTo==0"
@@ -104,7 +105,7 @@ export default {
 				});
 				tempArray[i].scrollTo = k;
 			}
-			return tempArray
+			return tempArray;
 		},
 	},
 
@@ -217,13 +218,16 @@ export default {
 		},
 
 		scrollToElement(number) {
-			if (document.getElementById(number) !== null) {
+			if (this.$refs[this.interpretation_id]
+						.querySelector(`#${CSS.escape(number)}`) !== null) {
 				if (this.$store.state.consoles.length == 1) {
-					document
-						.getElementById(number)
+					this.$refs[this.interpretation_id]
+						.querySelector(`#${CSS.escape(number)}`)
 						.scrollIntoView({ behavior: "smooth", block: "start" });
 				} else {
-					document.getElementById(number).scrollIntoView({ block: "start" });
+					this.$refs[this.interpretation_id]
+						.querySelector(`#${CSS.escape(number)}`)
+						.scrollIntoView({ block: "start" });
 				}
 			}
 		},
