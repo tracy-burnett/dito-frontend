@@ -4,7 +4,8 @@
 			<span class="py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 			in <span class="py-1 border-gray-300 rounded">{{ language_name }}</span>
 
-			<br><br>
+			<br>
+			<br>
 			<div
 				class="w-full h-full py-1 border-gray-300 rounded viewer"
 				:style="{ 'font-size': fontsize + 'px' }"
@@ -13,9 +14,10 @@
 				<span
 					v-for="substring in substringArray"
 					:key="substring.startingcharacter"
-					ref="highlightedwords"
+					:id="substring.startingcharacter"
 				>
 
+					<!-- :ref="el => {functionRef(el)}" -->
 					<span
 						v-if="highlight(substring.startingcharacter)==0"
 						class="cursor-pointer"
@@ -77,6 +79,7 @@ export default {
 			endslice: 0, // helper variable for latest_text_slices function, never accessed outside of that function
 			i: 0, // helper variable for latest_text_slices function, never accessed outside of that function
 			spaced_by: "",
+			targetId: 0,
 		};
 	},
 
@@ -126,6 +129,10 @@ export default {
 						break;
 					}
 				}
+				// IMPLEMENT AUTOSCROLL HERE
+				// if (this.$refs) {
+				// console.log(this.$refs)}
+				this.scrollToElement(this.targetId);
 			}
 		},
 		"$store.state.audioplayertime": function () {
@@ -155,6 +162,8 @@ export default {
 						break;
 					}
 				}
+
+				this.scrollToElement(this.targetId);
 			}
 		},
 		// currenthighlight: function () {
@@ -175,6 +184,16 @@ export default {
 	},
 
 	methods: {
+		// functionRef(el) {
+		// 	console.log(el)
+		// },
+
+		scrollToElement(number) {
+			document
+				.getElementById(number)
+				.scrollIntoView({ behavior: "smooth", block: "start" });
+		},
+
 		// access the interpretation that needs to be displayed
 		async fetchNewInterpretation() {
 			if (this.$store.state.user) {
@@ -482,6 +501,7 @@ export default {
 						startingcharacter >= element.startCharacter &&
 						startingcharacter < element.endCharacter
 					) {
+						this.targetId = startingcharacter;
 						k++;
 						// this.currenthighlight = elementindex;
 					}
@@ -529,7 +549,7 @@ export default {
 
 		// // 					console.log(calculated)}
 		// 					return calculated
-		// 				}, 
+		// 				},
 
 		snapToTimestamp(substring) {
 			// console.log(substring)
