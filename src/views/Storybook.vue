@@ -135,6 +135,7 @@ export default {
 
 	beforeUnmount() {
 		this.$store.commit("clearConsoles");
+		this.$store.commit("updateAudioTime",0)
 		this.interpretationsList.length = 0;
 		this.formerInterpretationsList.length = 0;
 	},
