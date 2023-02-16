@@ -510,10 +510,12 @@ export default {
 					}
 				}
 
-				if (k == 1) {
+
+			}
+			);
+			if (k == 1) {
 					this.targetId = startingcharacter;
 				}
-			});
 			// if (this.$refs.highlightedwords) {
 			// 		if (this.$refs.highlightedwords.length > 0) {
 			// 			this.$refs.highlightedwords[this.currenthighlight].scrollIntoView({behavior: "smooth", block: "center"});
