@@ -132,6 +132,7 @@ export default {
 				// IMPLEMENT AUTOSCROLL HERE
 				// if (this.$refs) {
 				// console.log(this.$refs)}
+				console.log(this.targetId)
 				this.scrollToElement(this.targetId);
 			}
 		},
@@ -515,6 +516,7 @@ export default {
 			);
 			if (k == 1) {
 					this.targetId = startingcharacter;
+					console.log(this.targetId)
 				}
 			// if (this.$refs.highlightedwords) {
 			// 		if (this.$refs.highlightedwords.length > 0) {
