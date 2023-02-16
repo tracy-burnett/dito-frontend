@@ -79,7 +79,6 @@ export default {
 			endslice: 0, // helper variable for latest_text_slices function, never accessed outside of that function
 			i: 0, // helper variable for latest_text_slices function, never accessed outside of that function
 			spaced_by: "",
-			targetId: 0,
 		};
 	},
 
@@ -101,42 +100,26 @@ export default {
 	},
 	watch: {
 		interpretationStatus: function () {
+			// console.log("1");
 			this.fetchNewInterpretation();
 		},
 		downloadSRTcounter: function () {
+			// console.log("2");
 			this.downloadSRT();
 		},
 		timestep: function () {
+			// console.log("3");
 			this.fetchNewInterpretation();
 		},
 		"$store.state.renewViewer": function () {
+			// console.log("4");
 			this.fetchNewInterpretation();
 		},
 		"$store.state.checkViewerHighlight": function () {
-			if (
-				this.$store.state.audioplayertime < this.lastTimestamp ||
-				this.$store.state.audioplayertime > this.nextTimestamp
-			) {
-				let currenttime = this.$store.state.audioplayertime;
-				// REPOPULATE TIMESTAMPS
-				for (let i = 0; i < this.relevantTimestamps.length; i++) {
-					if (
-						this.relevantTimestamps[i] <= currenttime &&
-						this.relevantTimestamps[i + 1] >= currenttime
-					) {
-						this.lastTimestamp = this.relevantTimestamps[i];
-						this.nextTimestamp = this.relevantTimestamps[i + 1];
-						break;
-					}
-				}
-				// IMPLEMENT AUTOSCROLL HERE
-				// if (this.$refs) {
-				// console.log(this.$refs)}
-				console.log(this.targetId)
-				this.scrollToElement(this.targetId);
-			}
+			this.rerenderHighlights();
 		},
 		"$store.state.audioplayertime": function () {
+			this.rerenderHighlights();
 			// if (this.$store.state.audioplayertime >= this.nextTimestamp)
 			// {
 			// 	this.lastTimestamp=this.nextTimestamp
@@ -147,25 +130,26 @@ export default {
 			// }
 			// if (this.$store.state.audioplayertime < this.lastTimestamp)
 			// {}
-			if (
-				this.$store.state.audioplayertime < this.lastTimestamp ||
-				this.$store.state.audioplayertime > this.nextTimestamp
-			) {
-				let currenttime = this.$store.state.audioplayertime;
-				// REPOPULATE TIMESTAMPS
-				for (let i = 0; i < this.relevantTimestamps.length; i++) {
-					if (
-						this.relevantTimestamps[i] <= currenttime &&
-						this.relevantTimestamps[i + 1] > currenttime
-					) {
-						this.lastTimestamp = this.relevantTimestamps[i];
-						this.nextTimestamp = this.relevantTimestamps[i + 1];
-						break;
-					}
-				}
+			// if (
+			// 	this.$store.state.audioplayertime < this.lastTimestamp ||
+			// 	this.$store.state.audioplayertime > this.nextTimestamp
+			// ) {
+			// 	console.log("6");
+			// 	let currenttime = this.$store.state.audioplayertime;
+			// 	// REPOPULATE TIMESTAMPS
+			// 	for (let i = 0; i < this.relevantTimestamps.length; i++) {
+			// 		if (
+			// 			this.relevantTimestamps[i] <= currenttime &&
+			// 			this.relevantTimestamps[i + 1] > currenttime
+			// 		) {
+			// 			this.lastTimestamp = this.relevantTimestamps[i];
+			// 			this.nextTimestamp = this.relevantTimestamps[i + 1];
+			// 			break;
+			// 		}
+			// 	}
 
-				this.scrollToElement(this.targetId);
-			}
+			// 	this.scrollToElement(this.targetId);
+			// }
 		},
 		// currenthighlight: function () {
 		// if (this.$refs.highlightedwords && this.fontsize <= 16) {
@@ -189,13 +173,33 @@ export default {
 		// 	console.log(el)
 		// },
 
+		rerenderHighlights() {
+			if (
+				this.$store.state.audioplayertime < this.lastTimestamp ||
+				this.$store.state.audioplayertime > this.nextTimestamp
+			) {
+				let currenttime = this.$store.state.audioplayertime;
+				// REPOPULATE TIMESTAMPS
+				for (let i = 0; i < this.relevantTimestamps.length; i++) {
+					if (
+						this.relevantTimestamps[i] <= currenttime &&
+						this.relevantTimestamps[i + 1] > currenttime
+					) {
+						this.lastTimestamp = this.relevantTimestamps[i];
+						this.nextTimestamp = this.relevantTimestamps[i + 1];
+						break;
+					}
+				}
+			}
+		},
+
 		scrollToElement(number) {
 			if (this.$store.state.consoles.length == 1) {
 				document
 					.getElementById(number)
-					.scrollIntoView({ behavior: "smooth", block: "start" });
+					.scrollIntoView({ behavior: "smooth", block: "center" });
 			} else {
-				document.getElementById(number).scrollIntoView({ block: "start" });
+				document.getElementById(number).scrollIntoView({ block: "center" });
 			}
 		},
 
@@ -510,14 +514,10 @@ export default {
 						// this.currenthighlight = elementindex;
 					}
 				}
-
-
-			}
-			);
+			});
 			if (k == 1) {
-					this.targetId = startingcharacter;
-					console.log(this.targetId)
-				}
+				this.scrollToElement(startingcharacter);
+			}
 			// if (this.$refs.highlightedwords) {
 			// 		if (this.$refs.highlightedwords.length > 0) {
 			// 			this.$refs.highlightedwords[this.currenthighlight].scrollIntoView({behavior: "smooth", block: "center"});
