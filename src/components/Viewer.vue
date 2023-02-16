@@ -15,7 +15,7 @@
 					v-for="substring in arrayForRenderingHighlights"
 					:key="substring.startingcharacter"
 					:id="substring.scrollTo"
-					style="scroll-margin-bottom: 13vh;"
+					style="scroll-margin-bottom: 23vh;"
 				>
 
 					<!-- :ref="el => {functionRef(el)}" -->
