@@ -195,12 +195,14 @@ export default {
 		},
 
 		scrollToElement(number) {
-			if (this.$store.state.consoles.length == 1) {
-				document
-					.getElementById(number)
-					.scrollIntoView({ behavior: "smooth", block: "center" });
-			} else {
-				document.getElementById(number).scrollIntoView({ block: "center" });
+			if (document.getElementById(number) !== null) {
+				if (this.$store.state.consoles.length == 1) {
+					document
+						.getElementById(number)
+						.scrollIntoView({ behavior: "smooth", block: "center" });
+				} else {
+					document.getElementById(number).scrollIntoView({ block: "center" });
+				}
 			}
 		},
 
