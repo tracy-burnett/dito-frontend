@@ -12,33 +12,33 @@
 				style="overscroll-behavior:none; height: 47.5vh;"
 			>
 				<span
-					v-for="substring in substringArray"
+					v-for="substring in arrayForRenderingHighlights"
 					:key="substring.startingcharacter"
-					:id="substring.startingcharacter"
-					style="scroll-margin-bottom: 22vh;"
+					:id="substring.scrollTo"
+					style="scroll-margin-bottom: 13vh;"
 				>
 
 					<!-- :ref="el => {functionRef(el)}" -->
 					<span
-						v-if="highlight(substring.startingcharacter)==0"
+						v-if="substring.scrollTo==0"
 						class="cursor-pointer"
 						@click="snapToTimestamp(substring)"
 						style="white-space: pre-wrap"
 					>{{ substring.text }}</span>
 					<span
-						v-else-if="highlight(substring.startingcharacter)==1"
+						v-else-if="substring.scrollTo==1"
 						class="text-red-600"
 						style="white-space: pre-wrap"
 						@click="snapToTimestamp(substring)"
 					>{{ substring.text }}</span>
 					<span
-						v-else-if="highlight(substring.startingcharacter)==2"
+						v-else-if="substring.scrollTo==2"
 						class="text-blue-600"
 						style="white-space: pre-wrap"
 						@click="snapToTimestamp(substring)"
 					>{{ substring.text }}</span>
 					<span
-						v-else-if="highlight(substring.startingcharacter)>=3"
+						v-else-if="substring.scrollTo>=3"
 						class="text-purple-600"
 						style="white-space: pre-wrap"
 						@click="snapToTimestamp(substring)"
@@ -83,11 +83,30 @@ export default {
 		};
 	},
 
-	// computed: {
-	// 	newlinestillnow() {
-
-	// 	},
-	// },
+	computed: {
+		arrayForRenderingHighlights() {
+			let tempArray = this.substringArray;
+			for (let i = 0; i < tempArray.length; i++) {
+				let k = 0;
+				this.parsedAssociations.forEach((element) => {
+					if (
+						this.lastTimestamp >= element.startTime &&
+						this.lastTimestamp < element.endTime
+					) {
+						if (
+							tempArray[i].startingcharacter >= element.startCharacter &&
+							tempArray[i].startingcharacter < element.endCharacter
+						) {
+							k++;
+							// this.currenthighlight = elementindex;
+						}
+					}
+				});
+				tempArray[i].scrollTo = k;
+			}
+			return tempArray
+		},
+	},
 
 	props: {
 		audio_id: {
@@ -167,6 +186,9 @@ export default {
 		if (this.interpretationStatus) {
 			this.fetchNewInterpretation();
 		}
+	},
+	updated() {
+		this.scrollToElement(1);
 	},
 
 	methods: {
@@ -500,37 +522,35 @@ export default {
 			this.relevantTimestamps = [...new Set(this.relevantTimestamps)];
 		},
 
-		highlight(startingcharacter) {
-			let k = 0;
-			// console.log(startingcharacter)
-			// console.log(this.parsedAssociations)
-			this.parsedAssociations.forEach((element, elementindex) => {
-				if (
-					this.lastTimestamp >= element.startTime &&
-					this.lastTimestamp < element.endTime
-				) {
-					if (
-						startingcharacter >= element.startCharacter &&
-						startingcharacter < element.endCharacter
-					) {
-						k++;
-						// this.currenthighlight = elementindex;
-					}
-				}
-			});
-			if (k == 1) {
-				this.scrollToElement(startingcharacter);
-			}
-			// if (this.$refs.highlightedwords) {
-			// 		if (this.$refs.highlightedwords.length > 0) {
-			// 			this.$refs.highlightedwords[this.currenthighlight].scrollIntoView({behavior: "smooth", block: "center"});
-			// 			// console.log(this.$refs.highlightedwords[20])
-			// 		}
+		// highlight(startingcharacter) {
+		// 	let k = 0;
+		// 	// console.log(startingcharacter)
+		// 	// console.log(this.parsedAssociations)
+		// 	this.parsedAssociations.forEach((element, elementindex) => {
+		// 		if (
+		// 			this.lastTimestamp >= element.startTime &&
+		// 			this.lastTimestamp < element.endTime
+		// 		) {
+		// 			if (
+		// 				startingcharacter >= element.startCharacter &&
+		// 				startingcharacter < element.endCharacter
+		// 			) {
+		// 				k++;
+		// 				// this.currenthighlight = elementindex;
+		// 			}
+		// 		}
+		// 	});
 
-			// }
-			// console.log(k)
-			return k; // any value of k greater than 0 will cause the substring to be highlighted at this moment in the audio player time
-		},
+		// if (this.$refs.highlightedwords) {
+		// 		if (this.$refs.highlightedwords.length > 0) {
+		// 			this.$refs.highlightedwords[this.currenthighlight].scrollIntoView({behavior: "smooth", block: "center"});
+		// 			// console.log(this.$refs.highlightedwords[20])
+		// 		}
+
+		// }
+		// console.log(k)
+		// 	return k; // any value of k greater than 0 will cause the substring to be highlighted at this moment in the audio player time
+		// },
 
 		populateSRT(startingcharacter) {
 			let tempassociation = {};
