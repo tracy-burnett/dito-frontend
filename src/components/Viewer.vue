@@ -194,9 +194,7 @@ export default {
 					.getElementById(number)
 					.scrollIntoView({ behavior: "smooth", block: "start" });
 			} else {
-				document
-					.getElementById(number)
-					.scrollIntoView({ block: "start" });
+				document.getElementById(number).scrollIntoView({ block: "start" });
 			}
 		},
 
@@ -507,8 +505,10 @@ export default {
 						startingcharacter >= element.startCharacter &&
 						startingcharacter < element.endCharacter
 					) {
-						this.targetId = startingcharacter;
 						k++;
+						if (k == 1) {
+							this.targetId = startingcharacter;
+						}
 						// this.currenthighlight = elementindex;
 					}
 				}
