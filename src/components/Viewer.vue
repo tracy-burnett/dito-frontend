@@ -15,7 +15,7 @@
 				<span
 					v-for="substring in arrayForRenderingHighlights"
 					:key="substring.startingcharacter"
-					:id="substring.scrollTo"
+					:id="substring.highlighted"
 				>
 
 					<!-- style="scroll-margin-bottom: 23vh;" -->
@@ -86,6 +86,7 @@ export default {
 
 	computed: {
 		arrayForRenderingHighlights() {
+			// we get a new one of these only every time the highlights need to change
 			let tempArray = this.substringArray;
 			for (let i = 0; i < tempArray.length; i++) {
 				let k = 0;
@@ -103,8 +104,60 @@ export default {
 						}
 					}
 				});
+
 				tempArray[i].scrollTo = k;
+				if (tempArray[i].scrollTo > 0) {
+					tempArray[i].highlighted = 1;
+				} else {
+					tempArray[i].highlighted = 0;
+				}
 			}
+			let firstPassHighlightsArray = [];
+			tempArray.forEach((element) => {
+				if (element.scrollTo > 0) {
+					// console.log(element.startingcharacter)
+					if (
+						this.parsedAssociations
+							.map((assoc) => parseInt(assoc.startCharacter))
+							.indexOf(element.startingcharacter) != -1
+					) {
+						firstPassHighlightsArray.push(
+							this.parsedAssociations[
+								this.parsedAssociations
+									.map((assoc) => parseInt(assoc.startCharacter))
+									.indexOf(element.startingcharacter)
+							]
+						);
+					}
+				}
+			});
+			// console.log(tempArray)
+			// console.log(firstPassHighlightsArray);
+			firstPassHighlightsArray.forEach((element) => {
+				this.parsedAssociations.forEach((parsed) => {
+					// console.log(element.startTime + " is less than " + parsed.startTime)
+					// console.log(parsed.endTime + " is less than " + element.endTime)
+					if (
+						parseInt(element.startTime) < parseInt(parsed.startTime) &&
+						parseInt(parsed.endTime) < parseInt(element.endTime)
+					) {
+						// get the index of the parsedAssociation in question and bump its k by 1 in tempArray
+						// 						console.log(parsed.startCharacter)
+						// console.log(tempArray.map((temp)=>parseInt(temp.startingcharacter)).indexOf(parseInt(parsed.startCharacter)))
+						// console.log('HIT')
+						let tempindex = tempArray
+							.map((temp) => parseInt(temp.startingcharacter))
+							.indexOf(parseInt(parsed.startCharacter));
+						// console.log(tempindex);
+						// console.log(tempArray[tempindex]);
+						tempArray[tempindex].scrollTo = tempArray[tempindex].scrollTo + 1;
+						tempArray[tempindex].highlighted = 1;
+						// console.log(tempArray[tempindex]);
+						// then find the index of tempArray with parsed.startCharacter and up its k by 1
+					}
+				});
+			});
+
 			return tempArray;
 		},
 	},
