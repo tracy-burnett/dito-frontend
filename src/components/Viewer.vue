@@ -4,7 +4,8 @@
 			<span class="py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 			in <span class="py-1 border-gray-300 rounded">{{ language_name }}</span>
 
-			<br>
+			<br>{{ parsedAssociations }}<br>
+			<br>{{ arrayForRenderingHighlights }}
 			<br>
 			<div
 				class="w-full h-full py-1 border-gray-300 rounded viewer"
@@ -137,9 +138,15 @@ export default {
 				this.parsedAssociations.forEach((parsed) => {
 					// console.log(element.startTime + " is less than " + parsed.startTime)
 					// console.log(parsed.endTime + " is less than " + element.endTime)
+					// console.log(element.startCharacter + " is NOT less than " + parsed.startCharacter)
+					// console.log(parsed.endCharacter + " is NOT less than " + element.endCharacter)
 					if (
 						parseInt(element.startTime) < parseInt(parsed.startTime) &&
-						parseInt(parsed.endTime) < parseInt(element.endTime)
+						parseInt(parsed.endTime) < parseInt(element.endTime) &&
+						!(
+							parseInt(element.startCharacter) < parseInt(parsed.startCharacter) &&
+							parseInt(parsed.endCharacter) < parseInt(element.endCharacter)
+						)
 					) {
 						// get the index of the parsedAssociation in question and bump its k by 1 in tempArray
 						// 						console.log(parsed.startCharacter)
@@ -663,7 +670,12 @@ export default {
 					// console.log(element)
 				}
 			});
-			potentialSnapArray.sort((a, b) =>  (b.endCharacter-b.startCharacter) - (a.endCharacter-a.startCharacter));
+			potentialSnapArray.sort(
+				(a, b) =>
+					b.endCharacter -
+					b.startCharacter -
+					(a.endCharacter - a.startCharacter)
+			);
 			let playFromTimestamp =
 				potentialSnapArray[potentialSnapArray.length - 1].startTime / 100;
 			// console.log(playFromTimestamp)
