@@ -660,12 +660,13 @@ export default {
 					startingcharacter < element.endCharacter
 				) {
 					potentialSnapArray.push(element);
+					// console.log(element)
 				}
 			});
-			potentialSnapArray.sort((a, b) => a.startTime - b.startTime);
+			potentialSnapArray.sort((a, b) =>  (b.endTime-b.startTime) - (a.endTime-a.startTime));
 			let playFromTimestamp =
 				potentialSnapArray[potentialSnapArray.length - 1].startTime / 100;
-
+			// console.log(playFromTimestamp)
 			if (playFromTimestamp || playFromTimestamp === 0) {
 				// console.log(playFromTimestamp)
 				// console.log(startingcharacter);
