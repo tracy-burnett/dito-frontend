@@ -663,7 +663,7 @@ export default {
 					// console.log(element)
 				}
 			});
-			potentialSnapArray.sort((a, b) =>  (b.endTime-b.startTime) - (a.endTime-a.startTime));
+			potentialSnapArray.sort((a, b) =>  (b.endCharacter-b.startCharacter) - (a.endCharacter-a.startCharacter));
 			let playFromTimestamp =
 				potentialSnapArray[potentialSnapArray.length - 1].startTime / 100;
 			// console.log(playFromTimestamp)
