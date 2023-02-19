@@ -40,7 +40,7 @@
 					>{{ substring.text }}</span>
 					<span
 						v-else-if="substring.scrollTo>=3"
-						class="text-purple-600"
+						class="text-purple-800"
 						style="white-space: pre-wrap"
 						@click="snapToTimestamp(substring)"
 					>{{ substring.text }}</span>
