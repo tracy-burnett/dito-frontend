@@ -88,6 +88,11 @@ export default {
 		arrayForRenderingHighlights() {
 			// we get a new one of these only every time the highlights need to change
 			let tempArray = this.substringArray;
+			let mappedParsedAssociations = this.parsedAssociations.map(
+				(assoc) => assoc.startCharacter
+			);
+			let firstPassHighlightsArray = [];
+			// let assistantArray = [];
 			for (let i = 0; i < tempArray.length; i++) {
 				let k = 0;
 				this.parsedAssociations.forEach((element) => {
@@ -106,54 +111,54 @@ export default {
 				});
 
 				tempArray[i].scrollTo = k;
+
 				if (tempArray[i].scrollTo > 0) {
 					tempArray[i].highlighted = 1;
+					let temporaryindex = mappedParsedAssociations.indexOf(
+						tempArray[i].startingcharacter
+					);
+					if (temporaryindex != -1) {
+						firstPassHighlightsArray.push(
+							this.parsedAssociations[temporaryindex]
+						);
+						// assistantArray.push(
+						// 	this.parsedAssociations[temporaryindex].startTime
+						// );
+						// assistantArray.push(
+						// 	this.parsedAssociations[temporaryindex].endTime
+						// );
+					}
 				} else {
 					tempArray[i].highlighted = 0;
 				}
 			}
-			let firstPassHighlightsArray = [];
-			tempArray.forEach((element) => {
-				if (element.scrollTo > 0) {
-					// console.log(element.startingcharacter)
-					if (
-						this.parsedAssociations
-							.map((assoc) => parseInt(assoc.startCharacter))
-							.indexOf(element.startingcharacter) != -1
-					) {
-						firstPassHighlightsArray.push(
-							this.parsedAssociations[
-								this.parsedAssociations
-									.map((assoc) => parseInt(assoc.startCharacter))
-									.indexOf(element.startingcharacter)
-							]
-						);
-					}
-				}
-			});
-			// console.log(tempArray)
-			// console.log(firstPassHighlightsArray);
+			// let trimmedParsedAssociations = this.parsedAssociations.filter(
+			// 	(parsed) =>
+			// 		parsed.startTime > Math.min(assistantArray) &&
+			// 		parsed.endTime < Math.max(assistantArray)
+			// );
+			let mappedTempArray = tempArray.map((temp) => temp.startingcharacter);
+
 			firstPassHighlightsArray.forEach((element) => {
 				this.parsedAssociations.forEach((parsed) => {
+					// filter this a little more first?
 					// console.log(element.startTime + " is less than " + parsed.startTime)
 					// console.log(parsed.endTime + " is less than " + element.endTime)
 					// console.log(element.startCharacter + " is NOT less than " + parsed.startCharacter)
 					// console.log(parsed.endCharacter + " is NOT less than " + element.endCharacter)
 					if (
-						parseInt(element.startTime) < parseInt(parsed.startTime) &&
-						parseInt(parsed.endTime) < parseInt(element.endTime) &&
+						element.startTime < parsed.startTime &&
+						parsed.endTime < element.endTime &&
 						!(
-							parseInt(element.startCharacter) < parseInt(parsed.startCharacter) &&
-							parseInt(parsed.endCharacter) < parseInt(element.endCharacter)
+							element.startCharacter < parsed.startCharacter &&
+							parsed.endCharacter < element.endCharacter
 						)
 					) {
 						// get the index of the parsedAssociation in question and bump its k by 1 in tempArray
 						// 						console.log(parsed.startCharacter)
 						// console.log(tempArray.map((temp)=>parseInt(temp.startingcharacter)).indexOf(parseInt(parsed.startCharacter)))
 						// console.log('HIT')
-						let tempindex = tempArray
-							.map((temp) => parseInt(temp.startingcharacter))
-							.indexOf(parseInt(parsed.startCharacter));
+						let tempindex = mappedTempArray.indexOf(parsed.startCharacter);
 						// console.log(tempindex);
 						// console.log(tempArray[tempindex]);
 						tempArray[tempindex].scrollTo = tempArray[tempindex].scrollTo + 1;
@@ -388,11 +393,11 @@ export default {
 						)[1];
 
 						let associationsObject = {};
-						associationsObject.startTime = startTime;
-						associationsObject.endTime = endTime;
+						associationsObject.startTime = Number(startTime);
+						associationsObject.endTime = Number(endTime);
 
-						associationsObject.startCharacter = startCharacter;
-						associationsObject.endCharacter = Number.parseInt(endCharacter) + 1;
+						associationsObject.startCharacter = Number(startCharacter);
+						associationsObject.endCharacter = Number(endCharacter) + 1;
 						this.parsedAssociations.push(associationsObject);
 					}
 				}
