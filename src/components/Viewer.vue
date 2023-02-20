@@ -92,7 +92,6 @@ export default {
 				(assoc) => assoc.startCharacter
 			);
 			let firstPassHighlightsArray = [];
-			// let assistantArray = [];
 			for (let i = 0; i < tempArray.length; i++) {
 				let k = 0;
 				this.parsedAssociations.forEach((element) => {
@@ -105,47 +104,34 @@ export default {
 							tempArray[i].startingcharacter < element.endCharacter
 						) {
 							k++;
-							// this.currenthighlight = elementindex;
 						}
 					}
 				});
 
-				tempArray[i].scrollTo = k;
+				tempArray[i].scrollTo = k; // tells us how many levels of highlight (= which color of highlight) to give that substring
 
-				if (tempArray[i].scrollTo > 0) {
+				if (tempArray[i].scrollTo > 0) { // for each highlighted substring...
 					tempArray[i].highlighted = 1;
 					let temporaryindex = mappedParsedAssociations.indexOf(
 						tempArray[i].startingcharacter
 					);
 					if (temporaryindex != -1) {
-						firstPassHighlightsArray.push(
+						firstPassHighlightsArray.push(  // ...put it in another array
 							this.parsedAssociations[temporaryindex]
 						);
-						// assistantArray.push(
-						// 	this.parsedAssociations[temporaryindex].startTime
-						// );
-						// assistantArray.push(
-						// 	this.parsedAssociations[temporaryindex].endTime
-						// );
 					}
 				} else {
 					tempArray[i].highlighted = 0;
 				}
 			}
-			// let trimmedParsedAssociations = this.parsedAssociations.filter(
-			// 	(parsed) =>
-			// 		parsed.startTime > Math.min(assistantArray) &&
-			// 		parsed.endTime < Math.max(assistantArray)
-			// );
 			let mappedTempArray = tempArray.map((temp) => temp.startingcharacter);
-			// let containersToCheck = [];
-
+			
 			// console.log(firstPassHighlightsArray);
-			let toIncrease = [];
+			let toIncrease = []; // which ones should we give an extra nesting value?
 
 			firstPassHighlightsArray.forEach((element) => {
 				this.parsedAssociations.forEach((parsed) => {
-					if (
+					if ( // make sure nested written meanings are at least highlighted a little bit even if their characters are out of order
 						element.startTime < parsed.startTime &&
 						parsed.endTime < element.endTime &&
 						!(
@@ -157,7 +143,7 @@ export default {
 						tempArray[tempindex].scrollTo = tempArray[tempindex].scrollTo + 1;
 						tempArray[tempindex].highlighted = 1;
 					}
-					if (
+					if ( // highlight container meanings even if they're technically not relevant in the moment
 						parsed.startCharacter < element.startCharacter &&
 						element.endCharacter < parsed.endCharacter &&
 						!(
@@ -178,11 +164,11 @@ export default {
 					}
 				});
 			});
-			toIncrease = [...new Set(toIncrease)];
+			toIncrease = [...new Set(toIncrease)]; // but don't give them more nesteds than they need!
 			// console.log(toIncrease);
 
 			let p = 0;
-			toIncrease.forEach((c) => {
+			toIncrease.forEach((c) => { // and if everything's already highlighted once then don't turn it all into being highlighted twice!
 				if (tempArray[c].scrollTo != 1) {
 					p++;
 				}
