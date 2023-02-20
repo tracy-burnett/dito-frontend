@@ -138,14 +138,13 @@ export default {
 			// 		parsed.endTime < Math.max(assistantArray)
 			// );
 			let mappedTempArray = tempArray.map((temp) => temp.startingcharacter);
+			// let containersToCheck = [];
+
+			// console.log(firstPassHighlightsArray);
+			let toIncrease = [];
 
 			firstPassHighlightsArray.forEach((element) => {
 				this.parsedAssociations.forEach((parsed) => {
-					// filter this a little more first?
-					// console.log(element.startTime + " is less than " + parsed.startTime)
-					// console.log(parsed.endTime + " is less than " + element.endTime)
-					// console.log(element.startCharacter + " is NOT less than " + parsed.startCharacter)
-					// console.log(parsed.endCharacter + " is NOT less than " + element.endCharacter)
 					if (
 						element.startTime < parsed.startTime &&
 						parsed.endTime < element.endTime &&
@@ -154,20 +153,56 @@ export default {
 							parsed.endCharacter < element.endCharacter
 						)
 					) {
-						// get the index of the parsedAssociation in question and bump its k by 1 in tempArray
-						// 						console.log(parsed.startCharacter)
-						// console.log(tempArray.map((temp)=>parseInt(temp.startingcharacter)).indexOf(parseInt(parsed.startCharacter)))
-						// console.log('HIT')
 						let tempindex = mappedTempArray.indexOf(parsed.startCharacter);
-						// console.log(tempindex);
-						// console.log(tempArray[tempindex]);
 						tempArray[tempindex].scrollTo = tempArray[tempindex].scrollTo + 1;
 						tempArray[tempindex].highlighted = 1;
-						// console.log(tempArray[tempindex]);
-						// then find the index of tempArray with parsed.startCharacter and up its k by 1
+					}
+					if (
+						parsed.startCharacter < element.startCharacter &&
+						element.endCharacter < parsed.endCharacter &&
+						!(
+							parsed.startTime < element.startTime &&
+							element.endTime < parsed.endTime
+						)
+					) {
+						// console.log(parsed);
+						for (let c = 0; c < tempArray.length; c++) {
+							if (
+								parsed.startCharacter <= tempArray[c].startingcharacter &&
+								tempArray[c].startingcharacter < parsed.endCharacter
+							) {
+								// console.log(tempArray[c].startingcharacter);
+								toIncrease.push(c);
+							}
+						}
 					}
 				});
 			});
+			toIncrease = [...new Set(toIncrease)];
+			// console.log(toIncrease);
+
+			let p = 0;
+			toIncrease.forEach((c) => {
+				if (tempArray[c].scrollTo != 1) {
+					p++;
+				}
+			});
+			if (p > 0) {
+				toIncrease.forEach((c) => {
+					tempArray[c].scrollTo = tempArray[c].scrollTo + 1;
+					tempArray[c].highlighted = 1;
+				});
+			}
+			// console.log(containersToCheck)
+			// containersToCheck.forEach(container => {
+			// 	this.parsedAssociations.forEach(parsed => {
+			// 		if (container.start<=parsed.startCharacter && parsed.endCharacter <= container.end) {
+			// 			let tempindex = mappedTempArray.indexOf(parsed.startCharacter);
+			// 			tempArray[tempindex].scrollTo = tempArray[tempindex].scrollTo + 1;
+			// 			tempArray[tempindex].highlighted = 1;
+			// 		}
+			// 	})
+			// })
 
 			return tempArray;
 		},
@@ -632,9 +667,13 @@ export default {
 					startingcharacter >= this.parsedAssociations[i].startCharacter &&
 					startingcharacter < this.parsedAssociations[i].endCharacter
 				) {
-					tempassociation.startCharacter = this.parsedAssociations[i].startCharacter;
-					tempassociation.endCharacter = this.parsedAssociations[i].endCharacter;
-					tempassociation.startTime = String(this.parsedAssociations[i].startTime);
+					tempassociation.startCharacter =
+						this.parsedAssociations[i].startCharacter;
+					tempassociation.endCharacter =
+						this.parsedAssociations[i].endCharacter;
+					tempassociation.startTime = String(
+						this.parsedAssociations[i].startTime
+					);
 					tempassociation.endTime = String(this.parsedAssociations[i].endTime);
 					break;
 				}
