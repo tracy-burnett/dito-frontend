@@ -634,8 +634,8 @@ export default {
 				) {
 					tempassociation.startCharacter = this.parsedAssociations[i].startCharacter;
 					tempassociation.endCharacter = this.parsedAssociations[i].endCharacter;
-					tempassociation.startTime = String(this.parsedAssociations[i].startCharacter);
-					tempassociation.endTime = String(this.parsedAssociations[i].startCharacter);
+					tempassociation.startTime = String(this.parsedAssociations[i].startTime);
+					tempassociation.endTime = String(this.parsedAssociations[i].endTime);
 					break;
 				}
 			}
