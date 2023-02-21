@@ -309,12 +309,22 @@ export default {
 		},
 
 		scrollToElement(number) {
+			// console.log(number);
+			// console.log(this.arrayForRenderingHighlights);
+			// console.log(
+			// 	this.$refs[this.interpretation_id].querySelector(
+			// 		`#${CSS.escape(number)}`
+			// 	)
+			// );
+			// console.log(this.$store.state.consoles.length);
+
 			if (
 				this.$refs[this.interpretation_id].querySelector(
 					`#${CSS.escape(number)}`
 				) !== null
 			) {
 				if (this.$store.state.consoles.length == 1) {
+					// console.log("in scroll smooth");
 					this.$refs[this.interpretation_id]
 						.querySelector(`#${CSS.escape(number)}`)
 						.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -322,7 +332,22 @@ export default {
 					this.$refs[this.interpretation_id]
 						.querySelector(`#${CSS.escape(number)}`)
 						.scrollIntoView({ block: "start" });
+					// console.log("in scroll instant");
 				}
+			} else {
+				this.$nextTick(() => {
+					if (this.$store.state.consoles.length == 1) {
+						// console.log("in scroll smooth");
+						this.$refs[this.interpretation_id]
+							.querySelector(`#${CSS.escape(number)}`)
+							.scrollIntoView({ behavior: "smooth", block: "start" });
+					} else {
+						this.$refs[this.interpretation_id]
+							.querySelector(`#${CSS.escape(number)}`)
+							.scrollIntoView({ block: "start" });
+						// console.log("in scroll instant");
+					}
+				});
 			}
 		},
 
