@@ -129,46 +129,46 @@ export default {
 			let mappedTempArray = tempArray.map((temp) => temp.startingcharacter);
 
 			// console.log(firstPassHighlightsArray);
-			let toIncrease = []; // which ones should we give an extra nesting value?
+			// let toIncrease = []; // which ones should we give an extra nesting value?
 
 			firstPassHighlightsArray.forEach((element) => {
 				this.parsedAssociations.forEach((parsed) => {
 					if (
 						// make sure nested written meanings are at least highlighted a little bit even if their characters are out of order
-						element.startTime < parsed.startTime &&
-						parsed.endTime < element.endTime &&
+						element.startTime <= parsed.startTime &&
+						parsed.endTime <= element.endTime &&
 						!(
-							element.startCharacter < parsed.startCharacter &&
-							parsed.endCharacter < element.endCharacter
+							element.startCharacter <= parsed.startCharacter &&
+							parsed.endCharacter <= element.endCharacter
 						)
 					) {
 						let tempindex = mappedTempArray.indexOf(parsed.startCharacter);
 						tempArray[tempindex].scrollTo = tempArray[tempindex].scrollTo + 1;
 						tempArray[tempindex].highlighted = 1;
 					}
-					if (
-						// highlight container meanings even if they're technically not relevant in the moment
-						parsed.startCharacter < element.startCharacter &&
-						element.endCharacter < parsed.endCharacter &&
-						!(
-							parsed.startTime < element.startTime &&
-							element.endTime < parsed.endTime
-						)
-					) {
-						// console.log(parsed);
-						for (let c = 0; c < tempArray.length; c++) {
-							if (
-								parsed.startCharacter <= tempArray[c].startingcharacter &&
-								tempArray[c].startingcharacter < parsed.endCharacter
-							) {
-								// console.log(tempArray[c].startingcharacter);
-								toIncrease.push(c);
-							}
-						}
-					}
+					// if (
+					// 	// highlight container meanings even if they're technically not relevant in the moment
+					// 	parsed.startCharacter < element.startCharacter &&
+					// 	element.endCharacter < parsed.endCharacter &&
+					// 	!(
+					// 		parsed.startTime < element.startTime &&
+					// 		element.endTime < parsed.endTime
+					// 	)
+					// ) {
+					// 	console.log(parsed);
+					// 	for (let c = 0; c < tempArray.length; c++) {
+					// 		if (
+					// 			parsed.startCharacter <= tempArray[c].startingcharacter &&
+					// 			tempArray[c].startingcharacter < parsed.endCharacter
+					// 		) {
+					// 			// console.log(tempArray[c].startingcharacter);
+					// 			toIncrease.push(c);
+					// 		}
+					// 	}
+					// }
 				});
 			});
-			toIncrease = [...new Set(toIncrease)]; // but don't give them more nesteds than they need!
+			// toIncrease = [...new Set(toIncrease)]; // but don't give them more nesteds than they need!
 			// console.log(toIncrease);
 
 			// let p = 0;
@@ -586,39 +586,43 @@ export default {
 				slice.startingcharacter = 0;
 				this.substringArray.push(slice);
 			}
-			// console.log(this.relevantTimestamps.length);
-			let tempParsedAssociations = this.parsedAssociations.map(
-				(element) => element.endCharacter
-			);
-			let startTimeParsedAssociations = this.parsedAssociations.map(
-				(element) => element.startTime
-			);
-			this.substringArray.forEach((element) => {
-				if (
-					element.text == "\n\n" ||
-					// element.text == this.spaced_by ||
-					element.text == ""
-				) {
-					// console.log(element);
-					if (tempParsedAssociations.indexOf(element.startingcharacter) != -1) {
-						let timeToRemove =
-							this.parsedAssociations[
-								tempParsedAssociations.indexOf(element.startingcharacter)
-							].endTime;
-						// console.log(timeToRemove);
-						if (startTimeParsedAssociations.indexOf(timeToRemove) == -1) {
-							// only remove the timestamp if it's not relevant for starting a different important block of text
-							this.relevantTimestamps.splice(
-								this.relevantTimestamps.indexOf(timeToRemove),
-								1
-							);
-						}
-					}
-				}
-			});
 
 			// console.log(this.relevantTimestamps.length);
-			// console.log(this.relevantTimestamps)
+			// let tempParsedAssociations = this.parsedAssociations.map(
+			// 	(element) => element.endCharacter
+			// );
+			// let startTimeParsedAssociations = this.parsedAssociations.map(
+			// 	(element) => element.startTime
+			// );
+			// let endTimeParsedAssociations = this.parsedAssociations.map(
+			// 	(element) => element.endTime
+			// );
+			// this.substringArray.forEach((element) => {
+			// 	if (
+			// 		element.text == "\n\n" ||
+			// 		// element.text == this.spaced_by ||
+			// 		element.text == ""
+			// 	) {
+			// 		// console.log(element);
+			// 		if (tempParsedAssociations.indexOf(element.startingcharacter) != -1) {
+			// 			let timeToRemove =
+			// 				this.parsedAssociations[
+			// 					tempParsedAssociations.indexOf(element.startingcharacter)
+			// 				].endTime;
+			// 			// console.log(timeToRemove);
+			// 			if ((startTimeParsedAssociations.indexOf(timeToRemove) == -1) && (endTimeParsedAssociations.indexOf(timeToRemove) == -1)) {
+			// 				// only remove the timestamp if it's not relevant for starting a different important block of text
+			// 				this.relevantTimestamps.splice(
+			// 					this.relevantTimestamps.indexOf(timeToRemove),
+			// 					1
+			// 				);
+			// 			}
+			// 		}
+			// 	}
+			// });
+
+			// console.log(this.relevantTimestamps.length);
+			// // console.log(this.relevantTimestamps)
 
 			this.rerenderHighlights();
 			// console.log(this.substringArray)
