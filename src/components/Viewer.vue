@@ -596,7 +596,7 @@ export default {
 			this.substringArray.forEach((element) => {
 				if (
 					element.text == "\n\n" ||
-					element.text == this.spaced_by ||
+					// element.text == this.spaced_by ||
 					element.text == ""
 				) {
 					// console.log(element);
