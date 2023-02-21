@@ -1,6 +1,8 @@
 <template>
-	<div class="flex flex-col items-center justify-center flex-auto h-full backdrop"
-	@click.self="closeModal()">
+	<div
+		class="flex flex-col items-center justify-center flex-auto h-full backdrop"
+		@click.self="closeModal()"
+	>
 		<div class="flex flex-col items-center p-8 overflow-y-scroll bg-white border border-gray-300 shadow-md modal rounded-xl xl:w-2/5 lg:w-2/4 md:w-2/3">
 			<button
 				class="mx-4 my-2 text-xl text-gray-500"
@@ -128,7 +130,7 @@ export default {
 						console.log("Oops. " + error.code + ": " + error.message);
 					});
 			}
-
+			// console.log(this.int_text.normalize("NFC"))
 			if (
 				this.int_title != "" ||
 				this.int_text != "" ||
@@ -205,9 +207,9 @@ export default {
 			this.offsetsforBackend.length = 0;
 			this.captions.length = 0;
 			// console.log(this.fileloaded)
-			let arrayToParse = this.fileloaded.replaceAll("\r\n","\n").split("\n\n");
-			
-			
+			let arrayToParse = this.fileloaded.replaceAll("\r\n", "\n").split("\n\n");
+
+			let lastEndSeconds = 0;
 			arrayToParse.forEach((caption) => {
 				// console.log(caption)
 				let srt_instructions = caption.split("\n");
@@ -265,16 +267,53 @@ export default {
 								))) /
 						2;
 					this.offsetsforBackend.push(offsetforBackend);
-					// console.log(srt_instructions)
-					srt_instructions.shift()
-					srt_instructions.shift()
-					let caption_text=""
-					srt_instructions.forEach(part => caption_text = caption_text + "\n" + part)
-					caption_text = caption_text.substring(1) + "\n\n";
-					this.captions.push(caption_text);
+					srt_instructions.shift();
+					srt_instructions.shift();
+					// console.log(srt_instructions);
+					let caption_text = "";
+					// console.log(lastEndSeconds);
+					// console.log(100 * Number(timestampStartSeconds + "." + timestampStartMilliseconds))
+					// console.log(this.int_spacing)
+					srt_instructions.forEach(
+						// this is if the caption takes up two lines in the text file
+						(part) => (caption_text = caption_text + "\n" + part)
+					);
+					if (
+						100 *
+							Number(timestampStartSeconds + "." + timestampStartMilliseconds) >
+						lastEndSeconds
+					) {
+						// console.log(caption_text)
+						caption_text = "\n\n" + caption_text.substring(1);
+						this.captions.push(caption_text);
+					} else {
+						// console.log("SPACING!")
+
+						// console.log(caption_text)
+						caption_text = caption_text.substring(1);
+						// console.log(caption_text)
+						this.captions.push(caption_text);
+					}
+					lastEndSeconds =
+						100 * Number(timestampEndSeconds + "." + timestampEndMilliseconds);
 				}
 			});
 
+			if (this.captions[0][0] == "\n" && this.captions[0][1] == "\n") {  // take away the first two carriage returns from before the first caption
+				console.log("HIT")
+				console.log(this.captions[0])
+					this.captions[0]=this.captions[0].slice(2)
+				console.log(this.captions[0])
+				}
+
+			// console.log(this.captions);
+			// for (let a=0; a < this.captions.length; a++)
+			// {
+			// 	if (this.captions[a].substring(0,4) != "\n\n") {
+			// 		console.log("HIT")
+			// 		this.captions[a] = this.int_spacing + this.captions[a]
+			// 	}
+			// }
 			// console.log(this.captions);
 			this.captions.forEach((caption, captionindex) => {
 				let tempSplitCaption = caption.split("");
@@ -321,8 +360,14 @@ export default {
 				}
 				// console.log(this.captions[captionindex]);
 			});
+
+			for (let b = 1; b < this.captions.length; b++) { // ignore the first caption because we don't want to put a spacing character in front of that one
+				if (this.captions[b][0] != "\n" || this.captions[b][1] != "\n") {
+					this.captions[b] = this.int_spacing + this.captions[b];
+				}
+			}
 			this.int_text_unstripped = this.captions.join("");
-			// console.log(this.int_text_unstripped)
+			// console.log(this.int_text_unstripped);
 			// console.log(this.int_text);
 			this.captions_cleaned.length = 0;
 			// console.log(this.captions);
@@ -347,7 +392,7 @@ export default {
 				}
 			});
 
-			// console.log(this.captions_cleaned);
+			console.log(this.captions_cleaned);
 
 			// console.log(this.timestampsforBackend);
 
@@ -364,6 +409,8 @@ export default {
 					wordindexcount++;
 				}
 			});
+
+			console.log(this.new_associations);
 
 			this.create();
 		},

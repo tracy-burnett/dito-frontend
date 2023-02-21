@@ -92,7 +92,6 @@ export default {
 				(assoc) => assoc.startCharacter
 			);
 			let firstPassHighlightsArray = [];
-			// let assistantArray = [];
 			for (let i = 0; i < tempArray.length; i++) {
 				let k = 0;
 				this.parsedAssociations.forEach((element) => {
@@ -105,48 +104,37 @@ export default {
 							tempArray[i].startingcharacter < element.endCharacter
 						) {
 							k++;
-							// this.currenthighlight = elementindex;
 						}
 					}
 				});
 
-				tempArray[i].scrollTo = k;
+				tempArray[i].scrollTo = k; // tells us how many levels of highlight (= which color of highlight) to give that substring
 
 				if (tempArray[i].scrollTo > 0) {
+					// for each highlighted substring...
 					tempArray[i].highlighted = 1;
 					let temporaryindex = mappedParsedAssociations.indexOf(
 						tempArray[i].startingcharacter
 					);
 					if (temporaryindex != -1) {
 						firstPassHighlightsArray.push(
+							// ...put it in another array
 							this.parsedAssociations[temporaryindex]
 						);
-						// assistantArray.push(
-						// 	this.parsedAssociations[temporaryindex].startTime
-						// );
-						// assistantArray.push(
-						// 	this.parsedAssociations[temporaryindex].endTime
-						// );
 					}
 				} else {
 					tempArray[i].highlighted = 0;
 				}
 			}
-			// let trimmedParsedAssociations = this.parsedAssociations.filter(
-			// 	(parsed) =>
-			// 		parsed.startTime > Math.min(assistantArray) &&
-			// 		parsed.endTime < Math.max(assistantArray)
-			// );
 			let mappedTempArray = tempArray.map((temp) => temp.startingcharacter);
+
+			// console.log(firstPassHighlightsArray);
+			let toIncrease = []; // which ones should we give an extra nesting value?
 
 			firstPassHighlightsArray.forEach((element) => {
 				this.parsedAssociations.forEach((parsed) => {
-					// filter this a little more first?
-					// console.log(element.startTime + " is less than " + parsed.startTime)
-					// console.log(parsed.endTime + " is less than " + element.endTime)
-					// console.log(element.startCharacter + " is NOT less than " + parsed.startCharacter)
-					// console.log(parsed.endCharacter + " is NOT less than " + element.endCharacter)
 					if (
+						// make sure nested written meanings are at least highlighted a little bit even if their characters are out of order
 						element.startTime < parsed.startTime &&
 						parsed.endTime < element.endTime &&
 						!(
@@ -154,20 +142,58 @@ export default {
 							parsed.endCharacter < element.endCharacter
 						)
 					) {
-						// get the index of the parsedAssociation in question and bump its k by 1 in tempArray
-						// 						console.log(parsed.startCharacter)
-						// console.log(tempArray.map((temp)=>parseInt(temp.startingcharacter)).indexOf(parseInt(parsed.startCharacter)))
-						// console.log('HIT')
 						let tempindex = mappedTempArray.indexOf(parsed.startCharacter);
-						// console.log(tempindex);
-						// console.log(tempArray[tempindex]);
 						tempArray[tempindex].scrollTo = tempArray[tempindex].scrollTo + 1;
 						tempArray[tempindex].highlighted = 1;
-						// console.log(tempArray[tempindex]);
-						// then find the index of tempArray with parsed.startCharacter and up its k by 1
+					}
+					if (
+						// highlight container meanings even if they're technically not relevant in the moment
+						parsed.startCharacter < element.startCharacter &&
+						element.endCharacter < parsed.endCharacter &&
+						!(
+							parsed.startTime < element.startTime &&
+							element.endTime < parsed.endTime
+						)
+					) {
+						// console.log(parsed);
+						for (let c = 0; c < tempArray.length; c++) {
+							if (
+								parsed.startCharacter <= tempArray[c].startingcharacter &&
+								tempArray[c].startingcharacter < parsed.endCharacter
+							) {
+								// console.log(tempArray[c].startingcharacter);
+								toIncrease.push(c);
+							}
+						}
 					}
 				});
 			});
+			toIncrease = [...new Set(toIncrease)]; // but don't give them more nesteds than they need!
+			// console.log(toIncrease);
+
+			let p = 0;
+			toIncrease.forEach((c) => {
+				// and if everything's already highlighted once then don't turn it all into being highlighted twice!
+				if (tempArray[c].scrollTo != 1) {
+					p++;
+				}
+			});
+			if (p > 0) {
+				toIncrease.forEach((c) => {
+					tempArray[c].scrollTo = tempArray[c].scrollTo + 1;
+					tempArray[c].highlighted = 1;
+				});
+			}
+			// console.log(containersToCheck)
+			// containersToCheck.forEach(container => {
+			// 	this.parsedAssociations.forEach(parsed => {
+			// 		if (container.start<=parsed.startCharacter && parsed.endCharacter <= container.end) {
+			// 			let tempindex = mappedTempArray.indexOf(parsed.startCharacter);
+			// 			tempArray[tempindex].scrollTo = tempArray[tempindex].scrollTo + 1;
+			// 			tempArray[tempindex].highlighted = 1;
+			// 		}
+			// 	})
+			// })
 
 			return tempArray;
 		},
@@ -262,6 +288,7 @@ export default {
 		// },
 
 		rerenderHighlights() {
+			// basically always running if audio player is doing anything
 			if (
 				this.$store.state.audioplayertime < this.lastTimestamp ||
 				this.$store.state.audioplayertime > this.nextTimestamp
@@ -559,6 +586,39 @@ export default {
 				slice.startingcharacter = 0;
 				this.substringArray.push(slice);
 			}
+			// console.log(this.relevantTimestamps.length);
+			let tempParsedAssociations = this.parsedAssociations.map(
+				(element) => element.endCharacter
+			);
+			let startTimeParsedAssociations = this.parsedAssociations.map(
+				(element) => element.startTime
+			);
+			this.substringArray.forEach((element) => {
+				if (
+					element.text == "\n\n" ||
+					element.text == this.spaced_by ||
+					element.text == ""
+				) {
+					// console.log(element);
+					if (tempParsedAssociations.indexOf(element.startingcharacter) != -1) {
+						let timeToRemove =
+							this.parsedAssociations[
+								tempParsedAssociations.indexOf(element.startingcharacter)
+							].endTime;
+						// console.log(timeToRemove);
+						if (startTimeParsedAssociations.indexOf(timeToRemove) == -1) {
+							// only remove the timestamp if it's not relevant for starting a different important block of text
+							this.relevantTimestamps.splice(
+								this.relevantTimestamps.indexOf(timeToRemove),
+								1
+							);
+						}
+					}
+				}
+			});
+
+			// console.log(this.relevantTimestamps.length);
+			// console.log(this.relevantTimestamps)
 
 			this.rerenderHighlights();
 			// console.log(this.substringArray)
@@ -632,9 +692,13 @@ export default {
 					startingcharacter >= this.parsedAssociations[i].startCharacter &&
 					startingcharacter < this.parsedAssociations[i].endCharacter
 				) {
-					tempassociation.startCharacter = this.parsedAssociations[i].startCharacter;
-					tempassociation.endCharacter = this.parsedAssociations[i].endCharacter;
-					tempassociation.startTime = String(this.parsedAssociations[i].startTime);
+					tempassociation.startCharacter =
+						this.parsedAssociations[i].startCharacter;
+					tempassociation.endCharacter =
+						this.parsedAssociations[i].endCharacter;
+					tempassociation.startTime = String(
+						this.parsedAssociations[i].startTime
+					);
 					tempassociation.endTime = String(this.parsedAssociations[i].endTime);
 					break;
 				}
