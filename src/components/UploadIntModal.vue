@@ -299,12 +299,13 @@ export default {
 				}
 			});
 
-			if (this.captions[0][0] == "\n" && this.captions[0][1] == "\n") {  // take away the first two carriage returns from before the first caption
-				console.log("HIT")
-				console.log(this.captions[0])
-					this.captions[0]=this.captions[0].slice(2)
-				console.log(this.captions[0])
-				}
+			if (this.captions[0][0] == "\n" && this.captions[0][1] == "\n") {
+				// take away the first two carriage returns from before the first caption
+				// console.log("HIT")
+				// console.log(this.captions[0])
+				this.captions[0] = this.captions[0].slice(2);
+				// console.log(this.captions[0])
+			}
 
 			// console.log(this.captions);
 			// for (let a=0; a < this.captions.length; a++)
@@ -361,7 +362,8 @@ export default {
 				// console.log(this.captions[captionindex]);
 			});
 
-			for (let b = 1; b < this.captions.length; b++) { // ignore the first caption because we don't want to put a spacing character in front of that one
+			for (let b = 1; b < this.captions.length; b++) {
+				// ignore the first caption because we don't want to put a spacing character in front of that one
 				if (this.captions[b][0] != "\n" || this.captions[b][1] != "\n") {
 					this.captions[b] = this.int_spacing + this.captions[b];
 				}
@@ -392,7 +394,7 @@ export default {
 				}
 			});
 
-			console.log(this.captions_cleaned);
+			// console.log(this.captions_cleaned);
 
 			// console.log(this.timestampsforBackend);
 
@@ -410,7 +412,7 @@ export default {
 				}
 			});
 
-			console.log(this.new_associations);
+			// console.log(this.new_associations);
 
 			this.create();
 		},
