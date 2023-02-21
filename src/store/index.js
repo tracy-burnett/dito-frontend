@@ -223,7 +223,7 @@ export default new Vuex.Store({
     },
 
     updateStartTimePrompter(state, starttimeprompter) {
-      // console.log("start time updated")
+      // console.log("start time updated " + starttimeprompter)
       state.startTimePrompter = starttimeprompter;
     },
 
@@ -233,7 +233,7 @@ export default new Vuex.Store({
     },
 
     updateEndTimePrompter(state, endtimeprompter) {
-      // console.log("end time updated")
+      // console.log("end time updated " + endtimeprompter)
       state.endTimePrompter = endtimeprompter;
     },
 
@@ -287,6 +287,7 @@ export default new Vuex.Store({
     },
 
     forceRegionRerender(state) {
+      // console.log("rerender player")
       state.regionRerender++
       state.playnoPausecounter++
     },
