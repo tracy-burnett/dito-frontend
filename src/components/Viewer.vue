@@ -171,19 +171,19 @@ export default {
 			toIncrease = [...new Set(toIncrease)]; // but don't give them more nesteds than they need!
 			// console.log(toIncrease);
 
-			let p = 0;
-			toIncrease.forEach((c) => {
-				// and if everything's already highlighted once then don't turn it all into being highlighted twice!
-				if (tempArray[c].scrollTo != 1) {
-					p++;
-				}
-			});
-			if (p > 0) {
+			// let p = 0;
+			// toIncrease.forEach((c) => {
+			// 	// and if everything's already highlighted once then don't turn it all into being highlighted twice!
+			// 	if (tempArray[c].scrollTo != 1) {
+			// 		p++;
+			// 	}
+			// });
+			// if (p > 0) {
 				toIncrease.forEach((c) => {
 					tempArray[c].scrollTo = tempArray[c].scrollTo + 1;
 					tempArray[c].highlighted = 1;
 				});
-			}
+			// }
 			// console.log(containersToCheck)
 			// containersToCheck.forEach(container => {
 			// 	this.parsedAssociations.forEach(parsed => {
