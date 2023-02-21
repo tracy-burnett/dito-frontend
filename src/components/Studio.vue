@@ -65,6 +65,7 @@ export default {
 			i: 0, // helper variable for latest_text_slices function, never accessed outside of that function
 			watchSubstringArray: 0, // helper for rerendering DOM
 			watchSubstringIndex: 0,
+			substringArrayUpdatingStill: false,
 		};
 	},
 	computed: {
@@ -134,6 +135,7 @@ export default {
 		},
 
 		watchSubstringArray: function () {
+			this.substringArrayUpdatingStill = false;
 			if (
 				this.substringArray.length > 0 &&
 				this.$store.state.audioDuration > 0
@@ -434,7 +436,11 @@ export default {
 				slice.endtime = this.$store.state.audioDuration;
 				this.substringArray.push(slice);
 			}
-			this.watchSubstringArray++;
+
+			if (this.substringArrayUpdatingStill == false) {
+				this.substringArrayUpdatingStill = true;
+				setTimeout(() => this.watchSubstringArray++, 500);
+			}
 		},
 	},
 

@@ -336,16 +336,22 @@ export default {
 				}
 			} else {
 				this.$nextTick(() => {
-					if (this.$store.state.consoles.length == 1) {
-						// console.log("in scroll smooth");
-						this.$refs[this.interpretation_id]
-							.querySelector(`#${CSS.escape(number)}`)
-							.scrollIntoView({ behavior: "smooth", block: "start" });
-					} else {
-						this.$refs[this.interpretation_id]
-							.querySelector(`#${CSS.escape(number)}`)
-							.scrollIntoView({ block: "start" });
-						// console.log("in scroll instant");
+					if (
+						this.$refs[this.interpretation_id].querySelector(
+							`#${CSS.escape(number)}`
+						) !== null
+					) {
+						if (this.$store.state.consoles.length == 1) {
+							// console.log("in scroll smooth");
+							this.$refs[this.interpretation_id]
+								.querySelector(`#${CSS.escape(number)}`)
+								.scrollIntoView({ behavior: "smooth", block: "start" });
+						} else {
+							this.$refs[this.interpretation_id]
+								.querySelector(`#${CSS.escape(number)}`)
+								.scrollIntoView({ block: "start" });
+							// console.log("in scroll instant");
+						}
 					}
 				});
 			}
