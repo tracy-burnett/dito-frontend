@@ -6,7 +6,6 @@
 
 		<span class="py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="py-1 border-gray-300 rounded ">{{ language_name }}</span><br />
-
 		<div class="w-full h-full py-[1vh] border-gray-300 rounded">
 
 			<div
@@ -64,6 +63,8 @@ export default {
 			startslice: 0, // helper variable for latest_text_slices function, never accessed outside of that function
 			endslice: 0, // helper variable for latest_text_slices function, never accessed outside of that function
 			i: 0, // helper variable for latest_text_slices function, never accessed outside of that function
+			watchSubstringArray: 0, // helper for rerendering DOM
+			watchSubstringIndex: 0,
 		};
 	},
 	computed: {
@@ -132,12 +133,13 @@ export default {
 			}
 		},
 
-		"substringArray.length": function () {
+		watchSubstringArray: function () {
 			if (
 				this.substringArray.length > 0 &&
 				this.$store.state.audioDuration > 0
 			) {
 				this.substringindex = 0;
+				this.watchSubstringIndex++;
 			}
 		},
 
@@ -147,6 +149,7 @@ export default {
 				this.$store.state.audioDuration > 0
 			) {
 				this.substringindex = 0;
+				this.watchSubstringIndex++;
 			}
 		},
 
@@ -157,15 +160,17 @@ export default {
 			) {
 				if (this.substringindex < this.substringArray.length - 1) {
 					this.substringindex++;
+					this.watchSubstringIndex++;
 				} else if (this.substringindex == this.substringArray.length - 1) {
 					this.substringindex = 0;
 					this.finished = true;
+					this.watchSubstringIndex++;
 				}
 				this.new_text_unstripped = "";
 			}
 		},
 
-		substringindex: function () {
+		watchSubstringIndex: function () {
 			//if the audio player has loaded and the text has been divided into substrings already, then focus on the textbox
 			if (
 				this.$store.state.audioDuration > 0 &&
@@ -242,6 +247,7 @@ export default {
 			this.new_text_unstripped = "";
 			this.phrasechoicesArray = [];
 			this.substringindex = null;
+			this.watchSubstringIndex++;
 			this.associations = null;
 			this.parsedAssociations = [];
 			this.substringArray = [];
@@ -366,23 +372,40 @@ export default {
 					let checkExteriorEnd = parseInt(this.substringArray[y].endtime);
 					let z = 0;
 					while (z < this.substringArray.length) {
+						let checkInteriorStart = parseInt(this.substringArray[z].starttime);
+						let checkInteriorEnd = parseInt(this.substringArray[z].endtime);
+
 						if (
 							// if this one is exterior to the other one, then delete it
-							parseInt(this.substringArray[z].endtime) >= checkExteriorEnd &&
-							parseInt(this.substringArray[z].starttime) <=
-								checkExteriorStart &&
-							y != z
+							y != z &&
+							((checkInteriorEnd >= checkExteriorEnd &&
+								checkInteriorStart <= checkExteriorStart) ||
+								(checkInteriorEnd - checkInteriorStart >=
+									checkExteriorEnd - checkExteriorStart &&
+									((checkInteriorStart < checkExteriorStart &&
+										checkInteriorEnd > checkExteriorStart &&
+										checkInteriorEnd < checkExteriorEnd) ||
+										(checkInteriorStart > checkExteriorStart &&
+											checkInteriorStart < checkExteriorEnd &&
+											checkInteriorEnd > checkExteriorEnd))))
 						) {
 							// console.log(this.substringArray[y])
 							// 	console.log(this.substringArray[z])
 							indicesToDelete.push(z);
 							// console.log("deleting second of above")
 						} else if (
-							// if this one is interior to the other one, then break this while loop, delete the other one and do not index the other one's loop
-							parseInt(this.substringArray[z].endtime) <= checkExteriorEnd &&
-							parseInt(this.substringArray[z].starttime) >=
-								checkExteriorStart &&
-							y != z
+							// if this one is interior to the other one or smaller than the other one and offset with it, then break this while loop, delete the other one and do not index the other one's loop
+							y != z &&
+							((checkInteriorEnd <= checkExteriorEnd &&
+								checkInteriorStart >= checkExteriorStart) ||
+								(checkInteriorEnd - checkInteriorStart <=
+									checkExteriorEnd - checkExteriorStart &&
+									((checkInteriorStart < checkExteriorStart &&
+										checkInteriorEnd > checkExteriorStart &&
+										checkInteriorEnd < checkExteriorEnd) ||
+										(checkInteriorStart > checkExteriorStart &&
+											checkInteriorStart < checkExteriorEnd &&
+											checkInteriorEnd > checkExteriorEnd))))
 						) {
 							// delete exterior one
 							// console.log(this.substringArray[y])
@@ -411,6 +434,7 @@ export default {
 				slice.endtime = this.$store.state.audioDuration;
 				this.substringArray.push(slice);
 			}
+			this.watchSubstringArray++;
 		},
 	},
 
