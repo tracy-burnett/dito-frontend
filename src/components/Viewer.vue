@@ -171,19 +171,19 @@ export default {
 			toIncrease = [...new Set(toIncrease)]; // but don't give them more nesteds than they need!
 			// console.log(toIncrease);
 
-			// let p = 0;
-			// toIncrease.forEach((c) => {
-			// 	// and if everything's already highlighted once then don't turn it all into being highlighted twice!
-			// 	if (tempArray[c].scrollTo != 1) {
-			// 		p++;
-			// 	}
-			// });
-			// if (p > 0) {
-			// 	toIncrease.forEach((c) => {
-			// 		tempArray[c].scrollTo = tempArray[c].scrollTo + 1;
-			// 		tempArray[c].highlighted = 1;
-			// 	});
-			// }
+			let p = 0;
+			toIncrease.forEach((c) => {
+				// and if everything's already highlighted once then don't turn it all into being highlighted twice!
+				if (tempArray[c].scrollTo != 1) {
+					p++;
+				}
+			});
+			if (p > 0) {
+				toIncrease.forEach((c) => {
+					tempArray[c].scrollTo = tempArray[c].scrollTo + 1;
+					tempArray[c].highlighted = 1;
+				});
+			}
 			// console.log(containersToCheck)
 			// containersToCheck.forEach(container => {
 			// 	this.parsedAssociations.forEach(parsed => {
@@ -586,39 +586,43 @@ export default {
 				slice.startingcharacter = 0;
 				this.substringArray.push(slice);
 			}
-			// console.log(this.relevantTimestamps.length);
-			let tempParsedAssociations = this.parsedAssociations.map(
-				(element) => element.endCharacter
-			);
-			let startTimeParsedAssociations = this.parsedAssociations.map(
-				(element) => element.startTime
-			);
-			this.substringArray.forEach((element) => {
-				if (
-					element.text == "\n\n" ||
-					// element.text == this.spaced_by ||
-					element.text == ""
-				) {
-					// console.log(element);
-					if (tempParsedAssociations.indexOf(element.startingcharacter) != -1) {
-						let timeToRemove =
-							this.parsedAssociations[
-								tempParsedAssociations.indexOf(element.startingcharacter)
-							].endTime;
-						// console.log(timeToRemove);
-						if (startTimeParsedAssociations.indexOf(timeToRemove) == -1) {
-							// only remove the timestamp if it's not relevant for starting a different important block of text
-							this.relevantTimestamps.splice(
-								this.relevantTimestamps.indexOf(timeToRemove),
-								1
-							);
-						}
-					}
-				}
-			});
 
 			// console.log(this.relevantTimestamps.length);
-			// console.log(this.relevantTimestamps)
+			// let tempParsedAssociations = this.parsedAssociations.map(
+			// 	(element) => element.endCharacter
+			// );
+			// let startTimeParsedAssociations = this.parsedAssociations.map(
+			// 	(element) => element.startTime
+			// );
+			// let endTimeParsedAssociations = this.parsedAssociations.map(
+			// 	(element) => element.endTime
+			// );
+			// this.substringArray.forEach((element) => {
+			// 	if (
+			// 		element.text == "\n\n" ||
+			// 		// element.text == this.spaced_by ||
+			// 		element.text == ""
+			// 	) {
+			// 		// console.log(element);
+			// 		if (tempParsedAssociations.indexOf(element.startingcharacter) != -1) {
+			// 			let timeToRemove =
+			// 				this.parsedAssociations[
+			// 					tempParsedAssociations.indexOf(element.startingcharacter)
+			// 				].endTime;
+			// 			// console.log(timeToRemove);
+			// 			if ((startTimeParsedAssociations.indexOf(timeToRemove) == -1) && (endTimeParsedAssociations.indexOf(timeToRemove) == -1)) {
+			// 				// only remove the timestamp if it's not relevant for starting a different important block of text
+			// 				this.relevantTimestamps.splice(
+			// 					this.relevantTimestamps.indexOf(timeToRemove),
+			// 					1
+			// 				);
+			// 			}
+			// 		}
+			// 	}
+			// });
+
+			// console.log(this.relevantTimestamps.length);
+			// // console.log(this.relevantTimestamps)
 
 			this.rerenderHighlights();
 			// console.log(this.substringArray)
