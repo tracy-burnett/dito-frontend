@@ -439,7 +439,7 @@ export default {
 
 			if (this.substringArrayUpdatingStill == false) {
 				this.substringArrayUpdatingStill = true;
-				setTimeout(() => this.watchSubstringArray++, 500);
+				setTimeout(() => this.watchSubstringArray++, 600);
 			}
 		},
 	},
