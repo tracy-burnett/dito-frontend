@@ -122,7 +122,7 @@
 					style="background: #dbeafe;"
 					v-else-if="readyVerification==0"
 				>
-					<p>requesting permission to access audio file</p>
+					<p>please wait while the audio file is uploaded to the server</p>
 				</div>
 			</div>
 
