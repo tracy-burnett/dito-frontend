@@ -353,6 +353,9 @@ export default {
 				this.processingStorybooks = false;
 				this.audioArrayCurrent = [...this.$store.state.audioArray];
 			}
+			else if (this.$store.state.audioArray &&
+				this.$store.state.audioArray.length == 0)
+				{this.processingStorybooks = false;}
 			if (this.searchterm != ""){this.search()}
 			this.$nextTick(function () {
 				// console.log(this.$store.state.cardlistscrollposition)

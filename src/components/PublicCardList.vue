@@ -159,6 +159,9 @@ export default {
 					});
 				}
 			}
+			else if (this.$store.state.audioArray &&
+				this.$store.state.audioArray.length == 0)
+				{this.processingStorybooks = false;}
 		},
 	},
 };
