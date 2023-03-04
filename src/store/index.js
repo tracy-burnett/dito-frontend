@@ -67,8 +67,11 @@ export default new Vuex.Store({
       state.audioArrayChanged++
     },
 
-    addToAudioArray(state,params) {
-      state.audioArray.unshift(params)
+    addToAudioArray(state, params) {
+      if (
+        state.audioArray &&
+        state.audioArray.length > 0
+      ) { state.audioArray.unshift(params) } else { state.audioArray.push(params) }
     },
     // mutateAudioArrayArchive(state, params) {
     //   // console.log(state.audioArray)

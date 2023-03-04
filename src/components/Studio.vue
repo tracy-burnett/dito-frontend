@@ -441,7 +441,7 @@ export default {
 				this.substringArrayUpdatingStill = true;
 				setTimeout(() => this.watchSubstringArray++, 600);
 			}
-		},
+		}, 
 	},
 
 	unmounted() {
