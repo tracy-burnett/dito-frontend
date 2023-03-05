@@ -120,7 +120,7 @@
 						v-if="!otherIntInPrompter"
 						class=" w-[2.2vh] right-[1vw] top-0 bottom-0 m-auto cursor-pointer"
 						src="@/assets/icon_help.svg"
-						@click="studioHelp=true"
+						@click="studioHelp=true" 
 					/>
 				</div>
 
