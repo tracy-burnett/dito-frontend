@@ -126,13 +126,13 @@
 
 				<a
 					v-if="!otherIntInPrompter && (interpretationStatus == 'owner' || interpretationStatus == 'editor')"
-					@click="toggleStorybookStyle('Prompter')"
+					@click="toggleStorybookStyle('Prompter')" class="font-semibold"
 				>
 					Scribing
 				</a>
 				<a
 					v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'"
-					@click="toggleStorybookStyle('Editor')"
+					@click="toggleStorybookStyle('Editor')" class="font-semibold"
 				>Editing</a>
 				
 				<a @click="toggleStorybookStyle('Viewer')">Viewing</a>
