@@ -81,7 +81,7 @@ export default {
 				.then(
 					(data) => {
 						// console.log(data["audio files"])
-						if (data["audiofiles"] != undefined)
+						if (data["audio files"] != undefined)
 						{this.$store.commit("setAudioArray", data["audio files"]);}
 					} // collect the list of audio files that are owned by, or shared with, the logged-in user
 				)
