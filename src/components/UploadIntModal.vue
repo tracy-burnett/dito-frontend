@@ -1,45 +1,26 @@
 <template>
-	<div
-		class="flex flex-col items-center justify-center flex-auto h-full backdrop"
-		@click.self="closeModal()"
-	>
-		<div class="flex flex-col items-center p-8 overflow-y-scroll bg-white border border-gray-300 shadow-md modal rounded-xl xl:w-2/5 lg:w-2/4 md:w-2/3">
-			<button
-				class="mx-4 my-2 text-xl text-gray-500"
-				@click.prevent="closeModal()"
-			>
+	<div class="flex flex-col items-center justify-center flex-auto h-full backdrop">
+		<div
+			class="flex flex-col items-center p-8 overflow-y-scroll bg-white border border-gray-300 shadow-md modal rounded-xl xl:w-2/5 lg:w-2/4 md:w-2/3">
+			<button class="mx-4 my-2 text-xl text-gray-500" @click.prevent="closeModal()">
 				×
 			</button>
 			<h1 class="text-2xl font-bold">Upload .srt Interpretation File</h1>
 			<br />
-			<input
-				class="w-full px-3 py-1 mt-12 mb-3 border border-gray-300 rounded"
-				type="file"
-				accept=".srt, .txt"
-				ref="interpretationInput"
-			/>
-			<input
-				class="w-full px-3 py-1 border border-gray-300 rounded"
-				placeholder="Title of New Interpretation"
-				v-model="int_title"
-			/>
-			<input
-				class="w-full px-3 py-1 border border-gray-300 rounded"
-				placeholder="Language of New Interpretation"
-				v-model="int_language"
-			/>
-			<input
-				class="w-full px-3 py-1 border border-gray-300 rounded"
-				placeholder="What character is this language 'spaced' by? (or leave blank)"
-				v-model="int_spacing"
-				maxlength="1"
-			/>
+			<input class="w-full px-3 py-1 mt-12 mb-3 border border-gray-300 rounded" type="file" accept=".srt, .txt"
+				ref="interpretationInput" />
+			<input class="w-full px-3 py-1 border border-gray-300 rounded" placeholder="Title of New Interpretation"
+				v-model="int_title" />
+			<input class="w-full px-3 py-1 border border-gray-300 rounded" placeholder="Language of New Interpretation"
+				v-model="int_language" />
+			<input class="w-full px-3 py-1 border border-gray-300 rounded"
+				placeholder="What character is this language 'spaced' by? (or leave blank)" v-model="int_spacing"
+				maxlength="1" />
 			<br>
 
 			<button
 				class="w-full px-3 py-2 mt-16 text-sm font-medium text-white transition-colors border rounded bg-cyan-700 border-cyan-600 hover:bg-cyan-600"
-				@click="upload"
-			>
+				@click="upload">
 				Upload Interpretation
 			</button>
 		</div>
@@ -139,9 +120,9 @@ export default {
 				// console.log(this.int_text.normalize("NFC"))
 				fetch(
 					process.env.VUE_APP_api_URL +
-						"interpretations/audio/" +
-						this.audio_id +
-						"/",
+					"interpretations/audio/" +
+					this.audio_id +
+					"/",
 					{
 						method: "POST",
 						headers: {
@@ -167,10 +148,10 @@ export default {
 						// console.log(this.new_associations)
 						fetch(
 							process.env.VUE_APP_api_URL +
-								"content/" +
-								this.audio_id +
-								"/" +
-								response.interpretation.id,
+							"content/" +
+							this.audio_id +
+							"/" +
+							response.interpretation.id,
 							{
 								method: "POST",
 								body: JSON.stringify({
@@ -208,15 +189,20 @@ export default {
 			this.captions.length = 0;
 			// console.log(this.fileloaded)
 			let arrayToParse = this.fileloaded.replaceAll("\r\n", "\n").split("\n\n");
+			// console.log(arrayToParse)
+
+			for (let j = arrayToParse.length - 1; j >= 0; j--) {
+					if (arrayToParse[j] == "") {
+						arrayToParse.splice(j, 1);
+					}
+
+				}
 
 			let lastEndSeconds = 0;
 			arrayToParse.forEach((caption) => {
 				// console.log(caption)
 				let srt_instructions = caption.split("\n");
-				// console.log(srt_instructions)
-				if (srt_instructions[0] == "") {
-					srt_instructions.splice(0, 1);
-				}
+
 				let timestampInstructions = srt_instructions[1];
 
 				let timestampStart = timestampInstructions.split(" --> ")[0].trim();
@@ -280,7 +266,7 @@ export default {
 					);
 					if (
 						100 *
-							Number(timestampStartSeconds + "." + timestampStartMilliseconds) >
+						Number(timestampStartSeconds + "." + timestampStartMilliseconds) >
 						lastEndSeconds
 					) {
 						// console.log(caption_text)
@@ -433,12 +419,15 @@ export default {
 }
 
 .modal {
-	-ms-overflow-style: none; /* for Internet Explorer, Edge */
-	scrollbar-width: none; /* for Firefox */
+	-ms-overflow-style: none;
+	/* for Internet Explorer, Edge */
+	scrollbar-width: none;
+	/* for Firefox */
 	overflow-y: scroll;
 }
 
 .modal::-webkit-scrollbar {
-	display: none; /* for Chrome, Safari, and Opera */
+	display: none;
+	/* for Chrome, Safari, and Opera */
 }
 </style>
