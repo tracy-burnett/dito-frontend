@@ -201,7 +201,7 @@ export default {
 			let lastEndSeconds = 0;
 			arrayToParse.forEach((caption) => {
 				// console.log(caption)
-				let srt_instructions = caption.split("\n");
+				let srt_instructions = caption.trim().split("\n");
 
 				let timestampInstructions = srt_instructions[1];
 
