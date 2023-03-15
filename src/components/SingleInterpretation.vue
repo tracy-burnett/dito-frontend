@@ -21,7 +21,7 @@
 							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
 							@click="toggleSyncingModal()"
 						>
-							Sync
+							Adjust
 						</button>
 					</div>
 					<div>
