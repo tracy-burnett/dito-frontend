@@ -21,7 +21,7 @@
 							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
 							@click="toggleSyncingModal()"
 						>
-							Sync
+							Adjust
 						</button>
 					</div>
 					<div>
@@ -38,7 +38,7 @@
 							@click="clearTimestamps()"
 						>Clear New</button>
 					</div>
-					<div>
+					<div v-if="interpretationsList.length > 0">
 						<SelectInterpretationMenu
 							:interpretationsList="interpretationsList"
 							@changeInterpretationID="changeInterpretationIDfunction($event)"
