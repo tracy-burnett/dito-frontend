@@ -38,7 +38,7 @@
 							@click="clearTimestamps()"
 						>Clear New</button>
 					</div>
-					<div>
+					<div v-if="interpretationsList.length > 0">
 						<SelectInterpretationMenu
 							:interpretationsList="interpretationsList"
 							@changeInterpretationID="changeInterpretationIDfunction($event)"
