@@ -114,10 +114,10 @@ export default {
 			}
 		},
 		email() {
-			return this.email_mixedcase.toLowerCase();
+			return this.email_mixedcase.toLowerCase().trim();
 		},
 		reg_email() {
-			return this.reg_email_mixedcase.toLowerCase();
+			return this.reg_email_mixedcase.toLowerCase().trim();
 		},
 	},
 	methods: {
