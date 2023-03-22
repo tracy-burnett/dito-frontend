@@ -15,7 +15,7 @@
 				<div
 					v-for="viewer in shared_viewers"
 					:key="viewer.user_ID"
-				>{{ viewer.display_name }}<button @click="remove_viewer(viewer.email)">Remove</button></div>
+				>{{ viewer.display_name }}<button @click="remove_viewer(viewer.user_ID)">Remove</button></div>
 			</div>
 
 			Enter the email address of the Dito account to invite to view
