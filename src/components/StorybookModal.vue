@@ -15,14 +15,14 @@
 				<div
 					v-for="editor in shared_editors"
 					:key="editor.user_ID"
-				>{{ editor.display_name }}<button @click="remove_editor(editor.email)">Remove</button></div>
+				>{{ editor.display_name }}<button @click="remove_editor(editor.user_ID)">Remove</button></div>
 			</div>
 			<div v-if="shared_viewers.length > 0">
 				<h3>Viewers</h3>
 				<div
 					v-for="viewer in shared_viewers"
 					:key="viewer.user_ID"
-				>{{ viewer.display_name }}<button @click="remove_viewer(viewer.email)">Remove</button></div>
+				>{{ viewer.display_name }}<button @click="remove_viewer(viewer.user_ID)">Remove</button></div>
 			</div>
 
 			Enter the email address of the Dito account to invite to collaborate on
@@ -48,7 +48,7 @@
 			<label> viewer</label>
 
 			<button
-				class="w-full px-3 py-2 mt-16 text-sm font-medium text-white transition-colors bg-indigo-500 border border-indigo-400 rounded hover:bg-indigo-400"
+				class="w-full px-3 py-2 mt-16 text-sm font-medium text-white transition-colors border rounded border-cyan-600 bg-cyan-700 hover:bg-cyan-600"
 				@click="update"
 			>
 				Update Collaborators
