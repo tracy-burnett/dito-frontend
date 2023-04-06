@@ -43,7 +43,7 @@
         ease-in-out
         m-0
       "
-				placeholder="Text of New Interpretation (paste in your existing text without timestamps or metadata, or leave this blank)"
+				placeholder="Optional Text of New Interpretation (paste in your existing text without timestamps or metadata, or leave this blank)"
 				v-model="int_text_unstripped"
 				rows="5"
 				style="overflow-y: scroll"
