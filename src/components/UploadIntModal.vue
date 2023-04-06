@@ -61,6 +61,7 @@ export default {
 		},
 	},
 	computed: {
+		//decides whether the file format selection should be grayed out or black
 		isActive() {
 			if (this.filetype=="") {return true}
 			else {return false}
@@ -94,13 +95,15 @@ export default {
 				try {
 					this.srtToInterpretation();
 				}
-				catch {
+				catch(error) {
+					console.log(error)
 					alert("not a readable SubRip file; select a different filetype")
 				}
 			}
 			else if (this.filetype == "tsv") {
 				try { this.tsvToInterpretation() }
-				catch {
+				catch(error) {
+					console.log(error)
 					alert("not a readable Audacity Timing File; select a different filetype")
 				}
 			}
@@ -122,7 +125,7 @@ export default {
 				let reader = new FileReader();
 				reader.addEventListener("load", (event) => {
 					
-					this.fileloaded = event.target.result;
+					this.fileloaded = event.target.result.trim();
 				});
 				reader.readAsText(this.file);
 			}
@@ -219,7 +222,6 @@ export default {
 			this.captions.length = 0;
 			// console.log(this.fileloaded)
 			let arrayToParse = this.fileloaded.replaceAll("\r\n", "\n").split("\n\n");
-			// console.log(arrayToParse)
 
 			for (let j = arrayToParse.length - 1; j >= 0; j--) {
 				if (arrayToParse[j] == "") {
@@ -234,6 +236,7 @@ export default {
 				let srt_instructions = caption.trim().split("\n");
 
 				let timestampInstructions = srt_instructions[1];
+				// console.log(timestampInstructions)
 
 				let timestampStart = timestampInstructions.split(" --> ")[0].trim();
 				// console.log(timestampStart)
@@ -314,6 +317,7 @@ export default {
 						100 * timestampEndReformatted;
 				}
 			});
+
 
 			if (this.captions[0][0] == "\n" && this.captions[0][1] == "\n") {
 				// take away the first two carriage returns from before the first caption
