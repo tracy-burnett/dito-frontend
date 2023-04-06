@@ -24,7 +24,7 @@
 			<div class="w-[7.5vh]">
 				<img src="@/assets/icon_add_no_fill.svg" />
 			</div>
-			<p class="text-sm text-left md:text-base"> Upload .srt<br>Interpretation</p>
+			<p class="text-sm text-left md:text-base"> Upload Inter-<br>pretation File</p>
 		</div>
 		<!-- this is a button for adding another column that shows an Interpretation that you have access to but aren't yet viewing -->
 		<div
