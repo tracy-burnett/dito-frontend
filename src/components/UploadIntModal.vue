@@ -7,11 +7,13 @@
 			</button>
 			<h1 class="text-2xl font-bold mb-[1vh]">Upload Interpretation File</h1>
 			<br />
-			<input class="w-full px-3 py-[1vh] mb-[2vh] border border-gray-300 rounded" type="file" accept=".srt, .txt"
+			<input class="w-full px-3 py-[1vh] mb-[2vh] border border-gray-300 rounded" type="file" accept=".srt, .txt, .eaf"
 				ref="interpretationInput" />
-			<select v-model="filetype" class="w-full px-3 py-[1vh] mb-[1vh] border border-gray-300 rounded" :class="{'text-gray-500': isActive}">
+			<select v-model="filetype" class="w-full px-3 py-[1vh] mb-[1vh] border border-gray-300 rounded"
+				:class="{ 'text-gray-500': isActive }">
 				<option value="">What file format are you uploading?</option>
 				<option value="srt" class="text-black">SubRip (.srt)</option>
+				<option value="eaf" class="text-black">ELAN Annotation Format (.eaf)</option>
 				<option value="tsv" class="text-black">Audacity Timing File (.txt)</option>
 			</select>
 			<input class="w-full px-3 py-[1vh] border border-gray-300 rounded" placeholder="Title of New Interpretation"
@@ -63,8 +65,8 @@ export default {
 	computed: {
 		//decides whether the file format selection should be grayed out or black
 		isActive() {
-			if (this.filetype=="") {return true}
-			else {return false}
+			if (this.filetype == "") { return true }
+			else { return false }
 		},
 
 		int_text() {
@@ -95,14 +97,21 @@ export default {
 				try {
 					this.srtToInterpretation();
 				}
-				catch(error) {
+				catch (error) {
 					console.log(error)
 					alert("not a readable SubRip file; select a different filetype")
 				}
 			}
+			else if (this.filetype == "eaf") {
+				try { this.eafToInterpretation() }
+				catch (error) {
+					console.log(error)
+					alert("not a readable ELAN Annotation Format file; select a different filetype")
+				}
+			}
 			else if (this.filetype == "tsv") {
 				try { this.tsvToInterpretation() }
-				catch(error) {
+				catch (error) {
 					console.log(error)
 					alert("not a readable Audacity Timing File; select a different filetype")
 				}
@@ -118,13 +127,13 @@ export default {
 		},
 
 		upload() {
-			this.fileloaded=""
+			this.fileloaded = ""
 			this.file = this.$refs.interpretationInput.files[0];
 			// console.log(this.file);
 			if (this.file != null) {
 				let reader = new FileReader();
 				reader.addEventListener("load", (event) => {
-					
+
 					this.fileloaded = event.target.result.trim();
 				});
 				reader.readAsText(this.file);
@@ -216,11 +225,38 @@ export default {
 			}
 		},
 
-		srtToInterpretation() {
+		async srtToInterpretation() {
+
 			this.timestampsforBackend.length = 0;
 			this.offsetsforBackend.length = 0;
 			this.captions.length = 0;
-			// console.log(this.fileloaded)
+			await this.srtToInterpretationHelper()
+			this.prepText()
+		},
+
+		async tsvToInterpretation() {
+
+			this.timestampsforBackend.length = 0;
+			this.offsetsforBackend.length = 0;
+			this.captions.length = 0;
+			await this.tsvToInterpretationHelper()
+			this.prepText()
+		},
+
+		async eafToInterpretation() {
+			this.timestampsforBackend.length = 0;
+			this.offsetsforBackend.length = 0;
+			this.captions.length = 0;
+			await this.eafToInterpretationHelper()
+			this.prepText()
+		},
+
+		async eafToInterpretationHelper() {
+			console.log(this.fileloaded)
+			debugger
+		},
+
+		async srtToInterpretationHelper() {
 			let arrayToParse = this.fileloaded.replaceAll("\r\n", "\n").split("\n\n");
 
 			for (let j = arrayToParse.length - 1; j >= 0; j--) {
@@ -231,301 +267,107 @@ export default {
 			}
 
 			let lastEndSeconds = 0;
-			arrayToParse.forEach((caption) => {
-				// console.log(caption)
-				let srt_instructions = caption.trim().split("\n");
+
+			for (let h = 0; h < arrayToParse.length; h++) {
+
+				let srt_instructions = arrayToParse[h].trim().split("\n");
 
 				let timestampInstructions = srt_instructions[1];
-				// console.log(timestampInstructions)
 
 				let timestampStart = timestampInstructions.split(" --> ")[0].trim();
-				// console.log(timestampStart)
 				let timestampStartMilliseconds = timestampStart.slice(-3);
-				// console.log(timestampStartMilliseconds)
 				let timestampStartSecondsArray = timestampStart.slice(0, -4).split(":");
 				let timestampStartSeconds =
 					timestampStartSecondsArray[0] * 3600 +
 					timestampStartSecondsArray[1] * 60 +
 					timestampStartSecondsArray[2] * 1;
-				// console.log(timestampStartSeconds)
 				let timestampStartReformatted = Number(timestampStartSeconds + "." + timestampStartMilliseconds)
-				// console.log(timestampStartReformatted)
 
 				let timestampEnd = timestampInstructions.split(" --> ")[1].trim();
-				// console.log(timestampEnd)
 				let timestampEndMilliseconds = timestampEnd.slice(-3);
-				// console.log(timestampEndMilliseconds)
 				let timestampEndSecondsArray = timestampEnd.slice(0, -4).split(":");
-				// console.log(timestampEndSecondsArray)
 				let timestampEndSeconds =
 					timestampEndSecondsArray[0] * 3600 +
 					timestampEndSecondsArray[1] * 60 +
 					timestampEndSecondsArray[2] * 1;
-				// console.log(timestampEndSeconds)
 				let timestampEndReformatted = Number(timestampEndSeconds + "." + timestampEndMilliseconds)
-				// console.log(timestampEndReformatted)
-
-				// only add captions that don't exceed the maximum length of the audio file
-				// console.log((1000 * timestampEndSeconds) + " should be less than or equal to " + this.$store.state.audioDuration)
-				// console.log((1000*timestampStartSeconds + " should ge greater than or equal to 0"))
-				// console.log(srt_instructions[2] + " should not be undefined")
-				if (
-					1000 * timestampEndReformatted <= this.$store.state.audioDuration &&
-					1000 * timestampStartReformatted >= 0 &&
-					srt_instructions[2] != undefined
-				) {
-					let timestampforBackend =
-						(100 *
-							(timestampStartReformatted +
-								timestampEndReformatted)) /
-						2;
-					this.timestampsforBackend.push(timestampforBackend);
-					let offsetforBackend =
-						(100 *
-							(timestampEndReformatted -
-								timestampStartReformatted)) /
-						2;
-					this.offsetsforBackend.push(offsetforBackend);
-					srt_instructions.shift();
-					srt_instructions.shift();
-					// console.log(srt_instructions);
-					let caption_text = "";
-					// console.log(lastEndSeconds);
-					// console.log(100 * Number(timestampStartSeconds + "." + timestampStartMilliseconds))
-					// console.log(this.int_spacing)
-					srt_instructions.forEach(
-						// this is if the caption takes up two lines in the text file
-						(part) => (caption_text = caption_text + "\n" + part)
-					);
-					if (
-						100 *
-						timestampStartReformatted >
-						lastEndSeconds
-					) {
-						// console.log(caption_text)
-						caption_text = "\n\n" + caption_text.substring(1);
-						this.captions.push(caption_text);
-					} else {
-						// console.log("SPACING!")
-
-						// console.log(caption_text)
-						caption_text = caption_text.substring(1);
-						// console.log(caption_text)
-						this.captions.push(caption_text);
-					}
-					lastEndSeconds =
-						100 * timestampEndReformatted;
-				}
-			});
 
 
-			if (this.captions[0][0] == "\n" && this.captions[0][1] == "\n") {
-				// take away the first two carriage returns from before the first caption
-				// console.log("HIT")
-				// console.log(this.captions[0])
-				this.captions[0] = this.captions[0].slice(2);
-				// console.log(this.captions[0])
+				lastEndSeconds = await this.formatForBackend(timestampStartReformatted, timestampEndReformatted, srt_instructions, lastEndSeconds)
 			}
 
-			// console.log(this.captions);
-			// for (let a=0; a < this.captions.length; a++)
-			// {
-			// 	if (this.captions[a].substring(0,4) != "\n\n") {
-			// 		console.log("HIT")
-			// 		this.captions[a] = this.int_spacing + this.captions[a]
-			// 	}
-			// }
-			// console.log(this.captions);
-			this.captions.forEach((caption, captionindex) => {
-				let tempSplitCaption = caption.split("");
-				// console.log(tempSplitCaption)
-				tempSplitCaption.forEach((character, index) => {
-					if (character == "\\" && tempSplitCaption[index + 1]) {
-						if (tempSplitCaption[index + 1] == "n") {
-							// console.log("hit")
-							tempSplitCaption[index] = "\n";
-							tempSplitCaption[index + 1] = "";
-						}
-					}
-				});
-				// console.log(tempSplitCaption)
-				this.captions[captionindex] = tempSplitCaption.join("");
-			});
 
-			this.captions.forEach((caption, captionindex) => {
-				// console.log(caption);
-				if (this.int_spacing != "") {
-					caption = caption.replace(
-						this.regexwithmultiplespacedby,
-						this.int_spacing
-					);
-
-					let tempCaptionArray = caption.split("\n");
-					for (let j = 0; j < tempCaptionArray.length; j++) {
-						if (tempCaptionArray[j][0] == this.int_spacing) {
-							tempCaptionArray[j] = tempCaptionArray[j].substring(1);
-						}
-						if (
-							tempCaptionArray[j][tempCaptionArray[j].length - 1] ==
-							this.int_spacing
-						) {
-							tempCaptionArray[j] = tempCaptionArray[j].substring(
-								0,
-								tempCaptionArray[j].length - 1
-							);
-						}
-					}
-
-					// console.log(stripped.join("\n"));
-					this.captions[captionindex] = tempCaptionArray.join("\n");
-				}
-				// console.log(this.captions[captionindex]);
-			});
-
-			for (let b = 1; b < this.captions.length; b++) {
-				// ignore the first caption because we don't want to put a spacing character in front of that one
-				if (this.captions[b][0] != "\n" || this.captions[b][1] != "\n") {
-					this.captions[b] = this.int_spacing + this.captions[b];
-				}
-			}
-			this.int_text_unstripped = this.captions.join("");
-			// console.log(this.int_text_unstripped);
-			// console.log(this.int_text);
-			this.captions_cleaned.length = 0;
-			// console.log(this.captions);
-
-			this.captions.forEach((caption) => {
-				// console.log(caption)
-				let split_text = caption.normalize("NFC").split(this.regexwithspacedby);
-				// console.log(split_text.length);
-				for (let j = split_text.length; j >= 0; j--) {
-					if (split_text[j] === undefined || split_text[j] == "") {
-						split_text.splice(j, 1);
-					} // second parameter being 1 means remove 1 element only
-				}
-
-				if (this.int_spacing.length > 0) {
-					// console.log(split_text.length);
-					this.captions_cleaned.push(split_text);
-				} else if (this.int_spacing.length == 0) {
-					let strung_together = split_text.join("");
-					// console.log(strung_together);
-					this.captions_cleaned.push(strung_together);
-				}
-			});
-
-			// console.log(this.captions_cleaned);
-
-			// console.log(this.timestampsforBackend);
-
-			let wordindexcount = 0;
-			this.captions_cleaned.forEach((caption, captionindex) => {
-				for (let j = 0; j < caption.length; j++) {
-					if (caption[j] != "\n") {
-						this.new_associations[wordindexcount] = {};
-						this.new_associations[wordindexcount][
-							Math.round(this.timestampsforBackend[captionindex])
-						] = Math.round(this.offsetsforBackend[captionindex]);
-					}
-
-					wordindexcount++;
-				}
-			});
-
-			// console.log(this.new_associations);
-
-			this.create();
 		},
 
-
-
-		tsvToInterpretation() {
-			this.timestampsforBackend.length = 0;
-			this.offsetsforBackend.length = 0;
-			this.captions.length = 0;
-			// console.log(this.fileloaded)
+		async tsvToInterpretationHelper() {
 			let arrayToParse = this.fileloaded.replaceAll("\r\n", "\n").split("\n");
-			// console.log(arrayToParse)
 
 			for (let j = arrayToParse.length - 1; j >= 0; j--) {
 				if (arrayToParse[j] == "") {
 					arrayToParse.splice(j, 1);
 				}
-
 			}
 
 			let lastEndSeconds = 0;
-			arrayToParse.forEach((caption) => {
-				// console.log(caption)
-				let srt_instructions = caption.trim().split("\t");
-				// console.log(srt_instructions)
+			for (let h = 0; h < arrayToParse.length; h++) {
+				let srt_instructions = arrayToParse[h].trim().split("\t");
+				let timestampStartReformatted = Number(srt_instructions[0])
+				let timestampEndReformatted = Number(srt_instructions[1])
+				lastEndSeconds = await this.formatForBackend(timestampStartReformatted, timestampEndReformatted, srt_instructions, lastEndSeconds)
+			}
 
-				let timestampStart = Number(srt_instructions[0])
-				// console.log(timestampStart)
-				// let timestampStartMilliseconds = timestampStart[1]
-				// console.log(timestampStartMilliseconds)
-				// let timestampStartSeconds = timestampStart[0]
-				// console.log(timestampStartSeconds)
+		},
 
-				let timestampEnd = Number(srt_instructions[1])
-				// console.log(timestampEnd)
-				// let timestampEndMilliseconds = timestampEnd[1];
-				// console.log(timestampEndMilliseconds)
-				// let timestampEndSeconds = timestampEnd[0]
-				// console.log(timestampEndSeconds)
+		formatForBackend(timestampStart, timestampEnd, srt_instructions, lastEndSeconds) {
+			// only add captions that don't exceed the maximum length of the audio file
+			// console.log((1000 * timestampEnd) + " should be less than or equal to " + this.$store.state.audioDuration)
+			// console.log((1000*timestampStart + " should ge greater than or equal to 0"))
+			// console.log(srt_instructions[2] + " should not be undefined")
+			if (
+				1000 * timestampEnd <= this.$store.state.audioDuration &&
+				1000 * timestampStart >= 0 &&
+				srt_instructions[2] != undefined
+			) {
+				let timestampforBackend =
+					(100 *
+						(timestampStart +
+							timestampEnd)) /
+					2;
+				this.timestampsforBackend.push(timestampforBackend);
+				let offsetforBackend =
+					(100 *
+						(timestampEnd -
+							timestampStart)) /
+					2;
+				this.offsetsforBackend.push(offsetforBackend);
+				srt_instructions.shift();
+				srt_instructions.shift();
+				let caption_text = "";
+				srt_instructions.forEach(
+					// this is for if the caption takes up more than one line in the text file
+					(part) => (caption_text = caption_text + "\n" + part)
+				);
 
-				// only add captions that don't exceed the maximum length of the audio file
-				// console.log((1000 * timestampEndSeconds) + " should be less than or equal to " + this.$store.state.audioDuration)
-				// console.log((1000*timestampStartSeconds + " should ge greater than or equal to 0"))
-				// console.log(srt_instructions[2] + " should not be undefined")
+				console.log((100 * timestampStart) + " should be greater than " + lastEndSeconds)
+
 				if (
-					1000 * timestampEnd <= this.$store.state.audioDuration &&
-					1000 * timestampStart >= 0 &&
-					srt_instructions[2] != undefined
+					100 *
+					timestampStart >
+					lastEndSeconds
 				) {
-					let timestampforBackend =
-						(100 *
-							(timestampStart +
-								timestampEnd)) /
-						2;
-					this.timestampsforBackend.push(timestampforBackend);
-					let offsetforBackend =
-						(100 *
-							(timestampEnd -
-								timestampStart)) /
-						2;
-					this.offsetsforBackend.push(offsetforBackend);
-					srt_instructions.shift();
-					srt_instructions.shift();
-					// console.log(srt_instructions);
-					let caption_text = "";
-					// console.log(lastEndSeconds);
-					// console.log(100 * Number(timestampStartSeconds + "." + timestampStartMilliseconds))
-					// console.log(this.int_spacing)
-					srt_instructions.forEach(
-						// this is if the caption takes up two lines in the text file
-						(part) => (caption_text = caption_text + "\n" + part)
-					);
-					if (
-						100 *
-						timestampStart >
-						lastEndSeconds
-					) {
-						// console.log(caption_text)
-						caption_text = "\n\n" + caption_text.substring(1);
-						this.captions.push(caption_text);
-					} else {
-						// console.log("SPACING!")
-
-						// console.log(caption_text)
-						caption_text = caption_text.substring(1);
-						// console.log(caption_text)
-						this.captions.push(caption_text);
-					}
-					lastEndSeconds =
-						timestampEnd;
+					caption_text = "\n\n" + caption_text.substring(1);
+					this.captions.push(caption_text);
+				} else {
+					caption_text = caption_text.substring(1);
+					this.captions.push(caption_text);
 				}
-			});
+				lastEndSeconds =
+					100 * timestampEnd;
+				return lastEndSeconds
+			} else { return lastEndSeconds }
+		},
+
+		prepText() {
 
 			if (this.captions[0][0] == "\n" && this.captions[0][1] == "\n") {
 				// take away the first two carriage returns from before the first caption
@@ -644,9 +486,6 @@ export default {
 
 			this.create();
 		},
-
-
-
 
 
 		closeModal() {
@@ -657,8 +496,6 @@ export default {
 </script>
 
 <style scoped>
-
-
 .backdrop {
 	background: rgba(0, 0, 0, 0.5);
 	position: fixed;
