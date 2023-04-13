@@ -129,7 +129,7 @@ export default {
 						// console.log(tier.getAttribute("TIER_ID"))
 						this.tiers.push(tier.getAttribute("TIER_ID"))
 					})
-					console.log(this.tiers)
+					// console.log(this.tiers)
 					if (this.tiers.length == 0) {
 						alert("no tiers found")
 					}
@@ -170,7 +170,7 @@ export default {
 	methods: {
 
 		finished(response) {
-			console.log(response)
+			// console.log(response)
 			this.$emit("addCreatedInterpretation", response.interpretation);
 		},
 
@@ -188,6 +188,7 @@ export default {
 			}
 		},
 
+		// this wasn't working as a computed property, so I am doing it manually
 		getIntText() {
 			if (this.int_spacing != "") {
 				let stripped = this.int_text_unstripped.replace(
@@ -361,7 +362,7 @@ export default {
 
 
 			let eafObject = await this.eafToInterpretationHelper(xmlDoc)
-			console.log(eafObject)
+			// console.log(eafObject)
 
 
 				let arrayOfTierNames = Object.keys(eafObject)
@@ -375,16 +376,17 @@ export default {
 
 					// console.log(this.int_text_unstripped)
 					this.int_title = arrayOfTierNames[m]
-					console.log(this.int_title)
-					console.log(this.tierLanguages)
-					console.log(this.tierLanguages[this.int_title])
+					// console.log(this.int_title)
+					// console.log(this.tierLanguages)
+					// console.log(this.tierLanguages[this.int_title])
 					if (this.tierLanguages[this.int_title]) {
-						console.log(this.tierLanguages)
+						// console.log(this.tierLanguages)
 						this.int_spacing = this.tierLanguages[this.int_title]
 					}
 					else { this.int_spacing = "" }
-					console.log(this.int_spacing)
+					// console.log(this.int_spacing)
 					this.int_text_unstripped = ""
+		// this wasn't working as a computed property, so I am doing it manually
 					this.getIntText()
 					// console.log(this.int_text_unstripped)
 					// console.log(this.int_text)
@@ -610,9 +612,9 @@ export default {
 					100 * timestampEnd;
 				return lastEndSeconds
 			} else {
-				console.log((1000 * timestampEnd) + " should be less than or equal to " + this.$store.state.audioDuration)
-				console.log((1000 * timestampStart + " should be greater than or equal to 0"))
-				console.log(srt_instructions + " should not be undefined")
+				// console.log((1000 * timestampEnd) + " should be less than or equal to " + this.$store.state.audioDuration)
+				// console.log((1000 * timestampStart + " should be greater than or equal to 0"))
+				// console.log(srt_instructions + " should not be undefined")
 				return lastEndSeconds
 			}
 		},
@@ -691,6 +693,7 @@ export default {
 			}
 
 			this.int_text_unstripped = this.captions.join("");
+		// this wasn't working as a computed property, so I am doing it manually
 			this.getIntText()
 			// console.log(this.int_text_unstripped);
 			// console.log(this.int_text);
@@ -742,7 +745,7 @@ export default {
 			// console.log(this.new_associations);
 
 			let response = await this.create();
-			console.log(response)
+			// console.log(response)
 			return response
 		},
 
