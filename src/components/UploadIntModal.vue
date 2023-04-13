@@ -8,22 +8,23 @@
 			<h1 class="text-2xl font-bold mb-[1vh]">Upload Interpretation File</h1>
 			<br />
 			<input :disabled="uploadInProgress==true" class="w-full px-3 py-[1vh] mb-[2vh] border border-gray-300 rounded" type="file"
-				accept=".srt, .txt, .eaf" ref="interpretationInput" />
+				accept=".srt, .txt, .eaf, .xml" ref="interpretationInput" />
 			<select :disabled="uploadInProgress==true" v-model="filetype" class="w-full px-3 py-[1vh] mb-[1vh] border border-gray-300 rounded"
 				:class="{ 'text-gray-500': isActive }">
 				<option value="">What file format are you uploading?</option>
 				<option value="srt" class="text-black">SubRip (.srt)</option>
 				<option value="eaf" class="text-black">ELAN Annotation Format (.eaf)</option>
 				<option value="tsv" class="text-black">Audacity Timing File (.txt)</option>
+				<option value="pan" class="text-black">Pangloss Format (.xml)</option>
 			</select>
-			<input :disabled="uploadInProgress==true" v-if="filetype != 'eaf'" class="w-full px-3 py-[1vh] border border-gray-300 rounded"
+			<input :disabled="uploadInProgress==true" v-if="filetype != 'eaf' && filetype != 'pan'" class="w-full px-3 py-[1vh] border border-gray-300 rounded"
 				placeholder="Title of New Interpretation" v-model="int_title" />
-			<input :disabled="uploadInProgress==true" v-if="filetype != 'eaf'" class="w-full px-3 py-[1vh] border border-gray-300 rounded"
+			<input :disabled="uploadInProgress==true" v-if="filetype != 'eaf' && filetype != 'pan'" class="w-full px-3 py-[1vh] border border-gray-300 rounded"
 				placeholder="Language of New Interpretation" v-model="int_language" />
-			<input :disabled="uploadInProgress==true" v-if="filetype != 'eaf'" class="w-full px-3 py-[1vh] border border-gray-300 rounded"
+			<input :disabled="uploadInProgress==true" v-if="filetype != 'eaf' && filetype != 'pan'" class="w-full px-3 py-[1vh] border border-gray-300 rounded"
 				placeholder="What character is this language 'spaced' by? (or leave blank)" v-model="int_spacing"
 				maxlength="1" />
-			<div v-if="filetype == 'eaf'">
+			<div v-if="filetype == 'eaf' || filetype == 'pan'">
 				<div v-for="tier in tiers">{{ tier }}
 					<input class="w-full px-3 py-[1vh] border border-gray-300 rounded"
 						placeholder="What is the tokenizer, if any?" v-model="tierLanguages[tier]" maxlength="1" />
@@ -36,17 +37,22 @@
 		>
 				Upload In Progress
 			</button>
-			<button v-else-if="filetype != 'eaf'"
+			<button v-else-if="filetype != 'eaf' && filetype != 'pan'"
 				class="w-full px-3 py-2 mt-[2vh] text-sm font-medium text-white transition-colors border rounded bg-cyan-700 border-cyan-600 hover:bg-cyan-600"
 				@click="upload">
 				Upload Interpretation
 			</button>
-			<button v-else-if="allowEAFUpload == false"
+			<button v-else-if="allowTieredUpload == false && filetype=='eaf'"
 				class="w-full px-3 py-2 mt-[2vh] text-sm font-medium text-white transition-colors border rounded bg-cyan-700 border-cyan-600 hover:bg-cyan-600"
 				@click="showEAFTiers">
 				Examine Tiers
 			</button>
-			<button v-else-if="allowEAFUpload == true"
+			<button v-else-if="allowTieredUpload == false && filetype=='pan'"
+				class="w-full px-3 py-2 mt-[2vh] text-sm font-medium text-white transition-colors border rounded bg-cyan-700 border-cyan-600 hover:bg-cyan-600"
+				@click="showPANTiers">
+				Examine Tiers
+			</button>
+			<button v-else-if="allowTieredUpload == true"
 				class="w-full px-3 py-2 mt-[2vh] text-sm font-medium text-white transition-colors border rounded bg-cyan-700 border-cyan-600 hover:bg-cyan-600"
 				@click="upload">Upload</button>
 		</div>
@@ -64,7 +70,8 @@ export default {
 			tiers: [],
 			tierLanguages: {},
 			EAFfileloaded: "",
-			allowEAFUpload: false,
+			PANfileloaded: "",
+			allowTieredUpload: false,
 			uploadInProgress: false,
 			int_title: "",
 			int_text_unstripped: "",
@@ -109,11 +116,15 @@ export default {
 	watch: {
 
 		filetype: function () {
-			if (this.filetype == "eaf") {
+			if (this.filetype == "eaf" || this.filetype=='pan') {
 				this.int_language = ""
 				this.int_title = ""
 				this.int_spacing = ""
 			}
+		},
+
+		PANfileloaded: function() {
+			// FLAG!!!
 		},
 
 		EAFfileloaded: function () {
@@ -134,7 +145,7 @@ export default {
 						alert("no tiers found")
 					}
 					else if (this.tiers.length > 0) {
-						this.allowEAFUpload = true
+						this.allowTieredUpload = true
 					}
 
 				}
@@ -159,6 +170,10 @@ export default {
 				this.eafToInterpretation()
 
 			}
+			else if (this.filetype == "pan") {
+				this.panToInterpretation()
+
+			}
 			else if (this.filetype == "tsv") {
 				this.tsvToInterpretation()
 			}
@@ -172,6 +187,11 @@ export default {
 		finished(response) {
 			// console.log(response)
 			this.$emit("addCreatedInterpretation", response.interpretation);
+		},
+
+		showPANTiers() {
+
+			// FLAG!!!
 		},
 
 		showEAFTiers() {
@@ -336,6 +356,11 @@ export default {
 			this.$emit("closeUploadIntModal");
 		},
 
+		async panToInterpretation() {
+			// FLAG!!!
+
+		},
+
 		async eafToInterpretation() {
 
 			try {
@@ -431,6 +456,12 @@ export default {
 			}
 			this.$emit("closeUploadIntModal");
 
+
+		},
+
+		async panToInterpretationHelper(xmlDoc) {
+
+			// FLAG!!!
 
 		},
 
