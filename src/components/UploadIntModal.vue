@@ -24,12 +24,11 @@
 				placeholder="What character is this language 'spaced' by? (or leave blank)" v-model="int_spacing"
 				maxlength="1" />
 			<div v-if="filetype == 'eaf'">
-			<div v-for="tier in tiers">{{tier}}
-				<input class="w-full px-3 py-[1vh] border border-gray-300 rounded"
-				placeholder="What is the tokenizer, if any?" v-model="tierLanguages[tier]"
-				maxlength="1" />
+				<div v-for="tier in tiers">{{ tier }}
+					<input class="w-full px-3 py-[1vh] border border-gray-300 rounded"
+						placeholder="What is the tokenizer, if any?" v-model="tierLanguages[tier]" maxlength="1" />
+				</div>
 			</div>
-		</div>
 			<br>
 
 			<button v-if="filetype != 'eaf'"
@@ -147,27 +146,14 @@ export default {
 			// for (var member in this.tierLanguages) delete this.tierLanguages[member]
 			if (this.fileloaded == "") { }
 			else if (this.filetype == "srt") {
-				try {
-					this.srtToInterpretation();
-				}
-				catch (error) {
-					console.log(error)
-					alert("not a readable SubRip file; select a different filetype")
-				}
+				this.srtToInterpretation();
 			}
 			else if (this.filetype == "eaf") {
-				try { this.eafToInterpretation() }
-				catch (error) {
-					console.log(error)
-					alert("not a readable ELAN Annotation Format file; select a different filetype")
-				}
+				this.eafToInterpretation()
+
 			}
 			else if (this.filetype == "tsv") {
-				try { this.tsvToInterpretation() }
-				catch (error) {
-					console.log(error)
-					alert("not a readable Audacity Timing File; select a different filetype")
-				}
+				this.tsvToInterpretation()
 			}
 			else {
 				alert("file type not selected")
@@ -334,87 +320,100 @@ export default {
 		},
 
 		async eafToInterpretation() {
-			for (var member in this.timestamps) delete this.timestamps[member]
 
-			let xmlDoc = new DOMParser().parseFromString(this.fileloaded, "text/xml")
+			try {
 
-			// console.log(xmlDoc)
+				for (var member in this.timestamps) delete this.timestamps[member]
+
+				let xmlDoc = new DOMParser().parseFromString(this.fileloaded, "text/xml")
+
+				// console.log(xmlDoc)
 
 
-			let time_unit = xmlDoc.querySelector("HEADER").getAttribute('TIME_UNITS')
-			if (time_unit != "milliseconds") { throw new Error('Dito can only upload .eaf files with timestamps calculated in milliseconds at this time.') }
-			this.timestamps = {}
-			let timeslots = xmlDoc.querySelector("TIME_ORDER").querySelectorAll("TIME_SLOT")
+				let time_unit = xmlDoc.querySelector("HEADER").getAttribute('TIME_UNITS')
+				if (time_unit != "milliseconds") { throw new Error('Dito can only upload .eaf files with timestamps calculated in milliseconds at this time.') }
+				this.timestamps = {}
+				let timeslots = xmlDoc.querySelector("TIME_ORDER").querySelectorAll("TIME_SLOT")
 
-			// console.log(timeslots)
+				// console.log(timeslots)
 
-			for (let a = 0; a < timeslots.length; a++) {
-				this.timestamps[timeslots[a].getAttribute("TIME_SLOT_ID")] = timeslots[a].getAttribute("TIME_VALUE")
+				for (let a = 0; a < timeslots.length; a++) {
+					this.timestamps[timeslots[a].getAttribute("TIME_SLOT_ID")] = timeslots[a].getAttribute("TIME_VALUE")
+				}
+
+				// console.log(this.timestamps)
 			}
-
-			// console.log(this.timestamps)
+			catch (error) {
+				console.log(error)
+				alert("not a readable ELAN Annotation Format file; select a different filetype")
+			}
 
 			let eafObject = await this.eafToInterpretationHelper(xmlDoc)
 			console.log(eafObject)
+			try {
+
+				let arrayOfTierNames = Object.keys(eafObject)
 
 
-			let arrayOfTierNames = Object.keys(eafObject)
+				for (let m = 0; m < arrayOfTierNames.length; m++) {
 
+					this.timestampsforBackend.length = 0;
+					this.offsetsforBackend.length = 0;
+					this.captions.length = 0;
 
-			for (let m = 0; m < arrayOfTierNames.length; m++) {
-
-				this.timestampsforBackend.length = 0;
-				this.offsetsforBackend.length = 0;
-				this.captions.length = 0;
-
-				// console.log(this.int_text_unstripped)
-				this.int_title = arrayOfTierNames[m]
-				console.log(this.int_title)
-				console.log(this.tierLanguages)
-				console.log(this.tierLanguages[this.int_title])
-				if (this.tierLanguages[this.int_title])
-{	console.log(this.tierLanguages)		
-		this.int_spacing = this.tierLanguages[this.int_title]}
-else {this.int_spacing=""}
-				console.log(this.int_spacing)
-				this.int_text_unstripped = ""
-				this.getIntText()
-				// console.log(this.int_text_unstripped)
-				// console.log(this.int_text)
-				this.int_language = ""
-				let arrayToParse = Object.entries(eafObject[arrayOfTierNames[m]])
-				console.log(arrayToParse)
-
-				for (let j = arrayToParse.length - 1; j >= 0; j--) {
-					if (arrayToParse[j][1]["annotationText"] == "") {
-						arrayToParse.splice(j, 1);
+					// console.log(this.int_text_unstripped)
+					this.int_title = arrayOfTierNames[m]
+					console.log(this.int_title)
+					console.log(this.tierLanguages)
+					console.log(this.tierLanguages[this.int_title])
+					if (this.tierLanguages[this.int_title]) {
+						console.log(this.tierLanguages)
+						this.int_spacing = this.tierLanguages[this.int_title]
 					}
+					else { this.int_spacing = "" }
+					console.log(this.int_spacing)
+					this.int_text_unstripped = ""
+					this.getIntText()
+					// console.log(this.int_text_unstripped)
+					// console.log(this.int_text)
+					this.int_language = ""
+					let arrayToParse = Object.entries(eafObject[arrayOfTierNames[m]])
+					console.log(arrayToParse)
+
+					for (let j = arrayToParse.length - 1; j >= 0; j--) {
+						if (arrayToParse[j][1]["annotationText"] == "") {
+							arrayToParse.splice(j, 1);
+						}
+					}
+					console.log(arrayToParse)
+
+					let lastEndSeconds = 0;
+					for (let h = 0; h < arrayToParse.length; h++) {
+						let srt_instructions = arrayToParse[h][1]["annotationText"]
+						// console.log(srt_instructions)
+
+						let timestampStartReformatted = 0
+						let timestampEndReformatted = 0
+						if (arrayToParse[h][1]["annotationType"] == "alignable") {
+							timestampStartReformatted = Number(this.timestamps[arrayToParse[h][1]["timeslotRef1"]]) / 1000
+							timestampEndReformatted = Number(this.timestamps[arrayToParse[h][1]["timeslotRef2"]]) / 1000
+							// console.log(timestampStartReformatted)
+							// console.log(timestampEndReformatted)
+						}
+						else if (arrayToParse[h][1]["annotationType"] == "ref") {
+							timestampStartReformatted = Number(this.timestamps[eafObject[arrayToParse[h][1]["parentRef"]][arrayToParse[h][1]["annotationRef"]]["timeslotRef1"]]) / 1000
+							timestampEndReformatted = Number(this.timestamps[eafObject[arrayToParse[h][1]["parentRef"]][arrayToParse[h][1]["annotationRef"]]["timeslotRef2"]]) / 1000
+						}
+						lastEndSeconds = await this.formatForBackend(timestampStartReformatted, timestampEndReformatted, srt_instructions, lastEndSeconds)
+
+					}
+					await this.prepText()
 				}
-				console.log(arrayToParse)
-
-				let lastEndSeconds = 0;
-				for (let h = 0; h < arrayToParse.length; h++) {
-					let srt_instructions = arrayToParse[h][1]["annotationText"]
-					// console.log(srt_instructions)
-
-					let timestampStartReformatted = 0
-					let timestampEndReformatted = 0
-					if (arrayToParse[h][1]["annotationType"] == "alignable") {
-						timestampStartReformatted = Number(this.timestamps[arrayToParse[h][1]["timeslotRef1"]]) / 1000
-						timestampEndReformatted = Number(this.timestamps[arrayToParse[h][1]["timeslotRef2"]]) / 1000
-						// console.log(timestampStartReformatted)
-						// console.log(timestampEndReformatted)
-					}
-					else if (arrayToParse[h][1]["annotationType"] == "ref") {
-						timestampStartReformatted = Number(this.timestamps[eafObject[arrayToParse[h][1]["parentRef"]][arrayToParse[h][1]["annotationRef"]]["timeslotRef1"]]) / 1000
-						timestampEndReformatted = Number(this.timestamps[eafObject[arrayToParse[h][1]["parentRef"]][arrayToParse[h][1]["annotationRef"]]["timeslotRef2"]]) / 1000
-					}
-					lastEndSeconds = await this.formatForBackend(timestampStartReformatted, timestampEndReformatted, srt_instructions, lastEndSeconds)
-
-				}
-				await this.prepText()
 			}
-
+			catch (error) {
+				console.log(error)
+				alert("not a readable ELAN Annotation Format file; select a different filetype")
+			}
 
 
 
@@ -423,115 +422,131 @@ else {this.int_spacing=""}
 		async eafToInterpretationHelper(xmlDoc) {
 			// console.log(this.fileloaded)
 
+			try {
+
+				let tiers = xmlDoc.querySelectorAll("TIER")
+
+				let newInterpretations = {}
+
+				tiers.forEach(tier => {
+					let parentRef = tier.getAttribute("PARENT_REF")
+					// let annotationType = tier
+					// console.log(tier.querySelector("ANNOTATION").firstElementChild.tagName)
+					// console.log(parentRef)
+					newInterpretations[tier.getAttribute("TIER_ID")] = {}
+					if (tier.querySelector("ANNOTATION") && tier.querySelector("ANNOTATION").firstElementChild.tagName == "ALIGNABLE_ANNOTATION") {
+						tier.querySelectorAll("ANNOTATION").forEach(annotation => {
+							let child = annotation.firstElementChild
+							newInterpretations[tier.getAttribute("TIER_ID")][child.getAttribute("ANNOTATION_ID")] = {}
+							newInterpretations[tier.getAttribute("TIER_ID")][child.getAttribute("ANNOTATION_ID")].annotationType = "alignable"
+							newInterpretations[tier.getAttribute("TIER_ID")][child.getAttribute("ANNOTATION_ID")].timeslotRef1 = child.getAttribute("TIME_SLOT_REF1")
+							newInterpretations[tier.getAttribute("TIER_ID")][child.getAttribute("ANNOTATION_ID")].timeslotRef2 = child.getAttribute("TIME_SLOT_REF2")
+							newInterpretations[tier.getAttribute("TIER_ID")][child.getAttribute("ANNOTATION_ID")].annotationText = child.firstElementChild.textContent
+
+							// console.log("alignable: " + annotationId + "; " + timeslotRef1 + "; " + timeslotRef2 + "; " + annotationText)
+						})
+					} else if (tier.querySelector("ANNOTATION") && tier.querySelector("ANNOTATION").firstElementChild.tagName == "REF_ANNOTATION") {
+						// newInterpretations[tier.getAttribute("TIER_ID")].forEach(annotation => {
+						tier.querySelectorAll("ANNOTATION").forEach(annotation => {
+							let child = annotation.firstElementChild
+							newInterpretations[tier.getAttribute("TIER_ID")][child.getAttribute("ANNOTATION_ID")] = {}
+							newInterpretations[tier.getAttribute("TIER_ID")][child.getAttribute("ANNOTATION_ID")].parentRef = parentRef
+							newInterpretations[tier.getAttribute("TIER_ID")][child.getAttribute("ANNOTATION_ID")].annotationType = "ref"
+							newInterpretations[tier.getAttribute("TIER_ID")][child.getAttribute("ANNOTATION_ID")].annotationRef = child.getAttribute("ANNOTATION_REF")
+							newInterpretations[tier.getAttribute("TIER_ID")][child.getAttribute("ANNOTATION_ID")].annotationText = child.firstElementChild.textContent
+
+							// console.log("ref: " + annotationId + "; " + parentRef + "; " + annotationRef + "; " + annotationText)
+						})
 
 
-			let tiers = xmlDoc.querySelectorAll("TIER")
-
-			let newInterpretations = {}
-
-			tiers.forEach(tier => {
-				let parentRef = tier.getAttribute("PARENT_REF")
-				// let annotationType = tier
-				// console.log(tier.querySelector("ANNOTATION").firstElementChild.tagName)
-				// console.log(parentRef)
-				newInterpretations[tier.getAttribute("TIER_ID")] = {}
-				if (tier.querySelector("ANNOTATION") && tier.querySelector("ANNOTATION").firstElementChild.tagName == "ALIGNABLE_ANNOTATION") {
-					tier.querySelectorAll("ANNOTATION").forEach(annotation => {
-						let child = annotation.firstElementChild
-						newInterpretations[tier.getAttribute("TIER_ID")][child.getAttribute("ANNOTATION_ID")] = {}
-						newInterpretations[tier.getAttribute("TIER_ID")][child.getAttribute("ANNOTATION_ID")].annotationType = "alignable"
-						newInterpretations[tier.getAttribute("TIER_ID")][child.getAttribute("ANNOTATION_ID")].timeslotRef1 = child.getAttribute("TIME_SLOT_REF1")
-						newInterpretations[tier.getAttribute("TIER_ID")][child.getAttribute("ANNOTATION_ID")].timeslotRef2 = child.getAttribute("TIME_SLOT_REF2")
-						newInterpretations[tier.getAttribute("TIER_ID")][child.getAttribute("ANNOTATION_ID")].annotationText = child.firstElementChild.textContent
-
-						// console.log("alignable: " + annotationId + "; " + timeslotRef1 + "; " + timeslotRef2 + "; " + annotationText)
-					})
-				} else if (tier.querySelector("ANNOTATION") && tier.querySelector("ANNOTATION").firstElementChild.tagName == "REF_ANNOTATION") {
-					// newInterpretations[tier.getAttribute("TIER_ID")].forEach(annotation => {
-					tier.querySelectorAll("ANNOTATION").forEach(annotation => {
-						let child = annotation.firstElementChild
-						newInterpretations[tier.getAttribute("TIER_ID")][child.getAttribute("ANNOTATION_ID")] = {}
-						newInterpretations[tier.getAttribute("TIER_ID")][child.getAttribute("ANNOTATION_ID")].parentRef = parentRef
-						newInterpretations[tier.getAttribute("TIER_ID")][child.getAttribute("ANNOTATION_ID")].annotationType = "ref"
-						newInterpretations[tier.getAttribute("TIER_ID")][child.getAttribute("ANNOTATION_ID")].annotationRef = child.getAttribute("ANNOTATION_REF")
-						newInterpretations[tier.getAttribute("TIER_ID")][child.getAttribute("ANNOTATION_ID")].annotationText = child.firstElementChild.textContent
-
-						// console.log("ref: " + annotationId + "; " + parentRef + "; " + annotationRef + "; " + annotationText)
-					})
-
+					}
 
 				}
+				)
+				return newInterpretations
 
 			}
-			)
-			return newInterpretations
-
-
+			catch (error) {
+				console.log(error)
+				alert("not a readable ELAN Annotation Format file; select a different filetype")
+			}
 
 		},
 
 		async srtToInterpretationHelper() {
-			let arrayToParse = this.fileloaded.replaceAll("\r\n", "\n").split("\n\n");
+			try {
+				let arrayToParse = this.fileloaded.replaceAll("\r\n", "\n").split("\n\n");
 
-			for (let j = arrayToParse.length - 1; j >= 0; j--) {
-				if (arrayToParse[j] == "") {
-					arrayToParse.splice(j, 1);
+				for (let j = arrayToParse.length - 1; j >= 0; j--) {
+					if (arrayToParse[j] == "") {
+						arrayToParse.splice(j, 1);
+					}
+
 				}
 
+				let lastEndSeconds = 0;
+
+				for (let h = 0; h < arrayToParse.length; h++) {
+
+					let srt_instructions = arrayToParse[h].trim().split("\n");
+
+					let timestampInstructions = srt_instructions[1];
+					srt_instructions.shift();
+					srt_instructions.shift();
+
+					let timestampStart = timestampInstructions.split(" --> ")[0].trim();
+					let timestampStartMilliseconds = timestampStart.slice(-3);
+					let timestampStartSecondsArray = timestampStart.slice(0, -4).split(":");
+					let timestampStartSeconds =
+						timestampStartSecondsArray[0] * 3600 +
+						timestampStartSecondsArray[1] * 60 +
+						timestampStartSecondsArray[2] * 1;
+					let timestampStartReformatted = Number(timestampStartSeconds + "." + timestampStartMilliseconds)
+
+					let timestampEnd = timestampInstructions.split(" --> ")[1].trim();
+					let timestampEndMilliseconds = timestampEnd.slice(-3);
+					let timestampEndSecondsArray = timestampEnd.slice(0, -4).split(":");
+					let timestampEndSeconds =
+						timestampEndSecondsArray[0] * 3600 +
+						timestampEndSecondsArray[1] * 60 +
+						timestampEndSecondsArray[2] * 1;
+					let timestampEndReformatted = Number(timestampEndSeconds + "." + timestampEndMilliseconds)
+
+
+					lastEndSeconds = await this.formatForBackend(timestampStartReformatted, timestampEndReformatted, srt_instructions, lastEndSeconds)
+				}
 			}
-
-			let lastEndSeconds = 0;
-
-			for (let h = 0; h < arrayToParse.length; h++) {
-
-				let srt_instructions = arrayToParse[h].trim().split("\n");
-
-				let timestampInstructions = srt_instructions[1];
-				srt_instructions.shift();
-				srt_instructions.shift();
-
-				let timestampStart = timestampInstructions.split(" --> ")[0].trim();
-				let timestampStartMilliseconds = timestampStart.slice(-3);
-				let timestampStartSecondsArray = timestampStart.slice(0, -4).split(":");
-				let timestampStartSeconds =
-					timestampStartSecondsArray[0] * 3600 +
-					timestampStartSecondsArray[1] * 60 +
-					timestampStartSecondsArray[2] * 1;
-				let timestampStartReformatted = Number(timestampStartSeconds + "." + timestampStartMilliseconds)
-
-				let timestampEnd = timestampInstructions.split(" --> ")[1].trim();
-				let timestampEndMilliseconds = timestampEnd.slice(-3);
-				let timestampEndSecondsArray = timestampEnd.slice(0, -4).split(":");
-				let timestampEndSeconds =
-					timestampEndSecondsArray[0] * 3600 +
-					timestampEndSecondsArray[1] * 60 +
-					timestampEndSecondsArray[2] * 1;
-				let timestampEndReformatted = Number(timestampEndSeconds + "." + timestampEndMilliseconds)
-
-
-				lastEndSeconds = await this.formatForBackend(timestampStartReformatted, timestampEndReformatted, srt_instructions, lastEndSeconds)
+			catch (error) {
+				console.log(error)
+				alert("not a readable SubRip file; select a different filetype")
 			}
 
 
 		},
 
 		async tsvToInterpretationHelper() {
-			let arrayToParse = this.fileloaded.replaceAll("\r\n", "\n").split("\n");
+			try {
+				let arrayToParse = this.fileloaded.replaceAll("\r\n", "\n").split("\n");
 
-			for (let j = arrayToParse.length - 1; j >= 0; j--) {
-				if (arrayToParse[j] == "") {
-					arrayToParse.splice(j, 1);
+				for (let j = arrayToParse.length - 1; j >= 0; j--) {
+					if (arrayToParse[j] == "") {
+						arrayToParse.splice(j, 1);
+					}
+				}
+
+				let lastEndSeconds = 0;
+				for (let h = 0; h < arrayToParse.length; h++) {
+					let srt_instructions = arrayToParse[h].trim().split("\t");
+					let timestampStartReformatted = Number(srt_instructions[0])
+					let timestampEndReformatted = Number(srt_instructions[1])
+					srt_instructions.shift();
+					srt_instructions.shift();
+					lastEndSeconds = await this.formatForBackend(timestampStartReformatted, timestampEndReformatted, srt_instructions, lastEndSeconds)
 				}
 			}
-
-			let lastEndSeconds = 0;
-			for (let h = 0; h < arrayToParse.length; h++) {
-				let srt_instructions = arrayToParse[h].trim().split("\t");
-				let timestampStartReformatted = Number(srt_instructions[0])
-				let timestampEndReformatted = Number(srt_instructions[1])
-				srt_instructions.shift();
-				srt_instructions.shift();
-				lastEndSeconds = await this.formatForBackend(timestampStartReformatted, timestampEndReformatted, srt_instructions, lastEndSeconds)
+			catch (error) {
+				console.log(error)
+				alert("not a readable Audacity Timing File; select a different filetype")
 			}
 
 		},
