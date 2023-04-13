@@ -23,13 +23,28 @@
 			<input v-if="filetype != 'eaf'" class="w-full px-3 py-[1vh] border border-gray-300 rounded"
 				placeholder="What character is this language 'spaced' by? (or leave blank)" v-model="int_spacing"
 				maxlength="1" />
+			<div v-if="filetype == 'eaf'">
+			<div v-for="tier in tiers">{{tier}}
+				<input class="w-full px-3 py-[1vh] border border-gray-300 rounded"
+				placeholder="What is the tokenizer, if any?" v-model="tierLanguages[tier]"
+				maxlength="1" />
+			</div>
+		</div>
 			<br>
 
-			<button
+			<button v-if="filetype != 'eaf'"
 				class="w-full px-3 py-2 mt-[2vh] text-sm font-medium text-white transition-colors border rounded bg-cyan-700 border-cyan-600 hover:bg-cyan-600"
 				@click="upload">
 				Upload Interpretation
 			</button>
+			<button v-if="filetype == 'eaf' && allowEAFUpload == false"
+				class="w-full px-3 py-2 mt-[2vh] text-sm font-medium text-white transition-colors border rounded bg-cyan-700 border-cyan-600 hover:bg-cyan-600"
+				@click="showEAFTiers">
+				Examine Tiers
+			</button>
+			<button v-else-if="filetype == 'eaf' && allowEAFUpload == true"
+				class="w-full px-3 py-2 mt-[2vh] text-sm font-medium text-white transition-colors border rounded bg-cyan-700 border-cyan-600 hover:bg-cyan-600"
+				@click="upload">Upload</button>
 		</div>
 	</div>
 </template>
@@ -42,6 +57,10 @@ export default {
 	components: {},
 	data() {
 		return {
+			tiers: [],
+			tierLanguages: {},
+			EAFfileloaded: "",
+			allowEAFUpload: false,
 			int_title: "",
 			int_text_unstripped: "",
 			int_text: "",
@@ -91,7 +110,41 @@ export default {
 			}
 		},
 
+		EAFfileloaded: function () {
+			this.tiers.length = 0
+			for (var member in this.tierLanguages) delete this.tierLanguages[member]
+			if (this.EAFfileloaded == "") { }
+			else if (this.filetype == "eaf") {
+				try {
+					let xmlDoc = new DOMParser().parseFromString(this.EAFfileloaded, "text/xml")
+					let tiers = xmlDoc.querySelectorAll("TIER")
+					// console.log(tiers)
+					tiers.forEach(tier => {
+						// console.log(tier.getAttribute("TIER_ID"))
+						this.tiers.push(tier.getAttribute("TIER_ID"))
+					})
+					console.log(this.tiers)
+					if (this.tiers.length == 0) {
+						alert("no tiers found")
+					}
+					else if (this.tiers.length > 0) {
+						this.allowEAFUpload = true
+					}
+
+				}
+				catch (error) {
+					console.log(error)
+
+					alert("not a readable EAF file; select a different filetype")
+				}
+
+			}
+
+		},
+
 		fileloaded: function () {
+			this.tiers.length = 0
+			// for (var member in this.tierLanguages) delete this.tierLanguages[member]
 			if (this.fileloaded == "") { }
 			else if (this.filetype == "srt") {
 				try {
@@ -122,6 +175,20 @@ export default {
 		},
 	},
 	methods: {
+
+		showEAFTiers() {
+			this.fileloaded = ""
+			this.file = this.$refs.interpretationInput.files[0];
+			// console.log(this.file);
+			if (this.file != null) {
+				let reader = new FileReader();
+				reader.addEventListener("load", (event) => {
+
+					this.EAFfileloaded = event.target.result.trim();
+				});
+				reader.readAsText(this.file);
+			}
+		},
 
 		getIntText() {
 			if (this.int_spacing != "") {
@@ -303,7 +370,13 @@ export default {
 				// console.log(this.int_text_unstripped)
 				this.int_title = arrayOfTierNames[m]
 				console.log(this.int_title)
-				this.int_spacing = " "
+				console.log(this.tierLanguages)
+				console.log(this.tierLanguages[this.int_title])
+				if (this.tierLanguages[this.int_title])
+{	console.log(this.tierLanguages)		
+		this.int_spacing = this.tierLanguages[this.int_title]}
+else {this.int_spacing=""}
+				console.log(this.int_spacing)
 				this.int_text_unstripped = ""
 				this.getIntText()
 				// console.log(this.int_text_unstripped)
@@ -412,10 +485,10 @@ export default {
 			for (let h = 0; h < arrayToParse.length; h++) {
 
 				let srt_instructions = arrayToParse[h].trim().split("\n");
-				srt_instructions.shift();
-				srt_instructions.shift();
 
 				let timestampInstructions = srt_instructions[1];
+				srt_instructions.shift();
+				srt_instructions.shift();
 
 				let timestampStart = timestampInstructions.split(" --> ")[0].trim();
 				let timestampStartMilliseconds = timestampStart.slice(-3);
@@ -454,10 +527,10 @@ export default {
 			let lastEndSeconds = 0;
 			for (let h = 0; h < arrayToParse.length; h++) {
 				let srt_instructions = arrayToParse[h].trim().split("\t");
-				srt_instructions.shift();
-				srt_instructions.shift();
 				let timestampStartReformatted = Number(srt_instructions[0])
 				let timestampEndReformatted = Number(srt_instructions[1])
+				srt_instructions.shift();
+				srt_instructions.shift();
 				lastEndSeconds = await this.formatForBackend(timestampStartReformatted, timestampEndReformatted, srt_instructions, lastEndSeconds)
 			}
 
@@ -518,7 +591,7 @@ export default {
 
 		async prepText() {
 			// console.log(...this.captions)
-			if (this.captions.length>1 && this.captions[0][0] == "\n" && this.captions[0][1] == "\n") {
+			if (this.captions.length > 1 && this.captions[0][0] == "\n" && this.captions[0][1] == "\n") {
 				// take away the first two carriage returns from before the first caption
 				// console.log("HIT")
 				// console.log(this.captions[0])
@@ -594,7 +667,7 @@ export default {
 			// console.log(this.int_text_unstripped);
 			// console.log(this.int_text);
 			this.captions_cleaned.length = 0;
-			
+
 			for (var member in this.new_associations) delete this.new_associations[member]
 			// console.log(this.captions);
 
