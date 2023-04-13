@@ -7,20 +7,20 @@
 			</button>
 			<h1 class="text-2xl font-bold mb-[1vh]">Upload Interpretation File</h1>
 			<br />
-			<input class="w-full px-3 py-[1vh] mb-[2vh] border border-gray-300 rounded" type="file"
+			<input :disabled="uploadInProgress==true" class="w-full px-3 py-[1vh] mb-[2vh] border border-gray-300 rounded" type="file"
 				accept=".srt, .txt, .eaf" ref="interpretationInput" />
-			<select v-model="filetype" class="w-full px-3 py-[1vh] mb-[1vh] border border-gray-300 rounded"
+			<select :disabled="uploadInProgress==true" v-model="filetype" class="w-full px-3 py-[1vh] mb-[1vh] border border-gray-300 rounded"
 				:class="{ 'text-gray-500': isActive }">
 				<option value="">What file format are you uploading?</option>
 				<option value="srt" class="text-black">SubRip (.srt)</option>
 				<option value="eaf" class="text-black">ELAN Annotation Format (.eaf)</option>
 				<option value="tsv" class="text-black">Audacity Timing File (.txt)</option>
 			</select>
-			<input v-if="filetype != 'eaf'" class="w-full px-3 py-[1vh] border border-gray-300 rounded"
+			<input :disabled="uploadInProgress==true" v-if="filetype != 'eaf'" class="w-full px-3 py-[1vh] border border-gray-300 rounded"
 				placeholder="Title of New Interpretation" v-model="int_title" />
-			<input v-if="filetype != 'eaf'" class="w-full px-3 py-[1vh] border border-gray-300 rounded"
+			<input :disabled="uploadInProgress==true" v-if="filetype != 'eaf'" class="w-full px-3 py-[1vh] border border-gray-300 rounded"
 				placeholder="Language of New Interpretation" v-model="int_language" />
-			<input v-if="filetype != 'eaf'" class="w-full px-3 py-[1vh] border border-gray-300 rounded"
+			<input :disabled="uploadInProgress==true" v-if="filetype != 'eaf'" class="w-full px-3 py-[1vh] border border-gray-300 rounded"
 				placeholder="What character is this language 'spaced' by? (or leave blank)" v-model="int_spacing"
 				maxlength="1" />
 			<div v-if="filetype == 'eaf'">
@@ -31,17 +31,22 @@
 			</div>
 			<br>
 
-			<button v-if="filetype != 'eaf'"
+			<button v-if="uploadInProgress == true"
+			class="w-full px-3 py-2 mt-[2vh] text-sm font-medium text-white transition-colors border rounded bg-cyan-700 border-cyan-600 hover:bg-cyan-600"
+		>
+				Upload In Progress
+			</button>
+			<button v-else-if="filetype != 'eaf'"
 				class="w-full px-3 py-2 mt-[2vh] text-sm font-medium text-white transition-colors border rounded bg-cyan-700 border-cyan-600 hover:bg-cyan-600"
 				@click="upload">
 				Upload Interpretation
 			</button>
-			<button v-if="filetype == 'eaf' && allowEAFUpload == false"
+			<button v-else-if="allowEAFUpload == false"
 				class="w-full px-3 py-2 mt-[2vh] text-sm font-medium text-white transition-colors border rounded bg-cyan-700 border-cyan-600 hover:bg-cyan-600"
 				@click="showEAFTiers">
 				Examine Tiers
 			</button>
-			<button v-else-if="filetype == 'eaf' && allowEAFUpload == true"
+			<button v-else-if="allowEAFUpload == true"
 				class="w-full px-3 py-2 mt-[2vh] text-sm font-medium text-white transition-colors border rounded bg-cyan-700 border-cyan-600 hover:bg-cyan-600"
 				@click="upload">Upload</button>
 		</div>
@@ -60,6 +65,7 @@ export default {
 			tierLanguages: {},
 			EAFfileloaded: "",
 			allowEAFUpload: false,
+			uploadInProgress: false,
 			int_title: "",
 			int_text_unstripped: "",
 			int_text: "",
@@ -101,6 +107,7 @@ export default {
 		},
 	},
 	watch: {
+
 		filetype: function () {
 			if (this.filetype == "eaf") {
 				this.int_language = ""
@@ -162,6 +169,11 @@ export default {
 	},
 	methods: {
 
+		finished(response) {
+			console.log(response)
+			this.$emit("addCreatedInterpretation", response.interpretation);
+		},
+
 		showEAFTiers() {
 			this.fileloaded = ""
 			this.file = this.$refs.interpretationInput.files[0];
@@ -194,6 +206,7 @@ export default {
 
 		upload() {
 			this.fileloaded = ""
+			this.uploadInProgress=true
 			this.file = this.$refs.interpretationInput.files[0];
 			// console.log(this.file);
 			if (this.file != null) {
@@ -269,7 +282,7 @@ export default {
 					});
 
 
-				await fetch(
+				return fetch(
 					process.env.VUE_APP_api_URL +
 					"content/" +
 					this.audio_id +
@@ -290,14 +303,13 @@ export default {
 					}
 				)
 					.then(() => {
-						this.$emit("addCreatedInterpretation", response.interpretation);
-						this.$emit("closeUploadIntModal");
+						console.log(response)
+						return response
 					})
 					// .then((data) => console.log(data))
 					.catch((error) => console.error("Error:", error));
 				// if the interpretation was created successfully, then tell the parent component to add it to the list of interpretations potentially displayed in the dropdown menu, and tell the Vuex store that we need to add another column to the main screen for viewing the new interpretation
 
-				return;
 			}
 		},
 
@@ -307,7 +319,9 @@ export default {
 			this.offsetsforBackend.length = 0;
 			this.captions.length = 0;
 			await this.srtToInterpretationHelper()
-			this.prepText()
+			let response = await this.prepText()
+			this.finished(response)
+			this.$emit("closeUploadIntModal");
 		},
 
 		async tsvToInterpretation() {
@@ -316,7 +330,9 @@ export default {
 			this.offsetsforBackend.length = 0;
 			this.captions.length = 0;
 			await this.tsvToInterpretationHelper()
-			this.prepText()
+			let response = await this.prepText()
+			this.finished(response)
+			this.$emit("closeUploadIntModal");
 		},
 
 		async eafToInterpretation() {
@@ -342,15 +358,11 @@ export default {
 				}
 
 				// console.log(this.timestamps)
-			}
-			catch (error) {
-				console.log(error)
-				alert("not a readable ELAN Annotation Format file; select a different filetype")
-			}
+
 
 			let eafObject = await this.eafToInterpretationHelper(xmlDoc)
 			console.log(eafObject)
-			try {
+
 
 				let arrayOfTierNames = Object.keys(eafObject)
 
@@ -407,14 +419,15 @@ export default {
 						lastEndSeconds = await this.formatForBackend(timestampStartReformatted, timestampEndReformatted, srt_instructions, lastEndSeconds)
 
 					}
-					await this.prepText()
+					let response = await this.prepText()
+					this.finished(response)
 				}
 			}
 			catch (error) {
 				console.log(error)
 				alert("not a readable ELAN Annotation Format file; select a different filetype")
 			}
-
+			this.$emit("closeUploadIntModal");
 
 
 		},
@@ -728,7 +741,9 @@ export default {
 
 			// console.log(this.new_associations);
 
-			await this.create();
+			let response = await this.create();
+			console.log(response)
+			return response
 		},
 
 
