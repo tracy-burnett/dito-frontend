@@ -255,13 +255,17 @@ export default new Vuex.Store({
       state.consolesheight = newheight
     },
 
-    addConsolesCount(state, interpretation_id) {
-      state.consoles.push(interpretation_id)
+    exchangeConsole(state, tempObject) {
+      let index = state.consoles.indexOf(tempObject.formerinterpretation);
+
+      if (index > -1) {
+        state.consoles[index] = tempObject.newID
+      }
+
     },
 
-    updateAudioDuration(state, duration) {
-      // console.log("updated in store")
-      state.audioDuration = duration
+    addConsolesCount(state, interpretation_id) {
+      state.consoles.push(interpretation_id)
     },
 
     deleteConsole(state, interpretation_id) {
@@ -274,6 +278,11 @@ export default new Vuex.Store({
       }
 
       // console.log(state.consoles)
+    },
+
+    updateAudioDuration(state, duration) {
+      // console.log("updated in store")
+      state.audioDuration = duration
     },
 
     clearConsoles(state) {

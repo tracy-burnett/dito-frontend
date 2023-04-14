@@ -1,76 +1,55 @@
 <template>
 	<div class="h-full singleint">
-		<span
-			v-if="showSyncingModal"
-			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
-		>
-			<SyncingModal
-				:audio_id="audio_id"
-				:interpretation_id="interpretation_id"
-				@closeSyncingModal="closeSyncingModal()"
-			/>
+		<span v-if="showSyncingModal" class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen">
+			<SyncingModal :audio_id="audio_id" :interpretation_id="interpretation_id"
+				@closeSyncingModal="closeSyncingModal()" />
 		</span>
 		<!-- the current component represents what is viewable in a single interpretation column of an open storybook -->
 		<div class="flex flex-col -mt-[0vh]">
 			<div class="flex flex-row justify-center ">
 				<div class="sticky flex flex-row flex-wrap justify-around shrink ">
 
-					<div v-if="styleoption==='Viewer' && (this.interpretationStatus == 'owner' || this.interpretationStatus=='editor')">
+					<div
+						v-if="styleoption === 'Viewer' && (this.interpretationStatus == 'owner' || this.interpretationStatus == 'editor')">
 
-						<button
-							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-							@click="toggleSyncingModal()"
-						>
+						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="toggleSyncingModal()">
 							Adjust
 						</button>
 					</div>
 					<div>
-						<DeleteInterpretationViewer
-							:interpretation_id="interpretation_id"
-							@returnFormerInterpretation="returnFormerInterpretation($event)"
-						/>
+						<DeleteInterpretationViewer :interpretation_id="interpretation_id"
+							@returnFormerInterpretation="returnFormerInterpretation($event)" />
 					</div>
 
-					<div v-if="styleoption==='Tagger'">
+					<div v-if="styleoption === 'Tagger'">
 						<!-- quick and dirty way to undo tags you haven't saved to the database yet -->
-						<button
-							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-							@click="clearTimestamps()"
-						>Clear New</button>
+						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="clearTimestamps()">Clear
+							New</button>
 					</div>
 					<div v-if="interpretationsList.length > 0">
-						<SelectInterpretationMenu
-							:interpretationsList="interpretationsList"
-							@changeInterpretationID="changeInterpretationIDfunction($event)"
-						/>
+						<SelectInterpretationMenu :interpretationsList="interpretationsList"
+							@changeInterpretationID="changeInterpretationIDfunction($event)" />
 					</div>
 
 				</div>
 
 				<div class="sticky flex flex-row flex-wrap-reverse justify-around shrink top-12">
 
-					<div v-if="styleoption==='Prompter'">
-						<button
-							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-							@click="resetSensitivity()"
-						>
+					<div v-if="styleoption === 'Prompter'">
+						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="resetSensitivity()">
 							Reset Sensitivity
 						</button>
 					</div>
 
 					<div>
-						<StorybookStyleMenu
-							:interpretationStatus="interpretationStatus"
+						<StorybookStyleMenu :interpretationStatus="interpretationStatus"
 							:interpretation_id="interpretation_id"
-							@toggleStorybookStyle="toggleStorybookStylefunction($event)"
-						/>
+							@toggleStorybookStyle="toggleStorybookStylefunction($event)" />
 					</div>
-					<div v-if="styleoption==='Viewer' && (this.interpretationStatus == 'owner' || this.interpretationStatus=='editor')">
+					<div
+						v-if="styleoption === 'Viewer' && (this.interpretationStatus == 'owner' || this.interpretationStatus == 'editor')">
 
-						<div
-							class="dropdown"
-							style="float: right"
-						>
+						<div class="dropdown" style="float: right">
 							<button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn">Download</button>
 							<div class="dropdown-content">
 								<a @click="downloadSRT()">overlapping .srt</a>
@@ -78,37 +57,26 @@
 						</div>
 					</div>
 
-					<div v-if="styleoption==='Prompter'">
-						<button
-							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-							@click="newPrompt()"
-						>
+					<div v-if="styleoption === 'Prompter'">
+						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="newPrompt()">
 							New Prompt
 						</button>
 					</div>
 
-					<div v-if="styleoption==='Studio'">
-						<button
-							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-							@click="newPhrase()"
-						>
+					<div v-if="styleoption === 'Studio'">
+						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="newPhrase()">
 							New Phrase
 						</button>
 					</div>
 
-					<div v-if="styleoption==='Editor'">
-						<button
-							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-							@click="saveEditsincrease()"
-						>
+					<div v-if="styleoption === 'Editor'">
+						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="saveEditsincrease()">
 							Save
 						</button>
 					</div>
 
-					<div v-if="styleoption==='Tagger'"><button
-							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-							@click="updateAssociationsfunc()"
-						>
+					<div v-if="styleoption === 'Tagger'"><button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
+							@click="updateAssociationsfunc()">
 							Save
 						</button></div>
 				</div>
@@ -117,63 +85,36 @@
 
 				<div>
 					change font size<br>
-					<input
-						id="fontsizeslider"
-						v-model="fontsize"
-						type="range"
-						min="8"
-						max="50"
-						step=".5"
-					/>
+					<input id="fontsizeslider" v-model="fontsize" type="range" min="8" max="50" step=".5" />
 				</div>
 
 				<!--highlight more/less slider -->
-				<div v-if="styleoption==='Viewer'">
+				<div v-if="styleoption === 'Viewer'">
 					<div class="flex">
 						highlight less / more
 					</div>
 					<div>
-						<input
-							id="timestepslider"
-							v-model="timestep"
-							type="range"
-							min="0"
-							max="2500"
-							step="10"
-						/>
+						<input id="timestepslider" v-model="timestep" type="range" min="0" max="2500" step="10" />
 					</div>
 				</div>
 
-				<div v-if="styleoption==='Prompter'">
+				<div v-if="styleoption === 'Prompter'">
 					<div class="flex">
 						scribe less / more
 					</div>
 					<div>
-						<input
-							id="scribingslider"
-							v-model="scribing"
-							type="range"
-							min="20"
-							max="4000"
-							step="10"
-						/><!-- do not let min go to less than 20, since then it will be within the margin of error of the scriber auto-segmenter -->
+						<input id="scribingslider" v-model="scribing" type="range" min="20" max="4000"
+							step="10" /><!-- do not let min go to less than 20, since then it will be within the margin of error of the scriber auto-segmenter -->
 					</div>
 
 				</div>
 
-				<div v-if="styleoption==='Studio'">
+				<div v-if="styleoption === 'Studio'">
 					<div class="flex">
 						&nbsp;&nbsp;&nbsp;phrase length
 					</div>
 					<div>
-						<input
-							id="studyingslider"
-							v-model="studying"
-							type="range"
-							min="0"
-							max="2000"
-							step="10"
-						/>
+						<input id="studyingslider" v-model="studying" type="range" min="0" max="2000" step="10" />
 					</div>
 
 				</div>
@@ -181,28 +122,15 @@
 		</div>
 		<div class="mt-[6vh]">
 			<!-- this component will depend on the user's selection of component to vue via a menu in a different component -->
-			<component
-				v-bind:is="styleoption"
-				:audio_id="audio_id"
-				:timestep="timestep"
-				:scribing="scribing"
-				:studying="studying"
-				:fontsize="fontsize"
-				:key="prompterReloadCounter"
-				:clearTimestampsvar="clearTimestampsvar"
-				:updateAssociations="updateAssociations"
-				:saveEditscounter="saveEditscounter"
-				:newPromptscounter="newPromptscounter"
-				:resetSensitivitycounter="resetSensitivitycounter"
-				:downloadSRTcounter="downloadSRTcounter"
-				:newPhrasescounter="newPhrasescounter"
-				:interpretationStatus="interpretationStatus"
-				:interpretation_id="interpretation_id"
-				@permanentlydestroy="permanentlydestroy($event)"
-				@increasePhrasesCounter="newPhrase()"
-				@generateNewPrompt="newPrompt()"
-				@reloadPrompter="prompterReloadCounter++"
-			>
+			<component v-bind:is="styleoption" :audio_id="audio_id" :timestep="timestep" :scribing="scribing"
+				:studying="studying" :fontsize="fontsize" :key="prompterReloadCounter"
+				:clearTimestampsvar="clearTimestampsvar" :updateAssociations="updateAssociations"
+				:saveEditscounter="saveEditscounter" :newPromptscounter="newPromptscounter"
+				:resetSensitivitycounter="resetSensitivitycounter" :downloadSRTcounter="downloadSRTcounter"
+				:newPhrasescounter="newPhrasescounter" :interpretationStatus="interpretationStatus"
+				:interpretation_id="interpretation_id" @permanentlydestroy="permanentlydestroy($event)"
+				@increasePhrasesCounter="newPhrase()" @generateNewPrompt="newPrompt()"
+				@reloadPrompter="prompterReloadCounter++">
 
 			</component>
 
@@ -251,7 +179,7 @@ export default {
 			saveEditscounter: 0,
 			// clearOldTimestampsvar: 0,
 			interpretationStatus: "", // this remembers whether the currently logged-in user is a viewer, editor, or owner of the currently-displayed interpretation
-			styleoption: "", // this can be Viewer, Editor, or Tagger, depending on how the user is currently interacting with the displayed interpretation
+			styleoption: "Viewer", // this can be Viewer, Editor, or Tagger, depending on how the user is currently interacting with the displayed interpretation
 			interpretationFull: {}, // this contains all of the information about the currently displayed interpretation
 			showSyncingModal: false,
 			prompterReloadCounter: 0, // reloads prompter component
@@ -367,8 +295,10 @@ export default {
 		// when the user chooses to swap the interpretation they are currently viewing for a different interpretation...
 		changeInterpretationIDfunction(newID) {
 			let formerinterpretation = this.interpretation_id;
-			this.$emit("displayInterpretationID", newID); // ...tell the parent component to create a new column for the new interpretation the user wants to view
-			this.returnFormerInterpretation(formerinterpretation); // ...tell the parent component to remove this column currently being worked in
+			// this.$emit("displayInterpretationID", newID); // ...tell the parent component to create a new column for the new interpretation the user wants to view
+			// this.returnFormerInterpretation(formerinterpretation); // ...tell the parent component to remove this column currently being worked in
+			this.$emit("exchangeInterpretations", { newID, formerinterpretation })
+
 		},
 
 		returnFormerInterpretation(formerinterpretation) {
@@ -384,13 +314,16 @@ export default {
 
 <style scoped>
 .singleint {
-	-ms-overflow-style: none; /* for Internet Explorer, Edge */
-	scrollbar-width: none; /* for Firefox */
+	-ms-overflow-style: none;
+	/* for Internet Explorer, Edge */
+	scrollbar-width: none;
+	/* for Firefox */
 	overflow-y: scroll;
 }
 
 .singleint::-webkit-scrollbar {
-	display: none; /* for Chrome, Safari, and Opera */
+	display: none;
+	/* for Chrome, Safari, and Opera */
 }
 
 .dropbtn {
@@ -431,9 +364,11 @@ export default {
 .dropdown-content a:hover {
 	background-color: #f1f1f1;
 }
+
 .dropdown:hover .dropdown-content {
 	display: block;
 }
+
 /* .dropdown:hover .dropbtn { */
 /* background-color: #7833ff; */
 /* } */

@@ -1,24 +1,12 @@
 <template>
 	<div @click.ctrl.exact="playerPlayPause++">
-		<span
-			v-if="showAddInterpretationModal"
-			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
-		>
-			<AddInterpretationModal
-				:audio_id="audio_ID"
-				@addCreatedInterpretation="addCreatedInterpretation($event)"
-				@closeInterpretationModal="closeInterpretationModal()"
-			/>
+		<span v-if="showAddInterpretationModal" class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen">
+			<AddInterpretationModal :audio_id="audio_ID" @addCreatedInterpretation="addCreatedInterpretation($event)"
+				@closeInterpretationModal="closeInterpretationModal()" />
 		</span>
-		<span
-			v-if="showUploadIntModal"
-			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
-		>
-			<UploadIntModal
-				:audio_id="audio_ID"
-				@addCreatedInterpretation="addCreatedInterpretation($event)"
-				@closeUploadIntModal="closeUploadIntModal()"
-			/>
+		<span v-if="showUploadIntModal" class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen">
+			<UploadIntModal :audio_id="audio_ID" @addCreatedInterpretation="addCreatedInterpretation($event)"
+				@closeUploadIntModal="closeUploadIntModal()" />
 		</span>
 
 		<Navbar :text=navtext />
@@ -26,46 +14,32 @@
 			<div class="pt-[5vh] flex flex-row justify-between h-[100vh]">
 
 				<div>
-					<PlayerVertical
-						v-if="this.$store.state.authCompleted"
-						:key="playerKey"
-						:audio_ID="audio_ID"
-						:playerPlayPause="playerPlayPause"
-						@rerenderPlayer="playerKey++"
-					/>
+					<PlayerVertical v-if="this.$store.state.authCompleted" :key="playerKey" :audio_ID="audio_ID"
+						:playerPlayPause="playerPlayPause" @rerenderPlayer="playerKey++" />
 				</div>
 				<div class="flex flex-row w-full ml-[105px] mr-[105px]">
 
-					<span
-						v-for="interpretation in $store.state.consoles"
-						:key="interpretation"
-						class="w-full box-border px-[.5vw]"
-					>
+					<span v-for="interpretation in $store.state.consoles" :key="interpretation"
+						class="w-full box-border px-[.5vw]">
 						<!-- tell the column which audio ID we are working with, which interpretations to put in the dropdown menu for viewing, which interpretations are currently being viewed,
       and the id of the interpretation to be displayed in this column in the browser window.  The interpretation component can use events
       to tell the current component to delete this interpretation column and add a new one for a different interpretation ID. -->
-						<SingleInterpretation
-							:audio_id="audio_ID"
-							:interpretationsList="interpretationsList"
-							:formerInterpretationsList="formerInterpretationsList"
-							:interpretation_id="interpretation"
+						<SingleInterpretation :audio_id="audio_ID" :interpretationsList="interpretationsList"
+							:formerInterpretationsList="formerInterpretationsList" :interpretation_id="interpretation"
 							@returnFormerInterpretation="returnFormerInterpretation($event)"
 							@displayInterpretationID="displayInterpretationID($event)"
 							@permanentlydestroy="permanentlydestroy($event)"
-						/>
+							@exchangeInterpretations="exchangeInterpretationsfunction($event)" />
 					</span>
 					<!-- the following component can tell the current component to add a new column for an interpretation that it just created,
       or to add a new column for an interpretation that has previously been created. -->
 
 				</div>
 				<div>
-					<AddInterpretationViewer
-						:audio_id="audio_ID"
-						:interpretationsList="interpretationsList"
+					<AddInterpretationViewer :audio_id="audio_ID" :interpretationsList="interpretationsList"
 						@toggleInterpretationModal="toggleInterpretationModal()"
 						@toggleUploadIntModal="toggleUploadIntModal()"
-						@displayInterpretationID="displayInterpretationID($event)"
-					/>
+						@displayInterpretationID="displayInterpretationID($event)" />
 				</div>
 			</div>
 		</div>
@@ -135,7 +109,7 @@ export default {
 
 	beforeUnmount() {
 		this.$store.commit("clearConsoles");
-		this.$store.commit("updateAudioTime",0)
+		this.$store.commit("updateAudioTime", 0)
 		this.interpretationsList.length = 0;
 		this.formerInterpretationsList.length = 0;
 	},
@@ -216,6 +190,39 @@ export default {
 
 			// tell the Vuex store to remove the ID number of the interpretation in question from the list of interpretions that currently need columns in the browser window
 			this.$store.commit("deleteConsole", oldInterpretation);
+		},
+
+		exchangeInterpretationsfunction({ newID, formerinterpretation }) {
+			console.log(newID + " " + formerinterpretation)
+			let mappedoldIDsArray = this.formerInterpretationsList.map(
+				(item) => item.id
+			);
+
+			let indexofold = mappedoldIDsArray.indexOf(formerinterpretation);
+			if (indexofold > -1) {
+				// if the index # is successfully identified, then add the whole interpretation object to the list of interpretations for the dropdown menu...
+				this.interpretationsList.unshift(
+					this.formerInterpretationsList[indexofold]
+				);
+				// ... and remove it from the list of interpretations currently being viewed
+				this.formerInterpretationsList.splice(indexofold, 1); // 2nd parameter means remove one item only
+			}
+
+			let mappedIDsArray = this.interpretationsList.map((item) => item.id);
+			let index = mappedIDsArray.indexOf(newID);
+			if (index > -1) {
+				// if the index # is successfully identified, then add the whole interpretation object to the list of interpretations for the browser window...
+
+				this.formerInterpretationsList.push(this.interpretationsList[index]);
+				// ... and remove it from the list of interpretations currently in the Dropdown menu
+				this.interpretationsList.splice(index, 1); // 2nd parameter means remove one item only
+			}
+			let tempObject = { newID, formerinterpretation }
+			this.$store.commit("exchangeConsole", tempObject)
+			if (this.$store.state.prompterID == formerinterpretation) {
+				this.$store.commit("removePrompterID");
+			}
+
 		},
 
 		// move an interpretation from a column in the browser window to the dropdown menu
@@ -300,24 +307,22 @@ export default {
 	position: absolute;
 	width: 100%;
 	height: 20vh;
-	background-image: linear-gradient(
-		rgb(0.784% 51.765% 78.039%) 0%,
-		rgb(0.941% 52.027% 78.356%) 6.25%,
-		rgb(1.421% 52.81% 79.296%) 12.5%,
-		rgb(2.258% 54.105% 80.826%) 18.75%,
-		rgb(3.506% 55.892% 82.891%) 25%,
-		rgb(5.241% 58.149% 85.417%) 31.25%,
-		rgb(7.56% 60.843% 88.304%) 37.5%,
-		rgb(12.183% 63.425% 89.834%) 43.75%,
-		rgb(21.156% 65.241% 87.961%) 50%,
-		rgb(30.833% 67.456% 86.332%) 56.25%,
-		rgb(41.028% 70.131% 85.13%) 62.5%,
-		rgb(51.535% 73.33% 84.563%) 68.75%,
-		rgb(62.126% 77.128% 84.859%) 75%,
-		rgb(72.551% 81.603% 86.268%) 81.25%,
-		rgb(82.538% 86.843% 89.062%) 87.5%,
-		rgb(91.792% 92.942% 93.534%) 93.75%,
-		rgb(100% 100% 100%) 100%
-	);
+	background-image: linear-gradient(rgb(0.784% 51.765% 78.039%) 0%,
+			rgb(0.941% 52.027% 78.356%) 6.25%,
+			rgb(1.421% 52.81% 79.296%) 12.5%,
+			rgb(2.258% 54.105% 80.826%) 18.75%,
+			rgb(3.506% 55.892% 82.891%) 25%,
+			rgb(5.241% 58.149% 85.417%) 31.25%,
+			rgb(7.56% 60.843% 88.304%) 37.5%,
+			rgb(12.183% 63.425% 89.834%) 43.75%,
+			rgb(21.156% 65.241% 87.961%) 50%,
+			rgb(30.833% 67.456% 86.332%) 56.25%,
+			rgb(41.028% 70.131% 85.13%) 62.5%,
+			rgb(51.535% 73.33% 84.563%) 68.75%,
+			rgb(62.126% 77.128% 84.859%) 75%,
+			rgb(72.551% 81.603% 86.268%) 81.25%,
+			rgb(82.538% 86.843% 89.062%) 87.5%,
+			rgb(91.792% 92.942% 93.534%) 93.75%,
+			rgb(100% 100% 100%) 100%);
 }
 </style>
