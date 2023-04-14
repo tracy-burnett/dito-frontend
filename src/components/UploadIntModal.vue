@@ -7,34 +7,36 @@
 			</button>
 			<h1 class="text-2xl font-bold mb-[1vh]">Upload Interpretation File</h1>
 			<br />
-			<input :disabled="uploadInProgress==true" class="w-full px-3 py-[1vh] mb-[2vh] border border-gray-300 rounded" type="file"
-				accept=".srt, .txt, .eaf, .xml" ref="interpretationInput" />
-			<select :disabled="uploadInProgress==true" v-model="filetype" class="w-full px-3 py-[1vh] mb-[1vh] border border-gray-300 rounded"
-				:class="{ 'text-gray-500': isActive }">
+			<input :disabled="uploadInProgress == true" class="w-full px-3 py-[1vh] mb-[2vh] border border-gray-300 rounded"
+				type="file" accept=".srt, .txt, .eaf, .xml" ref="interpretationInput" />
+			<select :disabled="uploadInProgress == true" v-model="filetype"
+				class="w-full px-3 py-[1vh] mb-[1vh] border border-gray-300 rounded" :class="{ 'text-gray-500': isActive }">
 				<option value="">What file format are you uploading?</option>
 				<option value="srt" class="text-black">SubRip (.srt)</option>
 				<option value="eaf" class="text-black">ELAN Annotation Format (.eaf)</option>
 				<option value="tsv" class="text-black">Audacity Timing File (.txt)</option>
-				<option value="pan" class="text-black">Pangloss Format (.xml)</option>
+				<option value="pan" class="text-black">Pangloss/LACITO (.xml)</option>
 			</select>
-			<input :disabled="uploadInProgress==true" v-if="filetype != 'eaf' && filetype != 'pan'" class="w-full px-3 py-[1vh] border border-gray-300 rounded"
-				placeholder="Title of New Interpretation" v-model="int_title" />
-			<input :disabled="uploadInProgress==true" v-if="filetype != 'eaf' && filetype != 'pan'" class="w-full px-3 py-[1vh] border border-gray-300 rounded"
-				placeholder="Language of New Interpretation" v-model="int_language" />
-			<input :disabled="uploadInProgress==true" v-if="filetype != 'eaf' && filetype != 'pan'" class="w-full px-3 py-[1vh] border border-gray-300 rounded"
+			<input :disabled="uploadInProgress == true" v-if="filetype != 'eaf' && filetype != 'pan'"
+				class="w-full px-3 py-[1vh] border border-gray-300 rounded" placeholder="Title of New Interpretation"
+				v-model="int_title" />
+			<input :disabled="uploadInProgress == true" v-if="filetype != 'eaf' && filetype != 'pan'"
+				class="w-full px-3 py-[1vh] border border-gray-300 rounded" placeholder="Language of New Interpretation"
+				v-model="int_language" />
+			<input :disabled="uploadInProgress == true" v-if="filetype != 'eaf' && filetype != 'pan'"
+				class="w-full px-3 py-[1vh] border border-gray-300 rounded"
 				placeholder="What character is this language 'spaced' by? (or leave blank)" v-model="int_spacing"
 				maxlength="1" />
 			<div v-if="filetype == 'eaf' || filetype == 'pan'">
 				<div v-for="tier in tiers">{{ tier }}
-					<input class="w-full px-3 py-[1vh] border border-gray-300 rounded"
+					<input :disabled="uploadInProgress == true" class="w-full px-3 py-[1vh] border border-gray-300 rounded"
 						placeholder="What is the tokenizer, if any?" v-model="tierLanguages[tier]" maxlength="1" />
 				</div>
 			</div>
 			<br>
 
 			<button v-if="uploadInProgress == true"
-			class="w-full px-3 py-2 mt-[2vh] text-sm font-medium text-white transition-colors border rounded bg-cyan-700 border-cyan-600 hover:bg-cyan-600"
-		>
+				class="w-full px-3 py-2 mt-[2vh] text-sm font-medium text-white transition-colors border rounded bg-cyan-700 border-cyan-600 hover:bg-cyan-600">
 				Upload In Progress
 			</button>
 			<button v-else-if="filetype != 'eaf' && filetype != 'pan'"
@@ -42,12 +44,12 @@
 				@click="upload">
 				Upload Interpretation
 			</button>
-			<button v-else-if="allowTieredUpload == false && filetype=='eaf'"
+			<button v-else-if="allowTieredUpload == false && filetype == 'eaf'"
 				class="w-full px-3 py-2 mt-[2vh] text-sm font-medium text-white transition-colors border rounded bg-cyan-700 border-cyan-600 hover:bg-cyan-600"
 				@click="showEAFTiers">
 				Examine Tiers
 			</button>
-			<button v-else-if="allowTieredUpload == false && filetype=='pan'"
+			<button v-else-if="allowTieredUpload == false && filetype == 'pan'"
 				class="w-full px-3 py-2 mt-[2vh] text-sm font-medium text-white transition-colors border rounded bg-cyan-700 border-cyan-600 hover:bg-cyan-600"
 				@click="showPANTiers">
 				Examine Tiers
@@ -61,6 +63,7 @@
 
 <script>
 import { getIdToken } from "firebase/auth";
+import { list } from "postcss";
 
 export default {
 	name: "UploadIntModal",
@@ -71,6 +74,7 @@ export default {
 			tierLanguages: {},
 			EAFfileloaded: "",
 			PANfileloaded: "",
+			panHelperObject: {},
 			allowTieredUpload: false,
 			uploadInProgress: false,
 			int_title: "",
@@ -116,15 +120,51 @@ export default {
 	watch: {
 
 		filetype: function () {
-			if (this.filetype == "eaf" || this.filetype=='pan') {
+			if (this.filetype == "eaf" || this.filetype == 'pan') {
 				this.int_language = ""
 				this.int_title = ""
 				this.int_spacing = ""
 			}
 		},
 
-		PANfileloaded: function() {
-			// FLAG!!!
+		PANfileloaded: function () {
+
+			this.tiers.length = 0
+			for (var member in this.tierLanguages) delete this.tierLanguages[member]
+			if (this.PANfileloaded == "") { }
+			else if (this.filetype == "pan") {
+				try {
+					let xmlDoc = new DOMParser().parseFromString(this.PANfileloaded, "text/xml")
+					// console.log(xmlDoc)
+					let segmentation = xmlDoc.querySelectorAll("AUDIO")
+
+					segmentation.forEach((segment) => {
+						// let timestamp1 = segment.getAttribute("start")
+						// let timestamp2 = segment.getAttribute("end")
+
+						// let sibling = segment
+						this.checkForNestedPanTiers(segment.nextElementSibling)
+					})
+					// console.log(this.tiers)
+
+					if (this.tiers.length == 0) {
+						alert("no tiers found")
+					}
+					else if (this.tiers.length > 0) {
+						this.allowTieredUpload = true
+					}
+
+				}
+				catch (error) {
+					console.log(error)
+
+					alert("not a readable Pangloss/LACITO XML file; select a different filetype")
+				}
+
+			}
+
+
+
 		},
 
 		EAFfileloaded: function () {
@@ -160,6 +200,7 @@ export default {
 		},
 
 		fileloaded: function () {
+			console.log("setting tiers length to 0")
 			this.tiers.length = 0
 			// for (var member in this.tierLanguages) delete this.tierLanguages[member]
 			if (this.fileloaded == "") { }
@@ -184,6 +225,71 @@ export default {
 	},
 	methods: {
 
+		checkForNestedPanTiers(sibling) {
+			while (sibling !== null) {
+				// console.log(sibling)
+				if (sibling.tagName == "AUDIO") { break }
+				else if (sibling.tagName == "FORM") {
+					if (this.tiers.indexOf(sibling.parentNode.tagName + "." + sibling.getAttribute("kindOf")) === -1) { this.tiers.push(sibling.parentNode.tagName + "." + sibling.getAttribute("kindOf")) }
+				} else if (sibling.tagName == "TRANSL") {
+					if (this.tiers.indexOf(sibling.parentNode.tagName + "." + sibling.getAttribute("xml:lang")) === -1) { this.tiers.push(sibling.parentNode.tagName + "." + sibling.getAttribute("xml:lang")) }
+				}
+				else {
+					this.checkForNestedPanTiers(sibling.firstElementChild)
+
+				}
+				sibling = sibling.nextElementSibling
+			}
+
+		},
+
+		async panToInterpretationHelperHelper(sibling, tier, i) {
+			// console.log(	this.panHelperObject[tier][i].text)
+			// console.log(tier + " and " + i)
+
+			// console.log(this.panHelperObject[tier][i].text)
+			// console.log(typeof this.panHelperObject[tier][i].text)
+			// console.log(typeof this.panHelperObject[tier][i].text == "string")
+			// console.log(typeof this.panHelperObject[tier][i].text == 'undefined')
+
+			while (sibling !== null) {
+				// console.log(sibling)
+				if (sibling.tagName == "AUDIO") { break }
+				else if (sibling.tagName == "FORM") {
+					if (tier == (sibling.parentNode.tagName + "." + sibling.getAttribute("kindOf"))) {
+						if (typeof this.panHelperObject[tier][i].text == 'string') { this.panHelperObject[tier][i].text = this.panHelperObject[tier][i].text + "\n\n" + sibling.textContent }
+
+						else {
+							// console.log(typeof this.panHelperObject[tier][i].text + " was not string")
+
+							this.panHelperObject[tier][i].text = sibling.textContent
+							// console.log(this.panHelperObject[tier][i].text)
+						}
+					}
+
+
+				} else if (sibling.tagName == "TRANSL") {
+					if (tier == sibling.parentNode.tagName + "." + sibling.getAttribute("xml:lang")) {
+
+						if (typeof this.panHelperObject[tier][i].text == 'string') { this.panHelperObject[tier][i].text = this.panHelperObject[tier][i].text + "\n\n" + sibling.textContent }
+						else {
+							// console.log(typeof this.panHelperObject[tier][i].text + " was not string")
+
+							this.panHelperObject[tier][i].text = sibling.textContent
+							// console.log(this.panHelperObject[tier][i].text)
+						}
+					}
+				}
+				else {
+					await this.panToInterpretationHelperHelper(sibling.firstElementChild, tier, i)
+
+				}
+				// console.log(tier + ": " + i + "; " + this.panHelperObject[tier][i].text)
+				sibling = sibling.nextElementSibling
+			}
+
+		},
+
 		finished(response) {
 			// console.log(response)
 			this.$emit("addCreatedInterpretation", response.interpretation);
@@ -191,7 +297,17 @@ export default {
 
 		showPANTiers() {
 
-			// FLAG!!!
+			this.fileloaded = ""
+			this.file = this.$refs.interpretationInput.files[0];
+			// console.log(this.file);
+			if (this.file != null) {
+				let reader = new FileReader();
+				reader.addEventListener("load", (event) => {
+
+					this.PANfileloaded = event.target.result.trim();
+				});
+				reader.readAsText(this.file);
+			}
 		},
 
 		showEAFTiers() {
@@ -227,7 +343,7 @@ export default {
 
 		upload() {
 			this.fileloaded = ""
-			this.uploadInProgress=true
+			this.uploadInProgress = true
 			this.file = this.$refs.interpretationInput.files[0];
 			// console.log(this.file);
 			if (this.file != null) {
@@ -357,7 +473,80 @@ export default {
 		},
 
 		async panToInterpretation() {
-			// FLAG!!!
+
+			try {
+
+				let xmlDoc = new DOMParser().parseFromString(this.fileloaded, "text/xml")
+
+				// console.log(xmlDoc)
+
+				await this.panToInterpretationHelper(xmlDoc)
+				// console.log(this.panHelperObject)
+
+				let arrayOfTierNames = Object.keys(this.panHelperObject)
+				// console.log(arrayOfTierNames)
+
+
+				for (let m = 0; m < arrayOfTierNames.length; m++) {
+
+
+					this.timestampsforBackend.length = 0;
+					this.offsetsforBackend.length = 0;
+					this.captions.length = 0;
+
+					// console.log(this.int_text_unstripped)
+					this.int_title = arrayOfTierNames[m]
+					// console.log(this.int_title)
+					// console.log(this.tierLanguages)
+					// console.log(this.tierLanguages[this.int_title])
+					if (this.tierLanguages[this.int_title]) {
+						// console.log(this.tierLanguages)
+						this.int_spacing = this.tierLanguages[this.int_title]
+					}
+					else { this.int_spacing = "" }
+					// console.log(this.int_spacing)
+					this.int_text_unstripped = ""
+					// this wasn't working as a computed property, so I am doing it manually
+					this.getIntText()
+					// console.log(this.int_text_unstripped)
+					// console.log(this.int_text)
+					this.int_language = ""
+					let arrayToParse = Object.entries(this.panHelperObject[arrayOfTierNames[m]])
+					// console.log(arrayToParse)
+
+
+					// this code might not actually be necessary but it's not hurting either
+					for (let j = arrayToParse.length - 1; j >= 0; j--) {
+						if (arrayToParse[j][1]["text"] == "") {
+							arrayToParse.splice(j, 1);
+						}
+					}
+					// console.log(arrayToParse)
+
+					let lastEndSeconds = 0;
+					for (let h = 0; h < arrayToParse.length; h++) {
+						let srt_instructions = arrayToParse[h][1]["text"]
+						// console.log(srt_instructions)
+
+						let timestampStartReformatted = 0
+						let timestampEndReformatted = 0
+							timestampStartReformatted = Number(arrayToParse[h][1]["start"])
+							timestampEndReformatted = Number(arrayToParse[h][1]["end"])
+
+						lastEndSeconds = await this.formatForBackend(timestampStartReformatted, timestampEndReformatted, srt_instructions, lastEndSeconds)
+
+					}
+					let response = await this.prepText()
+					this.finished(response)
+
+				}
+			}
+			catch (error) {
+				console.log(error)
+				alert("not a readable ELAN Annotation Format file; select a different filetype")
+			}
+			this.$emit("closeUploadIntModal");
+
 
 		},
 
@@ -386,8 +575,8 @@ export default {
 				// console.log(this.timestamps)
 
 
-			let eafObject = await this.eafToInterpretationHelper(xmlDoc)
-			// console.log(eafObject)
+				let eafObject = await this.eafToInterpretationHelper(xmlDoc)
+				// console.log(eafObject)
 
 
 				let arrayOfTierNames = Object.keys(eafObject)
@@ -411,20 +600,21 @@ export default {
 					else { this.int_spacing = "" }
 					// console.log(this.int_spacing)
 					this.int_text_unstripped = ""
-		// this wasn't working as a computed property, so I am doing it manually
+					// this wasn't working as a computed property, so I am doing it manually
 					this.getIntText()
 					// console.log(this.int_text_unstripped)
 					// console.log(this.int_text)
 					this.int_language = ""
 					let arrayToParse = Object.entries(eafObject[arrayOfTierNames[m]])
-					console.log(arrayToParse)
+					// console.log(arrayToParse)
 
+					// this code might not actually be necessary but it's not hurting either
 					for (let j = arrayToParse.length - 1; j >= 0; j--) {
 						if (arrayToParse[j][1]["annotationText"] == "") {
 							arrayToParse.splice(j, 1);
 						}
 					}
-					console.log(arrayToParse)
+					// console.log(arrayToParse)
 
 					let lastEndSeconds = 0;
 					for (let h = 0; h < arrayToParse.length; h++) {
@@ -461,7 +651,47 @@ export default {
 
 		async panToInterpretationHelper(xmlDoc) {
 
-			// FLAG!!!
+
+			try {
+
+				this.tiers.length = 0
+				for (var member in this.tierLanguages) delete this.tierLanguages[member]
+
+
+				for (var member in this.panHelperObject) delete this.panHelperObject[member]
+
+				let segmentation = xmlDoc.querySelectorAll("AUDIO")
+
+				segmentation.forEach((segment) => {
+					// let timestamp1 = segment.getAttribute("start")
+					// let timestamp2 = segment.getAttribute("end")
+
+					// let sibling = segment
+					this.checkForNestedPanTiers(segment.nextElementSibling)
+				})
+				// console.log(this.tiers)
+
+
+				this.tiers.forEach((tier) => {
+					this.panHelperObject[tier] = {}
+
+					for (let i = 0; i < segmentation.length; i++) {
+						this.panHelperObject[tier][i] = {}
+						this.panHelperObject[tier][i].start = segmentation[i].getAttribute("start")
+						this.panHelperObject[tier][i].end = segmentation[i].getAttribute("end")
+
+						this.panToInterpretationHelperHelper(segmentation[i].nextElementSibling, tier, i)
+					}
+
+
+				})
+
+			}
+			catch (error) {
+				console.log(error)
+				alert("not a readable ELAN Annotation Format file; select a different filetype")
+			}
+
 
 		},
 
@@ -724,7 +954,7 @@ export default {
 			}
 
 			this.int_text_unstripped = this.captions.join("");
-		// this wasn't working as a computed property, so I am doing it manually
+			// this wasn't working as a computed property, so I am doing it manually
 			this.getIntText()
 			// console.log(this.int_text_unstripped);
 			// console.log(this.int_text);
