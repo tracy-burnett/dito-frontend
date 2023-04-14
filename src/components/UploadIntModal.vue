@@ -148,7 +148,7 @@ export default {
 					// console.log(this.tiers)
 
 					if (this.tiers.length == 0) {
-						alert("no tiers found; select a different filetype")
+						alert("no time-aligned tiers found; select a different filetype")
 					}
 					else if (this.tiers.length > 0) {
 						this.allowTieredUpload = true
@@ -182,7 +182,7 @@ export default {
 					})
 					// console.log(this.tiers)
 					if (this.tiers.length == 0) {
-						alert("no tiers found; select a different filetype")
+						alert("no time-aligned tiers found; select a different filetype")
 					}
 					else if (this.tiers.length > 0) {
 						this.allowTieredUpload = true
