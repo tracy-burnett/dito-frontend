@@ -135,7 +135,7 @@ export default {
 			else if (this.filetype == "pan") {
 				try {
 					let xmlDoc = new DOMParser().parseFromString(this.PANfileloaded, "text/xml")
-					// console.log(xmlDoc)
+					console.log(xmlDoc)
 					let segmentation = xmlDoc.querySelectorAll("AUDIO")
 
 					segmentation.forEach((segment) => {
@@ -148,7 +148,7 @@ export default {
 					// console.log(this.tiers)
 
 					if (this.tiers.length == 0) {
-						alert("no tiers found")
+						alert("no tiers found; select a different filetype")
 					}
 					else if (this.tiers.length > 0) {
 						this.allowTieredUpload = true
@@ -182,7 +182,7 @@ export default {
 					})
 					// console.log(this.tiers)
 					if (this.tiers.length == 0) {
-						alert("no tiers found")
+						alert("no tiers found; select a different filetype")
 					}
 					else if (this.tiers.length > 0) {
 						this.allowTieredUpload = true
@@ -200,7 +200,6 @@ export default {
 		},
 
 		fileloaded: function () {
-			console.log("setting tiers length to 0")
 			this.tiers.length = 0
 			// for (var member in this.tierLanguages) delete this.tierLanguages[member]
 			if (this.fileloaded == "") { }
@@ -292,7 +291,14 @@ export default {
 
 		finished(response) {
 			// console.log(response)
-			this.$emit("addCreatedInterpretation", response.interpretation);
+			if (response == "stopped") { 
+				// console.log("doing nothing") 
+			}
+			else if (this.uploadInProgress == true && (this.filetype == "srt" || this.filetype == "tsv")) {
+				this.$emit("addCreatedInterpretation", response.interpretation);
+				this.$emit("closeUploadIntModal")
+			} else if (this.uploadInProgress == true && (this.filetype == "eaf" || this.filetype == "pan")) { this.$emit("addCreatedInterpretation", response.interpretation); }
+
 		},
 
 		showPANTiers() {
@@ -371,9 +377,7 @@ export default {
 			}
 			// console.log(this.int_text.normalize("NFC"))
 			if (
-				this.int_title != "" ||
-				this.int_text != "" ||
-				this.int_language != ""
+				this.uploadInProgress == true && this.int_text != ""
 			) {
 				// console.log(this.int_text.normalize("NFC"))
 				// console.log(this.int_title.normalize("NFC"))
@@ -440,13 +444,20 @@ export default {
 					}
 				)
 					.then(() => {
-						console.log(response)
+						// console.log(response)
 						return response
 					})
 					// .then((data) => console.log(data))
 					.catch((error) => console.error("Error:", error));
 				// if the interpretation was created successfully, then tell the parent component to add it to the list of interpretations potentially displayed in the dropdown menu, and tell the Vuex store that we need to add another column to the main screen for viewing the new interpretation
 
+			}
+			else if (this.uploadInProgress == true && this.int_text == "") {
+				// alert('no text to upload in interpretation titled "' + this.int_title + '"')
+				if (this.filetype=="srt" || this.filetype=="tsv")
+				{alert('no text to upload')
+					this.uploadInProgress = false}
+				return "stopped"
 			}
 		},
 
@@ -458,7 +469,7 @@ export default {
 			await this.srtToInterpretationHelper()
 			let response = await this.prepText()
 			this.finished(response)
-			this.$emit("closeUploadIntModal");
+			// this.$emit("closeUploadIntModal");
 		},
 
 		async tsvToInterpretation() {
@@ -468,8 +479,9 @@ export default {
 			this.captions.length = 0;
 			await this.tsvToInterpretationHelper()
 			let response = await this.prepText()
+			// console.log(response)
 			this.finished(response)
-			this.$emit("closeUploadIntModal");
+			// this.$emit("closeUploadIntModal");
 		},
 
 		async panToInterpretation() {
@@ -530,8 +542,8 @@ export default {
 
 						let timestampStartReformatted = 0
 						let timestampEndReformatted = 0
-							timestampStartReformatted = Number(arrayToParse[h][1]["start"])
-							timestampEndReformatted = Number(arrayToParse[h][1]["end"])
+						timestampStartReformatted = Number(arrayToParse[h][1]["start"])
+						timestampEndReformatted = Number(arrayToParse[h][1]["end"])
 
 						lastEndSeconds = await this.formatForBackend(timestampStartReformatted, timestampEndReformatted, srt_instructions, lastEndSeconds)
 
@@ -543,7 +555,8 @@ export default {
 			}
 			catch (error) {
 				console.log(error)
-				alert("not a readable ELAN Annotation Format file; select a different filetype")
+				alert("not a readable Panglass/LACITO Format file; select a different filetype")
+				this.uploadInProgress = false
 			}
 			this.$emit("closeUploadIntModal");
 
@@ -643,6 +656,7 @@ export default {
 			catch (error) {
 				console.log(error)
 				alert("not a readable ELAN Annotation Format file; select a different filetype")
+				this.uploadInProgress = false
 			}
 			this.$emit("closeUploadIntModal");
 
@@ -689,7 +703,8 @@ export default {
 			}
 			catch (error) {
 				console.log(error)
-				alert("not a readable ELAN Annotation Format file; select a different filetype")
+				alert("not a readable Pangloss/LACITO Annotation Format file; select a different filetype")
+				this.uploadInProgress = false
 			}
 
 
@@ -745,6 +760,7 @@ export default {
 			catch (error) {
 				console.log(error)
 				alert("not a readable ELAN Annotation Format file; select a different filetype")
+				this.uploadInProgress = false
 			}
 
 		},
@@ -795,6 +811,7 @@ export default {
 			catch (error) {
 				console.log(error)
 				alert("not a readable SubRip file; select a different filetype")
+				this.uploadInProgress = false
 			}
 
 
@@ -823,60 +840,69 @@ export default {
 			catch (error) {
 				console.log(error)
 				alert("not a readable Audacity Timing File; select a different filetype")
+				this.uploadInProgress = false
 			}
 
 		},
 
 		formatForBackend(timestampStart, timestampEnd, srt_instructions, lastEndSeconds) {
-			// only add captions that don't exceed the maximum length of the audio file
 
-			if (
-				1000 * timestampEnd <= this.$store.state.audioDuration &&
-				1000 * timestampStart >= 0 &&
-				srt_instructions != undefined
-			) {
-				let timestampforBackend =
-					(100 *
-						(timestampStart +
-							timestampEnd)) /
-					2;
-				this.timestampsforBackend.push(timestampforBackend);
-				let offsetforBackend =
-					(100 *
-						(timestampEnd -
-							timestampStart)) /
-					2;
-				this.offsetsforBackend.push(offsetforBackend);
-				let caption_text = "";
-				if (Array.isArray(srt_instructions)) {
-					srt_instructions.forEach(
-						// this is for if the caption takes up more than one line in the text file
-						(part) => (caption_text = caption_text + "\n" + part)
-					);
-				} else { caption_text = "\n" + srt_instructions }
-
-				// console.log((100 * timestampStart) + " should be greater than " + lastEndSeconds)
-				// console.log(caption_text)
+			try {
+				// only add captions that don't exceed the maximum length of the audio file
 
 				if (
-					100 *
-					timestampStart >
-					lastEndSeconds
+					1000 * timestampEnd <= this.$store.state.audioDuration &&
+					1000 * timestampStart >= 0 &&
+					srt_instructions != undefined
 				) {
-					caption_text = "\n\n" + caption_text.substring(1);
-					this.captions.push(caption_text);
+					let timestampforBackend =
+						(100 *
+							(timestampStart +
+								timestampEnd)) /
+						2;
+					this.timestampsforBackend.push(timestampforBackend);
+					let offsetforBackend =
+						(100 *
+							(timestampEnd -
+								timestampStart)) /
+						2;
+					this.offsetsforBackend.push(offsetforBackend);
+					let caption_text = "";
+					if (Array.isArray(srt_instructions)) {
+						srt_instructions.forEach(
+							// this is for if the caption takes up more than one line in the text file
+							(part) => (caption_text = caption_text + "\n" + part)
+						);
+					} else { caption_text = "\n" + srt_instructions }
+
+					// console.log((100 * timestampStart) + " should be greater than " + lastEndSeconds)
+					// console.log(caption_text)
+
+					if (
+						100 *
+						timestampStart >
+						lastEndSeconds
+					) {
+						caption_text = "\n\n" + caption_text.substring(1);
+						this.captions.push(caption_text);
+					} else {
+						caption_text = caption_text.substring(1);
+						this.captions.push(caption_text);
+					}
+					lastEndSeconds =
+						100 * timestampEnd;
+					return lastEndSeconds
 				} else {
-					caption_text = caption_text.substring(1);
-					this.captions.push(caption_text);
+					// console.log((1000 * timestampEnd) + " should be less than or equal to " + this.$store.state.audioDuration)
+					// console.log((1000 * timestampStart + " should be greater than or equal to 0"))
+					// console.log(srt_instructions + " should not be undefined")
+					return lastEndSeconds
 				}
-				lastEndSeconds =
-					100 * timestampEnd;
-				return lastEndSeconds
-			} else {
-				// console.log((1000 * timestampEnd) + " should be less than or equal to " + this.$store.state.audioDuration)
-				// console.log((1000 * timestampStart + " should be greater than or equal to 0"))
-				// console.log(srt_instructions + " should not be undefined")
-				return lastEndSeconds
+			}
+			catch (error) {
+				console.log(error)
+				alert("File format is not compatible with the selected filetype; please select a different filetype.")
+				this.uploadInProgress = false
 			}
 		},
 
