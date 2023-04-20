@@ -1,7 +1,7 @@
 <template>
 	<div class="h-full singleint">
 		<span v-if="showSyncingModal" class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen">
-			<SyncingModal :audio_id="audio_id" :interpretation_id="interpretation_id"
+			<SyncingModal :audio_id="audio_id" :interpretation_id="interpretation_id" :editingversion="interpretationFull.version"
 				@closeSyncingModal="closeSyncingModal()" />
 		</span>
 		<!-- the current component represents what is viewable in a single interpretation column of an open storybook -->
@@ -128,7 +128,7 @@
 				:saveEditscounter="saveEditscounter" :newPromptscounter="newPromptscounter"
 				:resetSensitivitycounter="resetSensitivitycounter" :downloadSRTcounter="downloadSRTcounter"
 				:newPhrasescounter="newPhrasescounter" :interpretationStatus="interpretationStatus"
-				:interpretation_id="interpretation_id" @permanentlydestroy="permanentlydestroy($event)"
+				:interpretation_id="interpretation_id" :editingversion="interpretationFull.version" @permanentlydestroy="permanentlydestroy($event)"
 				@increasePhrasesCounter="newPhrase()" @generateNewPrompt="newPrompt()"
 				@reloadPrompter="prompterReloadCounter++" @updateTitleLanguage="updateTitleLanguagefunc($event)">
 

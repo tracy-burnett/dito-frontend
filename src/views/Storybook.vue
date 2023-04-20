@@ -286,6 +286,7 @@ export default {
 				// console.log(this.formerInterpretationsList[indexofold])
 				this.formerInterpretationsList[indexofold].title = title
 				this.formerInterpretationsList[indexofold].language_name = language
+				this.formerInterpretationsList[indexofold].version = this.formerInterpretationsList[indexofold].version + 1
 			}
 		},
 

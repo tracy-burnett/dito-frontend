@@ -1,38 +1,23 @@
 <template>
-	<div
-		class="flex-auto"
-		@mousedown.left="mouseHighlighting=true"
-		@mouseup.left="mouseHighlighting=false"
-	>
+	<div class="flex-auto" @mousedown.left="mouseHighlighting = true" @mouseup.left="mouseHighlighting = false">
 		<span class="py-1 font-bold border-gray-300 rounded ">{{ title }}</span>
 		in <span class="py-1 border-gray-300 rounded">{{ language_name }}</span><br /><br>
 
-		<div
-			class="w-full h-full py-1 border-gray-300 rounded tagger"
-			:style="{ 'font-size': fontsize + 'px' }"
-			style="overflow: scroll; height:47.5vh;"
-		>
-			<span
-				v-for="character in latest_text_character_array"
-				:key="character.index"
-			>
-				<span v-if="character.value=='\n'">
+		<div class="w-full h-full py-1 border-gray-300 rounded tagger" :style="{ 'font-size': fontsize + 'px' }"
+			style="overflow: scroll; height:47.5vh;">
+			<span v-for="character in latest_text_character_array" :key="character.index">
+				<span v-if="character.value == '\n'">
 					<span style="white-space: pre-wrap">{{ character.value }}</span></span>
-				<span v-else-if="!new_associations[character.index+deletedfrombeginningIndex.length]">
-					<span
-						@click="addNewAssociation(character.index+deletedfrombeginningIndex.length)"
-						@mouseover.exact="addNewAssociationDrag(character.index+deletedfrombeginningIndex.length)"
-						@mouseleave.exact="addNewAssociationDrag(character.index+deletedfrombeginningIndex.length)"
-						style="white-space: pre-wrap"
-					>{{ character.value }}{{spaced_by}}</span></span>
-				<span
-					v-else
-					class="font-extrabold text-green-500"
-					style="white-space: pre-wrap"
-					@click="removeThisAssociation(character.index+deletedfrombeginningIndex.length)"
-					@mouseover.alt.exact="removeThisAssociationDrag(character.index+deletedfrombeginningIndex.length)"
-					@mouseleave.alt.exact="removeThisAssociationDrag(character.index+deletedfrombeginningIndex.length)"
-				>{{ character.value }}{{spaced_by}}</span>
+				<span v-else-if="!new_associations[character.index + deletedfrombeginningIndex.length]">
+					<span @click="addNewAssociation(character.index + deletedfrombeginningIndex.length)"
+						@mouseover.exact="addNewAssociationDrag(character.index + deletedfrombeginningIndex.length)"
+						@mouseleave.exact="addNewAssociationDrag(character.index + deletedfrombeginningIndex.length)"
+						style="white-space: pre-wrap">{{ character.value }}{{ spaced_by }}</span></span>
+				<span v-else class="font-extrabold text-green-500" style="white-space: pre-wrap"
+					@click="removeThisAssociation(character.index + deletedfrombeginningIndex.length)"
+					@mouseover.alt.exact="removeThisAssociationDrag(character.index + deletedfrombeginningIndex.length)"
+					@mouseleave.alt.exact="removeThisAssociationDrag(character.index + deletedfrombeginningIndex.length)">{{
+						character.value }}{{ spaced_by }}</span>
 			</span>
 		</div>
 		<br /><br />
@@ -97,6 +82,8 @@ export default {
 		interpretation_id: { default: "" },
 
 		interpretationStatus: { default: "" },
+
+		editingversion: { default: 0 },
 	},
 
 	async mounted() {
@@ -116,13 +103,13 @@ export default {
 
 		fetch(
 			process.env.VUE_APP_api_URL +
-				"interpretations/" +
-				this.interpretation_id +
-				"/audio/" +
-				this.audio_id +
-				"/" +
-				this.interpretationStatus +
-				"/",
+			"interpretations/" +
+			this.interpretation_id +
+			"/audio/" +
+			this.audio_id +
+			"/" +
+			this.interpretationStatus +
+			"/",
 			{
 				method: "GET",
 
@@ -165,13 +152,13 @@ export default {
 
 			fetch(
 				process.env.VUE_APP_api_URL +
-					"content/" +
-					this.audio_id +
-					"/" +
-					this.interpretation_id +
-					"/" +
-					1 + // FLAG TIME DECISION
-					"/", // timestep is 200 hundredths of seconds
+				"content/" +
+				this.audio_id +
+				"/" +
+				this.interpretation_id +
+				"/" +
+				1 + // FLAG TIME DECISION
+				"/", // timestep is 200 hundredths of seconds
 				{
 					method: "GET",
 					headers: {
@@ -389,13 +376,13 @@ export default {
 						((this.$store.state.startTimePrompter +
 							this.$store.state.endTimePrompter) *
 							100) /
-							2
+						2
 					)
 				] = Math.round(
 					((this.$store.state.endTimePrompter -
 						this.$store.state.startTimePrompter) *
 						100) /
-						2
+					2
 				);
 			}
 
@@ -421,15 +408,16 @@ export default {
 			// send new tags to the database
 			fetch(
 				process.env.VUE_APP_api_URL +
-					"content/" +
-					this.audio_id +
-					"/" +
-					this.interpretation_id,
+				"content/" +
+				this.audio_id +
+				"/" +
+				this.interpretation_id,
 				{
 					method: "POST",
 					body: JSON.stringify({
 						text: this.latest_text.normalize("NFC"), // Pass in a string that meets a minimum character count and includes all the new tags you want to save
 						associations: this.new_associations, // Pass in the list of the new tags
+						editingversion: this.editingversion,
 					}),
 
 					headers: {
@@ -439,8 +427,14 @@ export default {
 					},
 				}
 			)
-				.then((response) => response)
-				.then((data) => data)
+				.then((response) => { return response.json() })
+				.then((response) => {
+					if (response.error == "not editing current version") {
+						alert("This interpretation has been edited since you last loaded it; please refresh your page and try again.")
+					}
+				}
+
+				)
 				.then(() => {
 					this.clearTimestamps();
 					this.adulterateText();
@@ -454,8 +448,10 @@ export default {
 
 <style scoped>
 .tagger {
-	-ms-overflow-style: none; /* for Internet Explorer, Edge */
-	scrollbar-width: none; /* for Firefox */
+	-ms-overflow-style: none;
+	/* for Internet Explorer, Edge */
+	scrollbar-width: none;
+	/* for Firefox */
 	overflow-y: scroll;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
@@ -466,6 +462,7 @@ export default {
 }
 
 .tagger::-webkit-scrollbar {
-	display: none; /* for Chrome, Safari, and Opera */
+	display: none;
+	/* for Chrome, Safari, and Opera */
 }
 </style>

@@ -6,16 +6,11 @@
 
 		<span class="py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="py-1 border-gray-300 rounded ">{{ language_name }}</span><br /><br />
-		<textarea
-			class="w-full h-full px-3 py-1  mt-[2vh] border-gray-300 rounded prompter"
-			:style="{ 'font-size': fontsize + 'px' }"
-			style="overflow: scroll; height:45.5vh;"
-			placeholder="enter new text here"
-			v-model="new_text_unstripped"
-			ref="promptertextarea"
+		<textarea class="w-full h-full px-3 py-1  mt-[2vh] border-gray-300 rounded prompter"
+			:style="{ 'font-size': fontsize + 'px' }" style="overflow: scroll; height:45.5vh;"
+			placeholder="enter new text here" v-model="new_text_unstripped" ref="promptertextarea"
 			@keydown.enter.exact.prevent="emitNewPrompt()"
-			@keydown.enter.shift.exact.prevent="new_text_unstripped += '\n'"
-		></textarea>
+			@keydown.enter.shift.exact.prevent="new_text_unstripped += '\n'"></textarea>
 	</div>
 </template>
 
@@ -167,6 +162,8 @@ export default {
 
 		// whether the interpretation is owned "owner", editable "editor", or only viewable "viewer" by the logged-in user
 		interpretationStatus: { default: "" },
+
+		editingversion: { default: 0 },
 	},
 	watch: {
 		// nomoregaps: function() {
@@ -189,7 +186,7 @@ export default {
 			this.findGaps();
 		},
 		resetSensitivitycounter: function () {
-			this.sensitivity=.05
+			this.sensitivity = .05
 
 		},
 		newPromptscounter: function () {
@@ -228,9 +225,9 @@ export default {
 		"$store.state.endTimePrompter": function () {
 			if (
 				this.$store.state.startTimePrompter * 100 >=
-					this.relevantGap.startTime &&
+				this.relevantGap.startTime &&
 				this.$store.state.endTimePrompter * 100 <=
-					Math.min(this.usableGaps[0].endTime, this.tempcurrentgapend) // GAPS NOT POPULATED YET
+				Math.min(this.usableGaps[0].endTime, this.tempcurrentgapend) // GAPS NOT POPULATED YET
 			) {
 				//  {
 				// 	this.allowSubmit = false;
@@ -470,8 +467,8 @@ export default {
 				this.relevantGap.startTime = parseInt(this.usableGaps[0].startTime); // should be in hundredths of a second
 				this.relevantGap.endTime = Math.min(
 					parseInt(this.usableGaps[0].startTime) +
-						parseInt(this.scribingclean) +
-						100,
+					parseInt(this.scribingclean) +
+					100,
 					parseInt(this.usableGaps[0].endTime)
 				); // should be in hundredths of a second               // FLAG ARBITRARY TIME DECISION
 				this.relevantGap.startCharacter = parseInt(
@@ -594,8 +591,8 @@ export default {
 				// if there's still a lot of time left in usable portion of audio we are currently working with, like a lot meaning enough that there could be another relevant segment in it, then keep considering it... otherwise, move to the next portion
 				if (
 					this.usableGaps[0].endTime -
-						(this.contentEndingIndex + this.relevantGap.startTime - 5) >=
-						this.scribingclean && // FLAG TIME DECISION fyi when the user sets this value too low it can prevent them from annotating some parts of the audio because it ignores them because if it is sensitive enough to detect them then the gap is too big for the user to annotate based on the length of phrase that they say they prefer to annotate.
+					(this.contentEndingIndex + this.relevantGap.startTime - 5) >=
+					this.scribingclean && // FLAG TIME DECISION fyi when the user sets this value too low it can prevent them from annotating some parts of the audio because it ignores them because if it is sensitive enough to detect them then the gap is too big for the user to annotate based on the length of phrase that they say they prefer to annotate.
 					this.contentEndingIndex >= 5
 				) {
 					this.usableGaps[0].startTime =
@@ -603,16 +600,16 @@ export default {
 					this.tempcurrentgapend = this.$store.state.audioDuration / 10;
 				} else if (
 					this.usableGaps[0].endTime -
-						(this.contentEndingIndex - 5 + this.relevantGap.startTime) <
-						this.scribingclean && // FLAG TIME DECISION
+					(this.contentEndingIndex - 5 + this.relevantGap.startTime) <
+					this.scribingclean && // FLAG TIME DECISION
 					this.usableGaps.length >= 2
 				) {
 					this.tempcurrentgapend = this.usableGaps[0].endTime;
 					this.usableGaps.shift();
 				} else if (
 					this.usableGaps[0].endTime -
-						(this.contentEndingIndex - 5 + this.relevantGap.startTime) <
-						this.scribingclean && // FLAG TIME DECISION
+					(this.contentEndingIndex - 5 + this.relevantGap.startTime) <
+					this.scribingclean && // FLAG TIME DECISION
 					this.usableGaps.length <= 1
 				) {
 					// console.log("help")
@@ -721,7 +718,7 @@ export default {
 			if (
 				this.associationGaps.length > 1 &&
 				this.$store.state.startTimePrompter * 100 >=
-					this.associationGaps[0].startTime
+				this.associationGaps[0].startTime
 			) {
 				// console.log("in");
 				for (let i = 0; i < this.associationGaps.length; i++) {
@@ -748,9 +745,9 @@ export default {
 					if (
 						// if it's in the gap before the last chunk
 						this.$store.state.startTimePrompter * 100 >=
-							this.associationGaps[i].startTime &&
+						this.associationGaps[i].startTime &&
 						this.$store.state.startTimePrompter * 100 <
-							this.associationGaps[i].endTime &&
+						this.associationGaps[i].endTime &&
 						this.associationGaps[i + 1].endCharacter == null
 					) {
 						// place the new text before the last chunk
@@ -765,7 +762,7 @@ export default {
 					} else if (
 						// if it's in the last chunk
 						this.$store.state.startTimePrompter * 100 >=
-							this.associationGaps[i].endTime &&
+						this.associationGaps[i].endTime &&
 						this.associationGaps[i + 1].endCharacter == null
 					) {
 						// place the new text at the end of all of the old text
@@ -780,9 +777,9 @@ export default {
 					} else if (
 						// if it's in a gap that is not the last-gap section of the audio file
 						this.$store.state.startTimePrompter * 100 >=
-							this.associationGaps[i].startTime &&
+						this.associationGaps[i].startTime &&
 						this.$store.state.startTimePrompter * 100 <
-							this.associationGaps[i].endTime &&
+						this.associationGaps[i].endTime &&
 						this.associationGaps[i].endCharacter != null
 					) {
 						// place the new text after the gap (before the next chunk)
@@ -792,9 +789,9 @@ export default {
 					} else if (
 						// if it's in a chunk that is not the last chunk
 						this.$store.state.startTimePrompter * 100 >=
-							this.associationGaps[i].endTime &&
+						this.associationGaps[i].endTime &&
 						this.$store.state.startTimePrompter * 100 <
-							this.associationGaps[i + 1].startTime &&
+						this.associationGaps[i + 1].startTime &&
 						this.associationGaps[i + 1].startCharacter != null
 					) {
 						// place the new text after the chunk
@@ -984,13 +981,13 @@ export default {
 							((this.$store.state.startTimePrompter +
 								this.$store.state.endTimePrompter) *
 								100) /
-								2
+							2
 						)
 					] = Math.round(
 						((this.$store.state.endTimePrompter -
 							this.$store.state.startTimePrompter) *
 							100) /
-							2
+						2
 					);
 				}
 			});
@@ -1068,18 +1065,19 @@ export default {
 
 			fetch(
 				process.env.VUE_APP_api_URL +
-					"interpretations/" +
-					this.interpretation_id +
-					"/audio/" +
-					this.audio_id +
-					"/" +
-					this.interpretationStatus +
-					"/",
+				"interpretations/" +
+				this.interpretation_id +
+				"/audio/" +
+				this.audio_id +
+				"/" +
+				this.interpretationStatus +
+				"/",
 				{
 					method: "PATCH",
 					body: JSON.stringify({
 						latest_text: this.latest_text.normalize("NFC"),
 						instructions: this.instructions,
+						editingversion: this.editingversion,
 					}),
 					headers: {
 						"Content-Type": "application/json",
@@ -1093,6 +1091,7 @@ export default {
 				})
 				.then((response) => {
 					if (response == "interpretation updated") {
+						this.$emit("updateTitleLanguage", { "id": this.interpretation_id, "title": this.title, "language": this.language_name });
 						// console.log(textLengthDifference);
 						this.associationGaps.forEach((element) => {
 							element.startCharacter += textLengthDifference;
@@ -1108,15 +1107,16 @@ export default {
 						//add in the association for the new phrase.
 						fetch(
 							process.env.VUE_APP_api_URL +
-								"content/" +
-								this.audio_id +
-								"/" +
-								this.interpretation_id,
+							"content/" +
+							this.audio_id +
+							"/" +
+							this.interpretation_id,
 							{
 								method: "POST",
 								body: JSON.stringify({
 									// text: this.latest_text.normalize('NFC'), // Pass in a string that meets a minimum character fcount and includes all the new tags you want to save
 									associations: this.new_associations, // Pass in the list of the new tags
+									editingversion: this.editingversion + 1,
 								}),
 
 								headers: {
@@ -1126,9 +1126,17 @@ export default {
 								},
 							}
 						)
-							.then((response) => response)
-							// .then((data) => console.log(data))
+							.then((response) => { return response.json() })
+							.then((response) => {
+								if (response.error == "not editing current version") {
+									alert("This interpretation has been edited since you last loaded it; please refresh your page and try again.")
+								}
+							}
+
+							)
 							.catch((error) => console.error("Error:", error));
+					} else if (response == "not editing current version") {
+						alert("This interpretation has been edited since you last loaded it; please refresh your page and try again.")
 					}
 
 					return;
@@ -1544,13 +1552,13 @@ export default {
 
 		fetch(
 			process.env.VUE_APP_api_URL +
-				"interpretations/" +
-				this.interpretation_id +
-				"/audio/" +
-				this.audio_id +
-				"/" +
-				this.interpretationStatus +
-				"/",
+			"interpretations/" +
+			this.interpretation_id +
+			"/audio/" +
+			this.audio_id +
+			"/" +
+			this.interpretationStatus +
+			"/",
 			{
 				method: "GET",
 
@@ -1574,13 +1582,13 @@ export default {
 			.then(() => {
 				fetch(
 					process.env.VUE_APP_api_URL +
-						"content/" +
-						this.audio_id +
-						"/" +
-						this.interpretation_id +
-						"/" +
-						200 + // FLAG TIME DECISION
-						"/", // timestep is 200 hundredths of seconds
+					"content/" +
+					this.audio_id +
+					"/" +
+					this.interpretation_id +
+					"/" +
+					200 + // FLAG TIME DECISION
+					"/", // timestep is 200 hundredths of seconds
 					{
 						method: "GET",
 						headers: {
@@ -1609,12 +1617,15 @@ export default {
 
 <style scoped>
 .prompter {
-	-ms-overflow-style: none; /* for Internet Explorer, Edge */
-	scrollbar-width: none; /* for Firefox */
+	-ms-overflow-style: none;
+	/* for Internet Explorer, Edge */
+	scrollbar-width: none;
+	/* for Firefox */
 	overflow-y: scroll;
 }
 
 .prompter::-webkit-scrollbar {
-	display: none; /* for Chrome, Safari, and Opera */
+	display: none;
+	/* for Chrome, Safari, and Opera */
 }
 </style>
