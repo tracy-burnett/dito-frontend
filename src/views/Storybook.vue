@@ -29,7 +29,8 @@
 							@returnFormerInterpretation="returnFormerInterpretation($event)"
 							@displayInterpretationID="displayInterpretationID($event)"
 							@permanentlydestroy="permanentlydestroy($event)"
-							@exchangeInterpretations="exchangeInterpretationsfunction($event)" />
+							@exchangeInterpretations="exchangeInterpretationsfunction($event)"
+							@updateTitleLanguage="updateTitleLanguagefunc($event)" />
 					</span>
 					<!-- the following component can tell the current component to add a new column for an interpretation that it just created,
       or to add a new column for an interpretation that has previously been created. -->
@@ -193,7 +194,6 @@ export default {
 		},
 
 		exchangeInterpretationsfunction({ newID, formerinterpretation }) {
-			console.log(newID + " " + formerinterpretation)
 			let mappedoldIDsArray = this.formerInterpretationsList.map(
 				(item) => item.id
 			);
@@ -274,6 +274,21 @@ export default {
 			this.formerInterpretationsList.push(interpretation);
 			this.$store.commit("addConsolesCount", interpretation.id);
 		},
+
+		updateTitleLanguagefunc({ id, title, language }) {
+			let mappedoldIDsArray = this.formerInterpretationsList.map(
+				(item) => item.id
+			);
+			// find the index # of the ID to be returned to the dropdown menu (and removed from the viewer)
+			let indexofold = mappedoldIDsArray.indexOf(id);
+			if (indexofold > -1) {
+				// ... and remove it from the list of interpretations currently being viewed
+				// console.log(this.formerInterpretationsList[indexofold])
+				this.formerInterpretationsList[indexofold].title = title
+				this.formerInterpretationsList[indexofold].language_name = language
+			}
+		},
+
 		toggleUploadIntModal() {
 			this.showUploadIntModal = !this.showAddInterpretationModal;
 		},
