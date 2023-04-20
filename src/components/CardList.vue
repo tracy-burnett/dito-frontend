@@ -90,7 +90,7 @@
 				class="cursor-pointer"
 				@click="$store.commit('sortBy','4')"
 			>last edited at</p>
-			<p v-if="process.env.VUE_APP_TIER=='research' || process.env.VUE_APP_TIER=='project'"
+			<p v-if="tier=='research' || tier=='project'"
 				class="cursor-pointer"
 				@click="$store.commit('sortBy','5')"
 			>Public?</p>
@@ -214,6 +214,7 @@ import CardRow from "@/components/CardRow.vue";
 export default {
 	data() {
 		return {
+			tier: process.env.VUE_APP_TIER,
 			audioArray: [],
 			audioArrayCurrent: [],
 			lastknownscrollposition: 0,

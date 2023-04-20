@@ -39,7 +39,7 @@
 				<p v-else>{{ interpretation.language_name }}</p>
 				<p>{{ interpretation.created_by.display_name }}</p>
 				<p>{{ interpretation.last_edited_at.substring(0, 10) + ' UTC' }}</p>
-				<span v-if="(process.env.VUE_APP_TIER=='research' || process.env.VUE_APP_TIER=='project') && ((shared_editors && shared_editors.map((item) => item.user_ID).includes($store.state.user.uid)) || (interpretation.created_by.user_ID == $store.state.user.uid))">
+				<span v-if="(tier=='research' || tier=='project') && ((shared_editors && shared_editors.map((item) => item.user_ID).includes($store.state.user.uid)) || (interpretation.created_by.user_ID == $store.state.user.uid))">
 					<input
 						type="checkbox"
 						id="publictf"
@@ -84,7 +84,9 @@ export default {
 		IntViewersModal,
 	},
 	data: () => {
-		return { publictf: false, status: "" };
+		return { publictf: false,
+			status: "",
+		tier: process.env.VUE_APP_TIER };
 	},
 	props: {
 		interpretation: {

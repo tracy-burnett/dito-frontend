@@ -75,7 +75,7 @@
 				</div>
 				<p>{{ uploader }}</p>
 				<p>{{ last_edited }}</p>
-				<span v-if="(!archived && status == 'owner') && (process.env.VUE_APP_TIER=='research' || process.env.VUE_APP_TIER=='project')">
+				<span v-if="(!archived && status == 'owner') && (tier=='research' || tier=='project')">
 					<input
 						type="checkbox"
 						id="publictf"
@@ -181,6 +181,7 @@ export default {
 	},
 	data: () => {
 		return {
+			tier: process.env.VUE_APP_TIER,
 			localTitle: "",
 			localDescription: "",
 			localPublictf: "",
