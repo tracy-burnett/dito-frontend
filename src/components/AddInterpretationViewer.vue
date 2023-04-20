@@ -2,7 +2,7 @@
 	<div class="fixed right-0 w-[100px] flex flex-col  justify-center top-[23vh]">
 		<!-- this is a button for creating a new Interpretation and having it displayed in its own column -->
 		<div
-			v-if="$store.state.user"
+			v-if="$store.state.user && process.env.VUE_APP_TIER=='project'"
 			class="flex flex-col items-left py-[2vh]"
 			id="create"
 			@click="show"

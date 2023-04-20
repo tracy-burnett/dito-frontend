@@ -90,10 +90,11 @@
 				class="cursor-pointer"
 				@click="$store.commit('sortBy','4')"
 			>last edited at</p>
-			<p
+			<p v-if="process.env.VUE_APP_TIER=='research' || process.env.VUE_APP_TIER=='project'"
 				class="cursor-pointer"
 				@click="$store.commit('sortBy','5')"
 			>Public?</p>
+			<p v-else></p>
 			<p>Access</p>
 			<p></p>
 			<p></p>

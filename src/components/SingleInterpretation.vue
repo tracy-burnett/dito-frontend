@@ -47,7 +47,7 @@
 							@toggleStorybookStyle="toggleStorybookStylefunction($event)" />
 					</div>
 					<div
-						v-if="styleoption === 'Viewer' && (this.interpretationStatus == 'owner' || this.interpretationStatus == 'editor')">
+						v-if="(process.env.VUE_APP_TIER=='research' || process.env.VUE_APP_TIER=='project') && (styleoption === 'Viewer') && (this.interpretationStatus == 'owner' || this.interpretationStatus == 'editor')">
 
 						<div class="dropdown" style="float: right">
 							<button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn">Download</button>

@@ -75,7 +75,7 @@
 				</div>
 				<p>{{ uploader }}</p>
 				<p>{{ last_edited }}</p>
-				<span v-if="!archived && status == 'owner'">
+				<span v-if="(!archived && status == 'owner') && (process.env.VUE_APP_TIER=='research' || process.env.VUE_APP_TIER=='project')">
 					<input
 						type="checkbox"
 						id="publictf"
