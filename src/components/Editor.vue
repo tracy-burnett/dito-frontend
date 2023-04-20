@@ -1,23 +1,11 @@
 <template>
 	<slot></slot>
-	<div class="flex-auto"> <input
-			class="px-3 py-1 font-bold border-gray-300 rounded"
-			v-model="title"
-			:size="titlesize"
-		/>
+	<div class="flex-auto"> <input class="px-3 py-1 font-bold border-gray-300 rounded" v-model="title" :size="titlesize" />
 		in
-		<input
-			class="h-full px-3 py-1 border-gray-300 rounded"
-			v-model="language_name"
-			:size="languagesize"
-		/><br>
+		<input class="h-full px-3 py-1 border-gray-300 rounded" v-model="language_name" :size="languagesize" /><br>
 
-		<textarea
-			class="w-full px-[.5vw] border-gray-300 rounded editor"
-			style="overflow: scroll; height:50vh;"
-			:style="{ 'font-size': fontsize + 'px' } "
-			v-model="latest_text_unstripped"
-		></textarea>
+		<textarea class="w-full px-[.5vw] border-gray-300 rounded editor" style="overflow: scroll; height:50vh;"
+			:style="{ 'font-size': fontsize + 'px' }" v-model="latest_text_unstripped"></textarea>
 
 	</div>
 </template>
@@ -212,13 +200,13 @@ export default {
 
 			fetch(
 				process.env.VUE_APP_api_URL +
-					"interpretations/" +
-					this.interpretation_id +
-					"/audio/" +
-					this.audio_id +
-					"/" +
-					this.interpretationStatus +
-					"/",
+				"interpretations/" +
+				this.interpretation_id +
+				"/audio/" +
+				this.audio_id +
+				"/" +
+				this.interpretationStatus +
+				"/",
 				{
 					method: "PATCH",
 					body: JSON.stringify({
@@ -240,6 +228,9 @@ export default {
 				.then((response) => {
 					if (response == "interpretation deleted") {
 						this.permanentlydelete();
+					} else if (response == "interpretation updated") {
+
+						this.$emit("updateTitleLanguage", { "id": this.interpretation_id, "title": this.title.normalize("NFC"), "language": this.language_name.normalize("NFC") });
 					}
 				})
 				.catch((error) => console.error("Error:", error));
@@ -642,13 +633,13 @@ export default {
 
 		fetch(
 			process.env.VUE_APP_api_URL +
-				"interpretations/" +
-				this.interpretation_id +
-				"/audio/" +
-				this.audio_id +
-				"/" +
-				this.interpretationStatus +
-				"/",
+			"interpretations/" +
+			this.interpretation_id +
+			"/audio/" +
+			this.audio_id +
+			"/" +
+			this.interpretationStatus +
+			"/",
 			{
 				method: "GET",
 
@@ -675,12 +666,15 @@ export default {
 
 <style scoped>
 .editor {
-	-ms-overflow-style: none; /* for Internet Explorer, Edge */
-	scrollbar-width: none; /* for Firefox */
+	-ms-overflow-style: none;
+	/* for Internet Explorer, Edge */
+	scrollbar-width: none;
+	/* for Firefox */
 	overflow-y: scroll;
 }
 
 .editor::-webkit-scrollbar {
-	display: none; /* for Chrome, Safari, and Opera */
+	display: none;
+	/* for Chrome, Safari, and Opera */
 }
 </style>

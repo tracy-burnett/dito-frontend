@@ -47,7 +47,7 @@
 							@toggleStorybookStyle="toggleStorybookStylefunction($event)" />
 					</div>
 					<div
-						v-if="(tier=='research' || tier=='project') && (styleoption === 'Viewer') && (this.interpretationStatus == 'owner' || this.interpretationStatus == 'editor')">
+						v-if="(tier == 'research' || tier == 'project') && (styleoption === 'Viewer') && (this.interpretationStatus == 'owner' || this.interpretationStatus == 'editor')">
 
 						<div class="dropdown" style="float: right">
 							<button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn">Download</button>
@@ -130,7 +130,7 @@
 				:newPhrasescounter="newPhrasescounter" :interpretationStatus="interpretationStatus"
 				:interpretation_id="interpretation_id" @permanentlydestroy="permanentlydestroy($event)"
 				@increasePhrasesCounter="newPhrase()" @generateNewPrompt="newPrompt()"
-				@reloadPrompter="prompterReloadCounter++">
+				@reloadPrompter="prompterReloadCounter++" @updateTitleLanguage="updateTitleLanguagefunc($event)">
 
 			</component>
 
@@ -308,6 +308,10 @@ export default {
 
 		permanentlydestroy(formerinterpretation) {
 			this.$emit("permanentlydestroy", formerinterpretation);
+		},
+
+		updateTitleLanguagefunc({ id, title, language }) {
+			this.$emit("updateTitleLanguage", { "id": id, "title": title, "language": language })
 		},
 	},
 };
