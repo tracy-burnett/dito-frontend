@@ -2,7 +2,7 @@
 	<div class="fixed right-0 w-[100px] flex flex-col  justify-center top-[23vh]">
 		<!-- this is a button for creating a new Interpretation and having it displayed in its own column -->
 		<div
-			v-if="$store.state.user"
+			v-if="$store.state.user && tier=='project'"
 			class="flex flex-col items-left py-[2vh]"
 			id="create"
 			@click="show"
@@ -47,7 +47,9 @@
 export default {
 	name: "AddInterpretationViewer",
 	data: () => {
-		return {};
+		return {
+			tier: process.env.VUE_APP_TIER,
+		};
 	},
 	props: {
 		interpretationsList: {

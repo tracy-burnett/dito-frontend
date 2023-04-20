@@ -47,7 +47,7 @@
 							@toggleStorybookStyle="toggleStorybookStylefunction($event)" />
 					</div>
 					<div
-						v-if="styleoption === 'Viewer' && (this.interpretationStatus == 'owner' || this.interpretationStatus == 'editor')">
+						v-if="(tier=='research' || tier=='project') && (styleoption === 'Viewer') && (this.interpretationStatus == 'owner' || this.interpretationStatus == 'editor')">
 
 						<div class="dropdown" style="float: right">
 							<button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn">Download</button>
@@ -165,6 +165,7 @@ export default {
 
 	data: () => {
 		return {
+			tier: process.env.VUE_APP_TIER,
 			timestep: 0,
 			scribing: 1250,
 			studying: 200,

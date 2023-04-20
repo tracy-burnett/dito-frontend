@@ -1,19 +1,19 @@
 <template>
 	<div>
 		<span
-			v-if="prompterHelp"
+			v-if="prompterHelp && tier=='project'"
 			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
 		>
 			<PrompterInstructionsModal @closePrompterModal="prompterHelp=false" />
 		</span>
 		<span
-			v-if="editorHelp"
+			v-if="editorHelp && tier=='project'"
 			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
 		>
 			<EditorInstructionsModal @closeEditorModal="editorHelp=false" />
 		</span>
 		<span
-			v-if="taggerHelp"
+			v-if="taggerHelp && tier=='project'"
 			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
 		>
 			<TaggerInstructionsModal @closeTaggerModal="taggerHelp=false" />
@@ -25,7 +25,7 @@
 			<ViewerInstructionsModal @closeViewerModal="viewerHelp=false" />
 		</span>
 		<span
-			v-if="studioHelp"
+			v-if="studioHelp && tier=='project'"
 			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen"
 		>
 			<StudioInstructionsModal @closeStudioModal="studioHelp=false" />
@@ -37,7 +37,7 @@
 		>
 			<button
 				@click="prompterHelp=true"
-				v-if="styleselection=='Prompter'"
+				v-if="styleselection=='Prompter' && tier=='project'"
 				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
 			>Scribing
 				<img
@@ -48,7 +48,7 @@
 			</button>
 			<button
 				@click="editorHelp=true"
-				v-else-if="styleselection=='Editor'"
+				v-else-if="styleselection=='Editor' && tier=='project'"
 				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
 			>Editing
 				<img
@@ -58,7 +58,7 @@
 				/></button>
 			<button
 				@click="taggerHelp=true"
-				v-else-if="styleselection=='Tagger'"
+				v-else-if="styleselection=='Tagger' && tier=='project'"
 				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
 			>Refining
 				<img
@@ -78,7 +78,7 @@
 				/></button>
 			<button
 				@click="studioHelp=true"
-				v-else-if="styleselection=='Studio'"
+				v-else-if="styleselection=='Studio' && tier=='project'"
 				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
 			>Studying
 				<img
@@ -90,7 +90,7 @@
 				v-else
 				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn px-[.6vw] py-[1vh]"
 			>Interaction</button> -->
-			<div class="dropdown-content">
+			<div class="dropdown-content" v-if="tier=='project'">
 
 				<div class="absolute right-0 mr-[1vw] grid h-full">
 					<img
@@ -161,6 +161,7 @@ export default {
 	name: "StorybookStyleMenu",
 	data: () => {
 		return {
+			tier: process.env.VUE_APP_TIER,
 			prompterHelp: false,
 			editorHelp: false,
 			taggerHelp: false,
