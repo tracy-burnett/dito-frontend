@@ -1137,7 +1137,7 @@ export default {
 							.catch((error) => console.error("Error:", error));
 					} else if (response == "not editing current version") {
 						alert("This interpretation has been edited since you last loaded it; please refresh your page and try again.")
-					}
+					} else {alert("something broke")}
 
 					return;
 				})
