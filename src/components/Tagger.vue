@@ -431,7 +431,7 @@ export default {
 				.then((response) => {
 					if (response.error == "not editing current version") {
 						alert("This interpretation has been edited since you last loaded it; please refresh your page and try again.")
-					}
+					} else {this.$emit("updateTitleLanguage", { "id": this.interpretation_id, "title": this.title, "language": this.language_name })}
 				}
 
 				)
