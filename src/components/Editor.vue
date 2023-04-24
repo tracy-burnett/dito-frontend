@@ -117,6 +117,8 @@ export default {
 
 		// whether the interpretation is owned "owner", editable "editor", or only viewable "viewer" by the logged-in user
 		interpretationStatus: { default: "" },
+
+		editingversion: { default: 0 },
 	},
 	watch: {
 		saveEditscounter: function () {
@@ -214,6 +216,7 @@ export default {
 						title: this.title.normalize("NFC"),
 						language_name: this.language_name.normalize("NFC"),
 						instructions: this.instructions,
+						editingversion: this.editingversion,
 					}),
 					headers: {
 						"Content-Type": "application/json",
@@ -231,6 +234,8 @@ export default {
 					} else if (response == "interpretation updated") {
 
 						this.$emit("updateTitleLanguage", { "id": this.interpretation_id, "title": this.title.normalize("NFC"), "language": this.language_name.normalize("NFC") });
+					} else if (response == "not editing current version") {
+						alert("This interpretation has been edited since you last loaded it; please refresh your page and try again.")
 					}
 				})
 				.catch((error) => console.error("Error:", error));

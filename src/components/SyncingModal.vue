@@ -44,6 +44,8 @@ export default {
 			default: "",
 		},
 		interpretation_id: { default: "" },
+
+		editingversion: {default: 0},
 	},
 
 	computed: {
@@ -52,8 +54,22 @@ export default {
 		},
 	},
 	methods: {
-		sendOffset() {
+		async sendOffset() {
 			if (this.$store.state.audioDuration > 0) {
+
+				if (this.$store.state.user) {
+				// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+				await getIdToken(this.$store.state.user)
+					.then((idToken) => {
+						this.$store.commit("SetIdToken", idToken);
+						// console.log(this.$store.state.idToken)
+					})
+					.catch((error) => {
+						// An error happened.
+						console.log("Oops. " + error.code + ": " + error.message);
+					});
+			}
+
 				fetch(
 					process.env.VUE_APP_api_URL +
 						"content/" +
@@ -67,6 +83,7 @@ export default {
 							// associations: this.new_associations, // Pass in the list of the new tags
 							offset: this.offset_clean,
 							duration: this.$store.state.audioDuration,
+							editingversion: this.editingversion,
 						}),
 
 						headers: {
@@ -76,8 +93,14 @@ export default {
 						},
 					}
 				)
-					.then((response) => response)
-					.then((data) => console.log(data))
+					.then((response) => {return response.json()})
+					.then((response) => 
+					{
+						if (response.error == "not editing current version") {
+						alert("This interpretation has been edited since you last loaded it; please refresh your page and try again.")
+					}}
+					
+					)
 					.then(() => {
 						this.$store.commit("reloadViewer");
 						this.closeModal();
