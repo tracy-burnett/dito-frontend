@@ -45,6 +45,7 @@ export default {
 			recursionStopper: false,
 			// recursionTracker: 0,
 			nomoregaps: false, // will be true if no scriber regions exist
+            tempeditingversion: 0,
 		};
 	},
 	computed: {
@@ -1091,8 +1092,10 @@ export default {
 				})
 				.then((response) => {
 					if (response == "interpretation updated") {
+						this.tempeditingversion = this.editingversion
 						this.$emit("updateTitleLanguage", { "id": this.interpretation_id, "title": this.title, "language": this.language_name });
 						// console.log(textLengthDifference);
+                        // console.log(this.tempeditingversion + this.editingversion)
 						this.associationGaps.forEach((element) => {
 							element.startCharacter += textLengthDifference;
 							if (element.endCharacter != null) {
@@ -1103,6 +1106,7 @@ export default {
 						}); //increase every startcharacter and endcharacter
 
 						this.newPromptsfunc();
+                        // console.log(this.tempeditingversion + this.editingversion)
 
 						//add in the association for the new phrase.
 						fetch(
@@ -1116,7 +1120,7 @@ export default {
 								body: JSON.stringify({
 									// text: this.latest_text.normalize('NFC'), // Pass in a string that meets a minimum character fcount and includes all the new tags you want to save
 									associations: this.new_associations, // Pass in the list of the new tags
-									editingversion: this.editingversion + 1,
+									editingversion: this.tempeditingversion+1,
 								}),
 
 								headers: {
@@ -1131,6 +1135,7 @@ export default {
 								if (response.error == "not editing current version") {
 									alert("This interpretation has been edited since you last loaded it; please refresh your page and try again.")
 								}
+								else {						this.$emit("updateTitleLanguage", { "id": this.interpretation_id, "title": this.title, "language": this.language_name });}
 							}
 
 							)
@@ -1138,6 +1143,7 @@ export default {
 					} else if (response == "not editing current version") {
 						alert("This interpretation has been edited since you last loaded it; please refresh your page and try again.")
 					} else { alert("something broke") }
+                        // console.log(this.tempeditingversion + this.editingversion)
 
 					return;
 				})
