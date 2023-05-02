@@ -94,10 +94,10 @@
 
 				<p v-if="status == 'owner'"><button
 						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
-						@click="showStorybookModal(audio_ID)">Manage Collaborators</button></p>
+						@click="showStorybookModal(audio_ID)">Manage Collaboration</button></p>
 				<p v-else-if="status == 'editor'"><button
 						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
-						@click="showAddViewersModal(audio_ID)">Manage Viewers</button></p>
+						@click="showAddViewersModal(audio_ID)">Manage Viewing</button></p>
 				<p v-else-if="status == 'viewer'"><button
 						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 						@click="remove_viewer(this.$store.state.user.uid)">Decline Share</button></p>

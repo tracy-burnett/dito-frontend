@@ -62,11 +62,11 @@
 				<p v-if="status == 'owner'"><button
 						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 						@click="showIntCollabModal(interpretation.id)"
-					>Manage Collaborators</button></p>
+					>Manage Collaboration</button></p>
 				<p v-else-if="status == 'editor'"><button
 						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 						@click="showIntViewersModal(interpretation.id)"
-					>Add Viewers</button></p>
+					>Manage Viewing</button></p>
 			</div>
 		</div>
 	</div>
