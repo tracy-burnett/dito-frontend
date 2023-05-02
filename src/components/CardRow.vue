@@ -44,7 +44,7 @@
 				</div>
 				<p>{{ uploader }}</p>
 				<p>{{ last_edited }}</p>
-				<span v-if="(!archived && status == 'owner') && (tier == 'research' || tier == 'project')">
+				<span v-if="(!archived && (status == 'owner' || status == 'editor' )) && (tier == 'research' || tier == 'project')">
 					<input type="checkbox" id="publictf" value="publictf" v-model="localPublictf" @change="savechanges()" />
 
 					<span v-if="publictf"> yes</span>
