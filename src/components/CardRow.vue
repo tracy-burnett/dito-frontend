@@ -107,7 +107,7 @@
 			<div v-for="interpretation in interpretationsList" :key="interpretation.id">
 				<IntManager @refreshInts="getInterpretations()" :interpretation="interpretation" :audio_ID="audio_ID"
 					:shared_editors="interpretation.shared_editors" :shared_viewers="interpretation.shared_viewers"
-					@permanentlydestroy="permanentlydelete($event)" />
+					@permanentlydestroy="permanentlydelete($event)" @refreshInts2="getInterpretations2()" />
 			</div>
 		</div>
 	</div>
@@ -239,7 +239,6 @@ export default {
 				.then((answer) => {
 					if (answer.aid == this.audio_ID) {
 						this.$store.commit("removeFromAudioArray", answer.aid);
-						// this.$store.commit("forceDashboardRerender");
 					} else {
 						alert("error; please restart app");
 					}
@@ -267,6 +266,11 @@ export default {
 		showAddViewersModal() {
 			this.$store.commit("showAddViewersModal", this.audio_ID);
 		},
+		async getInterpretations2() {
+			await this.getInterpretations()
+			this.$store.commit("forceDashboardRerender");
+		},
+
 		async getInterpretations() {
 			if (this.dropdown) {
 				if (this.$store.state.user) {
@@ -300,7 +304,11 @@ export default {
 					.then((data) => {
 						// console.log("data")
 						// console.log(data["interpretations"])
-						this.interpretationsList = data["interpretations"];
+						if (data["interpretations"] != "none") { this.interpretationsList = data["interpretations"]; }
+						else { console.log("no interpretations to see")
+					return }
+
+
 						// console.log(this.interpretationsList)
 					})
 					.catch((error) => console.error("Error:", error));

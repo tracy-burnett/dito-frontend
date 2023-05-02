@@ -20,6 +20,7 @@
 		>
 			<IntViewersModal
 				@refreshInterpretations="$emit('refreshInts')"
+				@refreshInterpretations2="$emit('refreshInts2')"
 				:interpretation_id="interpretation.id"
 				:audio_id="audio_ID"
 				:status="status"
@@ -67,6 +68,10 @@
 						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 						@click="showIntViewersModal(interpretation.id)"
 					>Manage Viewing</button></p>
+					<p v-else-if="status == 'viewer'"><button
+						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
+						@click="remove_viewer($store.state.user.uid)"
+					>Decline Share</button></p>
 			</div>
 		</div>
 	</div>
@@ -130,6 +135,58 @@ export default {
 	},
 
 	methods: {
+
+		async remove_viewer(viewer) {
+			if (this.$store.state.user) {
+				// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+				await getIdToken(this.$store.state.user)
+					.then((idToken) => {
+						this.$store.commit("SetIdToken", idToken);
+						// console.log(this.$store.state.idToken)
+					})
+					.catch((error) => {
+						// An error happened.
+						console.log("Oops. " + error.code + ": " + error.message);
+					});
+			}
+
+			fetch(
+				process.env.VUE_APP_api_URL +
+					"interpretations/" +
+					this.interpretation.id +
+					"/audio/" +
+					this.audio_ID +
+					"/" +
+					this.status +
+					"/",
+				{
+					method: "PATCH",
+					headers: {
+						"Content-Type": "application/json",
+
+						Authorization: this.$store.state.idToken,
+					},
+					body: JSON.stringify({
+						// url: "coverimage.jpg",
+						// title: this.title,
+						// description: this.description,
+						// public: this.publictf,
+						remove_viewer: viewer,
+					}),
+				}
+			)
+				.then((response) => {
+					return response.json();
+				})
+
+				.then((response) => {
+					this.$emit("refreshInts2");
+				})
+				.catch((error) => {
+					console.error("Error:", error);
+				});
+		},
+
 		async deletefunc(id) {
 			if (this.$store.state.user) {
 				// REFRESH ID TOKEN FIRST AND WAIT FOR IT
