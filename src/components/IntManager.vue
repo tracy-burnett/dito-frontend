@@ -56,7 +56,7 @@
 					{{ status }} access
 				</p>
 				<p><button
-						v-if="this.status=='owner' || this.status=='editor'"
+						v-if="this.status=='owner'"
 						class="p-1 text-sm font-medium text-white transition-colors bg-blue-600 border border-blue-500 rounded hover:bg-blue-500"
 						@click="deletefunc(interpretation.id)"
 					>Delete</button></p>
