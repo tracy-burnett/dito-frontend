@@ -15,7 +15,7 @@
 				<div
 					v-for="viewer in shared_viewers"
 					:key="viewer.user_ID"
-				>{{ viewer.display_name }}<button @click="remove_viewer(viewer.user_ID)">Remove</button></div>
+				>{{ viewer.display_name }}<button class="text-blue-700" @click="remove_viewer(viewer.user_ID)">&nbsp;Remove</button></div>
 			</div>
 
 			Enter the email address of the Dito account to invite to view
@@ -32,6 +32,13 @@
 				@click="update"
 			>
 				Update Viewers
+			</button>
+			Click the button below to remove yourself as an editor of this interpretation.
+			<button
+				class="w-full px-3 py-2 mt-3 text-sm font-medium text-white transition-colors border rounded border-cyan-600 bg-cyan-700 hover:bg-cyan-600"
+				@click="remove_editor($store.state.user.uid)"
+			>
+				Remove My Editing Access to This Interpretation
 			</button>
 		</div>
 	</div>
@@ -75,6 +82,60 @@ export default {
 		},
 	},
 	methods: {
+
+		async remove_editor(editor) {
+			if (this.$store.state.user) {
+				// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+				await getIdToken(this.$store.state.user)
+					.then((idToken) => {
+						this.$store.commit("SetIdToken", idToken);
+						// console.log(this.$store.state.idToken)
+					})
+					.catch((error) => {
+						// An error happened.
+						console.log("Oops. " + error.code + ": " + error.message);
+					});
+			}
+
+			fetch(
+				process.env.VUE_APP_api_URL +
+					"interpretations/" +
+					this.interpretation_id +
+					"/audio/" +
+					this.audio_id +
+					"/" +
+					this.status +
+					"/",
+				{
+					method: "PATCH",
+					headers: {
+						"Content-Type": "application/json",
+
+						Authorization: this.$store.state.idToken,
+					},
+					body: JSON.stringify({
+						// url: "coverimage.jpg",
+						// title: this.title,
+						// description: this.description,
+						// public: this.publictf,
+						remove_editor: editor,
+					}),
+				}
+			)
+				.then((response) => {
+					return response.json();
+				})
+
+				.then((response) => {
+					console.log(response)
+					this.$emit("refreshInterpretations2");
+					this.closeModal()
+				})
+				.catch((error) => {
+					console.error("Error:", error);
+				});
+		},
+
 		async remove_viewer(viewer) {
 			if (this.$store.state.user) {
 				// REFRESH ID TOKEN FIRST AND WAIT FOR IT

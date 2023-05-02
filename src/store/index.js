@@ -67,6 +67,16 @@ export default new Vuex.Store({
       state.audioArrayChanged++
     },
 
+    removeFromAudioArray(state, aid) {
+      let audioIndex = state.audioArray.map((audio) => audio.id).indexOf(aid)
+
+
+      state.audioArray.splice(audioIndex, 1)
+
+      state.audioArrayChanged++
+
+    },
+
     addToAudioArray(state, params) {
       if (
         state.audioArray &&
