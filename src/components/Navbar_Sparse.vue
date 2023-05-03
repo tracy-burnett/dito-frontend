@@ -11,7 +11,7 @@
 		</div>
 
 		<div class="fixed m-auto left-0 right-0 w-[70vw]">
-			<p class="text-sm text-center text-slate-100">{{text}}</p>
+			<slot></slot>
 		</div>
 
 		<div class="fixed right-0 flex flex-col items-center">
@@ -52,9 +52,9 @@
 export default {
 	name: "Navbar",
 	props: {
-		text: {
-			default: "",
-		},
+		// text: {
+		// 	default: "",
+		// },
 	},
 	data() {
 		return {
@@ -62,6 +62,8 @@ export default {
 		};
 	},
 	methods: {
+		
+
 		signoutuser: function () {
 			this.$store.dispatch("Logout_User");
 			this.$router.replace("/");

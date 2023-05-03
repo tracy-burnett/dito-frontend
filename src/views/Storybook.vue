@@ -1,5 +1,8 @@
 <template>
 	<div @click.ctrl.exact="playerPlayPause++">
+		<span v-if="showGetLinkModal" class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen">
+			<GetLinkModal :audio_id="audio_ID" @closeGetLinkModal="closeGetLinkModal()" />
+		</span>
 		<span v-if="showAddInterpretationModal" class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen">
 			<AddInterpretationModal :audio_id="audio_ID" @addCreatedInterpretation="addCreatedInterpretation($event)"
 				@closeInterpretationModal="closeInterpretationModal()" />
@@ -9,7 +12,10 @@
 				@closeUploadIntModal="closeUploadIntModal()" />
 		</span>
 
-		<Navbar :text=navtext />
+		<Navbar>
+			<p class="mt-1 text-sm text-center cursor-pointer text-slate-100" @click="showGetLinkModal = true">Get Page Link
+			</p>
+		</Navbar>
 		<div class="relative overflow-x-hidden justify-items-center hero">
 			<div class="pt-[5vh] flex flex-row justify-between h-[100vh]">
 
@@ -48,11 +54,13 @@
 </template>
 
 <script>
+import { useRoute } from 'vue-router';
 import Navbar from "@/components/Navbar_Sparse.vue";
 import PlayerVertical from "@/components/PlayerVertical.vue";
 import SingleInterpretation from "@/components/SingleInterpretation.vue";
 import AddInterpretationViewer from "@/components/AddInterpretationViewer.vue";
 import AddInterpretationModal from "@/components/AddInterpretationModal.vue";
+import GetLinkModal from "@/components/GetLinkModal.vue";
 import UploadIntModal from "@/components/UploadIntModal.vue";
 import { getIdToken } from "firebase/auth";
 
@@ -64,6 +72,7 @@ export default {
 		SingleInterpretation,
 		AddInterpretationViewer,
 		AddInterpretationModal,
+		GetLinkModal,
 		UploadIntModal,
 	},
 	data: () => {
@@ -72,16 +81,20 @@ export default {
 			interpretationsList: [], // the list of interpretations that can be selected from the dropdown menu (does not include interpretations currently being viewed by this user in this browser window)
 			formerInterpretationsList: [], // the list of interpretations currently being viewed by this user in this browser window
 			showAddInterpretationModal: false,
+			showGetLinkModal: false,
 			showUploadIntModal: false,
 			playerPlayPause: 0, // when this changes, play or pause Player Vertical
-			navtext: "",
+			route: {},
+			intArray: [],
 		};
 	},
 	props: {
 		audio_ID: "",
 		// title: "",
 	},
-	computed: {},
+	computed: {
+
+	},
 
 	watch: {
 		"$store.state.authCompleted": function () {
@@ -96,6 +109,13 @@ export default {
 	},
 
 	mounted() {
+		this.route = useRoute();
+		// console.log(this.route)
+		if (this.route.query.open) {
+			this.intArray = this.route.query.open.match(new RegExp(/.{11}/g))
+		}
+		// console.log(this.intArray);
+
 		document.title =
 			"Dito - " + window.location.hostname.split(".")[0];
 		if (this.$store.state.authCompleted === true) {
@@ -116,6 +136,7 @@ export default {
 	},
 
 	methods: {
+
 		async getInterpretations() {
 			//fetch the interpretations the logged-in user has access to for this audio file
 
@@ -148,9 +169,28 @@ export default {
 			})
 				.then((response) => response.json())
 				.then((data) => {
-					this.interpretationsList = data["interpretations"];
-					let temp_id = this.interpretationsList[0].id;
-					this.displayInterpretationID(temp_id);
+
+					if (data["interpretations"] != "none") {
+						this.interpretationsList = data["interpretations"];
+						let mapped = this.interpretationsList.map(
+							(item) => item.id
+						)
+
+						this.intArray.forEach(queryint => {
+							if (mapped.indexOf(queryint) != -1) {
+								this.displayInterpretationID(queryint);
+								// change this to router push???!!!!
+							}
+
+						});
+
+						if (this.$store.state.consoles.length == 0) {
+							let temp_id = this.interpretationsList[0].id;
+							this.displayInterpretationID(temp_id);
+						}
+					}
+
+
 				})
 				.catch((error) => console.error("Error:", error));
 
@@ -302,8 +342,14 @@ export default {
 		toggleInterpretationModal() {
 			this.showAddInterpretationModal = !this.showAddInterpretationModal;
 		},
+		toggleGetLinkModal() {
+			this.showGetLinkModal = !this.showGetLinkModal
+		},
 		closeInterpretationModal() {
 			this.showAddInterpretationModal = false;
+		},
+		closeGetLinkModal() {
+			this.showGetLinkModal = false
 		},
 	},
 };

@@ -64,6 +64,13 @@ const routes = [
   //   name: 'Profile',
   //   component: Profile
   // },
+  // {
+  //   path: '/storybook/:audio_ID/consoles',
+  //   name: 'StorybookInterpretations',
+  //   component: Storybook,
+  //   props: route => ({ query: route.query })
+  // },
+
   {
     path: '/storybook/:audio_ID',
     name: 'Storybook',
