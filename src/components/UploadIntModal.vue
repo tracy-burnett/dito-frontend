@@ -2,7 +2,8 @@
 	<div class="flex flex-col items-center justify-center flex-auto h-full backdrop">
 		<div
 			class="flex flex-col items-center p-8 overflow-y-scroll bg-white border border-gray-300 shadow-md modal rounded-xl xl:w-2/5 lg:w-2/4 md:w-2/3">
-			<button v-if="uploadInProgress==false" class="mx-4 my-[1vh] text-xl text-gray-500" @click.prevent="closeModal()">
+			<button v-if="uploadInProgress == false" class="mx-4 my-[1vh] text-xl text-gray-500"
+				@click.prevent="closeModal()">
 				×
 			</button>
 			<h1 class="text-2xl font-bold mb-[1vh]">Upload Interpretation File</h1>
@@ -291,7 +292,7 @@ export default {
 
 		finished(response) {
 			// console.log(response)
-			if (response == "stopped") { 
+			if (response == "stopped") {
 				// console.log("doing nothing") 
 			}
 			else if (this.uploadInProgress == true && (this.filetype == "srt" || this.filetype == "tsv")) {
@@ -454,9 +455,10 @@ export default {
 			}
 			else if (this.uploadInProgress == true && this.int_text == "") {
 				// alert('no text to upload in interpretation titled "' + this.int_title + '"')
-				if (this.filetype=="srt" || this.filetype=="tsv")
-				{alert('no text to upload')
-					this.uploadInProgress = false}
+				if (this.filetype == "srt" || this.filetype == "tsv") {
+					alert('no text to upload')
+					this.uploadInProgress = false
+				}
 				return "stopped"
 			}
 		},
@@ -880,7 +882,7 @@ export default {
 
 					if (
 						100 *
-						timestampStart >
+						timestampStart >=
 						lastEndSeconds
 					) {
 						caption_text = "\n\n" + caption_text.substring(1);
