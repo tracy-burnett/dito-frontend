@@ -1,8 +1,7 @@
 <template>
 	<div @click.ctrl.exact="playerPlayPause++">
 		<span v-if="showGetLinkModal" class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen">
-			<GetLinkModal :audio_id="audio_ID" @addCreatedInterpretation="addCreatedInterpretation($event)"
-				@closeGetLinkModal="closeGetLinkModal()" />
+			<GetLinkModal :audio_id="audio_ID" @closeGetLinkModal="closeGetLinkModal()" />
 		</span>
 		<span v-if="showAddInterpretationModal" class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen">
 			<AddInterpretationModal :audio_id="audio_ID" @addCreatedInterpretation="addCreatedInterpretation($event)"
@@ -184,9 +183,14 @@ export default {
 							}
 
 						});
+
+						if (this.$store.state.consoles.length == 0) {
+							let temp_id = this.interpretationsList[0].id;
+							this.displayInterpretationID(temp_id);
+						}
 					}
-					// let temp_id = this.interpretationsList[0].id;
-					// this.displayInterpretationID(temp_id);
+
+
 				})
 				.catch((error) => console.error("Error:", error));
 
@@ -385,4 +389,5 @@ export default {
 			rgb(82.538% 86.843% 89.062%) 87.5%,
 			rgb(91.792% 92.942% 93.534%) 93.75%,
 			rgb(100% 100% 100%) 100%);
-}</style>
+}
+</style>
