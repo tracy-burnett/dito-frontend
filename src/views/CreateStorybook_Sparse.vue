@@ -65,13 +65,13 @@
 </template>
 
 <script>
-import Navbar from "@/components/Navbar_Sparse.vue";
+// import Navbar from "@/components/Navbar_Sparse.vue";
 import { getIdToken } from "firebase/auth";
 
 export default {
 	name: "CreateStorybook",
 	components: {
-		Navbar,
+		// Navbar,
 	},
 	data() {
 		return {

@@ -9,7 +9,7 @@
 				@closeUploadIntModal="closeUploadIntModal()" />
 		</span>
 
-		<Navbar :text=navtext />
+		<Navbar><p class="mt-1 text-sm text-center cursor-pointer text-slate-100" @click="showPageLink()">Get Page Link</p></Navbar>
 		<div class="relative overflow-x-hidden justify-items-center hero">
 			<div class="pt-[5vh] flex flex-row justify-between h-[100vh]">
 
@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import { useRoute } from 'vue-router';
 import Navbar from "@/components/Navbar_Sparse.vue";
 import PlayerVertical from "@/components/PlayerVertical.vue";
 import SingleInterpretation from "@/components/SingleInterpretation.vue";
@@ -74,7 +75,8 @@ export default {
 			showAddInterpretationModal: false,
 			showUploadIntModal: false,
 			playerPlayPause: 0, // when this changes, play or pause Player Vertical
-			navtext: "",
+			route: {},
+			intArray: [],
 		};
 	},
 	props: {
@@ -96,6 +98,11 @@ export default {
 	},
 
 	mounted() {
+		this.route = useRoute();
+		// console.log(this.route)
+		if (this.route.query.interpretations) { this.intArray = this.route.query.interpretations.split("~") }
+		// console.log(this.intArray);
+
 		document.title =
 			"Dito - " + window.location.hostname.split(".")[0];
 		if (this.$store.state.authCompleted === true) {
@@ -116,6 +123,12 @@ export default {
 	},
 
 	methods: {
+		showPageLink() {
+
+			// POP UP A MODAL GIVING A STATIC LINK TO THE CURRENT PAGE BUT WARNING THE USER THAT IT WILL ONLY COMPLETELY WORK FOR PEOPLE WHO HAVE ACCESS TO THE DIFFERENT ELEMENTS OF IT
+
+		},
+
 		async getInterpretations() {
 			//fetch the interpretations the logged-in user has access to for this audio file
 
@@ -148,9 +161,21 @@ export default {
 			})
 				.then((response) => response.json())
 				.then((data) => {
+
 					this.interpretationsList = data["interpretations"];
-					let temp_id = this.interpretationsList[0].id;
-					this.displayInterpretationID(temp_id);
+					let mapped = this.interpretationsList.map(
+						(item) => item.id
+					)
+
+					this.intArray.forEach(queryint => {
+						if (mapped.indexOf(queryint) != -1) { 
+							this.displayInterpretationID(queryint);
+						// change this to router push???!!!!
+						}
+
+					});
+					// let temp_id = this.interpretationsList[0].id;
+					// this.displayInterpretationID(temp_id);
 				})
 				.catch((error) => console.error("Error:", error));
 
