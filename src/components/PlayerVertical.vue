@@ -534,13 +534,13 @@ export default {
 
 		// When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
 		this.wavesurfer.on("waveform-ready", function () {
-			// console.log("waveform ready")
+			console.log("waveform ready")
 			that.readyVerification += 1;
 		});
 
 		// When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
 		this.wavesurfer.on("ready", function () {
-			// console.log("audio ready")
+			console.log("audio ready")
 			that.readyVerification += 1;
 		});
 
