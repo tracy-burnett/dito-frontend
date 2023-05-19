@@ -121,21 +121,43 @@ export default new Vuex.Store({
       // console.log(this.sortOrder)
       if (state.sortOrder) {
         state.audioArray.sort(function (a, b) {
-          console.log(a)
-          console.log(b)
+          // console.log(a[param])
+          // console.log(b[param])
+          if (param == "uploaded_by.display_name") {
+            if (a["uploaded_by"]["display_name"] < b["uploaded_by"]["display_name"]) {
+              console.log("yes")
+              return -1;
+            }
+            if (a["uploaded_by"]["display_name"] > b["uploaded_by"]["display_name"]) {
+              console.log("no")
+              return 1;
+            }
 
-          if (a[param] < b[param]) {
-            console.log("yes")
-            return -1;
-          }
-          if (a[param] > b[param]) {
-            console.log("no")
-            return 1;
+          } else {
+            if (a[param] < b[param]) {
+              console.log("yes")
+              return -1;
+            }
+            if (a[param] > b[param]) {
+              console.log("no")
+              return 1;
+            }
           }
           return 0;
         });
       } else {
         state.audioArray.sort(function (a, b) {
+
+          if (param == "uploaded_by.display_name") {
+            if (a["uploaded_by"]["display_name"] < b["uploaded_by"]["display_name"]) {
+              return 1;
+            }
+            if (a["uploaded_by"]["display_name"] > b["uploaded_by"]["display_name"]) {
+              return -1;
+            }
+
+          }
+
           if (a[param] < b[param]) {
             return 1;
           }
