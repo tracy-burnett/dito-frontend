@@ -121,10 +121,15 @@ export default new Vuex.Store({
       // console.log(this.sortOrder)
       if (state.sortOrder) {
         state.audioArray.sort(function (a, b) {
+          console.log(a)
+          console.log(b)
+
           if (a[param] < b[param]) {
+            console.log("yes")
             return -1;
           }
           if (a[param] > b[param]) {
+            console.log("no")
             return 1;
           }
           return 0;
