@@ -125,21 +125,21 @@ export default new Vuex.Store({
           // console.log(b[param])
           if (param == "uploaded_by.display_name") {
             if (a["uploaded_by"]["display_name"] < b["uploaded_by"]["display_name"]) {
-              console.log("yes")
+              // console.log("yes")
               return -1;
             }
             if (a["uploaded_by"]["display_name"] > b["uploaded_by"]["display_name"]) {
-              console.log("no")
+              // console.log("no")
               return 1;
             }
 
           } else {
             if (a[param] < b[param]) {
-              console.log("yes")
+              // console.log("yes")
               return -1;
             }
             if (a[param] > b[param]) {
-              console.log("no")
+              // console.log("no")
               return 1;
             }
           }
