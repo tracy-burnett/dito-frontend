@@ -125,7 +125,7 @@ export default {
 					k++;
 				}
 
-				if (audio.uploaded_by.anonymous == false) {
+				if (audio.uploaded_by.anonymous == false || audio.uploaded_by.anonymous === undefined) {
 					if (audio.uploaded_by.display_name.match(this.regexwithsearchterm)) {
 						k++;
 					}
