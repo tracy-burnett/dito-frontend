@@ -148,6 +148,7 @@ export default {
 			this.name = this.file["name"];
 			this.myArray = this.name.split(".");
 			this.ext = "." + this.myArray[this.myArray.length - 1];
+			console.log("before getting URL to use to send audio to server")
 			fetch(process.env.VUE_APP_api_URL + "s3/presignedposturl", {
 				method: "POST",
 				headers: {
@@ -183,6 +184,7 @@ export default {
 				.then(() =>
 					// post request to create new entry in audio table that includes data['audio_ID'], audio_URL (different from presigned URL), and other important information.
 					{
+						console.log("create new entry in audio table")
 						fetch(process.env.VUE_APP_api_URL + "audio/", {
 							method: "POST",
 							headers: {
@@ -211,6 +213,7 @@ export default {
 									this.$store.commit("toggleInfobit", "InfoPublish");
 
 									if (this.int_title || this.int_text || this.int_language) {
+										console.log("creating interpretation")
 										fetch(
 											process.env.VUE_APP_api_URL +
 												"interpretations/audio/" +
