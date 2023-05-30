@@ -2,7 +2,7 @@
 	<div class="flex flex-col items-center  pt-[2.2vh]">
 		<input
 			class="px-3 fixed py-.5 text-sm border border-gray-300 rounded w-[70vw] md:w-[70vw] lg:w-[30vw]"
-			placeholder="Search Storybooks (case-sensitive)"
+			placeholder="Search Storybooks"
 			v-model="searchterm"
 			@keyup.enter="search"
 		/>
