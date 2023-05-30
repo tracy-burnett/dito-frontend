@@ -74,6 +74,8 @@ export default {
 		},
 
 		gohome: function () {
+			
+			this.$store.commit('toggleInfobit', 'InfoRevitalize');
 			this.$router.push("/");
 		},
 	},

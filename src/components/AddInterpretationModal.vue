@@ -47,7 +47,7 @@ export default {
 
 
 		regexwithmultiplespacedby() {
-			return new RegExp(`${this.escapeRegex(this.int_spacing)}+`, "g");
+			return new RegExp(`${this.escapeRegex(this.int_spacing)}+`, "ug");
 		},
 	},
 	methods: {
