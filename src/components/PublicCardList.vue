@@ -74,7 +74,9 @@ export default {
 	computed: {
 		regexwithsearchterm() {
 			if (this.searchterm != "") {
-				return new RegExp(`${this.escapeRegex(this.searchterm)}+`, "g");
+
+				
+				return new RegExp(`${this.escapeRegex(this.searchterm.normalize("NFC")).replaceAll(/[Iıİi]/g,'[Iıİi]')}+`, "ugi");
 			} else {
 				return "";
 			}

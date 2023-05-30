@@ -60,7 +60,7 @@ export default {
 		},
 
 		regexwithmultiplespacedby() {
-			return new RegExp(`${this.escapeRegex(this.spaced_by)}+`, "g");
+			return new RegExp(`${this.escapeRegex(this.spaced_by)}+`, "ug");
 		},
 
 		numbernewlines() {

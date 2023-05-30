@@ -140,7 +140,8 @@ export default {
 
 		regexwithsearchterm() {
 			if (this.searchterm != "") {
-				return new RegExp(`${this.escapeRegex(this.searchterm)}+`, "g");
+				
+				return new RegExp(`${this.escapeRegex(this.searchterm).replaceAll(/[Iıİi]/g,'[Iıİi]')}+`, "ugi");
 			} else {
 				return "";
 			}
@@ -163,7 +164,8 @@ export default {
 				return this.$store.state.searchterm; // in the store
 			},
 			set(searchterm) {
-				this.$store.commit("updateSearchTerm", searchterm);
+				
+				this.$store.commit("updateSearchTerm", searchterm.normalize("NFC"));
 			},
 		},
 		checkedFilters: {
