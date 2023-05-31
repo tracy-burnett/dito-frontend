@@ -93,20 +93,20 @@
 		</div>
 
 		<p
-			class="text-xs font-semibold text-center cursor-pointer md:text-sm text-slate-700"
-			@click="$store.commit('toggleInfobit', 'PublicCardList');"
+			class="text-xs font-semibold text-center cursor-pointer md:text-sm"
+			@click="$store.commit('toggleInfobit', 'PublicCardList');" :class="{ 'text-slate-700': $store.state.infobit!='PublicCardList', 'text-slate-200': $store.state.infobit=='PublicCardList' }"
 		>Explore and Collaborate</p>
 		<p
-			class="text-xs font-semibold text-center cursor-pointer md:text-sm text-slate-700"
-			@click="$store.commit('toggleInfobit', 'CreateStorybook');"
+			class="text-xs font-semibold text-center cursor-pointer md:text-sm"
+			@click="$store.commit('toggleInfobit', 'CreateStorybook');" :class="{ 'text-slate-700': $store.state.infobit!='CreateStorybook', 'text-slate-200': $store.state.infobit=='CreateStorybook' }"
 		>Contribute Audio</p>
 		<p
-			class="text-xs font-semibold text-center cursor-pointer md:text-sm text-slate-700"
-			@click="$store.commit('toggleInfobit', 'InfoPublish');"
+			class="text-xs font-semibold text-center cursor-pointer md:text-sm"
+			@click="$store.commit('toggleInfobit', 'InfoPublish');" :class="{ 'text-slate-700': $store.state.infobit!='InfoPublish', 'text-slate-200': $store.state.infobit=='InfoPublish' }"
 		>Publish Storybooks</p>
 		<p
-			class="text-xs font-semibold text-center cursor-pointer md:text-sm text-slate-700"
-			@click="$store.commit('toggleInfobit', 'InfoRevitalize');"
+			class="text-xs font-semibold text-center cursor-pointer md:text-sm "
+			@click="$store.commit('toggleInfobit', 'InfoRevitalize');" :class="{ 'text-slate-700': $store.state.infobit!='InfoRevitalize', 'text-slate-200': $store.state.infobit=='InfoRevitalize' }"
 		>Learn and Revitalize</p>
 	</div>
 
