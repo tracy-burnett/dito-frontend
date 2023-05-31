@@ -40,7 +40,7 @@
 					src="@/assets/icon_profile.svg"
 					class="w-[3.2vw]  pt-[1vh]"
 				/>
-				<p class="text-sm">Login</p>
+				<p class="text-sm" :class="{ 'text-slate-700': $store.state.infobit!='Login', 'text-slate-200': $store.state.infobit=='Login' }">Login</p>
 
 			</div>
 
