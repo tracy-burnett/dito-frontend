@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="flex flex-col items-center justify-center flex-auto h-full backdrop"
-		@click="closeModal"
+		@mousedown.self="closeModal"
 	>
 		<div class="flex flex-col items-center p-8 overflow-y-scroll bg-white border border-gray-300 shadow-md modal rounded-xl xl:w-2/5 lg:w-2/4 md:w-2/3">
 			<button
