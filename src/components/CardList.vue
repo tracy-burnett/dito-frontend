@@ -213,6 +213,9 @@ export default {
 				if (audio.title.match(this.regexwithsearchterm)) {
 					k++;
 				}
+				if (audio.searchablestring.match(this.regexwithsearchterm)) {
+					k++;
+				}
 				if (
 					audio.uploaded_at.substring(0, 10).match(this.regexwithsearchterm)
 				) {

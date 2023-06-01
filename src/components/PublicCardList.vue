@@ -123,6 +123,9 @@ export default {
 				if (audio.title.match(this.regexwithsearchterm)) {
 					k++;
 				}
+				if (audio.searchablestring.match(this.regexwithsearchterm)) {
+					k++;
+				}
 				if (
 					audio.uploaded_at.substring(0, 10).match(this.regexwithsearchterm)
 				) {
@@ -164,6 +167,7 @@ export default {
 			else if (this.$store.state.audioArray &&
 				this.$store.state.audioArray.length == 0)
 				{this.processingStorybooks = false;}
+				
 		},
 	},
 };

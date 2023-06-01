@@ -104,7 +104,6 @@ export default {
 		},
 
 		search() {
-			// console.log(this.searchterm);
 			this.searchResultAudioArray = [...this.audioArray];
 			let i = 0;
 			while (i < this.searchResultAudioArray.length) {
@@ -119,6 +118,9 @@ export default {
 					k++;
 				}
 				if (audio.title.match(this.regexwithsearchterm)) {
+					k++;
+				}
+				if (audio.searchablestring.match(this.regexwithsearchterm)) {
 					k++;
 				}
 				if (
