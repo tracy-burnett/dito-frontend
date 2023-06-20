@@ -29,7 +29,7 @@
 		<div class="flex dropdown">
 			<button @click="reloadapp" class="dropbtn  w-[12vw] border-sky-600 bg-sky-700 hover:bg-sky-600  fixed right-[7vw] mt-[.3vw]">
 
-				<p class="text-sm font-medium ">Get Latest App Version</p>
+				<p class="text-sm font-medium ">{{$store.state.promptsObject.nGetLatestAppVersion}}</p>
 
 			</button>
 		</div>
@@ -39,7 +39,7 @@
 			<div class="flex flex-col items-center cursor-pointer mr-[1vw]" v-if="LoginLogoutButton" @click="signoutuser()">
 				<img src="@/assets/icon_sign_out.svg" class="pl-[.5vw] w-[3.2vw]  pt-[1vh]" />
 				<div>
-					<p class="text-sm">Logout</p>
+					<p class="text-sm">{{$store.state.promptsObject.nLogout}}</p>
 				</div>
 
 			</div>
@@ -48,7 +48,7 @@
 				<img src="@/assets/icon_profile.svg" class="w-[3.2vw]  pt-[1vh]" />
 				<p class="text-sm"
 					:class="{ 'text-slate-700': $store.state.infobit != 'Login', 'text-slate-200': $store.state.infobit == 'Login' }">
-					Login</p>
+					{{$store.state.promptsObject.nLogin}}</p>
 
 			</div>
 
