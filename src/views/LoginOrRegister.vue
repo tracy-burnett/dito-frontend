@@ -2,7 +2,7 @@
 
 	<div class="flex items-center justify-around pt-[4vh]">
 		<div class="flex flex-col items-center w-2/5 ">
-			<p class="text-xl font-bold">Login</p>
+			<p class="text-xl font-bold">{{$store.state.promptsObject.nLogin}}</p>
 			<input
 				class="w-full px-3 border border-gray-300 rounded mt-[2vh]"
 				placeholder="Email"
@@ -20,7 +20,7 @@
 				class="w-full px-3 py-1 mt-[2vh]  font-medium text-white transition-colors border rounded border-cyan-600 bg-cyan-700 hover:bg-cyan-600"
 				@click="login(email, password)"
 			>
-				Login
+			{{$store.state.promptsObject.nLogin}}
 			</button>
 
 			<p class="text-xs mt-[3vh]">(Forgot Password feature not available)</p>

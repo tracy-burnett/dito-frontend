@@ -13,7 +13,7 @@
 		</span>
 
 		<Navbar>
-			<p class="mt-1 text-sm text-center cursor-pointer text-slate-100" @click="showGetLinkModal = true">Get Page Link
+			<p class="mt-1 text-sm text-center cursor-pointer text-slate-100" @click="showGetLinkModal = true">{{$store.state.promptsObject.nGetPageLink}}
 			</p>
 		</Navbar>
 		<div class="relative overflow-x-hidden justify-items-center hero">
