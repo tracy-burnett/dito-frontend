@@ -30,10 +30,9 @@ export default {
 	//   },
 
 	// },
-	mounted() {},
+	mounted() { },
 	methods: {},
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -26,6 +26,14 @@
 			<slot></slot>
 		</div>
 
+		<div class="flex dropdown">
+			<button @click="reloadapp" class="dropbtn  w-[12vw] border-sky-600 bg-sky-700 hover:bg-sky-600  fixed right-[7vw] mt-[.3vw]">
+
+				<p class="text-sm font-medium ">Get Latest App Version</p>
+
+			</button>
+		</div>
+
 		<div class="fixed right-0 flex flex-col items-center">
 
 			<div class="flex flex-col items-center cursor-pointer mr-[1vw]" v-if="LoginLogoutButton" @click="signoutuser()">
@@ -62,6 +70,10 @@ export default {
 		};
 	},
 	methods: {
+
+		reloadapp(){
+			location.reload()
+		},
 
 		selectLanguage(chosenlanguage) {
 
