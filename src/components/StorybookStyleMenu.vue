@@ -39,7 +39,7 @@
 				@click="prompterHelp=true"
 				v-if="styleselection=='Prompter' && tier=='project'"
 				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
-			>Scribing
+			>{{$store.state.promptsObject.bScribing}}
 				<img
 					class="absolute w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer right-0 mr-[.5vw]"
 					src="@/assets/icon_help.svg"
@@ -50,7 +50,7 @@
 				@click="editorHelp=true"
 				v-else-if="styleselection=='Editor' && tier=='project'"
 				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
-			>Editing
+			>{{$store.state.promptsObject.bEditing}}
 				<img
 					class="absolute w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer right-0 mr-[.5vw]"
 					src="@/assets/icon_help.svg"
@@ -60,7 +60,7 @@
 				@click="taggerHelp=true"
 				v-else-if="styleselection=='Tagger' && tier=='project'"
 				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
-			>Refining
+			>{{$store.state.promptsObject.bRefining}}
 				<img
 					class="absolute w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer right-0 mr-[.5vw]"
 					src="@/assets/icon_help.svg"
@@ -70,7 +70,7 @@
 				@click="viewerHelp=true"
 				v-else-if="styleselection=='Viewer'"
 				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
-			>Viewing
+			>{{$store.state.promptsObject.bViewing}}
 				<img
 					class="absolute w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer right-0 mr-[.5vw]"
 					src="@/assets/icon_help.svg"
@@ -80,7 +80,7 @@
 				@click="studioHelp=true"
 				v-else-if="styleselection=='Studio' && tier=='project'"
 				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
-			>Studying
+			>{{$store.state.promptsObject.bStudying}}
 				<img
 					class="absolute w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer right-0 mr-[.5vw]"
 					src="@/assets/icon_help.svg"
@@ -128,22 +128,22 @@
 					v-if="!otherIntInPrompter && (interpretationStatus == 'owner' || interpretationStatus == 'editor')"
 					@click="toggleStorybookStyle('Prompter')" class="font-semibold"
 				>
-					Scribing
+				{{$store.state.promptsObject.bScribing}}
 				</a>
 				<a
 					v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'"
 					@click="toggleStorybookStyle('Editor')" class="font-semibold"
-				>Editing</a>
+				>{{$store.state.promptsObject.bEditing}}</a>
 				
-				<a @click="toggleStorybookStyle('Viewer')">Viewing</a>
+				<a @click="toggleStorybookStyle('Viewer')">{{$store.state.promptsObject.bViewing}}</a>
 				<a
 					v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'"
 					@click="toggleStorybookStyle('Tagger')"
-				>Refining</a>
+				>{{$store.state.promptsObject.bRefining}}</a>
 				<a
 					v-if="!otherIntInPrompter"
 					@click="toggleStorybookStyle('Studio')"
-				>Studying</a>
+				>{{$store.state.promptsObject.bStudying}}</a>
 
 			</div>
 		</div>
@@ -255,25 +255,7 @@ export default {
 	display: block;
 }
 
-.buttonplus {
-	/* background-color: #7833ff; */
-	border: none;
-	color: white;
-	padding: 9px 12px;
-	position: fixed;
-	left: 600px;
-	top: 300px;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	margin: 4px 2px;
-	cursor: pointer;
-	border-radius: 16px;
-}
 
-.buttonplus {
-	border-radius: 100%;
-}
 
 .dropdown-content a:hover {
 	background-color: #f1f1f1;

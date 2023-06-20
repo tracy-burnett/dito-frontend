@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
-    <router-view />
-  </div>
+	<div id="app">
+		<router-view />
+	</div>
 </template>
 
 <script>
@@ -9,35 +9,35 @@ import { auth } from "./firebase";
 import { onAuthStateChanged, getIdToken } from "firebase/auth";
 
 export default {
-  async created() {
-    await onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
-        this.$store.state.user = user;
-        getIdToken(this.$store.state.user)
-          .then((idToken) => {
-            this.$store.commit("SetIdToken", idToken);
-            // console.log(this.$store.state.idToken)
-          })
-          .catch((error) => {
-            // An error happened.
-            console.log("Oops. " + error.code + ": " + error.message);
-          });
-        console.log("you are currently signed in");
-      } else {
-        // User is signed out
-        this.$store.commit("Logout_User")
-        this.$store.commit("ClearIDToken")
-        console.log("everybody signed out");
-                  // this.$router.push("/");
-      }
+	async created() {
+		await onAuthStateChanged(auth, (user) => {
+			if (user) {
+				// User is signed in, see docs for a list of available properties
+				// https://firebase.google.com/docs/reference/js/firebase.User
+				this.$store.state.user = user;
+				getIdToken(this.$store.state.user)
+					.then((idToken) => {
+						this.$store.commit("SetIdToken", idToken);
+						// console.log(this.$store.state.idToken)
+					})
+					.catch((error) => {
+						// An error happened.
+						console.log("Oops. " + error.code + ": " + error.message);
+					});
+				console.log("you are currently signed in");
+			} else {
+				// User is signed out
+				this.$store.commit("Logout_User")
+				this.$store.commit("ClearIDToken")
+				console.log("everybody signed out");
+				// this.$router.push("/");
+			}
 
-      this.$store.commit(
-						"confirmAuth"
-					);
-    });
-  },
+			this.$store.commit(
+				"confirmAuth"
+			);
+		});
+	},
 
 
 
@@ -51,6 +51,23 @@ export default {
 	},
 	mounted() {
 		document.title = "Dito - " + window.location.hostname.split(".")[0];
+		fetch(process.env.VUE_APP_api_URL + "language/", {
+			method: "POST",
+
+			headers: {
+				"Content-Type": "application/json",
+				// Authorization: this.$store.state.idToken,
+			},
+			body: JSON.stringify({
+				language: "English"
+			}),
+		})
+			.then((response) => response.json()) // json to object
+			.then((data) => {
+				// console.log(data)
+				this.$store.commit("changeLanguage", data['languageprompts'])
+			})
+			.catch((error) => console.error("Error:", error));
 		this.getStorybooks()
 	},
 	methods: {
@@ -67,7 +84,7 @@ export default {
 						console.log("Oops. " + error.code + ": " + error.message);
 					});
 			}
-			
+
 			this.$store.commit("setAudioArray", []);
 			fetch(process.env.VUE_APP_api_URL + "audio/user/", {
 				method: "GET",
@@ -81,8 +98,7 @@ export default {
 				.then(
 					(data) => {
 						// console.log(data["audio files"])
-						if (data["audio files"] != undefined)
-						{this.$store.commit("setAudioArray", data["audio files"]);}
+						if (data["audio files"] != undefined) { this.$store.commit("setAudioArray", data["audio files"]); }
 					} // collect the list of audio files that are owned by, or shared with, the logged-in user
 				)
 				.catch((error) => console.error("Error:", error));
@@ -95,14 +111,14 @@ export default {
 
 <style>
 #app {
-  /* font-family: Avenir, Helvetica, Arial, sans-serif;
+	/* font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   margin-top: 60px; */
-  /* overflow:hidden */
-  font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  /* overscroll-behavior-x: none; */
+	/* overflow:hidden */
+	font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	/* overscroll-behavior-x: none; */
 }
 </style>

@@ -109,6 +109,7 @@ export default {
 	},
 
 	mounted() {
+		// console.log(this.$store.state.promptsObject)
 		this.route = useRoute();
 		// console.log(this.route)
 		if (this.route.query.open) {

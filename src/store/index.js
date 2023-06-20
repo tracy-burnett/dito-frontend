@@ -45,6 +45,7 @@ export default new Vuex.Store({
     sortOrder: true,
     // getNewStorybooks: 0,
     searchterm: "",
+    promptsObject: {name: "English"},
 
   },
   getters: {
@@ -290,6 +291,10 @@ export default new Vuex.Store({
 
     updateConsolesHeight(state, newheight) {
       state.consolesheight = newheight
+    },
+
+    changeLanguage(state, promptsObject) {
+      state.promptsObject = promptsObject
     },
 
     exchangeConsole(state, tempObject) {
