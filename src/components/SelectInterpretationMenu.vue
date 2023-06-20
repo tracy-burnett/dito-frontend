@@ -1,20 +1,14 @@
 <template>
 	<div>
-		<div
-			class="dropdown"
-			style="float: right"
-		>
-			<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600">Interpretation</button>
+		<div class="dropdown" style="float: right">
+			<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600">{{$store.state.promptsObject.bInterpretation}}</button>
 
 			<div class="dropdown-content">
 				<!-- for each interpretation in the list of interpretations to show in the menu, create a menu option that displays the language name -->
-				<span
-					v-for="interpretation in interpretationsList"
-					:key="interpretation.id"
-				>
-					<a @click="selectInterpretationMenu(interpretation.id)">{{interpretation.title}}, in {{
-            interpretation.language_name
-          }}</a>
+				<span v-for="interpretation in interpretationsList" :key="interpretation.id">
+					<a @click="selectInterpretationMenu(interpretation.id)">{{ interpretation.title }}, in {{
+						interpretation.language_name
+					}}</a>
 				</span>
 			</div>
 		</div>
@@ -79,32 +73,16 @@ export default {
 	display: block;
 }
 
-.buttonplus {
-	/* background-color: #7833ff; */
-	border: none;
-	color: white;
-	padding: 9px 12px;
-	position: fixed;
-	left: 600px;
-	top: 300px;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	margin: 4px 2px;
-	cursor: pointer;
-	border-radius: 16px;
-}
 
-.buttonplus {
-	border-radius: 100%;
-}
 
 .dropdown-content a:hover {
 	background-color: #f1f1f1;
 }
+
 .dropdown:hover .dropdown-content {
 	display: block;
 }
+
 /* .dropdown:hover .dropbtn { */
 /* background-color: #7833ff; */
 /* } */

@@ -13,7 +13,7 @@
 						v-if="styleoption === 'Viewer' && (this.interpretationStatus == 'owner' || this.interpretationStatus == 'editor')">
 
 						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="toggleSyncingModal()">
-							Adjust
+							{{$store.state.promptsObject.bAdjust}}
 						</button>
 					</div>
 					<div>
@@ -23,8 +23,7 @@
 
 					<div v-if="styleoption === 'Tagger'">
 						<!-- quick and dirty way to undo tags you haven't saved to the database yet -->
-						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="clearTimestamps()">Clear
-							New</button>
+						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="clearTimestamps()">{{$store.state.promptsObject.bClearNew}}</button>
 					</div>
 					<div v-if="interpretationsList.length > 0">
 						<SelectInterpretationMenu :interpretationsList="interpretationsList"
@@ -37,7 +36,7 @@
 
 					<div v-if="styleoption === 'Prompter'">
 						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="resetSensitivity()">
-							Reset Sensitivity
+							{{$store.state.promptsObject.bResetSensitivity}}
 						</button>
 					</div>
 
@@ -50,7 +49,7 @@
 						v-if="(tier == 'research' || tier == 'project') && (styleoption === 'Viewer') && (this.interpretationStatus == 'owner' || this.interpretationStatus == 'editor')">
 
 						<div class="dropdown" style="float: right">
-							<button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn">Download</button>
+							<button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn">{{$store.state.promptsObject.bDownload}}</button>
 							<div class="dropdown-content">
 								<a @click="downloadSRT()">overlapping .srt</a>
 							</div>
@@ -59,13 +58,13 @@
 
 					<div v-if="styleoption === 'Prompter'">
 						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="newPrompt()">
-							New Prompt
+							{{$store.state.promptsObject.bNewPrompt}}
 						</button>
 					</div>
 
 					<div v-if="styleoption === 'Studio'">
 						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="newPhrase()">
-							New Phrase
+							{{$store.state.promptsObject.bNewPhrase}}
 						</button>
 					</div>
 
@@ -84,14 +83,14 @@
 			<div class="flex flex-row flex-wrap justify-center">
 
 				<div>
-					change font size<br>
+					{{$store.state.promptsObject.sChangeFontSize}}<br>
 					<input id="fontsizeslider" v-model="fontsize" type="range" min="8" max="50" step=".5" />
 				</div>
 
 				<!--highlight more/less slider -->
 				<div v-if="styleoption === 'Viewer'">
 					<div class="flex">
-						highlight less / more
+						{{$store.state.promptsObject.sHighlightLessMore}}
 					</div>
 					<div>
 						<input id="timestepslider" v-model="timestep" type="range" min="0" max="2500" step="10" />
@@ -100,7 +99,7 @@
 
 				<div v-if="styleoption === 'Prompter'">
 					<div class="flex">
-						scribe less / more
+						{{$store.state.promptsObject.sScribeLessMore}}
 					</div>
 					<div>
 						<input id="scribingslider" v-model="scribing" type="range" min="20" max="4000"
@@ -111,7 +110,7 @@
 
 				<div v-if="styleoption === 'Studio'">
 					<div class="flex">
-						&nbsp;&nbsp;&nbsp;phrase length
+						&nbsp;&nbsp;&nbsp;{{$store.state.promptsObject.sPhraseLength}}
 					</div>
 					<div>
 						<input id="studyingslider" v-model="studying" type="range" min="0" max="2000" step="10" />

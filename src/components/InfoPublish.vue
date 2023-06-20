@@ -36,16 +36,4 @@ export default {
 </script>
 
 <style scoped>
-.dropbtn {
-	/* background-color: #7833ff; */
-	border: none;
-	color: white;
-	padding: 10px 20px;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	margin: 4px 2px;
-	cursor: pointer;
-	border-radius: 16px;
-}
 </style>

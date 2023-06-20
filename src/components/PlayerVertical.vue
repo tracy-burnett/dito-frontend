@@ -6,7 +6,7 @@
 
 		<!-- playback speed slider -->
 		<div class="flex justify-center text-xs">
-			playback speed {{playbackspeed}}x
+			{{$store.state.promptsObject.sPlaybackSpeed}} {{playbackspeed}}x
 		</div>
 		<div>
 			<input
@@ -22,7 +22,7 @@
 
 		<!-- zoom in / out slider -->
 		<div class="flex justify-center text-xs -mt-[1vh]">
-			zoom {{zoomnumber}}x
+			{{$store.state.promptsObject.sZoom}} {{zoomnumber}}x
 		</div>
 		<div
 			class="-mt-[.6vh]"
@@ -148,33 +148,33 @@
 					class="rounded-full clear mt-[4.3vh]"
 					@click="clearallregions()"
 				>
-					Clear Selection
+				{{$store.state.promptsObject.cClearSelection}}
 				</button> <button
 					v-else
 					class="rounded-full cursor-default disabled mt-[4.3vh]"
 					style="opacity:0.3;"
 				>
-					Clear Selection
+				{{$store.state.promptsObject.cClearSelection}}
 				</button>
 				<button
 					v-if="readyVerification<2"
 					class="rounded-full cursor-default disabled"
 					style="opacity:0.3;"
 				>
-					Repeat On / Off
+				{{$store.state.promptsObject.cRepeat}}
 				</button>
 				<button
 					v-else-if="repeat==true"
-					class="rounded-full clear"
+					class="font-semibold rounded-full clear"
 					@click="toggleRepeat()"
 				>
-					Repeat <b>On</b> / Off
+				{{$store.state.promptsObject.cRepeat}}
 				</button> <button
 					v-else
 					class="rounded-full clear"
 					@click="toggleRepeat()"
 				>
-					Repeat On / <b>Off</b>
+				{{$store.state.promptsObject.cRepeat}}
 				</button>
 
 				<button
@@ -182,20 +182,20 @@
 					class="rounded-full cursor-default disabled"
 					style="opacity:0.3;"
 				>
-					Autoscroll On / Off
+				{{$store.state.promptsObject.cAutoscroll}}
 				</button>
 				<button
 					v-else-if="autoscroll==true"
-					class="rounded-full clear"
+					class="font-semibold rounded-full clear"
 					@click="toggleAutoscroll()"
 				>
-					Autoscroll <b>On</b> / Off
+				{{$store.state.promptsObject.cAutoscroll}}
 				</button> <button
 					v-else
 					class="rounded-full clear"
 					@click="toggleAutoscroll()"
 				>
-					Autoscroll On / <b>Off</b>
+				{{$store.state.promptsObject.cAutoscroll}}
 				</button>
 				<!-- <button
 					v-if="readyVerification<2"
