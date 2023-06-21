@@ -145,18 +145,19 @@ export default {
 		}
 
 
-		if (this.$store.state.promptsObject.code != "en") {
-			const url = new URL(location)
-			url.searchParams.set("view", this.$store.state.promptsObject.code)
-			history.replaceState(history.state, '', url)
-		}
-		else {
-			// console.log(this.$store.state.promptsObject.code)
-			const url = new URL(location)
-			// console.log(url)
-			url.searchParams.delete("view")
-			history.replaceState(history.state, '', url)
-		}
+		// if (this.$store.state.promptsObject.code != "en") {
+		// 	const url = new URL(location)
+		// 	url.searchParams.set("view", this.$store.state.promptsObject.code)
+		// 	history.replaceState(history.state, '', url)
+		// }
+		// else {
+		// 	// console.log(this.$store.state.promptsObject.code)
+		// 	const url = new URL(location)
+		// 	// console.log(url)
+		// 	console.log("FOUR")
+		// 	url.searchParams.delete("view")
+		// 	history.replaceState(history.state, '', url)
+		// }
 
 		// console.log(this.intArray);
 
