@@ -74,7 +74,6 @@ export default {
 	},
 	mounted() {
 		this.route = useRoute();
-		console.log(this.route)
 
 		if (this.route.query.view) {
 			let language = this.route.query.view.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")
@@ -87,36 +86,7 @@ export default {
 	methods: {
 
 		reloadapp() {
-			if (this.$store.state.promptsObject.code != "en") {
-				// console.log(this.$store.state.promptsObject.code)
-				const url = new URL(location)
-				// console.log(url)
-				url.searchParams.set("view", this.$store.state.promptsObject.code)
-				if (this.route.name == "Storybook") {
-					let openparam = ""
-					for (let i = 0; i < this.$store.state.consoles.length; i++) {
-						openparam = openparam + this.$store.state.consoles[i]
-					}
-					url.searchParams.set("open", openparam)
-				}
-				// console.log(location)
-				location = url
-			}
-			else {
-				// console.log(this.$store.state.promptsObject.code)
-				const url = new URL(location)
-				// console.log(url)
-				url.searchParams.delete("view")
-				if (this.route.name == "Storybook") {
-					let openparam = ""
-					for (let i = 0; i < this.$store.state.consoles.length; i++) {
-						openparam = openparam + this.$store.state.consoles[i]
-					}
-					url.searchParams.set("open", openparam)
-				}
-				// console.log(location)
-				location = url
-			}
+			location.reload()
 		},
 
 		selectLanguage(chosenlanguage) {
@@ -137,6 +107,34 @@ export default {
 				.then((data) => {
 					// console.log(data)
 					this.$store.commit("changeLanguage", data['languageprompts'])
+
+
+					if (this.$store.state.promptsObject.code != "en") {
+						const url = new URL(location)
+
+						if (this.route.name == "Storybook") {
+							url.searchParams.delete("open")
+							let openparam = ""
+							for (let i = 0; i < this.$store.state.consoles.length; i++) {
+								openparam = openparam + this.$store.state.consoles[i]
+							}
+							url.searchParams.set("view", this.$store.state.promptsObject.code)
+							if (openparam.length > 0) { url.searchParams.set("open", openparam) }
+
+						}
+						else { url.searchParams.set("view", this.$store.state.promptsObject.code) }
+
+						history.replaceState(history.state, '', url)
+					}
+					else {
+						const url = new URL(location)
+						url.searchParams.delete("view")
+
+						history.replaceState(history.state, '', url)
+					}
+
+
+
 				})
 				.catch((error) => console.error("Error:", error));
 
