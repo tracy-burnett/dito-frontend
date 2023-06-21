@@ -1,6 +1,7 @@
 # Dialect Translation Tool Frontend
 
-Note: main branch auto-deploys to www.xygil.net.
+Note: two separate pieces of code in Navbar_Sparse must be updated to accommodate new viewing languages (one has the displayed name and one has the language code).
+Note: main branch auto-deploys to live subdomains for users of dito.live.
 
 ## Project setup
 
