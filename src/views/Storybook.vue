@@ -13,8 +13,17 @@
 		</span>
 
 		<Navbar>
-			<p class="mt-1 text-sm text-center cursor-pointer text-slate-100" @click="showGetLinkModal = true">{{$store.state.promptsObject.nGetPageLink}}
-			</p>
+
+			<button class="dropbtn  w-[8vw] border-sky-500 bg-sky-600 hover:bg-sky-500  " @click="showGetLinkModal = true">
+				<div class="flex flex-row justify-around">
+					<p class="flex text-sm font-medium">{{ $store.state.promptsObject.nGetPageLink }}</p>
+
+				</div>
+			</button>
+
+			<!-- <p class="mt-1 text-sm text-center cursor-pointer text-slate-100" >
+				
+			</p> -->
 		</Navbar>
 		<div class="relative overflow-x-hidden justify-items-center hero">
 			<div class="pt-[5vh] flex flex-row justify-between h-[100vh]">
@@ -113,8 +122,9 @@ export default {
 		this.route = useRoute();
 		// console.log(this.route)
 		if (this.route.query.open) {
-			this.intArray = this.route.query.open.match(new RegExp(/.{11}/g))
+			this.intArray = this.route.query.open.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&").match(new RegExp(/.{11}/g))
 		}
+
 		// console.log(this.intArray);
 
 		document.title =
@@ -357,6 +367,19 @@ export default {
 </script>
 
 <style scoped>
+
+.dropbtn {
+	/* background-color: #7833ff; */
+	border: none;
+	color: white;
+	padding: 1vh 1vh;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	/* margin: 4px 2px; */
+	cursor: pointer;
+	border-radius: 16px;
+}
 .hero {
 	/* position: relative; */
 	background-color: transparent;

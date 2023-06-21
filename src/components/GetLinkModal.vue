@@ -7,9 +7,13 @@
 			</button>
 			<h1 class="text-2xl font-bold">Get Shareable Link</h1>
 			<br />
-            <p class="text-center">This static link will only work for recipients if all elements (the audio file and all currently displayed interpretations of it) are public or have been shared with recipients' Dito accounts.</p>
-<br>
-            <textarea class="w-full text-center" autofocus="true" readonly @click="$event.target.select()" onfocus='this.style.height = "";this.style.height = this.scrollHeight + "px"' ref="currenturl">{{currenturl}}</textarea>
+			<p class="text-center">This static link will only work for recipients if all elements (the audio file and all
+				currently displayed interpretations of it) are public or have been shared with recipients' Dito accounts.
+			</p>
+			<br>
+			<textarea class="w-full text-center" autofocus="true" readonly @click="$event.target.select()"
+				onfocus='this.style.height = "";this.style.height = this.scrollHeight + "px"'
+				ref="currenturl">{{ currenturl }}</textarea>
 		</div>
 	</div>
 </template>
@@ -32,21 +36,30 @@ export default {
 			default: "",
 		},
 	},
-    mounted(){
-        
-				this.$refs.currenturl.focus();
-    },
+	mounted() {
+
+		this.$refs.currenturl.focus();
+	},
 	computed: {
 		// split by carriage returns and get rid of any spaced_by characters at the beginning and end of each element
 
-        currenturl() {
-            let baseurl = window.location.href.split("?")[0] + "?open="
-            for (let i=0; i < this.$store.state.consoles.length; i++) {
-                baseurl = baseurl + this.$store.state.consoles[i]
-            }
-            return baseurl
+		currenturl() {
+			if (this.$store.state.promptsObject.code != "en") {
+				let baseurl = window.location.href.split("?")[0] + "?view=" + this.$store.state.promptsObject.code + "&open="
+				for (let i = 0; i < this.$store.state.consoles.length; i++) {
+					baseurl = baseurl + this.$store.state.consoles[i]
+				}
+				return baseurl
+			}
+			else {
+				let baseurl = window.location.href.split("?")[0] + "?open="
+				for (let i = 0; i < this.$store.state.consoles.length; i++) {
+					baseurl = baseurl + this.$store.state.consoles[i]
+				}
+				return baseurl
+			}
 
-        },
+		},
 		regexwithmultiplespacedby() {
 			return new RegExp(`${this.escapeRegex(this.int_spacing)}+`, "ug");
 		},
@@ -135,5 +148,4 @@ export default {
 .modal::-webkit-scrollbar {
 	display: none;
 	/* for Chrome, Safari, and Opera */
-}
-</style>
+}</style>
