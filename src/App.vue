@@ -51,23 +51,6 @@ export default {
 	},
 	mounted() {
 		document.title = "Dito - " + window.location.hostname.split(".")[0];
-		fetch(process.env.VUE_APP_api_URL + "language/", {
-			method: "POST",
-
-			headers: {
-				"Content-Type": "application/json",
-				// Authorization: this.$store.state.idToken,
-			},
-			body: JSON.stringify({
-				language: "English"
-			}),
-		})
-			.then((response) => response.json()) // json to object
-			.then((data) => {
-				// console.log(data)
-				this.$store.commit("changeLanguage", data['languageprompts'])
-			})
-			.catch((error) => console.error("Error:", error));
 		this.getStorybooks()
 	},
 	methods: {

@@ -78,10 +78,10 @@ export default {
 		if (this.route.query.view) {
 			let language = this.route.query.view.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")
 			if (language == "zh") { this.selectLanguage("中文") }
+			else { this.selectLanguage("English") }
 			// else if (language=="bo")
 			// {this.selectLanguage("བོད་ཡིག")}
-			// if nothing matches, it will stay in English as per App.vue
-		}
+		} else { this.selectLanguage("English") }
 	},
 	methods: {
 
