@@ -45,7 +45,8 @@ export default new Vuex.Store({
     sortOrder: true,
     // getNewStorybooks: 0,
     searchterm: "",
-    promptsObject: {name: "English"},
+    promptsObject: {name: "English", code: "en"},
+    consoleschanged: 0,
 
   },
   getters: {
@@ -304,10 +305,13 @@ export default new Vuex.Store({
         state.consoles[index] = tempObject.newID
       }
 
+      state.consoleschanged++
+
     },
 
     addConsolesCount(state, interpretation_id) {
       state.consoles.push(interpretation_id)
+      state.consoleschanged++
     },
 
     deleteConsole(state, interpretation_id) {
@@ -319,6 +323,8 @@ export default new Vuex.Store({
         state.consoles.splice(index, 1); // 2nd parameter means remove one item only
       }
 
+      state.consoleschanged++
+
       // console.log(state.consoles)
     },
 
@@ -329,6 +335,7 @@ export default new Vuex.Store({
 
     clearConsoles(state) {
       state.consoles.length = 0
+      state.consoleschanged++
     },
 
 

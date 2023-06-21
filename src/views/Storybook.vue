@@ -1,8 +1,5 @@
 <template>
 	<div @click.ctrl.exact="playerPlayPause++">
-		<span v-if="showGetLinkModal" class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen">
-			<GetLinkModal :audio_id="audio_ID" @closeGetLinkModal="closeGetLinkModal()" />
-		</span>
 		<span v-if="showAddInterpretationModal" class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen">
 			<AddInterpretationModal :audio_id="audio_ID" @addCreatedInterpretation="addCreatedInterpretation($event)"
 				@closeInterpretationModal="closeInterpretationModal()" />
@@ -13,8 +10,9 @@
 		</span>
 
 		<Navbar>
-			<p class="mt-1 text-sm text-center cursor-pointer text-slate-100" @click="showGetLinkModal = true">{{$store.state.promptsObject.nGetPageLink}}
-			</p>
+			<!-- <p class="mt-1 text-sm text-center cursor-pointer text-slate-100" >
+				
+			</p> -->
 		</Navbar>
 		<div class="relative overflow-x-hidden justify-items-center hero">
 			<div class="pt-[5vh] flex flex-row justify-between h-[100vh]">
@@ -60,7 +58,6 @@ import PlayerVertical from "@/components/PlayerVertical.vue";
 import SingleInterpretation from "@/components/SingleInterpretation.vue";
 import AddInterpretationViewer from "@/components/AddInterpretationViewer.vue";
 import AddInterpretationModal from "@/components/AddInterpretationModal.vue";
-import GetLinkModal from "@/components/GetLinkModal.vue";
 import UploadIntModal from "@/components/UploadIntModal.vue";
 import { getIdToken } from "firebase/auth";
 
@@ -72,7 +69,6 @@ export default {
 		SingleInterpretation,
 		AddInterpretationViewer,
 		AddInterpretationModal,
-		GetLinkModal,
 		UploadIntModal,
 	},
 	data: () => {
@@ -81,7 +77,6 @@ export default {
 			interpretationsList: [], // the list of interpretations that can be selected from the dropdown menu (does not include interpretations currently being viewed by this user in this browser window)
 			formerInterpretationsList: [], // the list of interpretations currently being viewed by this user in this browser window
 			showAddInterpretationModal: false,
-			showGetLinkModal: false,
 			showUploadIntModal: false,
 			playerPlayPause: 0, // when this changes, play or pause Player Vertical
 			route: {},
@@ -102,6 +97,34 @@ export default {
 				this.getInterpretations();
 			}
 		},
+
+		"$store.state.consoleschanged": function () {
+			if (this.$store.state.promptsObject.code != "en") {
+				const url = new URL(location)
+				url.searchParams.set("view", this.$store.state.promptsObject.code)
+				let openparam = ""
+				for (let i = 0; i < this.$store.state.consoles.length; i++) {
+					openparam = openparam + this.$store.state.consoles[i]
+				}
+				if (openparam.length > 0) { url.searchParams.set("open", openparam) }
+				else { url.searchParams.delete("open") }
+				history.replaceState(history.state, '', url)
+			}
+			else {
+				const url = new URL(location)
+				url.searchParams.delete("view")
+				let openparam = ""
+				for (let i = 0; i < this.$store.state.consoles.length; i++) {
+					openparam = openparam + this.$store.state.consoles[i]
+				}
+				if (openparam.length > 0) { url.searchParams.set("open", openparam) }
+				else { url.searchParams.delete("open") }
+				history.replaceState(history.state, '', url)
+			}
+
+
+		},
+
 	},
 
 	created() {
@@ -109,12 +132,32 @@ export default {
 	},
 
 	mounted() {
+
+
+
+
+
 		// console.log(this.$store.state.promptsObject)
 		this.route = useRoute();
 		// console.log(this.route)
 		if (this.route.query.open) {
-			this.intArray = this.route.query.open.match(new RegExp(/.{11}/g))
+			this.intArray = this.route.query.open.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&").match(new RegExp(/.{11}/g))
 		}
+
+
+		if (this.$store.state.promptsObject.code != "en") {
+			const url = new URL(location)
+			url.searchParams.set("view", this.$store.state.promptsObject.code)
+			history.replaceState(history.state, '', url)
+		}
+		else {
+			// console.log(this.$store.state.promptsObject.code)
+			const url = new URL(location)
+			// console.log(url)
+			url.searchParams.delete("view")
+			history.replaceState(history.state, '', url)
+		}
+
 		// console.log(this.intArray);
 
 		document.title =
@@ -343,20 +386,27 @@ export default {
 		toggleInterpretationModal() {
 			this.showAddInterpretationModal = !this.showAddInterpretationModal;
 		},
-		toggleGetLinkModal() {
-			this.showGetLinkModal = !this.showGetLinkModal
-		},
 		closeInterpretationModal() {
 			this.showAddInterpretationModal = false;
-		},
-		closeGetLinkModal() {
-			this.showGetLinkModal = false
 		},
 	},
 };
 </script>
 
 <style scoped>
+.dropbtn {
+	/* background-color: #7833ff; */
+	border: none;
+	color: white;
+	padding: 1vh 1vh;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	/* margin: 4px 2px; */
+	cursor: pointer;
+	border-radius: 16px;
+}
+
 .hero {
 	/* position: relative; */
 	background-color: transparent;

@@ -94,10 +94,10 @@ export default {
 		// if (this.$store.state.idToken) {
 
 		this.getStorybooks();
-		history.pushState(null, null, location.href);
-		window.onpopstate = function (event) {
-			history.go(1);
-		};
+		// history.replaceState(history.state, '', location.href);
+		// window.onpopstate = function (event) {
+		// 	history.go(1);
+		// };
 		// }
 	},
 	methods: {

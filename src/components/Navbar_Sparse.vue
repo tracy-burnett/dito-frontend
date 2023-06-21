@@ -6,7 +6,7 @@
 		</div>
 
 		<div class="flex dropdown">
-			<button class="dropbtn  w-[8vw] border-sky-600 bg-sky-700 hover:bg-sky-600  ml-[7vw] mt-[.3vw]">
+			<button class="dropbtn  w-[8vw] border-sky-500 bg-sky-600 hover:bg-sky-500  ml-[7vw]">
 				<div class="flex flex-row justify-around">
 					<p class="flex text-sm font-medium">{{ $store.state.promptsObject["name"] }}&nbsp;</p>
 					<div class="w-[1.5vw] flex">
@@ -27,9 +27,10 @@
 		</div>
 
 		<div class="flex dropdown">
-			<button @click="reloadapp" class="dropbtn  w-[12vw] border-sky-600 bg-sky-700 hover:bg-sky-600  fixed right-[7vw] mt-[.3vw]">
+			<button @click="reloadapp"
+				class="dropbtn  w-[12vw] border-sky-500 bg-sky-600 hover:bg-sky-500  fixed right-[7vw] ">
 
-				<p class="text-sm font-medium ">{{$store.state.promptsObject.nGetLatestAppVersion}}</p>
+				<p class="text-sm font-medium ">{{ $store.state.promptsObject.nGetLatestAppVersion }}</p>
 
 			</button>
 		</div>
@@ -39,7 +40,7 @@
 			<div class="flex flex-col items-center cursor-pointer mr-[1vw]" v-if="LoginLogoutButton" @click="signoutuser()">
 				<img src="@/assets/icon_sign_out.svg" class="pl-[.5vw] w-[3.2vw]  pt-[1vh]" />
 				<div>
-					<p class="text-sm">{{$store.state.promptsObject.nLogout}}</p>
+					<p class="text-sm">{{ $store.state.promptsObject.nLogout }}</p>
 				</div>
 
 			</div>
@@ -48,7 +49,7 @@
 				<img src="@/assets/icon_profile.svg" class="w-[3.2vw]  pt-[1vh]" />
 				<p class="text-sm"
 					:class="{ 'text-slate-700': $store.state.infobit != 'Login', 'text-slate-200': $store.state.infobit == 'Login' }">
-					{{$store.state.promptsObject.nLogin}}</p>
+					{{ $store.state.promptsObject.nLogin }}</p>
 
 			</div>
 
@@ -57,6 +58,8 @@
 </template>
 
 <script>
+import { useRoute } from 'vue-router';
+
 export default {
 	name: "Navbar",
 	props: {
@@ -69,9 +72,20 @@ export default {
 			user: "",
 		};
 	},
+	mounted() {
+		this.route = useRoute();
+
+		if (this.route.query.view) {
+			let language = this.route.query.view.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")
+			if (language == "zh") { this.selectLanguage("中文") }
+			// else if (language=="bo")
+			// {this.selectLanguage("བོད་ཡིག")}
+			// if nothing matches, it will stay in English as per App.vue
+		}
+	},
 	methods: {
 
-		reloadapp(){
+		reloadapp() {
 			location.reload()
 		},
 
@@ -93,6 +107,34 @@ export default {
 				.then((data) => {
 					// console.log(data)
 					this.$store.commit("changeLanguage", data['languageprompts'])
+
+
+					if (this.$store.state.promptsObject.code != "en") {
+						const url = new URL(location)
+
+						if (this.route.name == "Storybook") {
+							url.searchParams.delete("open")
+							let openparam = ""
+							for (let i = 0; i < this.$store.state.consoles.length; i++) {
+								openparam = openparam + this.$store.state.consoles[i]
+							}
+							url.searchParams.set("view", this.$store.state.promptsObject.code)
+							if (openparam.length > 0) { url.searchParams.set("open", openparam) }
+
+						}
+						else { url.searchParams.set("view", this.$store.state.promptsObject.code) }
+
+						history.replaceState(history.state, '', url)
+					}
+					else {
+						const url = new URL(location)
+						url.searchParams.delete("view")
+
+						history.replaceState(history.state, '', url)
+					}
+
+
+
 				})
 				.catch((error) => console.error("Error:", error));
 
