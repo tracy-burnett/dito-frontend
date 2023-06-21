@@ -16,7 +16,7 @@
 			</button>
 			<div class="text-sm dropdown-content">
 				<a @click="selectLanguage('English')">English</a>
-				<!-- <a @click="selectLanguage('中文')">中文</a> -->
+				<a @click="selectLanguage('中文')">中文</a>
 				<!-- <a class="text-base" @click="selectLanguage('བོད་ཡིག')">བོད་ཡིག</a> -->
 			</div>
 		</div>
