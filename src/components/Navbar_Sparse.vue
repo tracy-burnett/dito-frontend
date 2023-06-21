@@ -81,7 +81,7 @@ export default {
 			else { this.selectLanguage("English") }
 			// else if (language=="bo")
 			// {this.selectLanguage("བོད་ཡིག")}
-		} else { this.selectLanguage("English") }
+		} else {this.selectLanguage(this.$store.state.promptsObject.name)}
 	},
 	methods: {
 
@@ -107,6 +107,8 @@ export default {
 				.then((data) => {
 					// console.log(data)
 					this.$store.commit("changeLanguage", data['languageprompts'])
+
+					// console.log("changing to " + chosenlanguage)
 
 
 					if (this.$store.state.promptsObject.code != "en") {
