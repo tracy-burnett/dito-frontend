@@ -70,13 +70,13 @@
 
 					<div v-if="styleoption === 'Editor'">
 						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="saveEditsincrease()">
-							Save
+							{{$store.state.promptsObject.bSave}}
 						</button>
 					</div>
 
 					<div v-if="styleoption === 'Tagger'"><button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
 							@click="updateAssociationsfunc()">
-							Save
+							{{$store.state.promptsObject.bSave}}
 						</button></div>
 				</div>
 			</div>
