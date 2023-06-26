@@ -17,7 +17,7 @@
 			<div class="text-sm dropdown-content">
 				<a @click="selectLanguage('English')">English</a>
 				<a @click="selectLanguage('中文')">中文</a>
-				<!-- <a class="text-base" @click="selectLanguage('བོད་ཡིག')">བོད་ཡིག</a> -->
+				<a class="text-base" @click="selectLanguage('བོད་ཡིག')">བོད་ཡིག</a>
 			</div>
 		</div>
 
@@ -78,10 +78,9 @@ export default {
 		if (this.route.query.view) {
 			let language = this.route.query.view.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")
 			if (language == "zh") { this.selectLanguage("中文") }
+			else if (language == "bo") { this.selectLanguage("བོད་ཡིག") }
 			else { this.selectLanguage("English") }
-			// else if (language=="bo")
-			// {this.selectLanguage("བོད་ཡིག")}
-		} else {this.selectLanguage(this.$store.state.promptsObject.name)}
+		} else { this.selectLanguage(this.$store.state.promptsObject.name) }
 	},
 	methods: {
 
