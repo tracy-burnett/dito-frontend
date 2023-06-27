@@ -38,7 +38,7 @@
 			<button
 				@click="prompterHelp=true"
 				v-if="styleselection=='Prompter' && tier=='project'"
-				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
+				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }"
 			>{{$store.state.promptsObject.bScribing}}
 				<img
 					class="absolute w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer right-0 mr-[.5vw]"
@@ -49,7 +49,7 @@
 			<button
 				@click="editorHelp=true"
 				v-else-if="styleselection=='Editor' && tier=='project'"
-				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
+				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }"
 			>{{$store.state.promptsObject.bEditing}}
 				<img
 					class="absolute w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer right-0 mr-[.5vw]"
@@ -58,7 +58,7 @@
 				/></button>
 			<button
 				@click="taggerHelp=true"
-				v-else-if="styleselection=='Tagger' && tier=='project'"
+				v-else-if="styleselection=='Tagger' && tier=='project'" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }"
 				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
 			>{{$store.state.promptsObject.bRefining}}
 				<img
@@ -68,7 +68,7 @@
 				/></button>
 			<button
 				@click="viewerHelp=true"
-				v-else-if="styleselection=='Viewer'"
+				v-else-if="styleselection=='Viewer'" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }"
 				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
 			>{{$store.state.promptsObject.bViewing}}
 				<img
@@ -78,7 +78,7 @@
 				/></button>
 			<button
 				@click="studioHelp=true"
-				v-else-if="styleselection=='Studio' && tier=='project'"
+				v-else-if="styleselection=='Studio' && tier=='project'" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }"
 				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
 			>{{$store.state.promptsObject.bStudying}}
 				<img
@@ -126,23 +126,23 @@
 
 				<a
 					v-if="!otherIntInPrompter && (interpretationStatus == 'owner' || interpretationStatus == 'editor')"
-					@click="toggleStorybookStyle('Prompter')" class="font-semibold"
+					@click="toggleStorybookStyle('Prompter')" class="font-semibold" :class="{ tibetansmall: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }"
 				>
 				{{$store.state.promptsObject.bScribing}}
 				</a>
 				<a
 					v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'"
-					@click="toggleStorybookStyle('Editor')" class="font-semibold"
+					@click="toggleStorybookStyle('Editor')" class="font-semibold" :class="{ tibetansmall: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }"
 				>{{$store.state.promptsObject.bEditing}}</a>
 				
-				<a @click="toggleStorybookStyle('Viewer')">{{$store.state.promptsObject.bViewing}}</a>
+				<a @click="toggleStorybookStyle('Viewer')" :class="{ tibetansmall: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">{{$store.state.promptsObject.bViewing}}</a>
 				<a
 					v-if="interpretationStatus == 'owner' || interpretationStatus == 'editor'"
-					@click="toggleStorybookStyle('Tagger')"
+					@click="toggleStorybookStyle('Tagger')" :class="{ tibetansmall: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }"
 				>{{$store.state.promptsObject.bRefining}}</a>
 				<a
 					v-if="!otherIntInPrompter"
-					@click="toggleStorybookStyle('Studio')"
+					@click="toggleStorybookStyle('Studio')" :class="{ tibetansmall: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }"
 				>{{$store.state.promptsObject.bStudying}}</a>
 
 			</div>
@@ -263,6 +263,36 @@ export default {
 .dropdown:hover .dropdown-content {
 	display: block;
 }
+
+.tibetan {
+	font-size: 1.25rem/* 14px */;
+    line-height: 1.75rem/* 20px */;
+}
+.nottibetan {
+	font-size: 0.875rem/* 14px */;
+    line-height: 1.25rem/* 20px */;
+}
+@media (min-width: 768px) {
+    .nottibetan {
+        font-size: 1rem/* 16px */;
+        line-height: 1.5rem/* 24px */;
+    }
+	.tibetan {
+	font-size: 1.5rem/* 14px */;
+    line-height: 2rem/* 20px */;
+}
+}
+
+.tibetansmall {
+	font-size: 1.4rem
+		/* 14px */
+	;
+	line-height: 1.5rem
+		/* 20px */
+	;
+}
+
+
 /* .dropdown:hover .dropbtn { */
 /* background-color: #7833ff; */
 /* } */

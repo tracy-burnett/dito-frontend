@@ -12,7 +12,7 @@
 					<div
 						v-if="styleoption === 'Viewer' && (this.interpretationStatus == 'owner' || this.interpretationStatus == 'editor')">
 
-						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="toggleSyncingModal()">
+						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="toggleSyncingModal()" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">
 							{{$store.state.promptsObject.bAdjust}}
 						</button>
 					</div>
@@ -23,7 +23,7 @@
 
 					<div v-if="styleoption === 'Tagger'">
 						<!-- quick and dirty way to undo tags you haven't saved to the database yet -->
-						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="clearTimestamps()">{{$store.state.promptsObject.bClearNew}}</button>
+						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="clearTimestamps()" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">{{$store.state.promptsObject.bClearNew}}</button>
 					</div>
 					<div v-if="interpretationsList.length > 0">
 						<SelectInterpretationMenu :interpretationsList="interpretationsList"
@@ -35,7 +35,7 @@
 				<div class="sticky flex flex-row flex-wrap-reverse justify-around shrink top-12">
 
 					<div v-if="styleoption === 'Prompter'">
-						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="resetSensitivity()">
+						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="resetSensitivity()" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">
 							{{$store.state.promptsObject.bResetSensitivity}}
 						</button>
 					</div>
@@ -49,7 +49,7 @@
 						v-if="(tier == 'research' || tier == 'project') && (styleoption === 'Viewer') && (this.interpretationStatus == 'owner' || this.interpretationStatus == 'editor')">
 
 						<div class="dropdown" style="float: right">
-							<button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn">{{$store.state.promptsObject.bDownload}}</button>
+							<button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">{{$store.state.promptsObject.bDownload}}</button>
 							<div class="dropdown-content">
 								<a @click="downloadSRT()">overlapping .srt</a>
 							</div>
@@ -57,7 +57,7 @@
 					</div>
 
 					<div v-if="styleoption === 'Prompter'">
-						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="newPrompt()">
+						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="newPrompt()" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">
 							{{$store.state.promptsObject.bNewPrompt}}
 						</button>
 					</div>
@@ -69,27 +69,27 @@
 					</div>
 
 					<div v-if="styleoption === 'Editor'">
-						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="saveEditsincrease()">
+						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="saveEditsincrease()" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">
 							{{$store.state.promptsObject.bSave}}
 						</button>
 					</div>
 
 					<div v-if="styleoption === 'Tagger'"><button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-							@click="updateAssociationsfunc()">
+							@click="updateAssociationsfunc()" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">
 							{{$store.state.promptsObject.bSave}}
 						</button></div>
 				</div>
 			</div>
 			<div class="flex flex-row flex-wrap justify-center">
 
-				<div>
+				<div :class="{ tibetantiny: $store.state.promptsObject.name=='བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name!='བོད་ཡིག' }">
 					{{$store.state.promptsObject.sChangeFontSize}}<br>
 					<input id="fontsizeslider" v-model="fontsize" type="range" min="8" max="50" step=".5" />
 				</div>
 
 				<!--highlight more/less slider -->
 				<div v-if="styleoption === 'Viewer'">
-					<div class="flex">
+					<div class="flex" :class="{ tibetantiny: $store.state.promptsObject.name=='བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name!='བོད་ཡིག' }">
 						{{$store.state.promptsObject.sHighlightLessMore}}
 					</div>
 					<div>
@@ -98,7 +98,7 @@
 				</div>
 
 				<div v-if="styleoption === 'Prompter'">
-					<div class="flex">
+					<div class="flex" :class="{ tibetantiny: $store.state.promptsObject.name=='བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name!='བོད་ཡིག' }">
 						{{$store.state.promptsObject.sScribeLessMore}}
 					</div>
 					<div>
@@ -109,7 +109,7 @@
 				</div>
 
 				<div v-if="styleoption === 'Studio'">
-					<div class="flex">
+					<div class="flex" :class="{ tibetantiny: $store.state.promptsObject.name=='བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name!='བོད་ཡིག' }">
 						&nbsp;&nbsp;&nbsp;{{$store.state.promptsObject.sPhraseLength}}
 					</div>
 					<div>
@@ -372,6 +372,43 @@ export default {
 
 .dropdown:hover .dropdown-content {
 	display: block;
+}
+
+.tibetan {
+	font-size: 1.25rem/* 14px */;
+    line-height: 1.75rem/* 20px */;
+}
+.nottibetan {
+	font-size: 0.875rem/* 14px */;
+    line-height: 1.25rem/* 20px */;
+}
+@media (min-width: 768px) {
+    .nottibetan {
+        font-size: 1rem/* 16px */;
+        line-height: 1.5rem/* 24px */;
+    }
+	.tibetan {
+	font-size: 1.5rem/* 14px */;
+    line-height: 2rem/* 20px */;
+}
+}
+
+.tibetantiny {
+	font-size: 1.125rem
+		/* 14px */
+	;
+	line-height: 1.75rem
+		/* 20px */
+	;
+}
+
+.nottibetantiny {
+	font-size: 0.75rem
+		/* 14px */
+	;
+	line-height: 1rem
+		/* 20px */
+	;
 }
 
 /* .dropdown:hover .dropbtn { */
