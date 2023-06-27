@@ -11,7 +11,7 @@
 			<div class="w-[7.5vh]">
 				<img src="@/assets/icon_add_no_fill.svg" />
 			</div>
-			<p class="text-sm text-left md:text-base">{{$store.state.promptsObject.oCreateNewInterpretation}}</p>
+			<p class="text-left md:text-base" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">{{$store.state.promptsObject.oCreateNewInterpretation}}</p>
 		</div>
 		<!-- this is a button for creating a new Interpretation and having it displayed in its own column -->
 		<div
@@ -24,7 +24,7 @@
 			<div class="w-[7.5vh]">
 				<img src="@/assets/icon_add_no_fill.svg" />
 			</div>
-			<p class="text-sm text-left md:text-base">{{$store.state.promptsObject.oUploadInterpretationFile}}</p>
+			<p class="text-left md:text-base" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">{{$store.state.promptsObject.oUploadInterpretationFile}}</p>
 		</div>
 		<!-- this is a button for adding another column that shows an Interpretation that you have access to but aren't yet viewing -->
 		<div
@@ -37,7 +37,7 @@
 			<div class="w-[7.5vh]">
 				<img src="@/assets/icon_add_fill.svg" />
 			</div>
-			<p class="text-sm text-left md:text-base">{{$store.state.promptsObject.oAddAnotherConsole}}</p>
+			<p class="text-left md:text-base" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">{{$store.state.promptsObject.oAddAnotherConsole}}</p>
 		</div>
 		<br />
 	</div>
@@ -78,5 +78,24 @@ export default {
 </script>
 
 <style scoped>
+
+.tibetan {
+	font-size: 1.25rem/* 14px */;
+    line-height: 1.75rem/* 20px */;
+}
+.nottibetan {
+	font-size: 0.875rem/* 14px */;
+    line-height: 1.25rem/* 20px */;
+}
+@media (min-width: 768px) {
+    .nottibetan {
+        font-size: 1rem/* 16px */;
+        line-height: 1.5rem/* 24px */;
+    }
+	.tibetan {
+	font-size: 1.5rem/* 14px */;
+    line-height: 2rem/* 20px */;
+}
+}
 </style>
 
