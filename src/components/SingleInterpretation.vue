@@ -1,8 +1,10 @@
 <template>
 	<div class="h-full singleint">
 		<span v-if="showSyncingModal" class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen">
-			<SyncingModal :audio_id="audio_id" :interpretation_id="interpretation_id" :editingversion="interpretationFull.version" :title="interpretationFull.version" :language_name="interpretationFull.language_name"
-			@updateTitleLanguage="updateTitleLanguagefunc($event)" @closeSyncingModal="closeSyncingModal()" />
+			<SyncingModal :audio_id="audio_id" :interpretation_id="interpretation_id"
+				:editingversion="interpretationFull.version" :title="interpretationFull.version"
+				:language_name="interpretationFull.language_name" @updateTitleLanguage="updateTitleLanguagefunc($event)"
+				@closeSyncingModal="closeSyncingModal()" />
 		</span>
 		<!-- the current component represents what is viewable in a single interpretation column of an open storybook -->
 		<div class="flex flex-col -mt-[0vh]">
@@ -12,8 +14,9 @@
 					<div
 						v-if="styleoption === 'Viewer' && (this.interpretationStatus == 'owner' || this.interpretationStatus == 'editor')">
 
-						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="toggleSyncingModal()" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">
-							{{$store.state.promptsObject.bAdjust}}
+						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="toggleSyncingModal()"
+							:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">
+							{{ $store.state.promptsObject.bAdjust }}
 						</button>
 					</div>
 					<div>
@@ -23,7 +26,8 @@
 
 					<div v-if="styleoption === 'Tagger'">
 						<!-- quick and dirty way to undo tags you haven't saved to the database yet -->
-						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="clearTimestamps()" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">{{$store.state.promptsObject.bClearNew}}</button>
+						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="clearTimestamps()"
+							:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">{{ $store.state.promptsObject.bClearNew }}</button>
 					</div>
 					<div v-if="interpretationsList.length > 0">
 						<SelectInterpretationMenu :interpretationsList="interpretationsList"
@@ -35,8 +39,9 @@
 				<div class="sticky flex flex-row flex-wrap-reverse justify-around shrink top-12">
 
 					<div v-if="styleoption === 'Prompter'">
-						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="resetSensitivity()" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">
-							{{$store.state.promptsObject.bResetSensitivity}}
+						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="resetSensitivity()"
+							:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">
+							{{ $store.state.promptsObject.bResetSensitivity }}
 						</button>
 					</div>
 
@@ -49,7 +54,8 @@
 						v-if="(tier == 'research' || tier == 'project') && (styleoption === 'Viewer') && (this.interpretationStatus == 'owner' || this.interpretationStatus == 'editor')">
 
 						<div class="dropdown" style="float: right">
-							<button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">{{$store.state.promptsObject.bDownload}}</button>
+							<button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn"
+								:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">{{ $store.state.promptsObject.bDownload }}</button>
 							<div class="dropdown-content">
 								<a @click="downloadSRT()">overlapping .srt</a>
 							</div>
@@ -57,40 +63,47 @@
 					</div>
 
 					<div v-if="styleoption === 'Prompter'">
-						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="newPrompt()" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">
-							{{$store.state.promptsObject.bNewPrompt}}
+						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="newPrompt()"
+							:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">
+							{{ $store.state.promptsObject.bNewPrompt }}
 						</button>
 					</div>
 
 					<div v-if="styleoption === 'Studio'">
-						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }" @click="newPhrase()">
-							{{$store.state.promptsObject.bNewPhrase}}
+						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
+							:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }"
+							@click="newPhrase()">
+							{{ $store.state.promptsObject.bNewPhrase }}
 						</button>
 					</div>
 
 					<div v-if="styleoption === 'Editor'">
-						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="saveEditsincrease()" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">
-							{{$store.state.promptsObject.bSave}}
+						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="saveEditsincrease()"
+							:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">
+							{{ $store.state.promptsObject.bSave }}
 						</button>
 					</div>
 
 					<div v-if="styleoption === 'Tagger'"><button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-							@click="updateAssociationsfunc()" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">
-							{{$store.state.promptsObject.bSave}}
+							@click="updateAssociationsfunc()"
+							:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">
+							{{ $store.state.promptsObject.bSave }}
 						</button></div>
 				</div>
 			</div>
 			<div class="flex flex-row flex-wrap justify-center">
 
-				<div :class="{ tibetantiny: $store.state.promptsObject.name=='བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name!='བོད་ཡིག' }">
-					{{$store.state.promptsObject.sChangeFontSize}}<br>
+				<div
+					:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">
+					{{ $store.state.promptsObject.sChangeFontSize }}<br>
 					<input id="fontsizeslider" v-model="fontsize" type="range" min="8" max="50" step=".5" />
 				</div>
 
 				<!--highlight more/less slider -->
 				<div v-if="styleoption === 'Viewer'">
-					<div class="flex" :class="{ tibetantiny: $store.state.promptsObject.name=='བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name!='བོད་ཡིག' }">
-						{{$store.state.promptsObject.sHighlightLessMore}}
+					<div class="flex"
+						:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">
+						{{ $store.state.promptsObject.sHighlightLessMore }}
 					</div>
 					<div>
 						<input id="timestepslider" v-model="timestep" type="range" min="0" max="2500" step="10" />
@@ -98,8 +111,9 @@
 				</div>
 
 				<div v-if="styleoption === 'Prompter'">
-					<div class="flex" :class="{ tibetantiny: $store.state.promptsObject.name=='བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name!='བོད་ཡིག' }">
-						{{$store.state.promptsObject.sScribeLessMore}}
+					<div class="flex"
+						:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">
+						{{ $store.state.promptsObject.sScribeLessMore }}
 					</div>
 					<div>
 						<input id="scribingslider" v-model="scribing" type="range" min="20" max="4000"
@@ -109,8 +123,9 @@
 				</div>
 
 				<div v-if="styleoption === 'Studio'">
-					<div class="flex" :class="{ tibetantiny: $store.state.promptsObject.name=='བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name!='བོད་ཡིག' }">
-						&nbsp;&nbsp;&nbsp;{{$store.state.promptsObject.sPhraseLength}}
+					<div class="flex"
+						:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">
+						&nbsp;&nbsp;&nbsp;{{ $store.state.promptsObject.sPhraseLength }}
 					</div>
 					<div>
 						<input id="studyingslider" v-model="studying" type="range" min="0" max="2000" step="10" />
@@ -127,9 +142,10 @@
 				:saveEditscounter="saveEditscounter" :newPromptscounter="newPromptscounter"
 				:resetSensitivitycounter="resetSensitivitycounter" :downloadSRTcounter="downloadSRTcounter"
 				:newPhrasescounter="newPhrasescounter" :interpretationStatus="interpretationStatus"
-				:interpretation_id="interpretation_id" :editingversion="interpretationFull.version" @permanentlydestroy="permanentlydestroy($event)"
-				@increasePhrasesCounter="newPhrase()" @generateNewPrompt="newPrompt()"
-				@reloadPrompter="prompterReloadCounter++" @updateTitleLanguage="updateTitleLanguagefunc($event)">
+				:interpretation_id="interpretation_id" :editingversion="interpretationFull.version"
+				@permanentlydestroy="permanentlydestroy($event)" @increasePhrasesCounter="newPhrase()"
+				@generateNewPrompt="newPrompt()" @reloadPrompter="prompterReloadCounter++"
+				@updateTitleLanguage="updateTitleLanguagefunc($event)">
 
 			</component>
 
@@ -375,22 +391,41 @@ export default {
 }
 
 .tibetan {
-	font-size: 1.25rem/* 14px */;
-    line-height: 1.75rem/* 20px */;
+	font-size: 1.25rem
+		/* 14px */
+	;
+	line-height: 1.75rem
+		/* 20px */
+	;
 }
+
 .nottibetan {
-	font-size: 0.875rem/* 14px */;
-    line-height: 1.25rem/* 20px */;
+	font-size: 0.875rem
+		/* 14px */
+	;
+	line-height: 1.25rem
+		/* 20px */
+	;
 }
+
 @media (min-width: 768px) {
-    .nottibetan {
-        font-size: 1rem/* 16px */;
-        line-height: 1.5rem/* 24px */;
-    }
+	.nottibetan {
+		font-size: 1rem
+			/* 16px */
+		;
+		line-height: 1.5rem
+			/* 24px */
+		;
+	}
+
 	.tibetan {
-	font-size: 1.5rem/* 14px */;
-    line-height: 2rem/* 20px */;
-}
+		font-size: 1.5rem
+			/* 14px */
+		;
+		line-height: 2rem
+			/* 20px */
+		;
+	}
 }
 
 .tibetantiny {
@@ -413,6 +448,5 @@ export default {
 
 /* .dropdown:hover .dropbtn { */
 /* background-color: #7833ff; */
-/* } */
-</style>
+/* } */</style>
 
