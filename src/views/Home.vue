@@ -2,12 +2,16 @@
 	<div class="flex-auto">
 		<div class="flex flex-col">
 			<Navbar>
-				<p class="mt-1 text-sm font-semibold text-center cursor-pointer text-slate-100">
+				<!-- <p class="mt-1 text-sm font-semibold text-center cursor-pointer text-slate-100">
 					{{ $store.state.portalname }}
-				</p>
+				</p> -->
 			</Navbar>
-			<Header />
-			<div>
+			<Header></Header>
+			<div v-if="!LoginLogoutButton">
+				<div v-if="$store.state.infobit=='Login'"><Login /></div>
+				<div v-else><InfoRevitalize /></div>
+			</div>
+			<div v-else>
 				<component v-bind:is="$store.state.infobit"></component>
 			</div>
 		</div>
@@ -33,6 +37,12 @@ export default {
 		InfoPublish,
 		InfoRevitalize,
 		Login,
+	},
+	computed: {
+		//We're not defining it here; we're using a computed property to reach out and get it.
+		LoginLogoutButton: function () {
+			return this.$store.state.user;
+		},
 	},
 	// mounted() {
 

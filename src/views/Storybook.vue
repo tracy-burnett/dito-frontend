@@ -10,9 +10,9 @@
 		</span>
 
 		<Navbar>
-			<p class="mt-1 text-sm font-semibold text-center cursor-pointer text-slate-100">
+			<!-- <p class="mt-1 text-sm font-semibold text-center cursor-pointer text-slate-100">
 				{{ $store.state.portalname }}
-			</p>
+			</p> -->
 		</Navbar>
 		<div class="relative overflow-x-hidden justify-items-center hero">
 			<div class="pt-[5vh] flex flex-row justify-between h-[100vh]">

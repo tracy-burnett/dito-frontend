@@ -5,7 +5,7 @@
 		<div class="flex justify-center">
 			<span
 				:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">{{ $store.state.promptsObject.sPlaybackSpeed }}</span><span
-				class="text-xs mt-[1.5vh]">&nbsp;{{ playbackspeed }}x</span>
+				class="text-xs" :class="{ 'mt-[1.5vh]': $store.state.promptsObject.name == 'བོད་ཡིག'}">&nbsp;{{ playbackspeed }}x</span>
 		</div>
 		<div>
 			<input id="slider" v-model="playbackspeed" type="range" min=".2" max="1.5" step=".10" style="width: 105px" />
@@ -15,7 +15,7 @@
 		<div class="flex justify-center  -mt-[1vh]">
 			<span
 				:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">{{ $store.state.promptsObject.sZoom }}</span><span
-				class="text-xs mt-[1.5vh]">&nbsp;{{ zoomnumber }}x</span>
+				class="text-xs" :class="{ 'mt-[1.5vh]': $store.state.promptsObject.name == 'བོད་ཡིག'}">&nbsp;{{ zoomnumber }}x</span>
 		</div>
 		<div class="-mt-[.6vh]" @mouseup="zoom()">
 			<input id="slider" v-model="zoomnumber" type="range" min="0" max="500" step=".10" style="width: 105px" />
