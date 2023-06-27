@@ -6,7 +6,7 @@
 			<!-- <div class=""> -->
 			<!-- <img class="flex left-0 mt-[1vh] object-scale-down  w-1/3" :src="image" /> -->
 
-			<div class="z-20 flex mt-1 ml-[1vw] mb-2 text-xl text-gray-100 group-hover:text-gray-50">&nbsp;&nbsp;{{ title
+			<div class="z-20 flex mt-1 ml-[1vw] mb-2 text-xl text-gray-100 group-hover:text-gray-50">{{ title
 			}}</div>
 			<div
 				class=" shrink-0 relative z-20 my-[1vh] flex items-center justify-center w-[3vw] h-[3vw] mr-[1vw] rounded-full shadow-lg bg-cyan-700">
