@@ -1,201 +1,105 @@
 <template>
-	<div
-		class="flex flex-col h-[20vh] mt-[6vh]"
-		style="position:fixed;"
-	>
+	<div class="flex flex-col h-[20vh] mt-[6vh]" style="position:fixed;">
 
 		<!-- playback speed slider -->
-		<div class="flex justify-center text-xs">
-			{{$store.state.promptsObject.sPlaybackSpeed}} {{playbackspeed}}x
+		<div class="flex justify-center">
+			<span
+				:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">{{ $store.state.promptsObject.sPlaybackSpeed }}</span><span
+				class="text-xs mt-[1.5vh]">&nbsp;{{ playbackspeed }}x</span>
 		</div>
 		<div>
-			<input
-				id="slider"
-				v-model="playbackspeed"
-				type="range"
-				min=".2"
-				max="1.5"
-				step=".10"
-				style="width: 105px"
-			/>
+			<input id="slider" v-model="playbackspeed" type="range" min=".2" max="1.5" step=".10" style="width: 105px" />
 		</div>
 
 		<!-- zoom in / out slider -->
-		<div class="flex justify-center text-xs -mt-[1vh]">
-			{{$store.state.promptsObject.sZoom}} {{zoomnumber}}x
+		<div class="flex justify-center  -mt-[1vh]">
+			<span
+				:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">{{ $store.state.promptsObject.sZoom }}</span><span
+				class="text-xs mt-[1.5vh]">&nbsp;{{ zoomnumber }}x</span>
 		</div>
-		<div
-			class="-mt-[.6vh]"
-			@mouseup="zoom()"
-		>
-			<input
-				id="slider"
-				v-model="zoomnumber"
-				type="range"
-				min="0"
-				max="500"
-				step=".10"
-				style="width: 105px"
-			/>
+		<div class="-mt-[.6vh]" @mouseup="zoom()">
+			<input id="slider" v-model="zoomnumber" type="range" min="0" max="500" step=".10" style="width: 105px" />
 		</div>
 		<!-- audio player body -->
 
 		<div class="container flex flex-col shadow-xl rounded-xl -mt-[.5vh]">
 			<!-- top-most time entry box (for start of view window) -->
-			<div
-				id="start"
-				ref="start"
-				class="start"
-			>
-				<input
-					class="text-sm"
-					type="string"
-					v-model="startTime"
-					pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
-					@keyup.enter="updateRegion()"
-				/>
+			<div id="start" ref="start" class="start">
+				<input class="text-sm" type="string" v-model="startTime"
+					pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)" @keyup.enter="updateRegion()" />
 			</div>
 
 			<!-- play button -->
-			<button
-				id="play"
-				@click="play"
-				class="play"
-			>
+			<button id="play" @click="play" class="play">
 				<div class="w-[5vh] mt-[1vh]">
-					<img
-						v-if="playing"
-						src="@/assets/pauseAudio.svg"
-					/>
-					<img
-						v-else
-						src="@/assets/playAudio.svg"
-					/>
+					<img v-if="playing" src="@/assets/pauseAudio.svg" />
+					<img v-else src="@/assets/playAudio.svg" />
 				</div>
 			</button>
 
 			<!-- middle time entry box (for current time) -->
-			<div
-				id="current"
-				ref="current"
-				class="current -mt-[2vh] pb-[5vh]"
-			>
-				<input
-					type="string"
-					class="text-sm"
-					v-model="currentTime"
-					pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
-					@click="pausePlayer()"
-					@keyup.enter="seekfunction()"
-				/>
+			<div id="current" ref="current" class="current -mt-[2vh] pb-[5vh]">
+				<input type="string" class="text-sm" v-model="currentTime"
+					pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)" @click="pausePlayer()"
+					@keyup.enter="seekfunction()" />
 			</div>
 
 			<!-- waveform display -->
 			<div class="flex flex-row">
-				<div
-					id="miniwaveform"
-					ref="miniwaveform"
-					class="miniwaveform"
-				></div>
+				<div id="miniwaveform" ref="miniwaveform" class="miniwaveform"></div>
 				<div class="midwaveform"></div>
-				<div
-					id="waveform"
-					ref="waveform"
-					class="flex waveform"
-				></div>
-				<div
-					class="absolute h-[30vh] z-10 content-center w-full flex flex-col py-[14vh] px-[1vw] text-sm"
-					style="background: #dbeafe;"
-					v-if="loadingpercent > 0 && loadingpercent < 100"
-				>
+				<div id="waveform" ref="waveform" class="flex waveform"></div>
+				<div class="absolute h-[30vh] z-10 content-center w-full flex flex-col py-[14vh] px-[1vw] text-sm"
+					style="background: #dbeafe;" v-if="loadingpercent > 0 && loadingpercent < 100">
 					<p>waveform {{ loadingpercent }}% completed</p>
 				</div>
-				<div
-					class="absolute h-[30vh] z-10 content-center w-full flex flex-col py-[6vh] px-[1vw] text-sm"
-					style="background: #dbeafe;"
-					v-else-if="readyVerification==1 && totalDuration==0"
-				>
+				<div class="absolute h-[30vh] z-10 content-center w-full flex flex-col py-[6vh] px-[1vw] text-sm"
+					style="background: #dbeafe;" v-else-if="readyVerification == 1 && totalDuration == 0">
 					<p>please be patient while your audio file finishes loading</p>
 				</div>
-				<div
-					class="absolute h-[30vh] z-10 content-center w-full flex flex-col py-[6vh] px-[1vw] text-sm"
-					style="background: #dbeafe;"
-					v-else-if="readyVerification==0"
-				>
+				<div class="absolute h-[30vh] z-10 content-center w-full flex flex-col py-[6vh] px-[1vw] text-sm"
+					style="background: #dbeafe;" v-else-if="readyVerification == 0">
 					<p>please wait while the audio file is uploaded to the server</p>
 				</div>
 			</div>
 
 			<!-- bottom-most time entry box (for end of view window) -->
-			<div
-				id="end"
-				ref="end"
-				class="end"
-			>
-				<input
-					type="string"
-					class="text-sm"
-					v-model="endTime"
-					pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)"
-					@keyup.enter="updateRegion()"
-				/>
+			<div id="end" ref="end" class="end">
+				<input type="string" class="text-sm" v-model="endTime"
+					pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)" @keyup.enter="updateRegion()" />
 			</div>
 
 			<!-- clear highlight button -->
 			<div class="-mt-[3.2vh] mb-[.1vh]">
-				<button
-					v-if="hasRegion==true"
-					class="rounded-full clear mt-[4.3vh]"
-					@click="clearallregions()"
-				>
-				{{$store.state.promptsObject.cClearSelection}}
-				</button> <button
-					v-else
-					class="rounded-full cursor-default disabled mt-[4.3vh]"
-					style="opacity:0.3;"
-				>
-				{{$store.state.promptsObject.cClearSelection}}
+				<button v-if="hasRegion == true" class="rounded-full clear mt-[4.3vh]" @click="clearallregions()"
+					:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">
+					{{ $store.state.promptsObject.cClearSelection }}
+				</button> <button v-else class="rounded-full cursor-default disabled mt-[4.3vh]" style="opacity:0.3;"
+					:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">
+					{{ $store.state.promptsObject.cClearSelection }}
 				</button>
-				<button
-					v-if="readyVerification<2"
-					class="rounded-full cursor-default disabled"
-					style="opacity:0.3;"
-				>
-				{{$store.state.promptsObject.cRepeat}}
+				<button v-if="readyVerification < 2" class="rounded-full cursor-default disabled" style="opacity:0.3;"
+					:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">
+					{{ $store.state.promptsObject.cRepeat }}
 				</button>
-				<button
-					v-else-if="repeat==true"
-					class="font-semibold rounded-full clear"
-					@click="toggleRepeat()"
-				>
-				{{$store.state.promptsObject.cRepeat}}
-				</button> <button
-					v-else
-					class="rounded-full clear"
-					@click="toggleRepeat()"
-				>
-				{{$store.state.promptsObject.cRepeat}}
+				<button v-else-if="repeat == true" class="font-semibold rounded-full clear" @click="toggleRepeat()"
+					:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">
+					{{ $store.state.promptsObject.cRepeat }}
+				</button> <button v-else class="rounded-full clear" @click="toggleRepeat()"
+					:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">
+					{{ $store.state.promptsObject.cRepeat }}
 				</button>
 
-				<button
-					v-if="readyVerification<2"
-					class="rounded-full cursor-default disabled"
-					style="opacity:0.3;"
-				>
-				{{$store.state.promptsObject.cAutoscroll}}
+				<button v-if="readyVerification < 2" class="rounded-full cursor-default disabled" style="opacity:0.3;"
+					:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">
+					{{ $store.state.promptsObject.cAutoscroll }}
 				</button>
-				<button
-					v-else-if="autoscroll==true"
-					class="font-semibold rounded-full clear"
-					@click="toggleAutoscroll()"
-				>
-				{{$store.state.promptsObject.cAutoscroll}}
-				</button> <button
-					v-else
-					class="rounded-full clear"
-					@click="toggleAutoscroll()"
-				>
-				{{$store.state.promptsObject.cAutoscroll}}
+				<button v-else-if="autoscroll == true" class="font-semibold rounded-full clear" @click="toggleAutoscroll()"
+					:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">
+					{{ $store.state.promptsObject.cAutoscroll }}
+				</button> <button v-else class="rounded-full clear" @click="toggleAutoscroll()"
+					:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">
+					{{ $store.state.promptsObject.cAutoscroll }}
 				</button>
 				<!-- <button
 					v-if="readyVerification<2"
@@ -533,7 +437,7 @@ export default {
 		let that = this;
 
 		this.wavesurfer.on('error', function (err) {
-  		console.warn("error", err?.message || err);
+			console.warn("error", err?.message || err);
 		});
 
 		// When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
@@ -644,8 +548,8 @@ export default {
 			// console.log(that.endTimeSeconds)
 			if (
 				// that.playing &&
-				Math.round(that.currentTimeSeconds*100)/100 < Math.round(that.startTimeSeconds*100)/100 ||
-				Math.round(that.currentTimeSeconds*100)/100 > Math.round(that.endTimeSeconds*100)/100
+				Math.round(that.currentTimeSeconds * 100) / 100 < Math.round(that.startTimeSeconds * 100) / 100 ||
+				Math.round(that.currentTimeSeconds * 100) / 100 > Math.round(that.endTimeSeconds * 100) / 100
 			) {
 				that.clearallregions();
 				that.pausePlayer();
@@ -762,8 +666,8 @@ export default {
 			if (!this.playing) {
 				// when the player starts playing, make sure it plays from whenever is currently displayed in the "current time" box that the user is also able to manually inpput into, unless of course that value is outside of the highlighted region
 				if (
-					Math.round(this.currentTimeSeconds*100)/100 < Math.round(this.endTimeSeconds*100)/100 &&
-					Math.round(this.currentTimeSeconds*100)/100 >= Math.round(this.startTimeSeconds*100)/100
+					Math.round(this.currentTimeSeconds * 100) / 100 < Math.round(this.endTimeSeconds * 100) / 100 &&
+					Math.round(this.currentTimeSeconds * 100) / 100 >= Math.round(this.startTimeSeconds * 100) / 100
 				) {
 					// console.log("playing inside region");
 					// console.log(this.startTimeSeconds)
@@ -911,6 +815,7 @@ export default {
 	/*background: radial-gradient(#798597, #616977);*/
 	background: #475569;
 }
+
 .clear {
 	font-size: 70%;
 	color: white;
@@ -1046,5 +951,39 @@ input {
 	/* border-radius: 15%; */
 	border-radius: 3px;
 	text-align: center;
+}
+
+.tibetantiny {
+	font-size: 1.125rem
+		/* 14px */
+	;
+	line-height: 1.75rem
+		/* 20px */
+	;
+}
+
+.nottibetantiny {
+	font-size: 0.75rem
+		/* 14px */
+	;
+	line-height: 1rem
+		/* 20px */
+	;
+}
+
+.tibetan {
+	font-size: 1.25rem
+		/* 14px */
+	;
+	padding-bottom: 5vh;
+}
+
+.nottibetan {
+	font-size: 0.875rem
+		/* 14px */
+	;
+	line-height: 1.25rem
+		/* 20px */
+	;
 }
 </style>

@@ -4,7 +4,7 @@
 	<div id="destroy">
 		<button
 			class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn"
-			@click="destroy"
+			@click="destroy" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }"
 		>
 		{{$store.state.promptsObject.bClose}}</button>
 	</div>
@@ -47,5 +47,23 @@ export default {
 	border-radius: 16px;
 }
 
+.tibetan {
+	font-size: 1.25rem/* 14px */;
+    line-height: 1.75rem/* 20px */;
+}
+.nottibetan {
+	font-size: 0.875rem/* 14px */;
+    line-height: 1.25rem/* 20px */;
+}
+@media (min-width: 768px) {
+    .nottibetan {
+        font-size: 1rem/* 16px */;
+        line-height: 1.5rem/* 24px */;
+    }
+	.tibetan {
+	font-size: 1.5rem/* 14px */;
+    line-height: 2rem/* 20px */;
+}
+}
 </style>
 

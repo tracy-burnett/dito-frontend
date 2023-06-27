@@ -8,7 +8,7 @@
 		<div class="flex dropdown">
 			<button class="dropbtn  w-[8vw] border-sky-500 bg-sky-600 hover:bg-sky-500  ml-[7vw]">
 				<div class="flex flex-row justify-around">
-					<p class="flex text-sm font-medium">{{ $store.state.promptsObject["name"] }}&nbsp;</p>
+					<p class="flex font-medium" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">{{ $store.state.promptsObject["name"] }}&nbsp;</p>
 					<div class="w-[1.5vw] flex">
 						<img class="cursor-pointer" src="@/assets/icon_language.svg" />
 					</div>
@@ -17,7 +17,7 @@
 			<div class="text-sm dropdown-content">
 				<a @click="selectLanguage('English')">English</a>
 				<a @click="selectLanguage('中文')">中文</a>
-				<a class="text-base" @click="selectLanguage('བོད་ཡིག')">བོད་ཡིག</a>
+				<a class="text-lg" @click="selectLanguage('བོད་ཡིག')">བོད་ཡིག</a>
 			</div>
 		</div>
 
@@ -30,7 +30,7 @@
 			<button @click="reloadapp"
 				class="dropbtn  w-[12vw] border-sky-500 bg-sky-600 hover:bg-sky-500  fixed right-[7vw] ">
 
-				<p class="text-sm font-medium ">{{ $store.state.promptsObject.nGetLatestAppVersion }}</p>
+				<p class="font-medium " :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">{{ $store.state.promptsObject.nGetLatestAppVersion }}</p>
 
 			</button>
 		</div>
@@ -40,15 +40,15 @@
 			<div class="flex flex-col items-center cursor-pointer mr-[1vw]" v-if="LoginLogoutButton" @click="signoutuser()">
 				<img src="@/assets/icon_sign_out.svg" class="pl-[.5vw] w-[3.2vw]  pt-[1vh]" />
 				<div>
-					<p class="text-sm">{{ $store.state.promptsObject.nLogout }}</p>
+					<p class="text-slate-200" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">{{ $store.state.promptsObject.nLogout }}</p>
 				</div>
 
 			</div>
 
 			<div class="flex flex-col items-center cursor-pointer mr-[1vw]" v-else @click="openlogin()">
 				<img src="@/assets/icon_profile.svg" class="w-[3.2vw]  pt-[1vh]" />
-				<p class="text-sm"
-					:class="{ 'text-slate-700': $store.state.infobit != 'Login', 'text-slate-200': $store.state.infobit == 'Login' }">
+				<p :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག','text-slate-700': $store.state.infobit != 'Login', 'text-slate-200': $store.state.infobit == 'Login'  }"
+				>
 					{{ $store.state.promptsObject.nLogin }}</p>
 
 			</div>
@@ -211,5 +211,14 @@ export default {
 
 .dropdown:hover .dropdown-content {
 	display: block;
+}
+
+.tibetan {
+	font-size: 1.125rem/* 14px */;
+    line-height: 1.75rem/* 20px */;
+}
+.nottibetan {
+	font-size: 0.875rem/* 14px */;
+    line-height: 1.25rem/* 20px */;
 }
 </style>

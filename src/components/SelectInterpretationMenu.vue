@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="dropdown" style="float: right">
-			<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600">{{$store.state.promptsObject.bInterpretation}}</button>
+			<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">{{$store.state.promptsObject.bInterpretation}}</button>
 
 			<div class="dropdown-content">
 				<!-- for each interpretation in the list of interpretations to show in the menu, create a menu option that displays the language name -->
@@ -81,6 +81,25 @@ export default {
 
 .dropdown:hover .dropdown-content {
 	display: block;
+}
+
+.tibetan {
+	font-size: 1.25rem/* 14px */;
+    line-height: 1.75rem/* 20px */;
+}
+.nottibetan {
+	font-size: 0.875rem/* 14px */;
+    line-height: 1.25rem/* 20px */;
+}
+@media (min-width: 768px) {
+    .nottibetan {
+        font-size: 1rem/* 16px */;
+        line-height: 1.5rem/* 24px */;
+    }
+	.tibetan {
+	font-size: 1.5rem/* 14px */;
+    line-height: 2rem/* 20px */;
+}
 }
 
 /* .dropdown:hover .dropbtn { */
