@@ -51,6 +51,7 @@ export default {
 	},
 	mounted() {
 		document.title = "Dito - " + window.location.hostname.split(".")[0];
+		this.$store.commit("updatePortalName", window.location.hostname.split(".")[0])
 		this.getStorybooks()
 	},
 	methods: {

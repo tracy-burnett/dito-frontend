@@ -45,8 +45,9 @@ export default new Vuex.Store({
     sortOrder: true,
     // getNewStorybooks: 0,
     searchterm: "",
-    promptsObject: {name: "English", code: "en"},
+    promptsObject: { name: "English", code: "en" },
     consoleschanged: 0,
+    portalname: "",
 
   },
   getters: {
@@ -262,6 +263,10 @@ export default new Vuex.Store({
 
     updateAudioTime(state, audiotime) {
       state.audioplayertime = audiotime;
+    },
+
+    updatePortalName(state, portalname) {
+      state.portalname = portalname
     },
 
     updateStartTimePrompter(state, starttimeprompter) {

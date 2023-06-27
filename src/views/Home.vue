@@ -1,7 +1,11 @@
 <template>
 	<div class="flex-auto">
 		<div class="flex flex-col">
-			<Navbar />
+			<Navbar>
+				<p class="mt-1 text-sm font-semibold text-center cursor-pointer text-slate-100">
+					{{ $store.state.portalname }}
+				</p>
+			</Navbar>
 			<Header />
 			<div>
 				<component v-bind:is="$store.state.infobit"></component>
