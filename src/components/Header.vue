@@ -24,9 +24,7 @@
 			<div class="flex flex-col items-center justify-center cursor-pointer h-[35vh] w-[20vw]"
 				@click="$store.commit('toggleInfobit', 'CreateStorybook');" @mouseover="contribute = true"
 				@mouseleave="contribute = false" v-else>
-				<p class="text-xs md:text-sm">Click below to upload an authentic recording of a language or a dialect that
-					you
-					speak or care about.</p>
+				<p class="text-xs md:text-sm">Upload an authentic recording of a language or dialect.</p>
 			</div>
 
 			<div class="cursor-pointer contents" v-if="publish == false" @mouseover="publish = true"
@@ -38,22 +36,19 @@
 			<div class="flex flex-col items-center justify-center cursor-pointer h-[35vh] w-[20vw]"
 				@click="$store.commit('toggleInfobit', 'InfoPublish');" @mouseover="publish = true"
 				@mouseleave="publish = false" v-else>
-				<p class="text-xs md:text-sm">Click below to review, share, and publish (or unpublish) the audio files that
-					you
-					uploaded and the interpretations you wrote.</p>
+				<p class="text-xs md:text-sm">Review, share, and publish (or unpublish) audio files and interpretations.</p>
 			</div>
 			<div class="cursor-pointer contents" v-if="revitalize == false" @mouseover="revitalize = true"
 				@mouseleave="revitalize = false">
-				<img class="object-scale-down h-[35vh] w-[20vw]" @click="$store.commit('toggleInfobit', 'InfoRevitalize');"
+				<img class="object-scale-down h-[35vh] w-[20vw]" @click="$store.commit('toggleInfobit', 'PublicCardList');"
 					:src="image4" />
 			</div>
 
 			<div class="flex flex-col items-center justify-center  cursor-pointer h-[35vh] w-[20vw]"
-				@click="$store.commit('toggleInfobit', 'InfoRevitalize');" @mouseover="revitalize = true"
+				@click="$store.commit('toggleInfobit', 'PublicCardList');" @mouseover="revitalize = true"
 				@mouseleave="revitalize = false" v-else>
-				<p class="text-xs lg:text-sm">Click below to enhance your language skills and exposure with listening
-					comprehension, reading comprehension, and typing training exercises in the context of any published
-					storybook.</p>
+				<p class="text-xs lg:text-sm">Enhance your language skills with listening
+					comprehension, reading comprehension, and typing training exercises.</p>
 			</div>
 
 
@@ -72,8 +67,8 @@
 				:class="{ 'text-slate-700': $store.state.infobit != 'InfoPublish', 'text-slate-200': $store.state.infobit == 'InfoPublish' }">
 				Manage Storybooks</p>
 			<p class="text-xs font-semibold text-center cursor-pointer md:text-sm "
-				@click="$store.commit('toggleInfobit', 'InfoRevitalize');"
-				:class="{ 'text-slate-700': $store.state.infobit != 'InfoRevitalize', 'text-slate-200': $store.state.infobit == 'InfoRevitalize' }">
+				@click="$store.commit('toggleInfobit', 'PublicCardList');"
+				:class="{ 'text-slate-700': $store.state.infobit != 'PublicCardList', 'text-slate-200': $store.state.infobit == 'PublicCardList' }">
 				Learn and Revitalize</p>
 		</div>
 		<div v-else class="grid grid-cols-1 justify-items-center  mx-[3vw] mt-[1.7vh]">
@@ -110,12 +105,10 @@ import browse from "@/assets/icon_detailed_browse.svg";
 import revitalize from "@/assets/icon_detailed_revitalize.svg";
 import contribute from "@/assets/icon_detailed_contribute.svg";
 import publish from "@/assets/icon_detailed_publish.svg";
-import InfoRevitalize from "@/components/InfoRevitalize.vue";
 
 export default {
 	name: "Header",
 
-	components: { InfoRevitalize },
 	data: () => {
 		return {
 			browse: false,
