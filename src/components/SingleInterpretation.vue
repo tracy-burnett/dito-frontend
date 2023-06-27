@@ -63,7 +63,7 @@
 					</div>
 
 					<div v-if="styleoption === 'Studio'">
-						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="newPhrase()">
+						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }" @click="newPhrase()">
 							{{$store.state.promptsObject.bNewPhrase}}
 						</button>
 					</div>
