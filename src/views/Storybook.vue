@@ -10,8 +10,8 @@
 		</span>
 
 		<Navbar>
-			<!-- <p class="mt-1 text-sm text-center cursor-pointer text-slate-100" >
-				
+			<!-- <p class="mt-1 text-sm font-semibold text-center cursor-pointer text-slate-100">
+				{{ $store.state.portalname }}
 			</p> -->
 		</Navbar>
 		<div class="relative overflow-x-hidden justify-items-center hero">
