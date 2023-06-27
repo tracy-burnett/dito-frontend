@@ -40,15 +40,15 @@
 			<div class="flex flex-col items-center cursor-pointer mr-[1vw]" v-if="LoginLogoutButton" @click="signoutuser()">
 				<img src="@/assets/icon_sign_out.svg" class="pl-[.5vw] w-[3.2vw]  pt-[1vh]" />
 				<div>
-					<p :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">{{ $store.state.promptsObject.nLogout }}</p>
+					<p class="text-slate-200" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">{{ $store.state.promptsObject.nLogout }}</p>
 				</div>
 
 			</div>
 
 			<div class="flex flex-col items-center cursor-pointer mr-[1vw]" v-else @click="openlogin()">
 				<img src="@/assets/icon_profile.svg" class="w-[3.2vw]  pt-[1vh]" />
-				<p class="text-sm"
-					:class="{ 'text-slate-700': $store.state.infobit != 'Login', 'text-slate-200': $store.state.infobit == 'Login' }">
+				<p :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག','text-slate-700': $store.state.infobit != 'Login', 'text-slate-200': $store.state.infobit == 'Login'  }"
+				>
 					{{ $store.state.promptsObject.nLogin }}</p>
 
 			</div>
