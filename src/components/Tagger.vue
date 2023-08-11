@@ -58,12 +58,12 @@ export default {
 		updateAssociations: function () {
 			this.updateAssociationsfunc();
 		},
-		"$store.state.startTimePrompter": function () {
-			this.clipText();
-		},
-		"$store.state.endTimePrompter": function () {
-			this.clipText();
-		},
+		// "$store.state.startTimePrompter": function () {
+		// 	this.clipText();
+		// },
+		// "$store.state.endTimePrompter": function () {
+		// 	this.clipText();
+		// },
 	},
 	props: {
 		clearTimestampsvar: {
@@ -227,13 +227,13 @@ export default {
 				// 	deletefromend.push(group.startCharacter);
 				// 	deletefromend.push(group.endCharacter);
 				// }
-				if (
-					!(group.startTime >= this.$store.state.endTimePrompter * 100) &&
-					!(group.endTime <= this.$store.state.startTimePrompter * 100)
-				) {
+				// if (
+				// 	!(group.startTime >= this.$store.state.endTimePrompter * 100) &&
+				// 	!(group.endTime <= this.$store.state.startTimePrompter * 100)
+				// ) {
 					donotdelete.push(group.startCharacter);
 					donotdelete.push(group.endCharacter);
-				}
+				// }
 			});
 			// console.log(deletefrombeginning)
 			// console.log(deletefromend)
