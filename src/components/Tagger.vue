@@ -213,8 +213,8 @@ export default {
 			this.latest_text_character_array = [];
 			// let deletefrombeginning = [];
 			// let deletefromend = [];
-			let donotdelete = [];
-			this.parsedAssociations.forEach((group) => {
+			// let donotdelete = [];
+			// this.parsedAssociations.forEach((group) => {
 				//if the time in the parsed association is wholly before the current highlighted audio region
 				// console.log(group.endTime)
 				// console.log(this.$store.state.startTimePrompter*100)
@@ -231,20 +231,20 @@ export default {
 				// 	!(group.startTime >= this.$store.state.endTimePrompter * 100) &&
 				// 	!(group.endTime <= this.$store.state.startTimePrompter * 100)
 				// ) {
-					donotdelete.push(group.startCharacter);
-					donotdelete.push(group.endCharacter);
+				// 	donotdelete.push(group.startCharacter);
+				// 	donotdelete.push(group.endCharacter);
 				// }
-			});
+			// });
 			// console.log(deletefrombeginning)
 			// console.log(deletefromend)
 
-			if (donotdelete.length >= 2) {
-				this.startingindex = Math.min(...donotdelete);
-				this.endingindex = Math.max(...donotdelete);
-			} else {
+			// if (donotdelete.length >= 2) {
+			// 	this.startingindex = Math.min(...donotdelete);
+			// 	this.endingindex = Math.max(...donotdelete);
+			// } else {
 				this.startingindex = 0;
 				this.endingindex = this.latest_text.length;
-			}
+			// }
 			// console.log(donotdelete);
 			// if (deletefrombeginning.length >= 1) {
 			// 	this.startingindex = Math.max(...deletefrombeginning);
