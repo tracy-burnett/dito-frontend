@@ -203,12 +203,12 @@ export default {
 				this.wavesurfer
 					.exportPCM((this.totalDuration / 2) * 100, 10000, true, 0)
 					.then(function (result) {
-						that.$store.commit("updatePeaksData", result);
 						if (that.sendtobackendBoolean == true) {
 							// console.log("peaks to send:")
 							// console.log(result)
 							that.peaksToBackend(JSON.stringify(result));
 						}
+						that.$store.commit("updatePeaksData", result);
 					});
 			}
 		},
