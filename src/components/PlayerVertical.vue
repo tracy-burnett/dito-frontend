@@ -206,7 +206,7 @@ export default {
 						if (that.sendtobackendBoolean == true) {
 							// console.log("peaks to send:")
 							// console.log(result)
-							that.peaksToBackend(JSON.stringify(result));
+							that.peaksToBackend(result);
 						}
 						else {console.log("duplicating peaks information")
 							that.$store.commit("updatePeaksData", result)}
@@ -588,12 +588,13 @@ export default {
 				}
 			)
 				.then((response) => {
+					console.log("response received")
 					return response.json();
 				})
 				.then((response) => {
 					console.log(response);
 					console.log("about to duplicate peaks information")
-					this.$store.commit("updatePeaksData", JSON.parse(generatedpeaks))
+					this.$store.commit("updatePeaksData", generatedpeaks)
 				})
 				.catch((error) => {
 					console.error("Error:", error);
