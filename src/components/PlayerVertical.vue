@@ -208,7 +208,8 @@ export default {
 							// console.log(result)
 							that.peaksToBackend(JSON.stringify(result));
 						}
-						that.$store.commit("updatePeaksData", result);
+						else {console.log("duplicating peaks information")
+							that.$store.commit("updatePeaksData", result)}
 					});
 			}
 		},
@@ -565,6 +566,7 @@ export default {
 
 	methods: {
 		peaksToBackend(generatedpeaks) {
+			console.log("about to send peaks information to backend")
 			fetch(
 				process.env.VUE_APP_api_URL + "audio/" + this.audio_ID + "/public/",
 				{
@@ -590,6 +592,8 @@ export default {
 				})
 				.then((response) => {
 					console.log(response);
+					console.log("about to duplicate peaks information")
+					this.$store.commit("updatePeaksData", JSON.parse(generatedpeaks))
 				})
 				.catch((error) => {
 					console.error("Error:", error);
