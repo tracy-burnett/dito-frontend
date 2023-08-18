@@ -566,6 +566,8 @@ export default {
 
 	methods: {
 		peaksToBackend(generatedpeaks) {
+			console.log(generatedpeaks)
+			let peaksString = JSON.stringify(generatedpeaks)
 			console.log("about to send peaks information to backend")
 			fetch(
 				process.env.VUE_APP_api_URL + "audio/" + this.audio_ID + "/public/",
@@ -583,7 +585,7 @@ export default {
 						// public: this.publictf,
 						// archived: false,
 						// shared_with: [],
-						peaks: generatedpeaks,
+						peaks: peaksString,
 					}),
 				}
 			)
