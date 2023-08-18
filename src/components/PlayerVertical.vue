@@ -566,8 +566,21 @@ export default {
 
 	methods: {
 		peaksToBackend(generatedpeaks) {
+			console.log("this is the json of peaks")
 			console.log(generatedpeaks)
-			let peaksString = JSON.stringify(generatedpeaks)
+			let peaksString = "["
+
+			for(let i=0; i < generatedpeaks.length-1; i++) {
+				let string1 = JSON.stringify(generatedpeaks[i])
+				peaksString = peaksString + string1 + ", "
+			}
+
+			peaksString=peaksString+JSON.stringify(generatedpeaks(generatedpeaks.length-1))+"]"
+
+			console.log("this is the string of peaks")
+			console.log(peaksString)
+
+			
 			console.log("about to send peaks information to backend")
 			fetch(
 				process.env.VUE_APP_api_URL + "audio/" + this.audio_ID + "/public/",
