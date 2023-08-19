@@ -204,8 +204,9 @@ export default {
 					.exportPCM((this.totalDuration / 2) * 100, 10000, true, 0)
 					.then(function (result) {
 						if (that.sendtobackendBoolean == true) {
-							// console.log("peaks to send:")
-							// console.log(result)
+							console.log("peaks generated")
+							console.log(result[1])
+							console.log(result[result.length-1])
 							that.peaksToBackend(result);
 						}
 						else {console.log("duplicating peaks information")
