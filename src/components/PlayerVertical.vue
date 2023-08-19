@@ -575,7 +575,7 @@ export default {
 				peaksString = peaksString + string1 + ", "
 			}
 
-			peaksString=peaksString+JSON.stringify(generatedpeaks(generatedpeaks.length-1))+"]"
+			peaksString=peaksString+JSON.stringify(generatedpeaks[generatedpeaks.length-1])+"]"
 
 			console.log("this is the string of peaks")
 			console.log(peaksString)
