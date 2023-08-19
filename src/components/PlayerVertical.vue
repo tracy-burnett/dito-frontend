@@ -204,8 +204,8 @@ export default {
 					.exportPCM((this.totalDuration / 2) * 100, 10000, true, 0)
 					.then(function (result) {
 						if (that.sendtobackendBoolean == true) {
-							console.log("peaks to send:")
-							console.log(result)
+							// console.log("peaks to send:")
+							// console.log(result)
 							that.peaksToBackend(result);
 						}
 						else {console.log("duplicating peaks information")
@@ -566,8 +566,7 @@ export default {
 
 	methods: {
 		peaksToBackend(generatedpeaks) {
-			console.log("this is the json of peaks")
-			console.log(generatedpeaks)
+			console.log("starting to stringify")
 			let peaksString = "["
 
 			for(let i=0; i < generatedpeaks.length-1; i++) {
@@ -577,11 +576,8 @@ export default {
 
 			peaksString=peaksString+JSON.stringify(generatedpeaks[generatedpeaks.length-1])+"]"
 
-			console.log("this is the string of peaks")
-			console.log(peaksString)
+			console.log("peaks stringified and about to be sent to backend")
 
-			
-			console.log("about to send peaks information to backend")
 			fetch(
 				process.env.VUE_APP_api_URL + "audio/" + this.audio_ID + "/public/",
 				{
