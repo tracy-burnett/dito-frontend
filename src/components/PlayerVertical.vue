@@ -206,9 +206,10 @@ export default {
 						if (that.sendtobackendBoolean == true) {
 							// console.log("peaks to send:")
 							// console.log(result)
-							that.peaksToBackend(JSON.stringify(result));
+							that.peaksToBackend(result);
 						}
-						that.$store.commit("updatePeaksData", result);
+						else {console.log("duplicating peaks information")
+							that.$store.commit("updatePeaksData", result)}
 					});
 			}
 		},
@@ -565,6 +566,18 @@ export default {
 
 	methods: {
 		peaksToBackend(generatedpeaks) {
+			console.log("starting to stringify")
+			let peaksString = "["
+
+			for(let i=0; i < generatedpeaks.length-1; i++) {
+				let string1 = JSON.stringify(generatedpeaks[i])
+				peaksString = peaksString + string1 + ", "
+			}
+
+			peaksString=peaksString+JSON.stringify(generatedpeaks[generatedpeaks.length-1])+"]"
+
+			console.log("peaks stringified and about to be sent to backend")
+
 			fetch(
 				process.env.VUE_APP_api_URL + "audio/" + this.audio_ID + "/public/",
 				{
@@ -581,15 +594,18 @@ export default {
 						// public: this.publictf,
 						// archived: false,
 						// shared_with: [],
-						peaks: generatedpeaks,
+						peaks: peaksString,
 					}),
 				}
 			)
 				.then((response) => {
+					console.log("response received")
 					return response.json();
 				})
 				.then((response) => {
 					console.log(response);
+					console.log("about to duplicate peaks information")
+					this.$store.commit("updatePeaksData", generatedpeaks)
 				})
 				.catch((error) => {
 					console.error("Error:", error);
