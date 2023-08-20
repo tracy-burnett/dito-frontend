@@ -1,7 +1,7 @@
 <template>
-	<div class="flex flex-row h-[20px] w-4/5 mb-[6vh]" style="position:fixed; background-color:blue;">
+   <div class="flex flex-row h-[20px] w-full bg-blue-50" style="position:absolute;">
 
-	   <div class="flex flex-col h-[20px]">	
+	   <div class="flex flex-col h-full bg-blue-100">	
 		<!-- playback speed slider -->
 		<div class="flex justify-center">
 			<span
@@ -24,7 +24,7 @@
 	   </div>
 		<!-- audio player body -->
 	   
-	   <div class="container flex flex-col h-[20px] shadow-xl rounded-xl">
+	   <div class="container flex flex-col h-full shadow-xl rounded-xl bg-blue-200">
 			<!-- top-most time entry box (for start of view window) -->
 			<div id="start" ref="start" class="start">
 				<input class="text-sm" type="string" v-model="startTime"
@@ -47,24 +47,26 @@
 			</div>
 	   </div>		
 			<!-- waveform display -->
-			<div class="flex flex-col h-[20px] w-full">
-				<div id="waveform" ref="waveform" class="waveform h-[10px]5 w-full"></div>
+	<div class="flex w-full bg-blue-300">
+		<div class="h-full w-full absolute">
+				<div id="waveform" ref="waveform" class="waveform h-[10px] w-full"></div>
 				<div class="midwaveform w-full h-[1px]"></div>
 				<div id="miniwaveform" ref="miniwaveform" class="miniwaveform h-[5px] w-full"></div>
-				<div class="absolute h-[15vh] z-10 content-center w-full flex flex-col py-[6vh] px-[1vw] text-sm"
+		</div>
+				<div class="absolute h-[15vh] z-10 content-center w-full flex-col py-[6vh] px-[1vw] text-sm"
 					style="background: #dbeafe;" v-if="loadingpercent > 0 && loadingpercent < 100">
 					<p>waveform {{ loadingpercent }}% completed</p>
 				</div>
-				<div class="absolute h-[15vh] z-10 content-center w-full flex flex-col py-[6vh] px-[1vw] text-sm"
+				<div class="absolute h-[15vh] z-10 content-center w-full flex-col py-[6vh] px-[1vw] text-sm"
 					style="background: #dbeafe;" v-else-if="readyVerification == 1 && totalDuration == 0">
 					<p>please be patient while your audio file finishes loading</p>
 				</div>
-				<div class="absolute h-[15vh] z-10 content-center w-full flex flex-col py-[6vh] px-[1vw] text-sm"
+				<div class="absolute h-[15vh] z-10 content-center w-full flex-col py-[6vh] px-[1vw] text-sm"
 					style="background: #dbeafe;" v-else-if="readyVerification == 0">
 					<p>please wait while the audio file is uploaded to the server</p>
 				</div>
-			</div>
-	   <div>
+	</div>
+	   <div class="flex w-[30px]">
 			<!-- bottom-most time entry box (for end of view window) -->
 			<div id="end" ref="end" class="end">
 				<input type="string" class="text-sm" v-model="endTime"
@@ -356,7 +358,7 @@ export default {
 			// autoCenter: false,
 			progressColor: "#475569",
 			// barWidth: 2,
-			barHeight: 2,
+			barHeight: 1,
 			// normalize: true,
 			hideScrollbar: true,
 			// barRadius: 3,
@@ -367,6 +369,7 @@ export default {
 					waveColor: "#777",
 					progressColor: "#222",
 					showOverview: true,
+					barHeight: 1,
     				}),
   			],
 		});
