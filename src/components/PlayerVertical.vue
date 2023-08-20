@@ -178,6 +178,34 @@ export default {
 		},
 
 		readyVerification: function () {
+			if (this.readyVerification == 1) {
+				this.totalDuration = this.wavesurfer.getDuration();
+				let that = this;
+				// length of output array/2, accuracy (irrelevant), don't popup a new window, start at 0,
+				let totallength=(this.totalDuration/2)*100
+				
+				console.log("total length is " + totallength)
+				
+				var peakstemp = this.wavesurfer.backend.getPeaks(totallength)
+
+				console.log("peakstemp created")
+				
+				var arr = [].map.call(peakstemp, function (val) {
+        				return Math.round(val * 10000) / 10000;
+      				});
+
+				console.log("accuracy reduced on peakstemp")
+				
+				if (that.sendtobackendBoolean == true) {
+					console.log("going to try to send to backend")
+					that.peaksToBackend(arr);
+				}
+				else {
+					console.log("duplicating peaks information")
+					that.$store.commit("updatePeaksData", arr)
+				}
+			}
+			
 			if (this.readyVerification == 2) {
 				// FLAG
 				this.isLoaded = true;
@@ -197,29 +225,6 @@ export default {
 					id: "initialregion",
 					loop: false,
 				});
-
-				let that = this;
-				// length of output array/2, accuracy (irrelevant), don't popup a new window, start at 0,
-
-				var peakstemp = this.wavesurfer.backend.getPeaks((this.totalDuration/2)*100)
-
-				console.log("peakstemp created")
-				
-				var arr = [].map.call(peakstemp, function (val) {
-        				return Math.round(val * 10000) / 10000;
-      				});
-
-				console.log("accuracy reduced on peakstemp")
-				
-				if (that.sendtobackendBoolean == true) {
-					console.log("going to try to send to backend")
-					that.peaksToBackend(arr);
-				}
-				else {
-					console.log("duplicating peaks information")
-					that.$store.commit("updatePeaksData", arr)
-				}
-
 			}
 		},
 
@@ -450,7 +455,6 @@ export default {
 			console.warn("error", err?.message || err);
 		});
 
-		// When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
 		this.wavesurfer.on("waveform-ready", function () {
 			// console.log("waveform ready")
 			that.readyVerification += 1;
