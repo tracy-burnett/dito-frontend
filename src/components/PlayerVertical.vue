@@ -183,6 +183,7 @@ export default {
 			
 			if (this.readyVerification == 2) {
 				// FLAG
+				console.log("everything is ready now")
 				this.isLoaded = true;
 				this.totalDuration = this.wavesurfer.getDuration();
 
@@ -444,6 +445,7 @@ export default {
 				that.peaksToBackend(peaks);
 			}
 			that.readyVerification += 1;
+			console.log("waveform ready")
 		})
 
 		this.wavesurfer.on('error', function (err) {
@@ -453,7 +455,7 @@ export default {
 
 		// When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
 		this.wavesurfer.on("ready", function () {
-			// console.log("audio ready")
+			console.log("audio ready")
 			that.readyVerification += 1;
 		});
 
