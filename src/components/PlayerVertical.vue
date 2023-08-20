@@ -356,10 +356,10 @@ export default {
 			// barRadius: 3,
 			vertical: true,
 			plugins: [
-				WaveSurfer.regions.create({
+				regions.create({
 					maxRegions: 1,
 				}),
-				WaveSurfer.minimap.create({
+				minimap.create({
 					container: this.$refs.miniwaveform,
 					waveColor: "#777",
 					progressColor: "#222",
