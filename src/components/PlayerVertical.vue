@@ -186,27 +186,6 @@ export default {
 				this.isLoaded = true;
 				this.totalDuration = this.wavesurfer.getDuration();
 
-				let that = this;
-				// length of output array/2, accuracy (irrelevant), don't popup a new window, start at 0,
-				let totallength=(this.totalDuration/2)*100
-				
-				console.log("total length is " + totallength)
-
-				this.wavesurfer
-					.exportPCM(totallength, 10000, true, 0)
-					.then(function (result) {
-						if (that.sendtobackendBoolean == true) {
-							console.log("peaks to send:")
-							console.log(result)
-							that.peaksToBackend(result);
-						}
-						else {console.log("duplicating peaks information")
-							that.$store.commit("updatePeaksData", result)}
-					});
-
-
-				
-				// console.log(this.totalDuration)
 				this.$store.commit("updateAudioDuration", this.totalDuration * 1000);
 				this.endTimeSeconds = this.totalDuration;
 				this.endTime = this.secondsToTime(this.endTimeSeconds);
@@ -366,10 +345,7 @@ export default {
 		// https://wavesurfer-js.org
 		this.wavesurfer = WaveSurfer.create({
 			container: this.$refs.waveform,
-			backend: "MediaElement",
-			responsive: true,
 			waveColor: "#94a3b8",
-			partialRender: true,
 			cursorColor: "red",
 			// autoCenter: false,
 			progressColor: "#475569",
@@ -437,6 +413,7 @@ export default {
 					// console.log(JSON.parse(data["peaks"]).reduce((max, v) => max >= v ? max : v, -Infinity))
 
 					this.wavesurfer.load(this.audioURL, JSON.parse(data["peaks"]));
+					this.$store.commit("updatePeaksData", data["peaks"])
 				} else {
 					// console.log("generating new peaks on frontend")
 					this.wavesurfer.load(this.audioURL);
@@ -449,14 +426,28 @@ export default {
 
 		let that = this;
 
+		this.wavesurfer.on('decode', (duration) => {
+			let totallength=(duration/2)*100
+			
+			console.log("total length is " + totallength)
+			
+			const peaks = wavesurfer.exportPeaks({
+				channels: 1, // how many audio channels to export, defaults to 1
+				maxLength: that.totallength, // how many peaks per channel
+				precision: 1e3, // round to 3 digits after comma
+				})
+			if (that.sendtobackendBoolean == true) {
+				console.log("peaks to send:")
+				console.log(peaks)
+				that.peaksToBackend(peaks);
+			}
+			that.readyVerification += 1;
+		})
+
 		this.wavesurfer.on('error', function (err) {
 			console.warn("error", err?.message || err);
 		});
 
-		this.wavesurfer.on("waveform-ready", function () {
-			// console.log("waveform ready")
-			that.readyVerification += 1;
-		});
 
 		// When the audio file is loaded, update our data about the length of the audio file, and create a new highlighted and draggable/adjustable region that spans the entire waveform
 		this.wavesurfer.on("ready", function () {
