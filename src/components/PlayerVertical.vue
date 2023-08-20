@@ -433,8 +433,9 @@ export default {
 				// console.log(data)
 				this.audioURL = data["url"];
 				if (data["peaks"]) {
-					// console.log("loading peaks from backend!")
-					// console.log(JSON.parse(data["peaks"]))
+					console.log("loading peaks from backend!")
+					console.log(data["peaks"])
+					console.log(JSON.parse(data["peaks"]))
 					// console.log(Math.max(...JSON.parse(data["peaks"])))
 					// console.log(JSON.parse(data["peaks"]).reduce((max, v) => max >= v ? max : v, -Infinity))
 
@@ -579,6 +580,8 @@ export default {
 
 	methods: {
 		peaksToBackend(generatedpeaks) {
+			console.log("JSON:")
+			console.log(generatedpeaks)
 			console.log("starting to stringify")
 			let peaksString = "["
 
@@ -588,6 +591,8 @@ export default {
 			}
 
 			peaksString=peaksString+JSON.stringify(generatedpeaks[generatedpeaks.length-1])+"]"
+			console.log("STRING:")
+			console.log(peaksString)
 
 			console.log("peaks stringified and about to be sent to backend")
 
