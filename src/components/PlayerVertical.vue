@@ -866,22 +866,6 @@ export default {
 	background: white;
 }
 
-.container {
-	/* height: 80vh; */
-	/* min-height: 600px; */
-	/* width: 7vw; */
-	width: 100px;
-	position: relative;
-	/* left: 10px; */
-	/* margin-top: 1vh; */
-	margin-left: 0.2vw;
-	/* top: 5px; */
-	display: inline;
-	/*max-width: 7%;*/
-	text-align: center;
-	background: #334155;
-	/*background: linear-gradient(90deg, #164e63, 30%, #1e293b, 70%, #164e63);*/
-}
 
 .waveform {
 	/* flex: 1; */
