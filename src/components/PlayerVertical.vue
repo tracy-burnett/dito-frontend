@@ -185,26 +185,19 @@ export default {
 				let totallength=(this.totalDuration/2)*100
 				
 				console.log("total length is " + totallength)
-				
-				var peakstemp = this.wavesurfer.backend.getPeaks(totallength)
 
-				console.log("peakstemp created")
-				console.log(peakstemp)
+				this.wavesurfer
+					.exportPCM(totallength, 10000, true, 0)
+					.then(function (result) {
+						if (that.sendtobackendBoolean == true) {
+							console.log("peaks to send:")
+							console.log(result)
+							that.peaksToBackend(result);
+						}
+						else {console.log("duplicating peaks information")
+							that.$store.commit("updatePeaksData", result)}
+					});
 				
-				var arr = [].map.call(peakstemp, function (val) {
-        				return Math.round(val * 10000) / 10000;
-      				});
-
-				console.log("accuracy reduced on peakstemp")
-				
-				if (that.sendtobackendBoolean == true) {
-					console.log("going to try to send to backend")
-					that.peaksToBackend(arr);
-				}
-				else {
-					console.log("duplicating peaks information")
-					that.$store.commit("updatePeaksData", arr)
-				}
 			}
 			
 			if (this.readyVerification == 2) {
