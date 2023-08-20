@@ -200,18 +200,26 @@ export default {
 
 				let that = this;
 				// length of output array/2, accuracy (irrelevant), don't popup a new window, start at 0,
-				this.wavesurfer
-					.exportPCM((this.totalDuration / 2) * 100, 10000, true, 0)
-					.then(function (result) {
-						if (that.sendtobackendBoolean == true) {
-							console.log("peaks generated")
-							console.log(result[1])
-							console.log(result[result.length-1])
-							that.peaksToBackend(result);
-						}
-						else {console.log("duplicating peaks information")
-							that.$store.commit("updatePeaksData", result)}
-					});
+
+				var peakstemp = this.wavesurfer.backend.getPeaks((this.totalDuration/2)*100)
+
+				console.log("peakstemp created")
+				
+				var arr = [].map.call(peakstemp, function (val) {
+        				return Math.round(val * 10000) / 10000;
+      				});
+
+				console.log("accuracy reduced on peakstemp")
+				
+				if (that.sendtobackendBoolean == true) {
+					console.log("going to try to send to backend")
+					that.peaksToBackend(arr);
+				}
+				else {
+					console.log("duplicating peaks information")
+					that.$store.commit("updatePeaksData", arr)
+				}
+
 			}
 		},
 
