@@ -14,13 +14,9 @@
 				{{ $store.state.portalname }}
 			</p> -->
 		</Navbar>
-		<div class="relative overflow-x-hidden justify-items-center hero">
-			<div class="pt-[5vh] flex flex-row justify-between h-[100vh]">
+		<div class="relative overflow-x-hidden justify-items-center hero flex flex-col">
 
-				<div>
-					<PlayerVertical v-if="this.$store.state.authCompleted" :key="playerKey" :audio_ID="audio_ID"
-						:playerPlayPause="playerPlayPause" @rerenderPlayer="playerKey++" />
-				</div>
+			<div class="pt-[5vh] flex flex-row justify-between h-[100vh]">
 				<div class="flex flex-row w-full ml-[105px] mr-[105px]">
 
 					<span v-for="interpretation in $store.state.consoles" :key="interpretation"
@@ -47,6 +43,13 @@
 						@displayInterpretationID="displayInterpretationID($event)" />
 				</div>
 			</div>
+
+
+			<div>
+				<PlayerVertical v-if="this.$store.state.authCompleted" :key="playerKey" :audio_ID="audio_ID"
+					:playerPlayPause="playerPlayPause" @rerenderPlayer="playerKey++" />
+			</div>
+			
 		</div>
 	</div>
 </template>
