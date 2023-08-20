@@ -358,7 +358,7 @@ export default {
 			// barRadius: 3,
 			vertical: true,
 			plugins: [
-    				Minimap.create({
+    				WaveSurfer.Minimap.create({
 					container: this.$refs.miniwaveform,
 					waveColor: "#777",
 					progressColor: "#222",
