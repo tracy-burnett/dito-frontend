@@ -196,7 +196,7 @@ export default {
 				// 	loop: false,
 				// });
 				this.wavesurfer.setOptions({autoCenter: true})
-				this.regions.enableDragSelection({
+				this.wavesurfer.enableDragSelection({
 					id: "initialregion",
 					loop: false,
 				});
@@ -222,7 +222,7 @@ export default {
 			// this.updatingFromPrompter = false;
 			// console.log(this.$store.state.incomingCurrentTime)
 			// console.log(this.$store.state.incomingEndTime)
-			this.regions.addRegion({
+			this.wavesurfer.addRegion({
 				start: this.$store.state.incomingCurrentTime,
 				end: this.$store.state.incomingEndTime,
 				id: "region",
@@ -338,8 +338,6 @@ export default {
 
 	unmounted() {
 		this.wavesurfer.destroy();
-		this.regions.destroy()
-		this.minimap.destroy()
 	},
 
 	async mounted() {
@@ -358,12 +356,11 @@ export default {
 			hideScrollbar: true,
 			// barRadius: 3,
 			vertical: true,
-		});
-
-		this.regions = WaveSurfer.Regions.create({
+			plugins: [
+				WaveSurfer.Regions.create({
 					maxRegions: 1,
-				})
-		this.minimap = WaveSurfer.Minimap.create({
+				}),
+				WaveSurfer.Minimap.create({
 					container: this.$refs.miniwaveform,
 					waveColor: "#777",
 					progressColor: "#222",
@@ -371,6 +368,8 @@ export default {
 					// showRegions: true,
 					// height: 50
 				}),
+			],
+		});
 
 		if (this.$store.state.user) {
 			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
@@ -459,7 +458,7 @@ export default {
 		});
 
 		// whenever the highlighted region or either of its bounds is dragged, update our data about where the region begins and ends accordingly
-		this.regions.on("region-update-end", (region, event) => {
+		this.wavesurfer.on("region-update-end", (region, event) => {
 			// console.log(region)
 			that.startTimeSeconds = region.start;
 			that.endTimeSeconds = region.end;
@@ -479,7 +478,7 @@ export default {
 			);
 		});
 
-		this.regions.on("region-created", (region, event) => {
+		this.wavesurfer.on("region-created", (region, event) => {
 			// console.log(region);
 			if (that.updatingFromPrompter == false) {
 				// console.log("creating region, not from prompter");
@@ -764,7 +763,7 @@ export default {
 		// clear the highlighted region and reset the HH:MM:SS displays of start and end time accordingly
 		clearallregions() {
 			// console.log("in clear regions")
-			this.regions.clearRegions();
+			this.wavesurfer.clearRegions();
 			// console.log(this.updatingFromPrompter);
 			this.startTime = "00:00:00";
 			this.endTime = this.secondsToTime(this.totalDuration);
@@ -778,9 +777,9 @@ export default {
 
 		// change the highlighted region based on manual HH:MM:SS inputs of start and end times by the user
 		updateRegion() {
-			this.regions.clearRegions();
+			this.wavesurfer.clearRegions();
 			// console.log("end time: " + this.endTime)
-			this.regions.addRegion({
+			this.wavesurfer.addRegion({
 				start: this.startTimeNumber,
 				end: this.endTimeNumber,
 				id: "region",
@@ -800,9 +799,9 @@ export default {
 
 		// change the highlighted region based on manual HH:MM:SS inputs of start and end times by the user
 		updateRegionFromPrompter() {
-			this.regions.clearRegions();
+			this.wavesurfer.clearRegions();
 			this.updatingFromPrompter = true;
-			this.regions.addRegion({
+			this.wavesurfer.addRegion({
 				start: this.$store.state.startTimePrompter,
 				end: this.$store.state.endTimePrompter,
 				id: "region",
