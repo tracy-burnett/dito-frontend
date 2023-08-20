@@ -836,7 +836,7 @@ export default {
 .container {
 	/* height: 80vh; */
 	/* min-height: 600px; */
-	/* width: 7vw; */
+	width: 7vw;
 	position: relative;
 	/* left: 10px; */
 	/* margin-top: 1vh; */
