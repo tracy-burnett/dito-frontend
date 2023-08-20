@@ -2,19 +2,27 @@
 	<div>
 			<!-- waveform display -->
 
-				<div id="waveform" ref="waveform" class="waveform"></div>
+				<div id="waveform" ref="waveform" class="flex waveform"></div>
 
 
 	</div>
 </template>
 
 <script>
-	
-import { getIdToken } from "firebase/auth";
 
 export default {
 	// name of component
 	name: "PlayerVertical",
+
+	// data that it inherits from parent component
+	props: {
+		audio_ID: {
+			default: "",
+		},
+		playerPlayPause: {
+			default: 0,
+		},
+	},
 
 	// declare the variables and default values that this component will need
 	data: () => {
@@ -22,62 +30,25 @@ export default {
 			audioURL: "",
 		};
 	},
-	props: {
-		audio_ID: {
-			default: "",
-		},
-	},
+
 
 	unmounted() {
 		this.wavesurfer.destroy();
 	},
 
-	mounted() {
+	async mounted() {
 
-		
 		// https://wavesurfer-js.org
 		this.wavesurfer = WaveSurfer.create({
 			container: this.$refs.waveform,
 			waveColor: "#94a3b8",
 			progressColor: "#475569",
 		});
-		if (this.$store.state.user) {
-			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
-			await getIdToken(this.$store.state.user)
-				.then((idToken) => {
-					this.$store.commit("SetIdToken", idToken);
-					// console.log(this.$store.state.idToken)
-				})
-				.catch((error) => {
-					// An error happened.
-					console.log("Oops. " + error.code + ": " + error.message);
-				});
-		}
-		const apiUrl = process.env.VUE_APP_api_URL + "s3/presignedgeturl";
-		fetch(apiUrl, {
-			method: "POST",
 
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: this.$store.state.idToken,
-			},
+		this.audioURL = "https://tile.loc.gov/storage-services/media/afc/cal/afc1986022_sr09b02.mp3"
 
-			body: JSON.stringify({
-				audio_ID: this.audio_ID,
-			}),
-		})
-			.then((response) => {
-				return response.json();
-			})
-			.then((data) => {
-				// console.log(data)
-				this.audioURL = data["url"];
-				this.wavesurfer.load(this.audioURL)
-			})
-			.catch((error) => {
-				console.error("Error:", error);
-			});
-	
+		this.wavesurfer.load(this.audioURL);
+				
 		this.wavesurfer.on('error', function (err) {
 			console.warn("error", err?.message || err);
 		});
@@ -87,19 +58,21 @@ export default {
 		this.wavesurfer.on('ready', function () {
 			console.log("waveform should be viewable now")
 		});
+
+
 	},
 
 };
 </script>
 
 <style scoped>
-	
+
 .waveform {
-	z-index: 50;
-	height: 200px;
-	width: 700px;
+	height: 30vh;
+	width: 75px;
 	background-color: white;
-	position: absolute;
 }
+
 	
+
 </style>
