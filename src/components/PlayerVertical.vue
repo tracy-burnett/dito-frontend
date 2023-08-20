@@ -106,7 +106,7 @@ export default {
 			})
 			.then((data) => {
 				// console.log(data)
-				this.audioURL = "https://www2.cs.uic.edu/~i101/SoundFiles/BabyElephantWalk60.wav"
+				this.audioURL = "https://tile.loc.gov/storage-services/media/afc/cal/afc1986022_sr09b02.mp3"
 
 				this.wavesurfer.load(this.audioURL);
 				
