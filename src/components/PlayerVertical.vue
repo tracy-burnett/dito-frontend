@@ -42,11 +42,7 @@ export default {
 		this.wavesurfer = WaveSurfer.create({
 			container: this.$refs.waveform,
 			waveColor: "#94a3b8",
-			cursorColor: "red",
 			progressColor: "#475569",
-			barHeight: 4,
-			hideScrollbar: true,
-			vertical: true,
 		});
 
 		this.audioURL = "https://tile.loc.gov/storage-services/media/afc/cal/afc1986022_sr09b02.mp3"
@@ -71,17 +67,10 @@ export default {
 
 <style scoped>
 
-.container {
-	width: 100px;
-	position: relative;
-	margin-left: 0.2vw;
-	display: inline;
-}
-
 .waveform {
 	height: 30vh;
 	width: 75px;
-
+	background-color: white;
 }
 
 	
