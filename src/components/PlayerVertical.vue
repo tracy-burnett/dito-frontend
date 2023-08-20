@@ -339,7 +339,6 @@ export default {
 	unmounted() {
 		this.wavesurfer.destroy();
 		this.regions.destroy()
-		this.minimap.destroy()
 	},
 
 	async mounted() {
@@ -358,19 +357,19 @@ export default {
 			hideScrollbar: true,
 			// barRadius: 3,
 			vertical: true,
-		});
-
-		this.regions = WaveSurfer.Regions.create({
-					maxRegions: 1,
-				})
-		this.minimap = WaveSurfer.Minimap.create({
+			plugins: [
+    				Minimap.create({
 					container: this.$refs.miniwaveform,
 					waveColor: "#777",
 					progressColor: "#222",
 					showOverview: true,
-					// showRegions: true,
-					// height: 50
-				}),
+    				}),
+  			],
+		});
+
+		this.regions = ws.registerPlugin(RegionsPlugin.create({
+					maxRegions: 1,
+				}))
 
 		if (this.$store.state.user) {
 			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
