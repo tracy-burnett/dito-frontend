@@ -52,7 +52,8 @@ export default {
 <style scoped>
 	
 .waveform {
-	height: 20px;
+	z-index: 50
+	height: 200px;
 	width: 700px;
 	background-color: white;
 	position: absolute;
