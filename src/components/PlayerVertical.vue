@@ -426,11 +426,11 @@ export default {
 
 		let that = this;
 
-		let totallength=(this.totalDuration/2)*100
-				
-		console.log("total length is " + totallength)
-
-		this.wavesurfer.on('decode', () => {
+		this.wavesurfer.on('decode', (duration) => {
+			let totallength=(duration/2)*100
+			
+			console.log("total length is " + totallength)
+			
 			const peaks = wavesurfer.exportPeaks({
 				channels: 1, // how many audio channels to export, defaults to 1
 				maxLength: that.totallength, // how many peaks per channel
