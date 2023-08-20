@@ -850,7 +850,6 @@ export default {
 
 .waveform {
 	/* flex: 1; */
-	display: flex;
 	height: 30vh;
 	width: 75px;
 	/* margin-left: 10px; */
@@ -862,7 +861,6 @@ export default {
 }
 
 .midwaveform {
-	display: flex;
 	/* height: 79vh; */
 	width: 1px;
 	height: 30vh;
@@ -871,7 +869,6 @@ export default {
 
 .miniwaveform {
 	/* flex: 1; */
-	display: flex;
 	/* height: 79vh; */
 	width: 24px;
 	background: #dbeafe;
