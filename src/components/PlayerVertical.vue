@@ -367,7 +367,7 @@ export default {
   			],
 		});
 
-		this.regions = ws.registerPlugin(RegionsPlugin.create({
+		this.regions = this.wavesurfer.registerPlugin(RegionsPlugin.create({
 					maxRegions: 1,
 				}))
 
