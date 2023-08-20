@@ -356,7 +356,7 @@ export default {
 			// autoCenter: false,
 			progressColor: "#475569",
 			// barWidth: 2,
-			barHeight: 4,
+			barHeight: 2,
 			// normalize: true,
 			hideScrollbar: true,
 			// barRadius: 3,
