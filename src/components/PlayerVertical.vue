@@ -276,7 +276,6 @@ export default {
 			this.updateRegionFromPrompter();
 		},
 	},
-	
 
 	// these are variables whose values are dynamically updated when necessary.
 	computed: {
