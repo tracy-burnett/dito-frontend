@@ -22,6 +22,11 @@ export default {
 			audioURL: "",
 		};
 	},
+	props: {
+		audio_ID: {
+			default: "",
+		},
+	},
 
 	unmounted() {
 		this.wavesurfer.destroy();
