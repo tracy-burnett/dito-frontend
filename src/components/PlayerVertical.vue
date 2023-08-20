@@ -9,6 +9,8 @@
 </template>
 
 <script>
+	
+import { getIdToken } from "firebase/auth";
 
 export default {
 	// name of component
@@ -26,15 +28,64 @@ export default {
 	},
 
 	mounted() {
+
+		
 		// https://wavesurfer-js.org
 		this.wavesurfer = WaveSurfer.create({
 			container: this.$refs.waveform,
 			waveColor: "#94a3b8",
 			progressColor: "#475569",
 		});
+		if (this.$store.state.user) {
+			// REFRESH ID TOKEN FIRST AND WAIT FOR IT
+			await getIdToken(this.$store.state.user)
+				.then((idToken) => {
+					this.$store.commit("SetIdToken", idToken);
+					// console.log(this.$store.state.idToken)
+				})
+				.catch((error) => {
+					// An error happened.
+					console.log("Oops. " + error.code + ": " + error.message);
+				});
+		}
+		const apiUrl = process.env.VUE_APP_api_URL + "s3/presignedgeturl";
+		fetch(apiUrl, {
+			method: "POST",
 
-		this.wavesurfer.load("https://citizen-dj.labs.loc.gov/audio/samplepacks/loc-american-english-dialect-recordings/Conversation-with-10-year-old-black-female-Washington-DC_afccal000391_002_00-05-36.mp3");
-				
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: this.$store.state.idToken,
+			},
+
+			body: JSON.stringify({
+				audio_ID: this.audio_ID,
+			}),
+		})
+			.then((response) => {
+				return response.json();
+			})
+			.then((data) => {
+				// console.log(data)
+				this.audioURL = data["url"];
+				if (data["peaks"]) {
+					console.log("loading peaks from backend!")
+					console.log(data["peaks"])
+					console.log(JSON.parse(data["peaks"]))
+					// console.log(Math.max(...JSON.parse(data["peaks"])))
+					// console.log(JSON.parse(data["peaks"]).reduce((max, v) => max >= v ? max : v, -Infinity))
+
+					this.wavesurfer.load(this.audioURL, JSON.parse(data["peaks"]));
+					this.$store.commit("updatePeaksData", data["peaks"])
+				} else {
+					// console.log("generating new peaks on frontend")
+					this.wavesurfer.load(this.audioURL);
+					this.sendtobackendBoolean = true;
+				}
+			})
+			.catch((error) => {
+				console.error("Error:", error);
+			});
+	
 		this.wavesurfer.on('error', function (err) {
 			console.warn("error", err?.message || err);
 		});
