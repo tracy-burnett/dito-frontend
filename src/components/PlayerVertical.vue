@@ -195,7 +195,7 @@ export default {
 				// 	id: "initialregion",
 				// 	loop: false,
 				// });
-				this.wavesurfer.drawer.params.autoCenter = true;
+				this.wavesurfer.setOptions({autoCenter: true})
 				this.wavesurfer.enableDragSelection({
 					id: "initialregion",
 					loop: false,
@@ -431,12 +431,13 @@ export default {
 			
 			console.log("total length is " + totallength)
 			
-			const peaks = that.wavesurfer.exportPeaks({
+
+			if (that.sendtobackendBoolean == true) {
+				const peaks = that.wavesurfer.exportPeaks({
 				channels: 1, // how many audio channels to export, defaults to 1
 				maxLength: that.totallength, // how many peaks per channel
 				precision: 1e3, // round to 3 digits after comma
 				})
-			if (that.sendtobackendBoolean == true) {
 				console.log("peaks to send:")
 				console.log(peaks)
 				that.peaksToBackend(peaks);
@@ -639,10 +640,10 @@ export default {
 		},
 		toggleAutoscroll() {
 			if (this.autoscroll == true) {
-				this.wavesurfer.drawer.params.autoCenter = false;
+				this.wavesurfer.setOptions({autoCenter: false})
 				this.autoscroll = false;
 			} else if (this.autoscroll == false) {
-				this.wavesurfer.drawer.params.autoCenter = true;
+				this.wavesurfer.setOptions({autoCenter: true})
 				this.autoscroll = true;
 			}
 		},
