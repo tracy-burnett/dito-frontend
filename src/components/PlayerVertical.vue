@@ -1,7 +1,7 @@
 <template>
-   <div class="flex flex-row h-[20px] w-full bg-blue-50">
+   <div class="flex flex-row h-[20px] w-full border-2 border-black">
 
-	   <div class="flex flex-col h-full bg-blue-100">	
+	   <div class="flex flex-col h-full border-2 border-black">	
 		<!-- playback speed slider -->
 		<div class="flex justify-center">
 			<span
@@ -47,7 +47,7 @@
 			</div>
 	   </div>		
 			<!-- waveform display -->
-	<div class="flex w-full bg-blue-300">
+	<div class="flex w-3/5 bg-blue-300">
 		<div class="h-full w-full absolute">
 				<div id="waveform" ref="waveform" class="waveform h-[10px] w-full"></div>
 				<div class="midwaveform w-full h-[1px]"></div>
