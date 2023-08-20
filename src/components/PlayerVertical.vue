@@ -1,7 +1,7 @@
 <template>
-	<div class="flex flex-col h-[20vh] mt-[6vh]" style="position:fixed;">
+	<div class="flex flex-row h-[20vh] mt-[6vh]" style="position:fixed;">
 
-		
+	   <div class="flex flex-col">	
 		<!-- playback speed slider -->
 		<div class="flex justify-center">
 			<span
@@ -19,11 +19,12 @@
 				class="text-xs" :class="{ 'mt-[1.5vh]': $store.state.promptsObject.name == 'བོད་ཡིག'}">&nbsp;{{ zoomnumber }}x</span>
 		</div>
 		<div class="-mt-[.6vh]" @mouseup="zoom()">
-			<input id="slider" v-model="zoomnumber" type="range" min="0" max="500" step=".10" style="width: 105px" />
+			<input id="slider" v-model="zoomnumber" type="range" min="0" max="50" step=".10" style="width: 105px" />
 		</div>
+	   </div>
 		<!-- audio player body -->
-
-		<div class="container flex flex-col shadow-xl rounded-xl -mt-[.5vh]">
+	   
+	   <div class="container flex flex-col shadow-xl rounded-xl -mt-[.5vh]">
 			<!-- top-most time entry box (for start of view window) -->
 			<div id="start" ref="start" class="start">
 				<input class="text-sm" type="string" v-model="startTime"
@@ -44,7 +45,7 @@
 					pattern="(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)" @click="pausePlayer()"
 					@keyup.enter="seekfunction()" />
 			</div>
-
+	   </div>		
 			<!-- waveform display -->
 			<div class="flex flex-col">
 				<div id="waveform" ref="waveform" class="waveform"></div>
@@ -63,7 +64,7 @@
 					<p>please wait while the audio file is uploaded to the server</p>
 				</div>
 			</div>
-
+	   <div>
 			<!-- bottom-most time entry box (for end of view window) -->
 			<div id="end" ref="end" class="end">
 				<input type="string" class="text-sm" v-model="endTime"
@@ -117,7 +118,8 @@
 				</button> -->
 
 			</div>
-		</div>
+	   </div>
+		
 	</div>
 </template>
 
