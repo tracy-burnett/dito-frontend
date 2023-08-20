@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-row h-[20px] w-4/5 mb-[6vh]" style="position:fixed;">
+	<div class="flex flex-row h-[20px] w-4/5 mb-[6vh]" style="position:fixed; background-color:blue;">
 
 	   <div class="flex flex-col h-[20px]">	
 		<!-- playback speed slider -->
