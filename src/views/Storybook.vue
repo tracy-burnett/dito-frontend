@@ -16,7 +16,7 @@
 		</Navbar>
 		<div class="relative overflow-x-hidden justify-items-center hero flex flex-col">
 
-			<div class="pt-[5vh] flex flex-row justify-between h-[100vh]">
+			<div class="pt-[5vh] flex flex-row justify-between h-[80vh]">
 				<div class="flex flex-row w-full ml-[105px] mr-[105px]">
 
 					<span v-for="interpretation in $store.state.consoles" :key="interpretation"
