@@ -177,9 +177,15 @@ export default {
 			this.play();
 		},
 
-		loadingpercent: function () {
-			if (this.loadingpercent==100) {
+
+
+		readyVerification: function () {
+			
+			if (this.readyVerification == 2) {
+				// FLAG
+				this.isLoaded = true;
 				this.totalDuration = this.wavesurfer.getDuration();
+
 				let that = this;
 				// length of output array/2, accuracy (irrelevant), don't popup a new window, start at 0,
 				let totallength=(this.totalDuration/2)*100
@@ -197,15 +203,9 @@ export default {
 						else {console.log("duplicating peaks information")
 							that.$store.commit("updatePeaksData", result)}
 					});
-			}
-		},
 
-		readyVerification: function () {
-			
-			if (this.readyVerification == 2) {
-				// FLAG
-				this.isLoaded = true;
-				this.totalDuration = this.wavesurfer.getDuration();
+
+				
 				// console.log(this.totalDuration)
 				this.$store.commit("updateAudioDuration", this.totalDuration * 1000);
 				this.endTimeSeconds = this.totalDuration;
