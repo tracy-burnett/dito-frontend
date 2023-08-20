@@ -1,5 +1,5 @@
 <template>
-   <div class="flex flex-row h-[20px] w-full bg-blue-50" style="position:absolute;">
+   <div class="flex flex-row h-[20px] w-full bg-blue-50">
 
 	   <div class="flex flex-col h-full bg-blue-100">	
 		<!-- playback speed slider -->
@@ -66,7 +66,7 @@
 					<p>please wait while the audio file is uploaded to the server</p>
 				</div>
 	</div>
-	   <div class="flex w-[30px]">
+	   <div class="flex w-[30px] container">
 			<!-- bottom-most time entry box (for end of view window) -->
 			<div id="end" ref="end" class="end">
 				<input type="string" class="text-sm" v-model="endTime"
