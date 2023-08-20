@@ -177,8 +177,8 @@ export default {
 			this.play();
 		},
 
-		readyVerification: function () {
-			if (this.readyVerification == 1) {
+		loadingpercent: function () {
+			if (this.loadingpercent==100) {
 				this.totalDuration = this.wavesurfer.getDuration();
 				let that = this;
 				// length of output array/2, accuracy (irrelevant), don't popup a new window, start at 0,
@@ -197,8 +197,10 @@ export default {
 						else {console.log("duplicating peaks information")
 							that.$store.commit("updatePeaksData", result)}
 					});
-				
 			}
+		},
+
+		readyVerification: function () {
 			
 			if (this.readyVerification == 2) {
 				// FLAG
