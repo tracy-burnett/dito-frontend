@@ -346,7 +346,7 @@ export default {
 
 		// https://wavesurfer-js.org
 		this.wavesurfer = WaveSurfer.create({
-			container: document.body,
+			container: this.$refs.waveforms,
 			waveColor: "#94a3b8",
 			cursorColor: "red",
 			// autoCenter: false,
@@ -357,14 +357,14 @@ export default {
 			hideScrollbar: true,
 			// barRadius: 3,
 			vertical: true,
-//			plugins: [
-//    				WaveSurfer.Minimap.create({
-//					container: this.$refs.miniwaveform,
-//					waveColor: "#777",
-//					progressColor: "#222",
-//					showOverview: true,
-  //  				}),
-  //			],
+			plugins: [
+    				WaveSurfer.Minimap.create({
+					container: this.$refs.miniwaveform,
+					waveColor: "#777",
+					progressColor: "#222",
+					showOverview: true,
+    				}),
+  			],
 		});
 
 		this.regions = this.wavesurfer.registerPlugin(WaveSurfer.Regions.create({
