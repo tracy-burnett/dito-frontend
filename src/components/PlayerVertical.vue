@@ -2,7 +2,7 @@
 	<div>
 			<!-- waveform display -->
 
-				<div id="waveform" ref="waveform" class="flex waveform"></div>
+				<div id="waveform" ref="waveform" class="waveform"></div>
 
 
 	</div>
