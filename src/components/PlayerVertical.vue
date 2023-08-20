@@ -358,7 +358,7 @@ export default {
 			// normalize: true,
 			hideScrollbar: true,
 			// barRadius: 3,
-			vertical: true,
+			// vertical: true,
 			plugins: [
     				WaveSurfer.Minimap.create({
 					container: this.$refs.miniwaveform,
