@@ -189,6 +189,7 @@ export default {
 				var peakstemp = this.wavesurfer.backend.getPeaks(totallength)
 
 				console.log("peakstemp created")
+				console.log(peakstemp)
 				
 				var arr = [].map.call(peakstemp, function (val) {
         				return Math.round(val * 10000) / 10000;
