@@ -1,7 +1,7 @@
 <template>
-	<div class="flex flex-row h-[15vh] w-[80vw] mb-[6vh]" style="position:fixed;">
+	<div class="flex flex-row h-[15vh] w-4/5 mb-[6vh]" style="position:fixed;">
 
-	   <div class="flex flex-col">	
+	   <div class="flex flex-col h-[15vh]">	
 		<!-- playback speed slider -->
 		<div class="flex justify-center">
 			<span
@@ -24,7 +24,7 @@
 	   </div>
 		<!-- audio player body -->
 	   
-	   <div class="container flex flex-col shadow-xl rounded-xl -mt-[.5vh]">
+	   <div class="container flex flex-col h-[15vh] shadow-xl rounded-xl -mt-[.5vh]">
 			<!-- top-most time entry box (for start of view window) -->
 			<div id="start" ref="start" class="start">
 				<input class="text-sm" type="string" v-model="startTime"
@@ -47,19 +47,19 @@
 			</div>
 	   </div>		
 			<!-- waveform display -->
-			<div class="flex flex-col">
+			<div class="flex flex-col h-[15vh]">
 				<div id="waveform" ref="waveform" class="waveform"></div>
 				<div class="midwaveform"></div>
 				<div id="miniwaveform" ref="miniwaveform" class="miniwaveform"></div>
-				<div class="absolute h-[30vh] z-10 content-center w-full flex flex-col py-[14vh] px-[1vw] text-sm"
+				<div class="absolute h-[15vh] z-10 content-center w-full flex flex-col py-[14vh] px-[1vw] text-sm"
 					style="background: #dbeafe;" v-if="loadingpercent > 0 && loadingpercent < 100">
 					<p>waveform {{ loadingpercent }}% completed</p>
 				</div>
-				<div class="absolute h-[30vh] z-10 content-center w-full flex flex-col py-[6vh] px-[1vw] text-sm"
+				<div class="absolute h-[15vh] z-10 content-center w-full flex flex-col py-[6vh] px-[1vw] text-sm"
 					style="background: #dbeafe;" v-else-if="readyVerification == 1 && totalDuration == 0">
 					<p>please be patient while your audio file finishes loading</p>
 				</div>
-				<div class="absolute h-[30vh] z-10 content-center w-full flex flex-col py-[6vh] px-[1vw] text-sm"
+				<div class="absolute h-[15vh] z-10 content-center w-full flex flex-col py-[6vh] px-[1vw] text-sm"
 					style="background: #dbeafe;" v-else-if="readyVerification == 0">
 					<p>please wait while the audio file is uploaded to the server</p>
 				</div>
@@ -837,7 +837,6 @@ export default {
 	/* height: 80vh; */
 	/* min-height: 600px; */
 	/* width: 7vw; */
-	width: 400vw;
 	position: relative;
 	/* left: 10px; */
 	/* margin-top: 1vh; */
@@ -852,8 +851,7 @@ export default {
 
 .waveform {
 	/* flex: 1; */
-	height: 15vh;
-	width: 300vw;
+	height: 9vh;
 	/* margin-left: 10px; */
 	background: #dbeafe;
 
@@ -864,15 +862,13 @@ export default {
 
 .midwaveform {
 	/* height: 79vh; */
-	width: 300vw;
-	height: 1px;
+	height: 1vh;
 	background: #dbeafe;
 }
 
 .miniwaveform {
 	/* flex: 1; */
-	/* height: 79vh; */
-	width: 24px;
+	height: 5vh;
 	background: #dbeafe;
 
 	/* background: linear-gradient(90deg, #155E75, #64748B, #155E75) */
