@@ -47,11 +47,11 @@
 			</div>
 	   </div>		
 			<!-- waveform display -->
-			<div class="flex flex-col h-[15vh]">
-				<div id="waveform" ref="waveform" class="waveform w-full"></div>
-				<div class="midwaveform w-full"></div>
-				<div id="miniwaveform" ref="miniwaveform" class="miniwaveform w-full"></div>
-				<div class="absolute h-[15vh] z-10 content-center w-full flex flex-col py-[14vh] px-[1vw] text-sm"
+			<div class="flex flex-col h-[15vh] w-full">
+				<div id="waveform" ref="waveform" class="waveform h-[9vh] w-full"></div>
+				<div class="midwaveform w-full h-[1vh]"></div>
+				<div id="miniwaveform" ref="miniwaveform" class="miniwaveform h-[5vh] w-full"></div>
+				<div class="absolute h-[15vh] z-10 content-center w-full flex flex-col py-[6vh] px-[1vw] text-sm"
 					style="background: #dbeafe;" v-if="loadingpercent > 0 && loadingpercent < 100">
 					<p>waveform {{ loadingpercent }}% completed</p>
 				</div>
