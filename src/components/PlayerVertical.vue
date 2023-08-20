@@ -352,19 +352,19 @@ export default {
 			// autoCenter: false,
 			progressColor: "#475569",
 			// barWidth: 2,
-			barHeight: 4,
+//			barHeight: 4,
 			// normalize: true,
-			hideScrollbar: true,
+//			hideScrollbar: true,
 			// barRadius: 3,
-			vertical: true,
-			plugins: [
-    				WaveSurfer.Minimap.create({
-					container: this.$refs.miniwaveform,
-					waveColor: "#777",
-					progressColor: "#222",
-					showOverview: true,
-    				}),
-  			],
+//			vertical: true,
+//			plugins: [
+//    				WaveSurfer.Minimap.create({
+//					container: this.$refs.miniwaveform,
+//					waveColor: "#777",
+//					progressColor: "#222",
+//					showOverview: true,
+  //  				}),
+  //			],
 		});
 
 		this.regions = this.wavesurfer.registerPlugin(WaveSurfer.Regions.create({
