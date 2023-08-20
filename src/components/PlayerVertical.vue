@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-row h-[20vh] mt-[6vh]" style="position:fixed;">
+	<div class="flex flex-row h-[15vh] w-[80vw] mb-[6vh]" style="position:fixed;">
 
 	   <div class="flex flex-col">	
 		<!-- playback speed slider -->
@@ -837,7 +837,7 @@ export default {
 	/* height: 80vh; */
 	/* min-height: 600px; */
 	/* width: 7vw; */
-	width: 100px;
+	width: 400vw;
 	position: relative;
 	/* left: 10px; */
 	/* margin-top: 1vh; */
@@ -852,8 +852,8 @@ export default {
 
 .waveform {
 	/* flex: 1; */
-	height: 30vh;
-	width: 75px;
+	height: 15vh;
+	width: 300vw;
 	/* margin-left: 10px; */
 	background: #dbeafe;
 
@@ -864,8 +864,8 @@ export default {
 
 .midwaveform {
 	/* height: 79vh; */
-	width: 1px;
-	height: 30vh;
+	width: 300vw;
+	height: 1px;
 	background: #dbeafe;
 }
 
