@@ -369,6 +369,7 @@ export default {
 			backend: "MediaElement",
 			responsive: true,
 			waveColor: "#94a3b8",
+			partialRender: true,
 			cursorColor: "red",
 			// autoCenter: false,
 			progressColor: "#475569",
