@@ -72,20 +72,7 @@ export default {
 			.then((data) => {
 				// console.log(data)
 				this.audioURL = data["url"];
-				if (data["peaks"]) {
-					console.log("loading peaks from backend!")
-					console.log(data["peaks"])
-					console.log(JSON.parse(data["peaks"]))
-					// console.log(Math.max(...JSON.parse(data["peaks"])))
-					// console.log(JSON.parse(data["peaks"]).reduce((max, v) => max >= v ? max : v, -Infinity))
-
-					this.wavesurfer.load(this.audioURL, JSON.parse(data["peaks"]));
-					this.$store.commit("updatePeaksData", data["peaks"])
-				} else {
-					// console.log("generating new peaks on frontend")
-					this.wavesurfer.load(this.audioURL);
-					this.sendtobackendBoolean = true;
-				}
+				this.wavesurfer.load(this.audioURL)
 			})
 			.catch((error) => {
 				console.error("Error:", error);
