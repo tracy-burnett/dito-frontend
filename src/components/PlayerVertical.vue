@@ -866,52 +866,6 @@ export default {
 	background: white;
 }
 
-
-.waveform {
-	/* flex: 1; */
-	display: flex;
-	height: 30vh;
-	width: 75px;
-	/* margin-left: 10px; */
-	background: #dbeafe;
-
-	/* background: linear-gradient(90deg, #155E75, #64748B, #155E75) */
-	/* margin-left: 10px; */
-	/* margin-right: 10px; */
-}
-
-.midwaveform {
-	display: flex;
-	/* height: 79vh; */
-	width: 1px;
-	height: 30vh;
-	background: #dbeafe;
-}
-
-.miniwaveform {
-	/* flex: 1; */
-	display: flex;
-	/* height: 79vh; */
-	width: 24px;
-	background: #dbeafe;
-
-	/* background: linear-gradient(90deg, #155E75, #64748B, #155E75) */
-	/* margin-left: 10px; */
-	/* margin-right: 10px; *
-		height: 80vh;
-	/* min-height: 600px; */
-	/* width: 7vw; */
-	/* position: relative; */
-	/* left: 10px; */
-	/* margin-top: 1vh; */
-	/* margin-left: 0.2vw; */
-	/* top: 5px; */
-	/* display: inline; */
-	/*max-width: 7%;*/
-	/* text-align: center; */
-	/*background: linear-gradient(90deg, #164e63, 30%, #1e293b, 70%, #164e63);*/
-}
-
 /* .loading { */
 /* display: flex; */
 /* margin-left: 15%; */
