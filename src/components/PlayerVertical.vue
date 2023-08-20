@@ -33,7 +33,7 @@ export default {
 			progressColor: "#475569",
 		});
 
-		this.wavesurfer.load("https://tile.loc.gov/storage-services/media/afc/cal/afc1986022_sr09b02.mp3");
+		this.wavesurfer.load("https://citizen-dj.labs.loc.gov/audio/samplepacks/loc-american-english-dialect-recordings/Conversation-with-10-year-old-black-female-Washington-DC_afccal000391_002_00-05-36.mp3");
 				
 		this.wavesurfer.on('error', function (err) {
 			console.warn("error", err?.message || err);
