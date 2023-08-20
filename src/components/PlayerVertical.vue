@@ -346,7 +346,7 @@ export default {
 
 		// https://wavesurfer-js.org
 		this.wavesurfer = WaveSurfer.create({
-			container: this.$refs.waveforms,
+			container: this.$refs.waveform,
 			waveColor: "#94a3b8",
 			cursorColor: "red",
 			// autoCenter: false,
