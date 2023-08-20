@@ -106,7 +106,7 @@ export default {
 			})
 			.then((data) => {
 				// console.log(data)
-				this.audioURL = data["url"];
+				this.audioURL = https://www2.cs.uic.edu/~i101/SoundFiles/BabyElephantWalk60.wav
 
 				this.wavesurfer.load(this.audioURL);
 				
@@ -118,6 +118,10 @@ export default {
 
 		this.wavesurfer.on('error', function (err) {
 			console.warn("error", err?.message || err);
+		});
+		
+		this.wavesurfer.on('ready', function () {
+			console.log("should be viewable now")
 		});
 
 
