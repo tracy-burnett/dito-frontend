@@ -346,17 +346,17 @@ export default {
 
 		// https://wavesurfer-js.org
 		this.wavesurfer = WaveSurfer.create({
-			container: this.$refs.waveform,
+			container: document.body,
 			waveColor: "#94a3b8",
 			cursorColor: "red",
 			// autoCenter: false,
 			progressColor: "#475569",
 			// barWidth: 2,
-//			barHeight: 4,
+			barHeight: 4,
 			// normalize: true,
-//			hideScrollbar: true,
+			hideScrollbar: true,
 			// barRadius: 3,
-//			vertical: true,
+			vertical: true,
 //			plugins: [
 //    				WaveSurfer.Minimap.create({
 //					container: this.$refs.miniwaveform,
