@@ -431,7 +431,7 @@ export default {
 			
 			console.log("total length is " + totallength)
 			
-			const peaks = wavesurfer.exportPeaks({
+			const peaks = that.wavesurfer.exportPeaks({
 				channels: 1, // how many audio channels to export, defaults to 1
 				maxLength: that.totallength, // how many peaks per channel
 				precision: 1e3, // round to 3 digits after comma
