@@ -24,7 +24,7 @@
 	   </div>
 		<!-- audio player body -->
 	   
-	   <div class="container flex flex-col h-[15vh] shadow-xl rounded-xl -mt-[.5vh]">
+	   <div class="container flex flex-col h-full shadow-xl rounded-xl -mt-[.5vh]">
 			<!-- top-most time entry box (for start of view window) -->
 			<div id="start" ref="start" class="start">
 				<input class="text-sm" type="string" v-model="startTime"
@@ -49,8 +49,8 @@
 			<!-- waveform display -->
 			<div class="flex flex-col h-[15vh] w-full">
 				<div id="waveform" ref="waveform" class="waveform h-[9vh] w-full"></div>
-				<div class="midwaveform w-full h-[1vh]"></div>
-				<div id="miniwaveform" ref="miniwaveform" class="miniwaveform h-[5vh] w-full"></div>
+				<div class="midwaveform w-full h-[1px]"></div>
+				<div id="miniwaveform" ref="miniwaveform" class="miniwaveform h-[3vh] w-full"></div>
 				<div class="absolute h-[15vh] z-10 content-center w-full flex flex-col py-[6vh] px-[1vw] text-sm"
 					style="background: #dbeafe;" v-if="loadingpercent > 0 && loadingpercent < 100">
 					<p>waveform {{ loadingpercent }}% completed</p>
@@ -851,7 +851,6 @@ export default {
 
 .waveform {
 	/* flex: 1; */
-	height: 9vh;
 	/* margin-left: 10px; */
 	background: #dbeafe;
 
@@ -862,13 +861,11 @@ export default {
 
 .midwaveform {
 	/* height: 79vh; */
-	height: 1vh;
 	background: #dbeafe;
 }
 
 .miniwaveform {
 	/* flex: 1; */
-	height: 5vh;
 	background: #dbeafe;
 
 	/* background: linear-gradient(90deg, #155E75, #64748B, #155E75) */
