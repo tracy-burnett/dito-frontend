@@ -829,42 +829,6 @@ export default {
 </script>
 
 <style scoped>
-.disabled {
-	font-size: 70%;
-	color: white;
-	text-align: center;
-	position: relative;
-	/* margin-top: -1vh; */
-	height: 18px;
-	width: 99%;
-	/* margin-bottom: 2vh; */
-	/*background: radial-gradient(#798597, #616977);*/
-	background: #475569;
-}
-
-.clear {
-	font-size: 70%;
-	color: white;
-	text-align: center;
-	position: relative;
-	/* margin-top: -1vh; */
-	height: 18px;
-	width: 99%;
-	/* margin-bottom: 2vh; */
-	/*background: radial-gradient(#798597, #616977);*/
-	background: #475569;
-}
-
-.clear:hover {
-	border-width: 2px;
-	border-color: white;
-}
-
-.clear:active {
-	/*background: radial-gradient(#636c7a, #94a3b8);*/
-	/*transform: translateX(1px) translateY(1px);*/
-	background: white;
-}
 
 .container {
 	/* height: 80vh; */
@@ -926,6 +890,43 @@ export default {
 	/*max-width: 7%;*/
 	/* text-align: center; */
 	/*background: linear-gradient(90deg, #164e63, 30%, #1e293b, 70%, #164e63);*/
+}
+	
+.disabled {
+	font-size: 70%;
+	color: white;
+	text-align: center;
+	position: relative;
+	/* margin-top: -1vh; */
+	height: 18px;
+	width: 99%;
+	/* margin-bottom: 2vh; */
+	/*background: radial-gradient(#798597, #616977);*/
+	background: #475569;
+}
+
+.clear {
+	font-size: 70%;
+	color: white;
+	text-align: center;
+	position: relative;
+	/* margin-top: -1vh; */
+	height: 18px;
+	width: 99%;
+	/* margin-bottom: 2vh; */
+	/*background: radial-gradient(#798597, #616977);*/
+	background: #475569;
+}
+
+.clear:hover {
+	border-width: 2px;
+	border-color: white;
+}
+
+.clear:active {
+	/*background: radial-gradient(#636c7a, #94a3b8);*/
+	/*transform: translateX(1px) translateY(1px);*/
+	background: white;
 }
 
 /* .loading { */
