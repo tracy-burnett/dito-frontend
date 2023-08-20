@@ -1,7 +1,7 @@
 <template>
-	<div class="flex flex-row h-[15vh] w-4/5 mb-[6vh]" style="position:fixed;">
+	<div class="flex flex-row h-[20px] w-4/5 mb-[6vh]" style="position:fixed;">
 
-	   <div class="flex flex-col h-[15vh]">	
+	   <div class="flex flex-col h-[20px]">	
 		<!-- playback speed slider -->
 		<div class="flex justify-center">
 			<span
@@ -24,7 +24,7 @@
 	   </div>
 		<!-- audio player body -->
 	   
-	   <div class="container flex flex-col h-full shadow-xl rounded-xl -mt-[.5vh]">
+	   <div class="container flex flex-col h-[20px] shadow-xl rounded-xl">
 			<!-- top-most time entry box (for start of view window) -->
 			<div id="start" ref="start" class="start">
 				<input class="text-sm" type="string" v-model="startTime"
@@ -47,7 +47,7 @@
 			</div>
 	   </div>		
 			<!-- waveform display -->
-			<div class="flex flex-col h-[15vh] w-full">
+			<div class="flex flex-col h-[20px] w-full">
 				<div id="waveform" ref="waveform" class="waveform h-[10px]5 w-full"></div>
 				<div class="midwaveform w-full h-[1px]"></div>
 				<div id="miniwaveform" ref="miniwaveform" class="miniwaveform h-[5px] w-full"></div>
