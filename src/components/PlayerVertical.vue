@@ -1,12 +1,12 @@
 <template>
 	<div class="flex flex-row h-[120px] w-full border-2 border-cyan-600">
-		<div class="flex w-[120px] border-1 border-cyan-300">hi
+		<div class="flex flex-col w-[120px] border-1 border-cyan-300">hi
 		</div>
-		<div class="flex w-[120px] border-1 border-cyan-300">hi
+		<div class="flex flex-col w-[120px] border-1 border-cyan-300">hi
 		</div>
-		<div class="grow border-1 border-cyan-300">hi
+		<div class="grow flex-col border-1 border-cyan-300">hi
 		</div>
-		<div class="flex w-[120px] border-1 border-cyan-300">hi
+		<div class="flex flex-col w-[120px] border-1 border-cyan-300">hi
 		</div>
 	</div>
 
