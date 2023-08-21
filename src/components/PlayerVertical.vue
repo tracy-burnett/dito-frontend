@@ -13,7 +13,7 @@
 	
    <div class="flex flex-row h-[120px] w-full border-2 border-black">
 
-	   <div class="flex flex-col h-full border-2 border-black">	
+	   <div class="flex flex-col w-[120px] border-1 border-cyan-300">	
 		<!-- playback speed slider -->
 		<div class="flex justify-center">
 			<span
@@ -36,7 +36,7 @@
 	   </div>
 		<!-- audio player body -->
 	   
-	   <div class="container flex flex-col h-full shadow-xl rounded-xl bg-blue-200">
+	   <div class="container flex flex-col  w-[120px] border-1 border-cyan-300 shadow-xl rounded-xl">
 			<!-- top-most time entry box (for start of view window) -->
 			<div id="start" ref="start" class="start">
 				<input class="text-sm" type="string" v-model="startTime"
@@ -59,7 +59,7 @@
 			</div>
 	   </div>		
 			<!-- waveform display -->
-	<div class="flex w-3/5 bg-blue-300">
+	<div class="grow border-1 flex-col border-cyan-300">
 		<div class="h-full w-full absolute">
 				<div id="waveform" ref="waveform" class="waveform h-[10px] w-full"></div>
 				<div class="midwaveform w-full h-[1px]"></div>
@@ -78,7 +78,7 @@
 					<p>please wait while the audio file is uploaded to the server</p>
 				</div>
 	</div>
-	   <div class="flex w-[30px] container">
+	   <div class="flex  w-[120px] border-1 border-cyan-300 container">
 			<!-- bottom-most time entry box (for end of view window) -->
 			<div id="end" ref="end" class="end">
 				<input type="string" class="text-sm" v-model="endTime"
@@ -851,11 +851,11 @@ export default {
 .container {
 	/* height: 80vh; */
 	/* min-height: 600px; */
-	width: 7vw;
-	position: relative;
+	/* width: 7vw; */
+	/* position: relative; */
 	/* left: 10px; */
 	/* margin-top: 1vh; */
-	margin-left: 0.2vw;
+	/* margin-left: 0.2vw; */
 	/* top: 5px; */
 	display: inline;
 	/*max-width: 7%;*/
