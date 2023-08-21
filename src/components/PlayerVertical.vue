@@ -13,7 +13,7 @@
 	
    <div class="flex flex-row h-[120px] w-full ">
 
-	   <div class="flex flex-col w-[120px]">	
+	   <div class="flex flex-col w-1/12">	
 		<!-- playback speed slider -->
 		<div class="flex justify-center">
 			<span
@@ -36,7 +36,7 @@
 	   </div>
 		<!-- audio player body -->
 	   
-	   <div class="container flex flex-col  w-[120px] shadow-xl rounded-xl">
+	   <div class="container flex flex-col  w-1/12 shadow-xl rounded-xl">
 			<!-- top-most time entry box (for start of view window) -->
 			<div id="start" ref="start" class="start">
 				<input class="text-sm" type="string" v-model="startTime"
@@ -59,7 +59,7 @@
 			</div>
 	   </div>		
 			<!-- waveform display -->
-	<div class="h-[60px] max-w-full">
+	<div class="h-[60px] w-9/12">
 				<div id="waveform" ref="waveform"></div>
 				<div class="absolute z-10 text-center h-[120px] flex-col  text-sm "
 					style="background: #dbeafe;" v-if="loadingpercent > 0 && loadingpercent < 100">
@@ -74,7 +74,7 @@
 					<p>please wait while the audio file is uploaded to the server</p>
 				</div>
 	</div>
-	   <div class="flex  w-[120px] container">
+	   <div class="flex  w-1/12 container">
 			<!-- bottom-most time entry box (for end of view window) -->
 			<div id="end" ref="end" class="end">
 				<input type="string" class="text-sm" v-model="endTime"
