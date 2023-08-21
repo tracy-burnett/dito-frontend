@@ -59,11 +59,11 @@
 			</div>
 	   </div>		
 			<!-- waveform display -->
-	<div class="grow border-1 flex-col border-cyan-300">
+	<div class="grow border-1 h-[120px] border-cyan-300">
 		<div>
-				<div id="waveform" ref="waveform" class="waveform h-[89px]"></div>
+				<div id="waveform" ref="waveform" class="waveform h-[79px]"></div>
 				<div class="midwaveform h-[1px]"></div>
-				<div id="miniwaveform" ref="miniwaveform" class="miniwaveform h-[30px]"></div>
+				<div id="miniwaveform" ref="miniwaveform" class="miniwaveform h-[20px]"></div>
 		</div>
 				<div class="absolute h-[15vh] z-10 content-center w-full flex-col py-[6vh] px-[1vw] text-sm"
 					style="background: #dbeafe;" v-if="loadingpercent > 0 && loadingpercent < 100">
