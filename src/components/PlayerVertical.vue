@@ -11,9 +11,9 @@
 	</div> -->
 
 	
-   <div class="flex flex-row h-[120px] w-full border-2 border-black">
+   <div class="flex flex-row h-[120px] w-full ">
 
-	   <div class="flex flex-col w-[120px] border-1 border-cyan-300">	
+	   <div class="flex flex-col w-[120px]">	
 		<!-- playback speed slider -->
 		<div class="flex justify-center">
 			<span
@@ -36,7 +36,7 @@
 	   </div>
 		<!-- audio player body -->
 	   
-	   <div class="container flex flex-col  w-[120px] border-1 border-cyan-300 shadow-xl rounded-xl">
+	   <div class="container flex flex-col  w-[120px] shadow-xl rounded-xl">
 			<!-- top-most time entry box (for start of view window) -->
 			<div id="start" ref="start" class="start">
 				<input class="text-sm" type="string" v-model="startTime"
@@ -59,7 +59,7 @@
 			</div>
 	   </div>		
 			<!-- waveform display -->
-	<div class="grow border-1 h-[60px] border-blue-300">
+	<div class="grow  h-[60px] ">
 				<div id="waveform" ref="waveform"></div>
 				<div class="absolute z-10 text-center h-[120px] flex-col  text-sm "
 					style="background: #dbeafe;" v-if="loadingpercent > 0 && loadingpercent < 100">
@@ -74,7 +74,7 @@
 					<p>please wait while the audio file is uploaded to the server</p>
 				</div>
 	</div>
-	   <div class="flex  w-[120px] border-1 border-cyan-300 container">
+	   <div class="flex  w-[120px] container">
 			<!-- bottom-most time entry box (for end of view window) -->
 			<div id="end" ref="end" class="end">
 				<input type="string" class="text-sm" v-model="endTime"
@@ -366,8 +366,8 @@ export default {
 			// autoCenter: false,
 			progressColor: "#475569",
 			// barWidth: 2,
-			barHeight: 1,
-			height: 100,
+			barHeight: 2,
+			height: 90,
 			// normalize: true,
 			hideScrollbar: true,
 			// barRadius: 3,
