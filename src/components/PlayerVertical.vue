@@ -372,6 +372,15 @@ export default {
 			hideScrollbar: true,
 			// barRadius: 3,
 			// vertical: true,
+			plugins: [
+    				WaveSurfer.Minimap.create({
+					height: 20,
+					waveColor: "#777",
+					progressColor: "#222",
+					showOverview: true,
+					barHeight: 1,
+    				}),
+  			],
 		});
 
 		this.regions = this.wavesurfer.registerPlugin(WaveSurfer.Regions.create({
