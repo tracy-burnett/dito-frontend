@@ -4,7 +4,7 @@
 		</div>
 		<div class="flex w-[120px] border-1 border-cyan-300">hi
 		</div>
-		<div class="flex border-1 border-cyan-300">hi
+		<div class="grow border-1 border-cyan-300">hi
 		</div>
 		<div class="flex w-[120px] border-1 border-cyan-300">hi
 		</div>
