@@ -379,7 +379,6 @@ export default {
 					progressColor: "#222",
 					showOverview: true,
 					barHeight: 1,
-					showRegions: true,
     				}),
   			],
 		});
