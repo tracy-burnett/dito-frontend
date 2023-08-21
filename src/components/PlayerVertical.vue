@@ -1,4 +1,9 @@
 <template>
+	<div class="flex flex-row h-[30px] w-full border-2 border-cyan-600">
+		hihihihi
+	</div>
+
+	
    <div class="flex flex-row h-[30px] w-[200px] border-2 border-black">
 
 	   <div class="flex flex-col h-full border-2 border-black">	
