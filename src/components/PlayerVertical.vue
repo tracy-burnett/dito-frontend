@@ -59,17 +59,17 @@
 			</div>
 	   </div>		
 			<!-- waveform display -->
-	<div class="grow border-1 h-[120px] border-blue-300">
+	<div class="grow border-1 h-[60px] border-blue-300">
 				<div id="waveform" ref="waveform" class="h-[60px]"></div>
-				<div class="absolute z-10 text-center h-full flex-col  text-sm "
+				<div class="absolute z-10 text-center h-[120px] flex-col  text-sm "
 					style="background: #dbeafe;" v-if="loadingpercent > 0 && loadingpercent < 100">
 					<p>waveform {{ loadingpercent }}% completed</p>
 				</div>
-				<div class="absolute z-10 text-center h-full flex-col  text-sm"
+				<div class="absolute z-10 text-center h-[120px] flex-col  text-sm"
 					style="background: #dbeafe;" v-else-if="readyVerification == 1 && totalDuration == 0">
 					<p>please be patient while your audio file finishes loading</p>
 				</div>
-				<div class="absolute z-10 text-center h-full flex-col text-sm"
+				<div class="absolute z-10 text-center h-[120px] flex-col text-sm"
 					style="background: #dbeafe;" v-else-if="readyVerification == 0">
 					<p>please wait while the audio file is uploaded to the server</p>
 				</div>
