@@ -60,7 +60,7 @@
 	   </div>		
 			<!-- waveform display -->
 	<div class="grow border-1 h-[120px] border-blue-300">
-				<div id="waveform" ref="waveform" ></div>
+				<div id="waveform" ref="waveform" class="h-[60px]"></div>
 				<div class="absolute z-10 text-center h-full flex-col  text-sm "
 					style="background: #dbeafe;" v-if="loadingpercent > 0 && loadingpercent < 100">
 					<p>waveform {{ loadingpercent }}% completed</p>
