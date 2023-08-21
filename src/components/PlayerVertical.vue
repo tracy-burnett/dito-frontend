@@ -885,8 +885,8 @@ export default {
 
 	/* background: linear-gradient(90deg, #155E75, #64748B, #155E75) */
 	/* margin-left: 10px; */
-	/* margin-right: 10px; *
-		height: 80vh;
+	/* margin-right: 10px; */
+	/*	height: 80vh;  */
 	/* min-height: 600px; */
 	/* width: 7vw; */
 	/* position: relative; */
