@@ -61,8 +61,8 @@
 			<!-- waveform display -->
 	<div class="grow border-1 h-[120px] border-blue-300">
 		<div class="h-full border-cyan-600">
-				<div id="waveform" ref="waveform" class="waveform h-2/3"></div>
-				<div id="miniwaveform" ref="miniwaveform" class="miniwaveform h-1/3"></div>
+				<div id="waveform" ref="waveform" class="h-2/3"></div>
+				<!-- <div id="miniwaveform" ref="miniwaveform" class="h-1/3"></div> -->
 		</div>
 				<div class="z-10 content-center h-full w-full flex-col  text-sm"
 					style="background: #dbeafe;" v-if="loadingpercent > 0 && loadingpercent < 100">
@@ -860,42 +860,6 @@ export default {
 	/*max-width: 7%;*/
 	text-align: center;
 	background: #334155;
-	/*background: linear-gradient(90deg, #164e63, 30%, #1e293b, 70%, #164e63);*/
-}
-
-.waveform {
-	/* flex: 1; */
-	/* margin-left: 10px; */
-	background: #dbeafe;
-
-	/* background: linear-gradient(90deg, #155E75, #64748B, #155E75) */
-	/* margin-left: 10px; */
-	/* margin-right: 10px; */
-}
-
-.midwaveform {
-	/* height: 79vh; */
-	background: #dbeafe;
-}
-
-.miniwaveform {
-	/* flex: 1; */
-	background: #dbeafe;
-
-	/* background: linear-gradient(90deg, #155E75, #64748B, #155E75) */
-	/* margin-left: 10px; */
-	/* margin-right: 10px; */
-	/*	height: 80vh;  */
-	/* min-height: 600px; */
-	/* width: 7vw; */
-	/* position: relative; */
-	/* left: 10px; */
-	/* margin-top: 1vh; */
-	/* margin-left: 0.2vw; */
-	/* top: 5px; */
-	/* display: inline; */
-	/*max-width: 7%;*/
-	/* text-align: center; */
 	/*background: linear-gradient(90deg, #164e63, 30%, #1e293b, 70%, #164e63);*/
 }
 	
