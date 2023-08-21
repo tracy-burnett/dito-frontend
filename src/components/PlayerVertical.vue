@@ -62,18 +62,17 @@
 	<div class="grow border-1 h-[120px] border-blue-300">
 		<div class="h-full border-cyan-600">
 				<div id="waveform" ref="waveform" class="waveform h-2/3"></div>
-				<div class="midwaveform"></div>
 				<div id="miniwaveform" ref="miniwaveform" class="miniwaveform h-1/3"></div>
 		</div>
-				<div class="z-10 content-center w-full flex-col py-[6vh] px-[1vw] text-sm"
+				<div class="z-10 content-center h-full w-full flex-col  text-sm"
 					style="background: #dbeafe;" v-if="loadingpercent > 0 && loadingpercent < 100">
 					<p>waveform {{ loadingpercent }}% completed</p>
 				</div>
-				<div class="z-10 content-center w-full flex-col py-[6vh] px-[1vw] text-sm"
+				<div class="z-10 content-center h-full w-full flex-col  text-sm"
 					style="background: #dbeafe;" v-else-if="readyVerification == 1 && totalDuration == 0">
 					<p>please be patient while your audio file finishes loading</p>
 				</div>
-				<div class="z-10 content-center w-full flex-col py-[6vh] px-[1vw] text-sm"
+				<div class="z-10 content-center h-full w-full flex-col text-sm"
 					style="background: #dbeafe;" v-else-if="readyVerification == 0">
 					<p>please wait while the audio file is uploaded to the server</p>
 				</div>
