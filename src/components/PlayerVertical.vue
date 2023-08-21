@@ -60,10 +60,10 @@
 	   </div>		
 			<!-- waveform display -->
 	<div class="grow border-1 flex-col border-cyan-300">
-		<div class="h-full w-full absolute">
-				<div id="waveform" ref="waveform" class="waveform h-[10px] w-full"></div>
-				<div class="midwaveform w-full h-[1px]"></div>
-				<div id="miniwaveform" ref="miniwaveform" class="miniwaveform h-[5px] w-full"></div>
+		<div>
+				<div id="waveform" ref="waveform" class="waveform"></div>
+				<div class="midwaveform"></div>
+				<div id="miniwaveform" ref="miniwaveform" class="miniwaveform"></div>
 		</div>
 				<div class="absolute h-[15vh] z-10 content-center w-full flex-col py-[6vh] px-[1vw] text-sm"
 					style="background: #dbeafe;" v-if="loadingpercent > 0 && loadingpercent < 100">
