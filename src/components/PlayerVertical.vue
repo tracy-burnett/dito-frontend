@@ -1,14 +1,15 @@
 <template>
-	<!-- <div class="flex flex-row h-[120px] w-full border-2 border-cyan-600">
+	<div class="flex flex-row h-[120px] w-full border-2 border-cyan-600">
 		<div class="flex flex-col w-[120px] border-1 border-cyan-300">hi
 		</div>
 		<div class="flex flex-col w-[120px] border-1 border-cyan-300">hi
 		</div>
-		<div class="grow flex-col border-1 border-cyan-300">hi
+		<div class="grow flex-col border-1 border-cyan-300">
+							<div id="waveform" ref="waveform"></div>
 		</div>
 		<div class="flex flex-col w-[120px] border-1 border-cyan-300">hi
 		</div>
-	</div> -->
+	</div>
 
 	
    <div class="flex flex-row h-[120px] w-full border-2 border-black">
@@ -60,7 +61,7 @@
 	   </div>		
 			<!-- waveform display -->
 	<div class="grow border-1 h-[60px] border-blue-300">
-				<div id="waveform" ref="waveform" class="h-[60px]"></div>
+				<div id="waveform" ref="waveforms" class="h-[60px]"></div>
 				<div class="absolute z-10 text-center h-[120px] flex-col  text-sm "
 					style="background: #dbeafe;" v-if="loadingpercent > 0 && loadingpercent < 100">
 					<p>waveform {{ loadingpercent }}% completed</p>
