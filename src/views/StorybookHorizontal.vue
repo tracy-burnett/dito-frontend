@@ -7,7 +7,7 @@
         :audio_ID="audio_ID"
         @rerenderPlayer="playerKey++"
       />
-    </div>
+    </div> 
     <div class="flex items-top">
       <span
         v-if="showAddInterpretationModal"
