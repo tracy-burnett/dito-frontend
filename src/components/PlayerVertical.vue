@@ -11,7 +11,7 @@
 	</div> -->
 
 	 
-   <div class="flex flex-row h-[120px] w-full ">
+   <div class="flex flex-row h-[120px] w-full "> 
 
 	   <div class="flex flex-col w-1/12">	
 		<!-- playback speed slider -->
