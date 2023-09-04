@@ -2,7 +2,7 @@
 	<div class="flex flex-col h-[20vh] mt-[6vh]" style="position:fixed;">
 
 		<!-- playback speed slider -->
-		<div class="flex justify-center">
+		<div class="flex justify-center">  
 			<span
 				:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">{{ $store.state.promptsObject.sPlaybackSpeed }}</span><span
 				class="text-xs" :class="{ 'mt-[1.5vh]': $store.state.promptsObject.name == 'བོད་ཡིག'}">&nbsp;{{ playbackspeed }}x</span>
