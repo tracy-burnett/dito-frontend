@@ -396,18 +396,10 @@ export default {
 							indicesToDelete.push(z);
 							// console.log("deleting second of above")
 						} else if (
-							// if this one is interior to the other one or smaller than the other one and offset with it, then break this while loop, delete the other one and do not index the other one's loop
+							// if this one is interior to the other one, then break this while loop, delete the other one and do not index the other one's loop
 							y != z &&
-							((checkInteriorEnd <= checkExteriorEnd &&
-								checkInteriorStart >= checkExteriorStart) ||
-								(checkInteriorEnd - checkInteriorStart <=
-									checkExteriorEnd - checkExteriorStart &&
-									((checkInteriorStart < checkExteriorStart &&
-										checkInteriorEnd > checkExteriorStart &&
-										checkInteriorEnd < checkExteriorEnd) ||
-										(checkInteriorStart > checkExteriorStart &&
-											checkInteriorStart < checkExteriorEnd &&
-											checkInteriorEnd > checkExteriorEnd))))
+							(checkInteriorEnd <= checkExteriorEnd &&
+								checkInteriorStart >= checkExteriorStart)
 						) {
 							// delete exterior one
 							// console.log(this.substringArray[y])
@@ -415,7 +407,21 @@ export default {
 							// console.log("deleting first of above")
 							indicesToDelete.push(y);
 							break;
-						} // no match; nothing gets deleted; index inner while loop
+						}
+						// else if (
+						// 	// if this one is smaller than the other one and offset with it
+						// 	checkInteriorEnd - checkInteriorStart <=
+						// 			checkExteriorEnd - checkExteriorStart &&
+						// 			((checkInteriorStart < checkExteriorStart &&
+						// 				checkInteriorEnd > checkExteriorStart &&
+						// 				checkInteriorEnd < checkExteriorEnd) ||
+						// 				(checkInteriorStart > checkExteriorStart &&
+						// 					checkInteriorStart < checkExteriorEnd &&
+						// 					checkInteriorEnd > checkExteriorEnd))
+						// ) {
+
+						// }
+						 // no match; nothing gets deleted; index inner while loop
 						z++;
 					}
 					y++;
