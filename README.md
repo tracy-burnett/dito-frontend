@@ -1,16 +1,27 @@
-# Dialect Translation Tool Frontend
+# Dialect Translation Tool Front End
 
-Note: two separate pieces of code in Navbar_Sparse must be updated to accommodate new viewing languages (one has the displayed name and one has the language code).
-Note: main branch auto-deploys to live subdomains for users of dito.live. 
+This is the front end repo for Dito (dialect interpretation and translation online), a project by Tracy Burnett.  Dito:
+- lets public and private teams upload and collaboratively annotate audio data
+- includes an auto-segmenter for audio data transcription
+- calculates explicit phrase alignment between written translations
+- uses phrase alignment information to automatically generate language lessons
+- auto-highlights nested aligned phrases simultaneously in multiple written translations
+
+Visit [Little Horse Crosses River](https://yakaloco.dito.live/storybook/S65cMnPPpJA.m4a?open=aQ_XB5yrA6QkB8X4sUIHyc) to see a sample project created by an undergraduate student team using Dito.
+
+## User Interface Demo Videos
+
+[Part 1](https://www.dropbox.com/s/6b0wnzr2kygpxli/points%201-3.mp4?dl=0 "Demo Video Part 1") (7:31)  
+[Part 2](https://www.dropbox.com/s/2j9l6w8c251x838/points%204-6.mp4?dl=0 "Demo Video Part 2") (10:44)
 
 ## Project setup
 
-Make sure you have both the latest version of NodeJS installed and npm installed.
+Make sure you have both the latest version of NodeJS installed and npm installed.  
 You can find the link to install these here: https://nodejs.org/en/download/
 
 Then, to get started with vue.js, clone the repository then run ```npm install```.
 
-Once installed, run ```npm run serve``` and open https://localhost:8080 in your browser to view a local version of the site.
+Once installed, run ```npm run serve``` and open https://localhost:8080 in your browser to view a local version of the site.  
 Vue.js has hot reloading enabled by default. Any changes will be reflected immediately.
 
 To build and minify for production, run ```npm run build```.
@@ -41,6 +52,11 @@ There is a GitHub project board located in the ```Projects``` tab of this reposi
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Notes
+
+Note: two separate pieces of code in Navbar_Sparse must be updated to accommodate new viewing languages (one has the displayed name and one has the language code).  
+Note: main branch auto-deploys to live subdomains for users of dito.live. 
 
 ### 04/07/2022 Audio Player Functionality (working on Windows Chrome)
 
