@@ -1,11 +1,11 @@
-# Dialect Translation Tool Front End
+# Dialect Interpretation and Translation Tool Front End
 
-This is the front end repo for Dito (dialect interpretation and translation online), a project by Tracy Burnett.  Dito:
-- lets public and private teams upload and collaboratively annotate audio data
-- includes an auto-segmenter for audio data transcription
+This is the front end repo for Dito (dialect interpretation and translation online), a project by Tracy Burnett.  Dito -
+- lets public and private teams collaboratively annotate audio data
+- includes an auto-segmenter for transcribing audio data
 - calculates explicit phrase alignment between written translations
-- uses phrase alignment information to automatically generate language lessons
 - auto-highlights nested aligned phrases simultaneously in multiple written translations
+- uses phrase alignment information to automatically generate language lessons
 
 Visit [Little Horse Crosses River](https://yakaloco.dito.live/storybook/S65cMnPPpJA.m4a?open=aQ_XB5yrA6QkB8X4sUIHyc) to see a sample project created by an undergraduate student team using Dito.
 
