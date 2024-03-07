@@ -10,7 +10,7 @@ This is the front end repo for Dito (dialect interpretation and translation onli
 Visit [Rain Story](https://dev.dito.live/storybook/8F43-Wdn_gU.wav?open=7h70ZiG6bwEavy1PMVUL8w) to see a sample project created for a software demonstration (video below) of Dito.  
 Visit [Little Horse Crosses River](https://yakaloco.dito.live/storybook/S65cMnPPpJA.m4a?open=aQ_XB5yrA6QkB8X4sUIHyc) to see a sample project created by an undergraduate student team using Dito.
 
-Dito backend was created using Vue, a JavaScript framework.  The [views.py](https://github.com/skysnolimit08/dito-backend/blob/main/storybooks/views.py) file contains the most handwritten code.
+Dito backend was created using Vue, a JavaScript framework.  The [components/](https://github.com/skysnolimit08/dito-frontend/tree/main/src/components) and [views/](https://github.com/skysnolimit08/dito-frontend/tree/main/src/views) folders contain most of the handwritten code.
 
 ## User Interface Demo Videos
 
