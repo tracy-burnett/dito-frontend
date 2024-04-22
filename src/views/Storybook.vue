@@ -217,9 +217,11 @@ export default {
 
 					if (data["interpretations"] != "none") {
 						this.interpretationsList = data["interpretations"];
+						console.log(this.interpretationsList)
 						let mapped = this.interpretationsList.map(
 							(item) => item.id
 						)
+						console.log(this.intArray)
 
 						this.intArray.forEach(queryint => {
 							if (mapped.indexOf(queryint) != -1) {
