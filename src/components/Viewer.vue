@@ -493,7 +493,7 @@ export default {
 					let tempSubstringSplit = tempSubstring.split("");
 					tempSubstringSplit.forEach((character, index) => {
 						if (character === "\n") {
-							tempSubstringSplit[index] = "\\n";
+							tempSubstringSplit[index] = this.spaced_by;
 						}
 					});
 

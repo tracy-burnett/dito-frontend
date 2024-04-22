@@ -769,7 +769,10 @@ export default {
 
 		async srtToInterpretationHelper() {
 			try {
+				// console.log("fileloaded" + this.fileloaded)
 				let arrayToParse = this.fileloaded.replaceAll("\r\n", "\n").split("\n\n");
+
+				// console.log("arrayToParse" + arrayToParse)
 
 				for (let j = arrayToParse.length - 1; j >= 0; j--) {
 					if (arrayToParse[j] == "") {
@@ -928,21 +931,24 @@ export default {
 			// 	}
 			// }
 			// console.log(this.captions);
-			this.captions.forEach((caption, captionindex) => {
-				let tempSplitCaption = caption.split("");
-				// console.log(tempSplitCaption)
-				tempSplitCaption.forEach((character, index) => {
-					if (character == "\\" && tempSplitCaption[index + 1]) {
-						if (tempSplitCaption[index + 1] == "n") {
-							// console.log("hit")
-							tempSplitCaption[index] = "\n";
-							tempSplitCaption[index + 1] = "";
-						}
-					}
-				});
-				// console.log(tempSplitCaption)
-				this.captions[captionindex] = tempSplitCaption.join("");
-			});
+
+			// the below is commented out so that Dito does not turn in-text \n into carriage returns
+
+			// this.captions.forEach((caption, captionindex) => {
+			// 	let tempSplitCaption = caption.split("");
+			// 	console.log(tempSplitCaption)
+			// 	tempSplitCaption.forEach((character, index) => {
+			// 		if (character == "\\" && tempSplitCaption[index + 1]) {
+			// 			if (tempSplitCaption[index + 1] == "n") {
+			// 				// console.log("hit")
+			// 				tempSplitCaption[index] = "\n";
+			// 				tempSplitCaption[index + 1] = "";
+			// 			}
+			// 		}
+			// 	});
+			// 	console.log(tempSplitCaption)
+			// 	this.captions[captionindex] = tempSplitCaption.join("");
+			// });
 
 			this.captions.forEach((caption, captionindex) => {
 				// console.log(caption);
