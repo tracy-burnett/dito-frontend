@@ -66,14 +66,14 @@
 					:archived="audio.archived" status="owner" :last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'"
 					:title="audio.title" :audio_ID="audio.id" @SelectRow="uncheck(audio.id)"></CardRow>
 				<CardRow
-					v-else-if="audio.shared_editors.some((e) => e.user_ID === $store.state.user.uid) && checkedFilters.includes('editor')"
+					v-else-if="audio.shared_editors.some((e) => e.user_ID === $store.state.user.uid) && !audio.archived && checkedFilters.includes('editor')"
 					:date="audio.uploaded_at.substring(0, 10) + ' UTC'" :description="audio.description"
 					:uploader="audio.uploaded_by.display_name" status="editor" :picked="selected"
 					:shared_viewers="audio.shared_viewers" :publictf="audio.public"
 					:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'" :title="audio.title" :audio_ID="audio.id"
 					@SelectRow="uncheck(audio.id)"></CardRow>
 				<CardRow
-					v-else-if="audio.shared_viewers.some((e) => e.user_ID === $store.state.user.uid) && checkedFilters.includes('viewer')"
+					v-else-if="audio.shared_viewers.some((e) => e.user_ID === $store.state.user.uid) && !audio.archived && checkedFilters.includes('viewer')"
 					:date="audio.uploaded_at.substring(0, 10) + ' UTC'" :uploader="audio.uploaded_by.display_name"
 					:description="audio.description" :publictf="audio.public" :picked="selected" status="viewer"
 					:last_edited="audio.last_updated_at.substring(0, 10) + ' UTC'" :title="audio.title" :audio_ID="audio.id"
@@ -271,7 +271,7 @@ export default {
 				// console.log(this.$store.state.cardlistscrollposition)
 				window.scrollTo(0, this.$store.state.cardlistscrollposition * 14.3);
 			});
-			// console.log(this.audioArrayCurrent)
+
 		},
 
 		myEventHandler() {
