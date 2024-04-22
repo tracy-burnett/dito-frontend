@@ -271,7 +271,7 @@ export default {
 				// console.log(this.$store.state.cardlistscrollposition)
 				window.scrollTo(0, this.$store.state.cardlistscrollposition * 14.3);
 			});
-			console.log("hi")
+			console.log("hello")
 			console.log(this.audioArrayCurrent)
 		},
 
