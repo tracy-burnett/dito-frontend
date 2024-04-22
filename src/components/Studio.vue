@@ -365,73 +365,73 @@ export default {
 					this.i++;
 				}
 				// console.log(this.substringArray)
-				let indicesToDelete = [];
-				// delete the ones whose timestamps completely surround another one
-				let y = 0;
-				while (y < this.substringArray.length) {
-					// this is the one that we are checking against
-					let checkExteriorStart = parseInt(this.substringArray[y].starttime);
-					let checkExteriorEnd = parseInt(this.substringArray[y].endtime);
-					let z = 0;
-					while (z < this.substringArray.length) {
-						let checkInteriorStart = parseInt(this.substringArray[z].starttime);
-						let checkInteriorEnd = parseInt(this.substringArray[z].endtime);
+				// let indicesToDelete = [];
+				// // delete the ones whose timestamps completely surround another one
+				// let y = 0;
+				// while (y < this.substringArray.length) {
+				// 	// this is the one that we are checking against
+				// 	let checkExteriorStart = parseInt(this.substringArray[y].starttime);
+				// 	let checkExteriorEnd = parseInt(this.substringArray[y].endtime);
+				// 	let z = 0;
+				// 	while (z < this.substringArray.length) {
+				// 		let checkInteriorStart = parseInt(this.substringArray[z].starttime);
+				// 		let checkInteriorEnd = parseInt(this.substringArray[z].endtime);
 
-						if (
-							// if this one is exterior to the other one, then delete it
-							y != z &&
-							((checkInteriorEnd >= checkExteriorEnd &&
-								checkInteriorStart <= checkExteriorStart) ||
-								(checkInteriorEnd - checkInteriorStart >=
-									checkExteriorEnd - checkExteriorStart &&
-									((checkInteriorStart < checkExteriorStart &&
-										checkInteriorEnd > checkExteriorStart &&
-										checkInteriorEnd < checkExteriorEnd) ||
-										(checkInteriorStart > checkExteriorStart &&
-											checkInteriorStart < checkExteriorEnd &&
-											checkInteriorEnd > checkExteriorEnd))))
-						) {
-							// console.log(this.substringArray[y])
-							// 	console.log(this.substringArray[z])
-							indicesToDelete.push(z);
-							// console.log("deleting second of above")
-						} else if (
-							// if this one is interior to the other one, then break this while loop, delete the other one and do not index the other one's loop
-							y != z &&
-							(checkInteriorEnd <= checkExteriorEnd &&
-								checkInteriorStart >= checkExteriorStart)
-						) {
-							// delete exterior one
-							// console.log(this.substringArray[y])
-							// 	console.log(this.substringArray[z])
-							// console.log("deleting first of above")
-							indicesToDelete.push(y);
-							break;
-						}
-						// else if (
-						// 	// if this one is smaller than the other one and offset with it
-						// 	checkInteriorEnd - checkInteriorStart <=
-						// 			checkExteriorEnd - checkExteriorStart &&
-						// 			((checkInteriorStart < checkExteriorStart &&
-						// 				checkInteriorEnd > checkExteriorStart &&
-						// 				checkInteriorEnd < checkExteriorEnd) ||
-						// 				(checkInteriorStart > checkExteriorStart &&
-						// 					checkInteriorStart < checkExteriorEnd &&
-						// 					checkInteriorEnd > checkExteriorEnd))
-						// ) {
+				// 		if (
+				// 			// if this one is exterior to the other one, then delete it
+				// 			y != z &&
+				// 			((checkInteriorEnd >= checkExteriorEnd &&
+				// 				checkInteriorStart <= checkExteriorStart) ||
+				// 				(checkInteriorEnd - checkInteriorStart >=
+				// 					checkExteriorEnd - checkExteriorStart &&
+				// 					((checkInteriorStart < checkExteriorStart &&
+				// 						checkInteriorEnd > checkExteriorStart &&
+				// 						checkInteriorEnd < checkExteriorEnd) ||
+				// 						(checkInteriorStart > checkExteriorStart &&
+				// 							checkInteriorStart < checkExteriorEnd &&
+				// 							checkInteriorEnd > checkExteriorEnd))))
+				// 		) {
+				// 			// console.log(this.substringArray[y])
+				// 			// 	console.log(this.substringArray[z])
+				// 			indicesToDelete.push(z);
+				// 			// console.log("deleting second of above")
+				// 		} else if (
+				// 			// if this one is interior to the other one, then break this while loop, delete the other one and do not index the other one's loop
+				// 			y != z &&
+				// 			(checkInteriorEnd <= checkExteriorEnd &&
+				// 				checkInteriorStart >= checkExteriorStart)
+				// 		) {
+				// 			// delete exterior one
+				// 			// console.log(this.substringArray[y])
+				// 			// 	console.log(this.substringArray[z])
+				// 			// console.log("deleting first of above")
+				// 			indicesToDelete.push(y);
+				// 			break;
+				// 		}
+				// 		// else if (
+				// 		// 	// if this one is smaller than the other one and offset with it
+				// 		// 	checkInteriorEnd - checkInteriorStart <=
+				// 		// 			checkExteriorEnd - checkExteriorStart &&
+				// 		// 			((checkInteriorStart < checkExteriorStart &&
+				// 		// 				checkInteriorEnd > checkExteriorStart &&
+				// 		// 				checkInteriorEnd < checkExteriorEnd) ||
+				// 		// 				(checkInteriorStart > checkExteriorStart &&
+				// 		// 					checkInteriorStart < checkExteriorEnd &&
+				// 		// 					checkInteriorEnd > checkExteriorEnd))
+				// 		// ) {
 
-						// }
-						 // no match; nothing gets deleted; index inner while loop
-						z++;
-					}
-					y++;
-				}
+				// 		// }
+				// 		 // no match; nothing gets deleted; index inner while loop
+				// 		z++;
+				// 	}
+				// 	y++;
+				// }
 				// console.log(indicesToDelete)
-				indicesToDelete = [...new Set(indicesToDelete)];
-				// console.log(indicesToDelete)
-				for (let t = indicesToDelete.length - 1; t >= 0; t--) {
-					this.substringArray.splice(indicesToDelete[t], 1);
-				}
+				// indicesToDelete = [...new Set(indicesToDelete)];
+				// // console.log(indicesToDelete)
+				// for (let t = indicesToDelete.length - 1; t >= 0; t--) {
+				// 	this.substringArray.splice(indicesToDelete[t], 1);
+				// }
 
 				// console.log(this.substringArray)
 			} else if (this.parsedAssociations.length == 1) {
