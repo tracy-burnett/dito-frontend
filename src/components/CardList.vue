@@ -271,8 +271,13 @@ export default {
 				// console.log(this.$store.state.cardlistscrollposition)
 				window.scrollTo(0, this.$store.state.cardlistscrollposition * 14.3);
 			});
-			console.log("hello")
-			console.log(this.audioArrayCurrent)
+			// console.log(this.audioArrayCurrent)
+			this.audioArrayCurrent.forEach(audio => {
+				console.log(audio.title)
+				console.log(audio.uploaded_by.user_ID==this.$store.state.user.uid)
+				console.log(audio.archived)
+				console.log(this.checkedFilters.includes('owner'))
+			})
 		},
 
 		myEventHandler() {
