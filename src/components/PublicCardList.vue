@@ -108,6 +108,7 @@ export default {
 
 		search() {
 			// console.log(this.regexwithsearchterm);
+			this.searchResultAudioArray=[]
 			this.searchResultAudioArrayTemp = [...this.$store.state.audioArray];
 
 			if (this.searchResultAudioArrayTemp) {
