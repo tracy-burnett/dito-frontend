@@ -61,6 +61,7 @@ export default {
 			audioArray: [], // the list of audio files owned by, or shared with, the logged-in user
 			searchResultAudioArray: [],
 			audioArrayTemp: [],
+			searchResultAudioArrayTemp: [],
 			searchterm: "",
 			processingStorybooks: false,
 		};
@@ -107,7 +108,16 @@ export default {
 
 		search() {
 			// console.log(this.regexwithsearchterm);
-			this.searchResultAudioArray = [...this.$store.state.audioArray];
+			this.searchResultAudioArrayTemp = [...this.$store.state.audioArray];
+
+			if (this.searchResultAudioArrayTemp) {
+				this.searchResultAudioArrayTemp.forEach((audio) => {
+						if (audio.archived == false) {
+							this.searchResultAudioArray.push(audio);
+						}
+					});
+				}
+
 			let i = 0;
 			while (i < this.searchResultAudioArray.length) {
 				let audio = this.searchResultAudioArray[i];
