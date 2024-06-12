@@ -439,6 +439,7 @@ export default {
 					if (
 						this.tempcurrentgapstart <
 						this.associationGaps[0].endTime - 200
+						|| this.onemoregap==true || this.nomoregaps == true
 					) {
 						// FLAG TIME DECISION
 						this.usableGaps.push(this.associationGaps[0]);
@@ -825,7 +826,7 @@ export default {
 
 			}
 			else {
-				console.log("setting nomoregaps at point 2")
+				// console.log("setting nomoregaps at point 2")
 				this.nomoregaps = true;
 			}
 		},
