@@ -1,11 +1,10 @@
-
-
 <template>
 	<slot></slot>
 	<div class="flex-auto">
 
 		<span class="py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="py-1 border-gray-300 rounded ">{{ language_name }}</span><br /><br />
+
 		<textarea class="w-full h-full px-3 py-1  mt-[2vh] border-gray-300 rounded prompter"
 			:style="{ 'font-size': fontsize + 'px' }" style="overflow: scroll; height:45.5vh;"
 			placeholder="enter new text here" v-model="new_text_unstripped" ref="promptertextarea"
@@ -45,7 +44,8 @@ export default {
 			recursionStopper: false,
 			// recursionTracker: 0,
 			nomoregaps: false, // will be true if no scriber regions exist
-            tempeditingversion: 0,
+			onemoregap: false,
+			tempeditingversion: 0,
 		};
 	},
 	computed: {
@@ -439,6 +439,7 @@ export default {
 					if (
 						this.tempcurrentgapstart <
 						this.associationGaps[0].endTime - 200
+						|| this.onemoregap==true || this.nomoregaps == true
 					) {
 						// FLAG TIME DECISION
 						this.usableGaps.push(this.associationGaps[0]);
@@ -459,11 +460,13 @@ export default {
 			this.contentStartingIndex = 0;
 
 			//if the audio player has loaded, and the gaps have been identified
+			// console.log("no more gaps? " + this.nomoregaps)
 			if (
 				this.$store.state.audioDuration > 0 &&
 				this.usableGaps.length > 0 &&
-				this.nomoregaps == false
+				this.nomoregaps == false && this.onemoregap == false
 			) {
+				// console.log("inside IF statement")
 				// a little gap to work with to generate this prompt
 				this.relevantGap.startTime = parseInt(this.usableGaps[0].startTime); // should be in hundredths of a second
 				this.relevantGap.endTime = Math.min(
@@ -537,6 +540,7 @@ export default {
 				}
 				priorvalue = null;
 				greenlight = false;
+
 				for (let i = this.usablePeaksData.length - 1; i >= 0; i--) {
 					//if we are just starting a streak of 1's
 					if (
@@ -615,7 +619,8 @@ export default {
 				) {
 					// console.log("help")
 					// this.findGaps()
-					this.nomoregaps = true;
+					// only the tail end of the gap remains, so use it.
+					this.onemoregap = true;
 				}
 
 				// console.log(this.contentStartingIndex + this.relevantGap.startTime);
@@ -670,7 +675,158 @@ export default {
 				// this.sensitivity=.1
 				// this.allowSubmit = true;
 				this.$refs.promptertextarea.focus();
-			} else {
+			} else if (this.onemoregap == true) {
+				this.onemoregap = false
+				this.nomoregaps = true
+				// a little gap to work with to generate this prompt
+				this.relevantGap.startTime = parseInt(this.usableGaps[0].startTime); // should be in hundredths of a second
+				this.relevantGap.endTime = Math.min(
+					parseInt(this.usableGaps[0].startTime) +
+					parseInt(this.scribingclean) +
+					100,
+					parseInt(this.usableGaps[0].endTime)
+				); // should be in hundredths of a second               // FLAG ARBITRARY TIME DECISION
+				this.relevantGap.startCharacter = parseInt(
+					this.usableGaps[0].startCharacter
+				);
+				this.relevantGap.endCharacter = parseInt(
+					this.usableGaps[0].endCharacter
+				);
+				// this.usablePeaksData=[1 , 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0]
+				// get information about the waveform for the little gap we are currently working with and map it to 1's and 0's depending on a preset sensitivity level
+				this.usablePeaksData = this.$store.state.peaksData
+					.slice(this.relevantGap.startTime, this.relevantGap.endTime)
+					.map((e) => Math.round(e * 1000) / 10)
+					.map((e) => {
+						if (Math.abs(e) > this.sensitivity) {
+							return 1;
+						} else {
+							return 0;
+						}
+					});
+
+				// find the largest set of content within the currently selected portion of audio that has a silence-ish gap on either side
+				let greenlight = false;
+				let priorvalue = null;
+				for (let i = 0; i < this.usablePeaksData.length; i++) {
+					if (
+						this.usablePeaksData[i] == 1 &&
+						(priorvalue <= 0 || priorvalue == null)
+					) {
+						priorvalue = 1;
+					} else if (
+						this.usablePeaksData[i] == 1 &&
+						priorvalue >= 1 &&
+						priorvalue < 3 &&
+						greenlight == true
+					) {
+						priorvalue++;
+					} else if (
+						this.usablePeaksData[i] == 1 &&
+						priorvalue >= 3 &&
+						greenlight == true
+					) {
+						this.contentStartingIndex = i - 7;
+						break;
+					} else if (
+						this.usablePeaksData[i] == 0 &&
+						(priorvalue == null || priorvalue > 0)
+					) {
+						priorvalue = 0;
+					}
+					//if we are in the middle of silence?
+					else if (
+						this.usablePeaksData[i] == 0 &&
+						priorvalue > -1 &&
+						priorvalue <= 0
+					) {
+						priorvalue--;
+					}
+					//if we are in the middle of silence
+					else if (this.usablePeaksData[i] == 0 && priorvalue <= -1) {
+						priorvalue = 0;
+						greenlight = true;
+					}
+					// console.log(priorvalue);
+				}
+				priorvalue = null;
+				greenlight = true;
+
+				for (let i = this.usablePeaksData.length - 1; i >= 0; i--) {
+					//if we are just starting a streak of 1's
+					if (
+						this.usablePeaksData[i] == 1 &&
+						(priorvalue <= 0 || priorvalue == null)
+					) {
+						priorvalue = 1;
+					}
+
+					//if we are in the middle of a streak of 1's and we are allowed to start searching for content
+					else if (
+						this.usablePeaksData[i] == 1 &&
+						priorvalue >= 1 &&
+						priorvalue < 3 &&
+						greenlight == true
+					) {
+						priorvalue++;
+					}
+
+					//if we have met our streak quota of content
+					else if (
+						this.usablePeaksData[i] == 1 &&
+						priorvalue >= 3 &&
+						greenlight == true
+					) {
+						this.contentEndingIndex = i + 5;
+						break;
+					}
+
+					//if silence is just starting
+					else if (
+						this.usablePeaksData[i] == 0 &&
+						(priorvalue == null || priorvalue > 0)
+					) {
+						priorvalue = 0;
+					}
+					//if we are in the middle of silence
+					else if (
+						this.usablePeaksData[i] == 0 &&
+						priorvalue > -1 &&
+						priorvalue <= 0
+					) {
+						priorvalue--;
+					}
+					//if we are in the middle of silence
+					else if (this.usablePeaksData[i] == 0 && priorvalue <= -1) {
+						priorvalue = 0;
+						greenlight = true;
+					}
+					// console.log(priorvalue);
+				}
+
+				this.$store.commit(
+					"updateStartTimePrompter",
+					(this.contentStartingIndex + this.relevantGap.startTime) / 100
+				);
+				this.$store.commit(
+					"updateEndTimePrompter",
+					(this.contentEndingIndex + this.relevantGap.startTime) / 100
+				);
+
+				// console.log((this.contentStartingIndex + this.relevantGap.startTime) / 100)
+				// console.log((this.contentEndingIndex + this.relevantGap.startTime) / 100)
+
+				this.$store.commit("forceRegionRerender");
+				// this.recursionTracker=0
+				// this.sensitivity=.1
+				// this.allowSubmit = true;
+				this.$refs.promptertextarea.focus();
+
+
+
+			}
+			else {
+				// console.log("setting nomoregaps at point 2")
 				this.nomoregaps = true;
 			}
 		},
@@ -1095,7 +1251,7 @@ export default {
 						this.tempeditingversion = this.editingversion
 						this.$emit("updateTitleLanguage", { "id": this.interpretation_id, "title": this.title, "language": this.language_name });
 						// console.log(textLengthDifference);
-                        // console.log(this.tempeditingversion + this.editingversion)
+						// console.log(this.tempeditingversion + this.editingversion)
 						this.associationGaps.forEach((element) => {
 							element.startCharacter += textLengthDifference;
 							if (element.endCharacter != null) {
@@ -1106,7 +1262,7 @@ export default {
 						}); //increase every startcharacter and endcharacter
 
 						this.newPromptsfunc();
-                        // console.log(this.tempeditingversion + this.editingversion)
+						// console.log(this.tempeditingversion + this.editingversion)
 
 						//add in the association for the new phrase.
 						fetch(
@@ -1120,7 +1276,7 @@ export default {
 								body: JSON.stringify({
 									// text: this.latest_text.normalize('NFC'), // Pass in a string that meets a minimum character fcount and includes all the new tags you want to save
 									associations: this.new_associations, // Pass in the list of the new tags
-									editingversion: this.tempeditingversion+1,
+									editingversion: this.tempeditingversion + 1,
 								}),
 
 								headers: {
@@ -1135,7 +1291,7 @@ export default {
 								if (response.error == "not editing current version") {
 									alert("This interpretation has been edited since you last loaded it; please refresh your page and try again.")
 								}
-								else {						this.$emit("updateTitleLanguage", { "id": this.interpretation_id, "title": this.title, "language": this.language_name });}
+								else { this.$emit("updateTitleLanguage", { "id": this.interpretation_id, "title": this.title, "language": this.language_name }); }
 							}
 
 							)
@@ -1143,7 +1299,7 @@ export default {
 					} else if (response == "not editing current version") {
 						alert("This interpretation has been edited since you last loaded it; please refresh your page and try again.")
 					} else { alert("something broke") }
-                        // console.log(this.tempeditingversion + this.editingversion)
+					// console.log(this.tempeditingversion + this.editingversion)
 
 					return;
 				})

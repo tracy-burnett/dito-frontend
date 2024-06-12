@@ -116,7 +116,7 @@
 						{{ $store.state.promptsObject.sScribeLessMore }}
 					</div>
 					<div>
-						<input id="scribingslider" v-model="scribing" type="range" min="20" max="4000"
+						<input id="scribingslider" v-model="scribing" type="range" min="20" max="750"
 							step="10" /><!-- do not let min go to less than 20, since then it will be within the margin of error of the scriber auto-segmenter -->
 					</div>
 
@@ -182,7 +182,7 @@ export default {
 		return {
 			tier: process.env.VUE_APP_TIER,
 			timestep: 0,
-			scribing: 1250,
+			scribing: 100,
 			studying: 200,
 			fontsize: 16,
 			updateAssociations: 0,

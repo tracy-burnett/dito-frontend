@@ -33,6 +33,10 @@ export default {
 				// this.$router.push("/");
 			}
 
+			if (this.$store.state.user) {
+				this.$store.commit('toggleInfobit', 'PublicCardList');
+			}
+
 			this.$store.commit(
 				"confirmAuth"
 			);
@@ -68,7 +72,6 @@ export default {
 						console.log("Oops. " + error.code + ": " + error.message);
 					});
 			}
-
 			this.$store.commit("setAudioArray", []);
 			fetch(process.env.VUE_APP_api_URL + "audio/user/", {
 				method: "GET",
@@ -81,8 +84,8 @@ export default {
 				.then((response) => response.json()) // json to object
 				.then(
 					(data) => {
-						// console.log(data["audio files"])
 						if (data["audio files"] != undefined) { this.$store.commit("setAudioArray", data["audio files"]); }
+
 					} // collect the list of audio files that are owned by, or shared with, the logged-in user
 				)
 				.catch((error) => console.error("Error:", error));
