@@ -25,6 +25,7 @@ export default {
 						console.log("Oops. " + error.code + ": " + error.message);
 					});
 				console.log("you are currently signed in");
+				this.$store.commit('toggleInfobit', 'PublicCardList');
 			} else {
 				// User is signed out
 				this.$store.commit("Logout_User")
