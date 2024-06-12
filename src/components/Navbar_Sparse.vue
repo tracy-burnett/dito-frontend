@@ -164,9 +164,12 @@ export default {
 		},
 
 		gohome: function () {
-
+			if (this.LoginLogoutButton) {
+				this.$store.commit('toggleInfobit', 'PublicCardList');
+			}
+			else {
 			this.$store.commit('toggleInfobit', 'InfoRevitalize');
-			this.$router.push("/");
+}			this.$router.push("/");
 		},
 	},
 
