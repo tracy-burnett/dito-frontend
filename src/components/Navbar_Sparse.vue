@@ -169,7 +169,10 @@ export default {
 			}
 			else {
 			this.$store.commit('toggleInfobit', 'InfoRevitalize');
-}			this.$router.push("/");
+}			
+// this.$router.push("/");
+console.log(location.hostname)
+location.assign(location.hostname)
 		},
 	},
 
