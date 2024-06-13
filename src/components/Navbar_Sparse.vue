@@ -172,9 +172,9 @@ export default {
 }			
 // this.$router.push("/");
 console.log(location.hostname)
-if (location.hostname=="localhost"){location.assign("http://localhost:8080" + '?n=' + new Date().getTime())}
+if (location.hostname=="localhost"){location.assign("http://localhost:8080/")}
 else{
-location.assign("https://" + location.hostname + '?n=' + new Date().getTime())}
+location.assign("https://" + location.hostname)}
 		},
 	},
 
