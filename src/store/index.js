@@ -9,7 +9,7 @@ export default new Vuex.Store({
     // It's like data, but for your store.
     user: null, // currently logged-in user
     selected: "",
-    checkedFilters: ["owner", "editor", "viewer", "public"],
+    checkedFilters: ["owner"],
     sidebar: false, // sidebar displayed or not
     playerRerender: "", // ID of audio file as it finishes uploading to AWS S3
     consoles: [], // array of ID's of interpretations for which there should be a viewer column currently displayed in the browser
