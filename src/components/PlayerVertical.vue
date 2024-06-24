@@ -805,6 +805,8 @@ export default {
 			this.endTime = this.secondsToTime(
 				Math.round(this.$store.state.endTimePrompter)
 			);
+			this.wavesurfer.seekTo(this.startTimeSeconds / this.totalDuration);
+			this.$store.commit("updateHighlights");
 			// this.startTimeSeconds = this.$store.state.startTimePrompter; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
 			// this.endTimeSeconds = this.$store.state.endTimePrompter; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
 			if (!this.playing) {
