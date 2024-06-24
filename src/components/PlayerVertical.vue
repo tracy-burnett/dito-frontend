@@ -244,7 +244,6 @@ export default {
 			);
 			this.endTime = this.secondsToTime(this.$store.state.incomingEndTime);
 			this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
-			console.log("should have just sought incomingcurrenttime")
 			// }
 			// else if (this.$store.state.incomingCurrentTime >= this.endTimeSeconds) {
 			// 	let tempendtime = this.endTimeSeconds;
