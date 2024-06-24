@@ -244,6 +244,7 @@ export default {
 			);
 			this.endTime = this.secondsToTime(this.$store.state.incomingEndTime);
 			this.seekTimestampfunction(this.$store.state.incomingCurrentTime);
+			console.log("should have just sought incomingcurrenttime")
 			// }
 			// else if (this.$store.state.incomingCurrentTime >= this.endTimeSeconds) {
 			// 	let tempendtime = this.endTimeSeconds;
@@ -805,6 +806,8 @@ export default {
 			this.endTime = this.secondsToTime(
 				Math.round(this.$store.state.endTimePrompter)
 			);
+			this.wavesurfer.seekTo(this.startTimeSeconds / this.totalDuration);
+			this.$store.commit("updateHighlights");
 			// this.startTimeSeconds = this.$store.state.startTimePrompter; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
 			// this.endTimeSeconds = this.$store.state.endTimePrompter; // wavesurfer's "region-update-end" event doesn't catch this so I am doing it manually here
 			if (!this.playing) {
