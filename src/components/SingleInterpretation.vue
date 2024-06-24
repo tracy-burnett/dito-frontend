@@ -240,6 +240,12 @@ export default {
 			this.interpretationFull.public
 		);
 	},
+
+	unmounted() {
+		if (this.$store.state.prompterID == this.interpretation_id) {
+			this.$store.commit("removePrompterID");
+		}
+	},
 	methods: {
 		toggleSyncingModal() {
 			this.showSyncingModal = !this.showSyncingModal;

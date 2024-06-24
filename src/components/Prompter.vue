@@ -1691,12 +1691,6 @@ export default {
 		},
 	},
 
-	unmounted() {
-		if (this.$store.state.prompterID == this.interpretation_id) {
-			this.$store.commit("removePrompterID");
-		}
-	},
-
 	async mounted() {
 		// this.$emit("yesGaps");
 		if (this.$store.state.user) {
