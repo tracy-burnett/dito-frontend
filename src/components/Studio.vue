@@ -450,12 +450,6 @@ export default {
 		}, 
 	},
 
-	unmounted() {
-		if (this.$store.state.prompterID == this.interpretation_id) {
-			this.$store.commit("removePrompterID");
-		}
-	},
-
 	mounted() {
 		this.parsedAssociations.length = 0;
 		if (this.interpretationStatus) {
