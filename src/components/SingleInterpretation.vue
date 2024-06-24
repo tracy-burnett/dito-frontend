@@ -27,7 +27,8 @@
 					<div v-if="styleoption === 'Tagger'">
 						<!-- quick and dirty way to undo tags you haven't saved to the database yet -->
 						<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="clearTimestamps()"
-							:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">{{ $store.state.promptsObject.bClearNew }}</button>
+							:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">{{
+			$store.state.promptsObject.bClearNew }}</button>
 					</div>
 					<div v-if="interpretationsList.length > 0">
 						<SelectInterpretationMenu :interpretationsList="interpretationsList"
@@ -55,7 +56,8 @@
 
 						<div class="dropdown" style="float: right">
 							<button class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn"
-								:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">{{ $store.state.promptsObject.bDownload }}</button>
+								:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">{{
+			$store.state.promptsObject.bDownload }}</button>
 							<div class="dropdown-content">
 								<a @click="downloadSRT()">overlapping .srt</a>
 							</div>
@@ -84,8 +86,8 @@
 						</button>
 					</div>
 
-					<div v-if="styleoption === 'Tagger'"><button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600"
-							@click="updateAssociationsfunc()"
+					<div v-if="styleoption === 'Tagger'"><button
+							class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" @click="updateAssociationsfunc()"
 							:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">
 							{{ $store.state.promptsObject.bSave }}
 						</button></div>
@@ -116,8 +118,8 @@
 						{{ $store.state.promptsObject.sScribeLessMore }}
 					</div>
 					<div>
-						<input id="scribingslider" v-model="scribing" type="range" min="20" max="750"
-							step="10" /><!-- do not let min go to less than 20, since then it will be within the margin of error of the scriber auto-segmenter -->
+						<input id="scribingslider" v-model="scribingold" type="range" min="20" max="750" step="10"
+							@mouseup="changescribinglength()" /><!-- do not let min go to less than 20, since then it will be within the margin of error of the scriber auto-segmenter -->
 					</div>
 
 				</div>
@@ -128,7 +130,8 @@
 						&nbsp;&nbsp;&nbsp;{{ $store.state.promptsObject.sPhraseLength }}
 					</div>
 					<div>
-						<input id="studyingslider" v-model="studying" type="range" min="0" max="2000" step="10" />
+						<input id="studyingslider" v-model="studyingold" type="range" min="0" max="2000" step="10"
+							@mouseup="changestudyinglength()" />
 					</div>
 
 				</div>
@@ -183,7 +186,9 @@ export default {
 			tier: process.env.VUE_APP_TIER,
 			timestep: 0,
 			scribing: 100,
+			scribingold: 100,
 			studying: 200,
+			studyingold: 200,
 			fontsize: 16,
 			updateAssociations: 0,
 			clearTimestampsvar: 0,
@@ -251,6 +256,10 @@ export default {
 		saveEditsincrease() {
 			this.saveEditscounter++;
 		},
+
+		changescribinglength() { this.scribing = this.scribingold },
+
+		changestudyinglength() { this.studying = this.studyingold },
 
 		downloadSRT() {
 			this.downloadSRTcounter++;
@@ -448,5 +457,5 @@ export default {
 
 /* .dropdown:hover .dropbtn { */
 /* background-color: #7833ff; */
-/* } */</style>
-
+/* } */
+</style>
