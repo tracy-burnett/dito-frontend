@@ -21,10 +21,6 @@ Dito backend was created using Vue, a JavaScript framework.  The [components/](h
 
 Dito is live and can be [used/sampled online](https://dev.dito.live "Dito"), and Tracy Burnett offers unique subdomains to users for larger projects.  Tracy Burnett makes Dito free to users as a tool for revitalizing low-resource languages, especially those with no dedicated orthography/written script.  However, Tracy Burnett reserves the right to terminate these services at any point.
 
-## Status
-
-Dito is live and can be [used/sampled online](dev.dito.live "Dito"), and Tracy Burnett offers unique subdomains to users for larger projects.  Tracy Burnett makes Dito free to users as a tool for revitalizing low-resource languages, especially those with no dedicated orthography/written script.  However, Tracy Burnett reserves the right to terminate these services at any point.
-
 ## Project setup
 
 Make sure you have both the latest version of NodeJS installed and npm installed.  
