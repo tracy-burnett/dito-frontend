@@ -23,7 +23,7 @@
 				@keyup.enter="upload"
 			/>
 		</div>
-		<div class="flex flex-col items-center w-2/5">
+<!--	<div class="flex flex-col items-center w-2/5">
 			<h1 class="text-2xl font-bold text-slate-700">Start First Interpretation (optional)</h1>
 			<br />
 			<input
@@ -52,7 +52,7 @@
 				style="overflow:hidden;"
 				oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
 			/>
-		</div>
+		</div>-->
 	</div>
 	<div class="flex flex-col items-center">
 		<button
@@ -79,51 +79,51 @@ export default {
 			name: "",
 			title: "",
 			description: "",
-			int_title: "",
-			int_text_unstripped: "",
-			int_language: "",
-			int_spacing: "",
+			// int_title: "",
+			// int_text_unstripped: "",
+			// int_language: "",
+			// int_spacing: "",
 			myArray: null,
 			file: null,
 		};
 	},
 	computed: {
 		// split by carriage returns and get rid of any spaced_by characters at the beginning and end of each element
-		int_text() {
-			if (this.spaced_by != "") {
-				let stripped = this.int_text_intermediary.split("\n");
-				for (let j = 0; j < stripped.length; j++) {
-					if (stripped[j][0] == this.spaced_by) {
-						stripped[j] = stripped[j].substring(1);
-					}
-					if (stripped[j][stripped[j].length - 1] == this.spaced_by) {
-						stripped[j] = stripped[j].substring(0, stripped[j].length - 1);
-					}
-				}
+		// int_text() {
+		// 	if (this.spaced_by != "") {
+		// 		let stripped = this.int_text_intermediary.split("\n");
+		// 		for (let j = 0; j < stripped.length; j++) {
+		// 			if (stripped[j][0] == this.spaced_by) {
+		// 				stripped[j] = stripped[j].substring(1);
+		// 			}
+		// 			if (stripped[j][stripped[j].length - 1] == this.spaced_by) {
+		// 				stripped[j] = stripped[j].substring(0, stripped[j].length - 1);
+		// 			}
+		// 		}
 
-				// console.log(stripped.join("\n"));
-				return stripped.join("\n");
-			} else if (this.spaced_by == "") {
-				return this.int_text_intermediary;
-			}
-		},
+		// 		// console.log(stripped.join("\n"));
+		// 		return stripped.join("\n");
+		// 	} else if (this.spaced_by == "") {
+		// 		return this.int_text_intermediary;
+		// 	}
+		// },
 
-		// gets rid of streaks of spaced_by characters; replaces them with a single spaced_by character
-		int_text_intermediary() {
-			if (this.int_spacing != "") {
-				let stripped = this.int_text_unstripped.replace(
-					this.regexwithmultiplespacedby,
-					this.int_spacing
-				);
-				return stripped;
-			} else if (this.int_spacing == "") {
-				return this.int_text_unstripped;
-			}
-		},
+		// // gets rid of streaks of spaced_by characters; replaces them with a single spaced_by character
+		// int_text_intermediary() {
+		// 	if (this.int_spacing != "") {
+		// 		let stripped = this.int_text_unstripped.replace(
+		// 			this.regexwithmultiplespacedby,
+		// 			this.int_spacing
+		// 		);
+		// 		return stripped;
+		// 	} else if (this.int_spacing == "") {
+		// 		return this.int_text_unstripped;
+		// 	}
+		// },
 
-		regexwithmultiplespacedby() {
-			return new RegExp(`${this.escapeRegex(this.int_spacing)}+`, "ug");
-		},
+		// regexwithmultiplespacedby() {
+		// 	return new RegExp(`${this.escapeRegex(this.int_spacing)}+`, "ug");
+		// },
 	},
 	methods: {
 		escapeRegex: function (string) {
@@ -212,39 +212,39 @@ export default {
 								{
 									this.$store.commit("toggleInfobit", "InfoPublish");
 
-									if (this.int_title || this.int_text || this.int_language) {
-										// console.log("creating interpretation")
-										fetch(
-											process.env.VUE_APP_api_URL +
-												"interpretations/audio/" +
-												this.name +
-												"/",
-											{
-												method: "POST",
-												headers: {
-													"Content-Type": "application/json",
+									// if (this.int_title || this.int_text || this.int_language) {
+									// 	// console.log("creating interpretation")
+									// 	fetch(
+									// 		process.env.VUE_APP_api_URL +
+									// 			"interpretations/audio/" +
+									// 			this.name +
+									// 			"/",
+									// 		{
+									// 			method: "POST",
+									// 			headers: {
+									// 				"Content-Type": "application/json",
 
-													Authorization: this.$store.state.idToken,
-												},
-												body: JSON.stringify({
-													title: this.int_title.normalize("NFC"),
-													latest_text: this.int_text.normalize("NFC"),
-													language_name: this.int_language.normalize("NFC"),
-													spaced_by: this.int_spacing.normalize("NFC"),
-													public: false,
-												}),
-											}
-										)
-											.then((response) => {
-												return response.json();
-											})
-											.then((response) => {
-												console.log(response);
-											})
-											.catch((error) => {
-												console.error("Error:", error);
-											});
-									}
+									// 				Authorization: this.$store.state.idToken,
+									// 			},
+									// 			body: JSON.stringify({
+									// 				title: this.int_title.normalize("NFC"),
+									// 				latest_text: this.int_text.normalize("NFC"),
+									// 				language_name: this.int_language.normalize("NFC"),
+									// 				spaced_by: this.int_spacing.normalize("NFC"),
+									// 				public: false,
+									// 			}),
+									// 		}
+									// 	)
+									// 		.then((response) => {
+									// 			return response.json();
+									// 		})
+									// 		.then((response) => {
+									// 			console.log(response);
+									// 		})
+									// 		.catch((error) => {
+									// 			console.error("Error:", error);
+									// 		});
+									// }
 
 									return;
 								}

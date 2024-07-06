@@ -498,10 +498,11 @@ export default {
 				let greenlight = false;
 				let priorvalue = null;
 				for (let i = 0; i < this.usablePeaksData.length; i++) {
+					// FLAG FOR NOW
 					if (
 						this.usablePeaksData[i] == 1
-						// &&
-						// (priorvalue <= 0 || priorvalue == null)
+						&&
+						(priorvalue <= 0 || priorvalue == null)
 					) {
 						priorvalue = 1;
 					} else if (
@@ -711,10 +712,11 @@ export default {
 				let greenlight = false;
 				let priorvalue = null;
 				for (let i = 0; i < this.usablePeaksData.length; i++) {
+					// FLAG FOR NOW
 					if (
 						this.usablePeaksData[i] == 1 
-						// &&
-						// (priorvalue <= 0 || priorvalue == null)
+						&&
+						(priorvalue <= 0 || priorvalue == null)
 					) {
 						priorvalue = 1;
 					} else if (
