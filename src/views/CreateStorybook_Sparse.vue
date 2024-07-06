@@ -2,28 +2,23 @@
 	<div class="flex justify-around pt-12">
 		<div class="flex flex-col items-center w-2/5 ">
 			<h1 class="text-2xl font-bold text-slate-700">Upload Audio File</h1>
-			<p class="mt-2 text-xs">Upload any audio file. If a .mp3 file acts strange within Dito, use VBRFix free software, then upload it again.</p>
-			<input
-				class="w-full px-3 py-1 mt-6 mb-3 border border-gray-300 rounded"
-				type="file"
+			<p class="mt-2 text-xs">Upload any audio file. If a .mp3 file acts strange within Dito, use VBRFix free
+				software, then upload it again.</p>
+			<input class="w-full px-3 py-1 mt-6 mb-3 border border-gray-300 rounded" type="file"
 				accept="audio/mpeg,audio/mp4,audio-x/flac,audio/x-mpegurl,audio/x-wav,audio/x-ms-wma,audio/x-aiff,audio/x-aac,audio/ogg,audio/mp4a-latm,audio/midi,audio/mpegurl,audio/x-m4a,audio/mp3,audio/x-mp3,audio/x-mpeg,audio/3gpp,audio/3gpp2,audio/vnd.wave"
-				ref="audioInput"
-				@keyup.enter="upload"
-			/>
-			<input
-				class="w-full px-3 py-1 border border-gray-300 rounded"
-				placeholder="Storybook/Audio Title"
-				v-model="title"
-				@keyup.enter="upload"
-			/> 
-			<input
-				class="w-full px-3 py-1 border border-gray-300 rounded"
-				placeholder="Description of Content"
-				v-model="description"
-				@keyup.enter="upload"
-			/>
+				ref="audioInput" @keyup.enter="upload" />
+			<input class="w-full px-3 py-1 border border-gray-300 rounded" placeholder="Storybook/Audio Title"
+				v-model="title" @keyup.enter="upload" />
+			<input class="w-full px-3 py-1 border border-gray-300 rounded" placeholder="Description of Content"
+				v-model="description" @keyup.enter="upload" />
+
+			<button
+				class="w-full px-3 py-2 text-sm font-medium text-white transition-colors border rounded mt-7 border-sky-600 bg-sky-700 hover:bg-sky-600"
+				@click="upload">
+				Upload
+			</button>
 		</div>
-<!--	<div class="flex flex-col items-center w-2/5">
+		<!--	<div class="flex flex-col items-center w-2/5">
 			<h1 class="text-2xl font-bold text-slate-700">Start First Interpretation (optional)</h1>
 			<br />
 			<input
@@ -54,14 +49,7 @@
 			/>
 		</div>-->
 	</div>
-	<div class="flex flex-col items-center">
-		<button
-			class="w-1/2 px-3 py-2 text-sm font-medium text-white transition-colors border rounded mt-7 border-sky-600 bg-sky-700 hover:bg-sky-600"
-			@click="upload"
-		>
-			Upload
-		</button>
-	</div>
+
 </template>
 
 <script>
@@ -182,79 +170,79 @@ export default {
 					return;
 				})
 				.then(() =>
-					// post request to create new entry in audio table that includes data['audio_ID'], audio_URL (different from presigned URL), and other important information.
-					{
-						// console.log("create new entry in audio table")
-						fetch(process.env.VUE_APP_api_URL + "audio/", {
-							method: "POST",
-							headers: {
-								"Content-Type": "application/json",
+				// post request to create new entry in audio table that includes data['audio_ID'], audio_URL (different from presigned URL), and other important information.
+				{
+					// console.log("create new entry in audio table")
+					fetch(process.env.VUE_APP_api_URL + "audio/", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
 
-								Authorization: this.$store.state.idToken,
-							},
-							body: JSON.stringify({
-								id: this.name.normalize("NFC"),
-								// url: process.env.VUE_APP_SUBDOMAIN_URL,
-								title: this.title.normalize("NFC"),
-								description: this.description.normalize("NFC"),
-								// shared_with: [],
-							}),
+							Authorization: this.$store.state.idToken,
+						},
+						body: JSON.stringify({
+							id: this.name.normalize("NFC"),
+							// url: process.env.VUE_APP_SUBDOMAIN_URL,
+							title: this.title.normalize("NFC"),
+							description: this.description.normalize("NFC"),
+							// shared_with: [],
+						}),
+					})
+						.then((response) => {
+							return response.json();
 						})
-							.then((response) => {
-								return response.json();
-							})
-							.then((response) => {
-								this.$store.commit("addToAudioArray",response)
-							})
+						.then((response) => {
+							this.$store.commit("addToAudioArray", response)
+						})
 
-							.then(() =>
-								// post request to create new interpretation for this audio
-								{
-									this.$store.commit("toggleInfobit", "InfoPublish");
+						.then(() =>
+						// post request to create new interpretation for this audio
+						{
+							this.$store.commit("toggleInfobit", "InfoPublish");
 
-									// if (this.int_title || this.int_text || this.int_language) {
-									// 	// console.log("creating interpretation")
-									// 	fetch(
-									// 		process.env.VUE_APP_api_URL +
-									// 			"interpretations/audio/" +
-									// 			this.name +
-									// 			"/",
-									// 		{
-									// 			method: "POST",
-									// 			headers: {
-									// 				"Content-Type": "application/json",
+							// if (this.int_title || this.int_text || this.int_language) {
+							// 	// console.log("creating interpretation")
+							// 	fetch(
+							// 		process.env.VUE_APP_api_URL +
+							// 			"interpretations/audio/" +
+							// 			this.name +
+							// 			"/",
+							// 		{
+							// 			method: "POST",
+							// 			headers: {
+							// 				"Content-Type": "application/json",
 
-									// 				Authorization: this.$store.state.idToken,
-									// 			},
-									// 			body: JSON.stringify({
-									// 				title: this.int_title.normalize("NFC"),
-									// 				latest_text: this.int_text.normalize("NFC"),
-									// 				language_name: this.int_language.normalize("NFC"),
-									// 				spaced_by: this.int_spacing.normalize("NFC"),
-									// 				public: false,
-									// 			}),
-									// 		}
-									// 	)
-									// 		.then((response) => {
-									// 			return response.json();
-									// 		})
-									// 		.then((response) => {
-									// 			console.log(response);
-									// 		})
-									// 		.catch((error) => {
-									// 			console.error("Error:", error);
-									// 		});
-									// }
+							// 				Authorization: this.$store.state.idToken,
+							// 			},
+							// 			body: JSON.stringify({
+							// 				title: this.int_title.normalize("NFC"),
+							// 				latest_text: this.int_text.normalize("NFC"),
+							// 				language_name: this.int_language.normalize("NFC"),
+							// 				spaced_by: this.int_spacing.normalize("NFC"),
+							// 				public: false,
+							// 			}),
+							// 		}
+							// 	)
+							// 		.then((response) => {
+							// 			return response.json();
+							// 		})
+							// 		.then((response) => {
+							// 			console.log(response);
+							// 		})
+							// 		.catch((error) => {
+							// 			console.error("Error:", error);
+							// 		});
+							// }
 
-									return;
-								}
-							)
-							.catch((error) => {
-								console.error("Error:", error);
-							});
+							return;
+						}
+						)
+						.catch((error) => {
+							console.error("Error:", error);
+						});
 
-						return;
-					}
+					return;
+				}
 				)
 
 				.catch((error) => {
@@ -265,5 +253,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
