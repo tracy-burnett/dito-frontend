@@ -36,56 +36,55 @@
 			style="float: right"
 		>
 			<button
-				@click="prompterHelp=true"
 				v-if="styleselection=='Prompter' && tier=='project'"
-				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }"
+				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[.6vw]" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }"
 			>{{$store.state.promptsObject.bScribing}}
-				<img
+				<!-- <img
 					class="absolute w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer right-0 mr-[.5vw]"
 					src="@/assets/icon_help.svg"
 					style="filter: brightness(0) invert(1)"
-				/>
+				/> -->
 			</button>
 			<button
-				@click="editorHelp=true"
 				v-else-if="styleselection=='Editor' && tier=='project'"
-				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }"
+				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[.6vw]" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }"
 			>{{$store.state.promptsObject.bEditing}}
-				<img
+				<!-- <img
 					class="absolute w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer right-0 mr-[.5vw]"
 					src="@/assets/icon_help.svg"
 					style="filter: brightness(0) invert(1)"
-				/></button>
+				/> -->
+			</button>
 			<button
-				@click="taggerHelp=true"
 				v-else-if="styleselection=='Tagger' && tier=='project'" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }"
-				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
+				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[.6vw]"
 			>{{$store.state.promptsObject.bRefining}}
-				<img
+				<!-- <img
 					class="absolute w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer right-0 mr-[.5vw]"
 					src="@/assets/icon_help.svg"
 					style="filter: brightness(0) invert(1)"
-				/></button>
+				/> -->
+			</button>
 			<button
-				@click="viewerHelp=true"
 				v-else-if="styleselection=='Viewer'" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }"
-				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
+				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[.6vw]"
 			>{{$store.state.promptsObject.bViewing}}
-				<img
+				<!-- <img
 					class="absolute w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer right-0 mr-[.5vw]"
 					src="@/assets/icon_help.svg"
 					style="filter: brightness(0) invert(1)"
-				/></button>
+				/> -->
+			</button>
 			<button
-				@click="studioHelp=true"
 				v-else-if="styleselection=='Studio' && tier=='project'" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }"
-				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[2vw]"
+				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn pl-[.6vw] py-[1vh] pr-[.6vw]"
 			>{{$store.state.promptsObject.bStudying}}
-				<img
+				<!-- <img
 					class="absolute w-[2.2vh] top-0 bottom-0 m-auto cursor-pointer right-0 mr-[.5vw]"
 					src="@/assets/icon_help.svg"
 					style="filter: brightness(0) invert(1)"
-				/></button>
+				/> -->
+			</button>
 			<!-- <button
 				v-else
 				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn px-[.6vw] py-[1vh]"
