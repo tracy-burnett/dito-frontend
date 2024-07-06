@@ -439,7 +439,7 @@ export default {
 					if (
 						this.tempcurrentgapstart <
 						this.associationGaps[0].endTime - 200
-						|| this.onemoregap==true || this.nomoregaps == true
+						|| this.onemoregap == true || this.nomoregaps == true
 					) {
 						// FLAG TIME DECISION
 						this.usableGaps.push(this.associationGaps[0]);
@@ -566,7 +566,7 @@ export default {
 						priorvalue >= 3 &&
 						greenlight == true
 					) {
-						this.contentEndingIndex = i + 5;
+						this.contentEndingIndex = i + 1;
 						break;
 					}
 
@@ -627,7 +627,7 @@ export default {
 				// console.log(this.contentEndingIndex + this.relevantGap.startTime);
 
 				//if the portion we decided to highlight is big enough, then highlight it; otherwise, play around with the sensitivity, then run this algorithm again
-				if (this.contentEndingIndex > this.contentStartingIndex + 50) {
+				if (this.contentEndingIndex > this.contentStartingIndex + 30) {
 					// console.log(this.recursionTracker)
 					this.$store.commit(
 						"updateStartTimePrompter",
@@ -777,7 +777,7 @@ export default {
 						priorvalue >= 3 &&
 						greenlight == true
 					) {
-						this.contentEndingIndex = i + 5;
+						this.contentEndingIndex = i + 1;
 						break;
 					}
 
