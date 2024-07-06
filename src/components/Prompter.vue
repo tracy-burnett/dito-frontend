@@ -627,7 +627,7 @@ export default {
 				// console.log(this.contentEndingIndex + this.relevantGap.startTime);
 
 				//if the portion we decided to highlight is big enough, then highlight it; otherwise, play around with the sensitivity, then run this algorithm again
-				if (this.contentEndingIndex > this.contentStartingIndex + 30) {
+				if (this.contentEndingIndex > this.contentStartingIndex + 15) {
 					// console.log(this.recursionTracker)
 					this.$store.commit(
 						"updateStartTimePrompter",

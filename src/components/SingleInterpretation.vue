@@ -186,7 +186,7 @@ export default {
 			tier: process.env.VUE_APP_TIER,
 			timestep: 0,
 			scribing: 50,
-			scribingold: 100,
+			scribingold: 50,
 			studying: 200,
 			studyingold: 200,
 			fontsize: 16,
