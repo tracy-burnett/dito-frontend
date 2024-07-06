@@ -499,8 +499,9 @@ export default {
 				let priorvalue = null;
 				for (let i = 0; i < this.usablePeaksData.length; i++) {
 					if (
-						this.usablePeaksData[i] == 1 &&
-						(priorvalue <= 0 || priorvalue == null)
+						this.usablePeaksData[i] == 1
+						// &&
+						// (priorvalue <= 0 || priorvalue == null)
 					) {
 						priorvalue = 1;
 					} else if (
@@ -544,7 +545,8 @@ export default {
 				for (let i = this.usablePeaksData.length - 1; i >= 0; i--) {
 					//if we are just starting a streak of 1's
 					if (
-						this.usablePeaksData[i] == 1 &&
+						this.usablePeaksData[i] == 1 
+						&&
 						(priorvalue <= 0 || priorvalue == null)
 					) {
 						priorvalue = 1;
@@ -710,8 +712,9 @@ export default {
 				let priorvalue = null;
 				for (let i = 0; i < this.usablePeaksData.length; i++) {
 					if (
-						this.usablePeaksData[i] == 1 &&
-						(priorvalue <= 0 || priorvalue == null)
+						this.usablePeaksData[i] == 1 
+						// &&
+						// (priorvalue <= 0 || priorvalue == null)
 					) {
 						priorvalue = 1;
 					} else if (
@@ -755,7 +758,8 @@ export default {
 				for (let i = this.usablePeaksData.length - 1; i >= 0; i--) {
 					//if we are just starting a streak of 1's
 					if (
-						this.usablePeaksData[i] == 1 &&
+						this.usablePeaksData[i] == 1 
+						&&
 						(priorvalue <= 0 || priorvalue == null)
 					) {
 						priorvalue = 1;
