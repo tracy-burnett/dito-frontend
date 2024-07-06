@@ -185,7 +185,7 @@ export default {
 		return {
 			tier: process.env.VUE_APP_TIER,
 			timestep: 0,
-			scribing: 100,
+			scribing: 50,
 			scribingold: 100,
 			studying: 200,
 			studyingold: 200,
