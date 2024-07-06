@@ -4,7 +4,7 @@
 
 		<span class="py-1 font-bold border-gray-300 rounded">{{ title }}</span>
 		in <span class="py-1 border-gray-300 rounded ">{{ language_name }}</span><br /><br />
-
+{{ usableGaps }}
 		<textarea class="w-full h-full px-3 py-1  mt-[2vh] border-gray-300 rounded prompter"
 			:style="{ 'font-size': fontsize + 'px' }" style="overflow: scroll; height:45.5vh;"
 			placeholder="enter new text here" v-model="new_text_unstripped" ref="promptertextarea"
@@ -445,12 +445,13 @@ export default {
 						this.usableGaps.push(this.associationGaps[0]);
 					}
 				}
-
+// console.log(...this.usableGaps)
 				this.newPromptsfunc();
 			}
 		},
 
 		newPromptsfunc() {
+			console.log(this.relevantGap)
 			if (this.newPromptorScribingToggle == true) {
 				this.relevantGap.startTime = this.tempcurrentgapstart; // this ensures that as the user drags the scribing toggle left and right, the relevant gap is always calculated based on the baseline starttime for the gap and starttime doesn't only increase (instead, it gets reset)
 			}
@@ -493,12 +494,13 @@ export default {
 							return 0;
 						}
 					});
-
+					console.log(...this.usablePeaksData)
 				// find the largest set of content within the currently selected portion of audio that has a silence-ish gap on either side
 				let greenlight = false;
 				let priorvalue = null;
 				for (let i = 0; i < this.usablePeaksData.length; i++) {
 					// FLAG FOR NOW
+					// console.log(i+": "+priorvalue+", greenlight: "+greenlight)
 					if (
 						this.usablePeaksData[i] == 1
 						&&
@@ -596,6 +598,8 @@ export default {
 					// console.log(priorvalue);
 				}
 
+				console.log(this.contentStartingIndex + " - " + this.contentEndingIndex)
+
 				// if there's still a lot of time left in usable portion of audio we are currently working with, like a lot meaning enough that there could be another relevant segment in it, then keep considering it... otherwise, move to the next portion
 				if (
 					this.usableGaps[0].endTime -
@@ -630,7 +634,7 @@ export default {
 				// console.log(this.contentEndingIndex + this.relevantGap.startTime);
 
 				//if the portion we decided to highlight is big enough, then highlight it; otherwise, play around with the sensitivity, then run this algorithm again
-				if (this.contentEndingIndex > this.contentStartingIndex + 50) {
+				if (this.contentEndingIndex > this.contentStartingIndex + 30) {
 					// console.log(this.recursionTracker)
 					this.$store.commit(
 						"updateStartTimePrompter",
@@ -671,6 +675,8 @@ export default {
 					} else {
 						// console.log("upping the sensitivity to " + this.sensitivity)
 						this.sensitivity += 0.05;
+						console.log("sensitivity: " + this.sensitivity)
+						console.log("now checking for: " + this.relevantGap.startTime + " to " + this.relevantGap.endTime)
 						this.newPromptsfunc();
 					}
 				}
