@@ -14,7 +14,7 @@
 
 		<div v-if="LoginLogoutButton" class="grid grid-cols-3 justify-items-center  mx-[3vw]">
 
-			<span @click="$store.commit('toggleInfobit', 'CreateStorybook');" @touchend="$store.commit('toggleInfobit', 'CreateStorybook');">
+			<span @click="$store.commit('toggleInfobit', 'CreateStorybook');" @touchend="$store.commit('toggleInfobit', 'CreateStorybook'); contribute=false">
 				<div class="cursor-pointer contents" v-if="contribute == false" @mouseover="contribute = true"
 					@mouseleave="contribute = false">
 					<img class="object-scale-down h-[35vh] w-[20vw]" :src="image2" />
@@ -25,7 +25,7 @@
 					<p class="text-xs md:text-sm">Upload an authentic recording of a language or dialect.</p>
 				</div>
 			</span>
-			<span @click="$store.commit('toggleInfobit', 'InfoPublish');" @touchend="$store.commit('toggleInfobit', 'InfoPublish');">
+			<span @click="$store.commit('toggleInfobit', 'InfoPublish');" @touchend="$store.commit('toggleInfobit', 'InfoPublish'); contribute=false">
 				<div class="cursor-pointer contents" v-if="publish == false" @mouseover="publish = true"
 					@mouseleave="publish = false">
 					<img class="object-scale-down h-[35vh] w-[20vw]" :src="image3" />
@@ -37,7 +37,7 @@
 						interpretations.</p>
 				</div>
 			</span>
-			<span @click="$store.commit('toggleInfobit', 'PublicCardList');" @touchend="$store.commit('toggleInfobit', 'PublicCardList');">
+			<span @click="$store.commit('toggleInfobit', 'PublicCardList');" @touchend="$store.commit('toggleInfobit', 'PublicCardList'); contribute=false">
 				<div class="cursor-pointer contents" v-if="revitalize == false" @mouseover="revitalize = true"
 					@mouseleave="revitalize = false">
 					<img class="object-scale-down h-[35vh] w-[20vw]" :src="image4" />
@@ -71,7 +71,7 @@
 		</div>
 		<div v-else class="grid grid-cols-1 justify-items-center  mx-[3vw] mt-[1.7vh]">
 
-			<span @click="$store.commit('toggleInfobit', 'InfoRevitalize');" @touchend="$store.commit('toggleInfobit', 'InfoRevitalize');">
+			<span @click="$store.commit('toggleInfobit', 'InfoRevitalize');" @touchend="$store.commit('toggleInfobit', 'InfoRevitalize'); contribute=false">
 				<div class="cursor-pointer contents" v-if="revitalize == false" @mouseover="revitalize = true"
 					@mouseleave="revitalize = false">
 					<img class="object-scale-down h-[35vh] w-[20vw]" :src="image4" />
