@@ -2,7 +2,7 @@
 	<div @click="cardclicked"
 		class="relative mb-[3vh] overflow-hidden transition-colors bg-white border-slate-300 border shadow-lg cursor-pointer hover:overflow-auto group card rounded-xl  hover:border-slate-400 hover:outline-2">
 		<div class="relative flex items-center justify-between bg-emerald-800 flex-cols-2">
-			<div class="absolute inset-0 z-10 opacity-0 bg-emerald-900 group-hover:opacity-100"></div>
+			<div class="absolute inset-0 opacity-0 bg-emerald-900 group-hover:opacity-100"></div>
 			<!-- <div class=""> -->
 			<!-- <img class="flex left-0 mt-[1vh] object-scale-down  w-1/3" :src="image" /> -->
 
