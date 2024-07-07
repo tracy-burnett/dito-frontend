@@ -144,6 +144,6 @@ export default {
 /* .play {
 	top: calc(50% - 1.75rem);
 	right: 0;
-} */
+} */ 
 
 </style>
