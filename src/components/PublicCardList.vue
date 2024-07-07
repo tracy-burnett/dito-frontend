@@ -69,6 +69,9 @@ export default {
 	components: {
 		Card,
 	},
+	unmounted() {
+		this.audioplayer.pause()
+	},
 	async mounted() {
 		// if (this.$store.state.idToken) {
 
