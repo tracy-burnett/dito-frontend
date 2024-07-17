@@ -12,7 +12,7 @@
 					<p class="flex font-medium"
 						:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">
 						{{ $store.state.promptsObject["name"] }}&nbsp;</p>
-					<div class="w-[1.5vw] flex">
+					<div class="w-[15px] flex">
 						<img class="cursor-pointer" src="@/assets/icon_language.svg" />
 					</div>
 				</div>
