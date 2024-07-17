@@ -7,7 +7,7 @@
 
 		<div class="flex dropdown">
 			<button
-				class="dropbtn ml-[80px] xs:ml-[100px] xs-sm:ml-[120px] xs-sm2:ml-[135px] sm:ml-[150px] md:ml-[150px] md-lg:ml-[250px] lg:ml-[150px] mt-[3vh] w-20 sm:mt-0 md:w-[100px] border-sky-500 bg-sky-600 hover:bg-sky-500">
+				class="dropbtn xs:ml-[100px] xs-sm:ml-[120px] xs-sm2:ml-[135px] sm:ml-[150px]  md-lg:ml-[250px] lg:ml-[150px] mt-[90vh] w-20 md:mt-0 md:w-[100px] border-sky-500 bg-sky-600 hover:bg-sky-500">
 				<div class="flex flex-row justify-around">
 					<p class="flex font-medium"
 						:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">
@@ -37,7 +37,7 @@
 
 		<div class="flex dropdown">
 			<button @click="reloadapp"
-				class="dropbtn  w-[12vw] border-sky-500 bg-sky-600 hover:bg-sky-500  fixed right-[30vw] mt-[3vh] xs:right-[15vw] sm:mt-0 sm:right-[10vw] md:right-[7vw] ">
+				class="dropbtn   border-sky-500 bg-sky-600 hover:bg-sky-500  fixed mt-[90vh] w-[100px] xs:w-[175px] right-[15vw] md:mt-0  md:right-[7vw] ">
 
 				<p class="font-medium "
 					:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">
