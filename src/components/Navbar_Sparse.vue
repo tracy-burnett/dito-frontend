@@ -1,7 +1,7 @@
 <template>
 	<div class="sticky top-0 z-30 flex flex-row h-0 bg-sky-600">
 
-		<div class="w-1/4 sm:w-1/5 md-lg:w-[160px] fixed -ml-[3.2vw] -mt-[1.9vw] flex">
+		<div class="w-[130px] fixed -ml-[46px] -mt-[24px] flex">
 			<img class="cursor-pointer" src="@/assets/dito_logo_main_color.svg" @click="gohome" />
 		</div>
 
