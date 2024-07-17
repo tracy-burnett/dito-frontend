@@ -1,12 +1,13 @@
 <template>
 	<div class="sticky top-0 z-30 flex flex-row h-0 bg-sky-600">
 
-		<div class="w-[9.3vw] fixed -ml-[3.2vw] -mt-[1.9vw] flex">
+		<div class="w-1/4 sm:w-1/5 md-lg:w-[160px] fixed -ml-[3.2vw] -mt-[1.9vw] flex">
 			<img class="cursor-pointer" src="@/assets/dito_logo_main_color.svg" @click="gohome" />
 		</div>
 
 		<div class="flex dropdown">
-			<button class="dropbtn  w-[8vw] border-sky-500 bg-sky-600 hover:bg-sky-500  ml-[7vw]">
+			<button
+				class="dropbtn ml-[80px] xs:ml-[140px] sm:ml-[150px] md:ml-[150px] md-lg:ml-[250px] lg:ml-[150px] mt-[3vh] w-20 sm:mt-0 md:w-[100px] border-sky-500 bg-sky-600 hover:bg-sky-500">
 				<div class="flex flex-row justify-around">
 					<p class="flex font-medium"
 						:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">
@@ -36,7 +37,7 @@
 
 		<div class="flex dropdown">
 			<button @click="reloadapp"
-				class="dropbtn  w-[12vw] border-sky-500 bg-sky-600 hover:bg-sky-500  fixed right-[7vw] ">
+				class="dropbtn  w-[12vw] border-sky-500 bg-sky-600 hover:bg-sky-500  fixed right-[30vw] mt-[3vh] xs:right-[15vw] sm:mt-0 sm:right-[10vw] md:right-[7vw] ">
 
 				<p class="font-medium "
 					:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">
@@ -47,8 +48,9 @@
 
 		<div class="fixed right-0 flex flex-col items-center">
 
-			<div class="flex flex-col items-center cursor-pointer mr-[1vw]" v-if="LoginLogoutButton" @click="signoutuser()">
-				<img src="@/assets/icon_sign_out.svg" class="pl-[.5vw] w-[3.2vw]  pt-[1vh]" />
+			<div class="flex flex-col items-center cursor-pointer mr-[1vw]" v-if="LoginLogoutButton"
+				@click="signoutuser()">
+				<img src="@/assets/icon_sign_out.svg" class="pl-[.5vw]  pt-[1vh]" />
 				<div>
 					<p class="text-slate-200"
 						:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">
@@ -58,7 +60,7 @@
 			</div>
 
 			<div class="flex flex-col items-center cursor-pointer mr-[1vw]" v-else @click="openlogin()">
-				<img src="@/assets/icon_profile.svg" class="w-[3.2vw]  pt-[1vh]" />
+				<img src="@/assets/icon_profile.svg" class="  pt-[1vh]" />
 				<p
 					:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག', 'text-slate-700': $store.state.infobit != 'Login', 'text-slate-200': $store.state.infobit == 'Login' }">
 					{{ $store.state.promptsObject.nLogin }}</p>
@@ -168,13 +170,14 @@ export default {
 				this.$store.commit('toggleInfobit', 'PublicCardList');
 			}
 			else {
-			this.$store.commit('toggleInfobit', 'InfoRevitalize');
-}			
-// this.$router.push("/");
-console.log(location.hostname)
-if (location.hostname=="localhost"){location.assign("http://localhost:8080/")}
-else{
-location.assign("https://" + location.hostname)}
+				this.$store.commit('toggleInfobit', 'InfoRevitalize');
+			}
+			// this.$router.push("/");
+			console.log(location.hostname)
+			if (location.hostname == "localhost") { location.assign("http://localhost:8080/") }
+			else {
+				location.assign("https://" + location.hostname)
+			}
 		},
 	},
 
@@ -249,4 +252,5 @@ location.assign("https://" + location.hostname)}
 	line-height: 1.25rem
 		/* 20px */
 	;
-}</style>
+}
+</style>
