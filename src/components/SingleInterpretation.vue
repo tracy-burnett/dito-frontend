@@ -1,5 +1,5 @@
 <template>
-	<div class="sticky h-full singleint">
+	<div class="h-full singleint">
 		<span v-if="showSyncingModal" class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen">
 			<SyncingModal :audio_id="audio_id" :interpretation_id="interpretation_id"
 				:editingversion="interpretationFull.version" :title="interpretationFull.version"
