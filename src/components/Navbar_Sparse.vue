@@ -1,22 +1,44 @@
 <template>
 	<div class="sticky top-0 z-30 flex flex-row h-0 bg-sky-600">
 
-		<div class="w-[9.3vw] fixed -ml-[3.2vw] -mt-[1.9vw] flex">
+		<div class="w-[130px] fixed -ml-[46px] -mt-[24px] flex">
 			<img class="cursor-pointer" src="@/assets/dito_logo_main_color.svg" @click="gohome" />
 		</div>
 
-		<div class="flex dropdown">
-			<button class="dropbtn  w-[8vw] border-sky-500 bg-sky-600 hover:bg-sky-500  ml-[7vw]">
+		<div class="flex dropdown" v-if="$store.state.audioDuration > 0">
+			<button
+				class="z-10 dropbtn right-[11px] mt-[18.2vh] xs:mt-0 xs:right-[50px] md:right-[550px] md-lg:right-[700px] lg:right-[820px] fixed sm:ml-[100px]  w-20  md:w-[100px] border-sky-500 bg-sky-600 hover:bg-sky-500">
 				<div class="flex flex-row justify-around">
 					<p class="flex font-medium"
 						:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">
 						{{ $store.state.promptsObject["name"] }}&nbsp;</p>
-					<div class="w-[1.5vw] flex">
+					<div class="w-[15px] flex">
 						<img class="cursor-pointer" src="@/assets/icon_language.svg" />
 					</div>
 				</div>
 			</button>
-			<div class="text-sm dropdown-content">
+			<div
+				class="right-[11px] mt-[24vh] xs:mt-[6vh] xs:right-[50px] md:right-[550px] md-lg:right-[700px] lg:right-[820px] fixed sm:ml-[100px]  w-20  md:w-[100px] text-sm dropdown-content">
+				<a @click="selectLanguage('English')">English</a>
+				<a @click="selectLanguage('中文')">中文</a>
+				<a class="text-lg" @click="selectLanguage('བོད་ཡིག')">བོད་ཡིག</a>
+			</div>
+		</div>
+		<div v-else class="flex dropdown">
+
+			<button
+				class="z-10 dropbtn ml-[80px] mt-[4vh]  fixed sm:ml-[100px] sm:mt-0 w-20   border-sky-500 bg-sky-600 hover:bg-sky-500">
+				<div class="flex flex-row justify-around">
+					<p class="flex font-medium"
+						:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">
+						{{ $store.state.promptsObject["name"] }}&nbsp;</p>
+					<div class="w-[15px] flex">
+						<img class="cursor-pointer" src="@/assets/icon_language.svg" />
+					</div>
+				</div>
+			</button>
+
+			<div class="ml-[80px] mt-[10vh]  fixed sm:ml-[100px] sm:mt-[5vh] w-20  text-sm dropdown-content ">
 				<a @click="selectLanguage('English')">English</a>
 				<a @click="selectLanguage('中文')">中文</a>
 				<a class="text-lg" @click="selectLanguage('བོད་ཡིག')">བོད་ཡིག</a>
@@ -35,8 +57,17 @@
 		</div>
 
 		<div class="flex dropdown">
-			<button @click="reloadapp"
-				class="dropbtn  w-[12vw] border-sky-500 bg-sky-600 hover:bg-sky-500  fixed right-[7vw] ">
+			<button v-if="$store.state.audioDuration > 0" @click="reloadapp"
+				class="dropbtn   border-sky-500 bg-sky-600 hover:bg-sky-500  fixed mt-[76vh] xs:mt-[72px] right-[11px] w-[100px] md:w-[175px]  md:mt-0  md:right-[7vw] ">
+
+				<p class="font-medium "
+					:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">
+					{{ $store.state.promptsObject.nGetLatestAppVersion }}</p>
+
+			</button>
+
+			<button v-else @click="reloadapp"
+				class="dropbtn   border-sky-500 bg-sky-600 hover:bg-sky-500  fixed mt-[4vh] right-[50px] w-[100px] sm:w-[175px]  sm:mt-0  sm:right-[7vw] ">
 
 				<p class="font-medium "
 					:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">
@@ -47,8 +78,9 @@
 
 		<div class="fixed right-0 flex flex-col items-center">
 
-			<div class="flex flex-col items-center cursor-pointer mr-[1vw]" v-if="LoginLogoutButton" @click="signoutuser()">
-				<img src="@/assets/icon_sign_out.svg" class="pl-[.5vw] w-[3.2vw]  pt-[1vh]" />
+			<div class="flex flex-col items-center cursor-pointer mr-[1vw]" v-if="LoginLogoutButton"
+				@click="signoutuser()">
+				<img src="@/assets/icon_sign_out.svg" class="pl-[.5vw]  pt-[1vh]" />
 				<div>
 					<p class="text-slate-200"
 						:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">
@@ -58,7 +90,7 @@
 			</div>
 
 			<div class="flex flex-col items-center cursor-pointer mr-[1vw]" v-else @click="openlogin()">
-				<img src="@/assets/icon_profile.svg" class="w-[3.2vw]  pt-[1vh]" />
+				<img src="@/assets/icon_profile.svg" class="  pt-[1vh]" />
 				<p
 					:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག', 'text-slate-700': $store.state.infobit != 'Login', 'text-slate-200': $store.state.infobit == 'Login' }">
 					{{ $store.state.promptsObject.nLogin }}</p>
@@ -168,13 +200,14 @@ export default {
 				this.$store.commit('toggleInfobit', 'PublicCardList');
 			}
 			else {
-			this.$store.commit('toggleInfobit', 'InfoRevitalize');
-}			
-// this.$router.push("/");
-console.log(location.hostname)
-if (location.hostname=="localhost"){location.assign("http://localhost:8080/")}
-else{
-location.assign("https://" + location.hostname)}
+				this.$store.commit('toggleInfobit', 'InfoRevitalize');
+			}
+			// this.$router.push("/");
+			console.log(location.hostname)
+			if (location.hostname == "localhost") { location.assign("http://localhost:8080/") }
+			else {
+				location.assign("https://" + location.hostname)
+			}
 		},
 	},
 
@@ -208,12 +241,11 @@ location.assign("https://" + location.hostname)}
 
 .dropdown-content {
 	display: none;
-	position: absolute;
-	right: 0;
+	/* right: 0; */
 	background-color: #f9f9f9;
 	min-width: 160px;
 	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-	z-index: 1;
+	/* z-index: 50; */
 }
 
 .dropdown-content a {
@@ -249,4 +281,5 @@ location.assign("https://" + location.hostname)}
 	line-height: 1.25rem
 		/* 20px */
 	;
-}</style>
+}
+</style>
