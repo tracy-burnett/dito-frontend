@@ -1,8 +1,8 @@
 <template>
 	<div class="sticky top-0 z-30 flex flex-row h-0 bg-sky-600">
 
-		<div class="w-[130px] fixed -ml-[46px] -mt-[24px] flex ">
-			<img class="cursor-pointer" src="@/assets/dito_logo_main_color.svg" @click="gohome" />
+		<div class="w-[130px] fixed -ml-[46px] -mt-[24px] flex " style="transform: translate3d(0,0,0);">
+			<img class="cursor-pointer" src="@/assets/dito_logo_main_color.svg" style="transform: translate3d(0,0,0);" @click="gohome" />
 		</div>
 
 		<div class="flex dropdown" v-if="$store.state.audioDuration > 0">
