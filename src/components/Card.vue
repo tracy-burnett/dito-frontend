@@ -14,9 +14,9 @@
 				</div>
 				<!-- <img class="z-40 w-6 ml-1 storybookicon" src="@/assets/white_book_icon.svg"
 					@click.stop="cardclicked" /> -->
-					<img v-if="currentaudioid==audio_ID" class="z-40" src="@/assets/pause.svg"
+					<img v-if="currentaudioid==audio_ID" class="z-40 w-10 h-10 " src="@/assets/pause.svg"
 					 />
-					<img v-else class="z-40 w-[2vw] h-[2vw] ml-1" src="@/assets/play.svg"
+					<img v-else class="z-40 w-6 h-6 ml-1" src="@/assets/play.svg"
 				/>
 			</div>
 
