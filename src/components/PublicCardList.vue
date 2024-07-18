@@ -25,7 +25,7 @@
 		class="flex flex-row flex-wrap justify-around basis-full pt-[10vh] lg:basis-2/5">processing information from
 		server; please wait...</div>
 
-		<div class="flex justify-center">
+	<div v-if="$store.state.portalname=='sfcanto'" class="flex justify-center">
 		<button class=" dropbtn border-emerald-900 bg-emerald-800 hover:bg-emerald-900" @click="openPhraseRequest"
 			:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">
 
@@ -244,7 +244,6 @@ export default {
 </script>
 
 <style scoped>
-
 .dropbtn {
 	/* background-color: #7833ff; */
 	border: none;
