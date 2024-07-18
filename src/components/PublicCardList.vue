@@ -9,15 +9,15 @@
 		<div v-if="searchResultAudioArray.length > 0" class="pt-[9vh]  flex flex-row items-center">
 			<div v-for="audio in searchResultAudioArray" :key="audio.id">
 				<Card :date="audio.uploaded_at.substring(0, 10) + ' UTC'" :uploader="audio.uploaded_by.display_name"
-					:description="audio.description" :title="audio.title" :audio_ID="audio.id"
-					@clicked="audioPlayPause($event)" />
+					:description="audio.description" :currentaudioid="currentaudioid" :title="audio.title"
+					:audio_ID="audio.id" @clicked="audioPlayPause($event)" />
 			</div>
 		</div>
 		<div v-else class=" pt-[9vh] flex flex-row items-center">
 			<div v-for="audio in audioArray" :key="audio.id">
 				<Card :date="audio.uploaded_at.substring(0, 10) + ' UTC'" :uploader="audio.uploaded_by.display_name"
-					:description="audio.description" :title="audio.title" :audio_ID="audio.id"
-					@clicked="audioPlayPause($event)" />
+					:description="audio.description" :currentaudioid="currentaudioid" :title="audio.title"
+					:audio_ID="audio.id" @clicked="audioPlayPause($event)" />
 			</div>
 		</div>
 	</div>
@@ -96,18 +96,26 @@ export default {
 		// }
 	},
 	methods: {
+		onEnded() {
+
+			this.oldaudioid = ""
+			this.currentaudioid = ""
+		},
 
 		onCanPlay() {
 			// Play the audio
 			this.audioplayer.play();
 			this.oldaudioid = this.currentaudioid
-			this.audioplayer.removeEventListener('canplay', this.onCanPlay, { once: true });
+			// the line below is not needed because once was invoked
+			// this.audioplayer.removeEventListener('canplay', this.onCanPlay, { once: true }); 
+			this.audioplayer.addEventListener('ended', this.onEnded, { once: true })
 		},
 
 		audioPlayPause(audio_ID) {
 			if (audio_ID == this.oldaudioid) {
 				this.audioplayer.pause()
 				this.oldaudioid = ""
+				this.currentaudioid = ""
 			}
 			else {
 				this.currentaudioid = audio_ID

@@ -1,5 +1,5 @@
 <template>
-	<div @click="cardclicked"
+	<div @click="openstorybook()"
 		class="relative mb-[3vh] overflow-hidden transition-colors bg-white border-slate-300 border shadow-lg cursor-pointer hover:overflow-auto group card rounded-xl  hover:border-slate-400 hover:outline-2">
 		<div class="relative flex items-center justify-between bg-emerald-800 flex-cols-2">
 			<div class="absolute inset-0 opacity-0 bg-emerald-900 group-hover:opacity-100"></div>
@@ -8,12 +8,16 @@
 
 			<div class="z-20 flex mt-1 ml-[1vw] mb-2 text-xl text-gray-100 group-hover:text-gray-50">{{ title
 				}}</div>
-			<div
+			<div @click.stop="cardclicked"
 				class=" shrink-0 relative z-20 my-[1vh] flex items-center justify-center w-10 h-10 mr-[1vw] rounded-full shadow-lg bg-cyan-700">
 				<div class="absolute inset-0 z-30 rounded-full shadow-lg opacity-0 bg-cyan-800 group-hover:opacity-100">
 				</div>
-				<img class="z-40 w-6 ml-1 storybookicon" src="@/assets/white_book_icon.svg"
-					@click.stop="openstorybook()" />
+				<!-- <img class="z-40 w-6 ml-1 storybookicon" src="@/assets/white_book_icon.svg"
+					@click.stop="cardclicked" /> -->
+					<img v-if="currentaudioid==audio_ID" class="z-40" src="@/assets/pause.svg"
+					 />
+					<img v-else class="z-40 w-[2vw] h-[2vw] ml-1" src="@/assets/play.svg"
+				/>
 			</div>
 
 			<!-- </div> -->
@@ -43,7 +47,9 @@ export default {
 		title: {
 			default: "",
 		},
-
+		currentaudioid: {
+			default: "",
+		},
 		// image: {
 		// 	default: browse,
 		// },
