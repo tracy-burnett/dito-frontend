@@ -6,7 +6,7 @@
 		</div>
 
 		<div class="flex dropdown">
-			<button
+			<button v-if="$store.state.audioDuration>0"
 				class="z-10 dropbtn right-[11px] mt-[18.2vh] xs:mt-0 xs:right-[50px] md:right-[550px] md-lg:right-[700px] lg:right-[820px] fixed sm:ml-[100px]  w-20  md:w-[100px] border-sky-500 bg-sky-600 hover:bg-sky-500">
 				<div class="flex flex-row justify-around">
 					<p class="flex font-medium"
@@ -17,6 +17,19 @@
 					</div>
 				</div>
 			</button>
+
+			<button v-else
+				class="z-10 dropbtn ml-[80px] mt-[4vh]  fixed sm:ml-[100px] sm:mt-0 w-20   border-sky-500 bg-sky-600 hover:bg-sky-500">
+				<div class="flex flex-row justify-around">
+					<p class="flex font-medium"
+						:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">
+						{{ $store.state.promptsObject["name"] }}&nbsp;</p>
+					<div class="w-[15px] flex">
+						<img class="cursor-pointer" src="@/assets/icon_language.svg" />
+					</div>
+				</div>
+			</button>
+
 			<div class="text-sm dropdown-content">
 				<a @click="selectLanguage('English')">English</a>
 				<a @click="selectLanguage('中文')">中文</a>
@@ -36,8 +49,17 @@
 		</div>
 
 		<div class="flex dropdown">
-			<button @click="reloadapp"
-				class="dropbtn   border-sky-500 bg-sky-600 hover:bg-sky-500  fixed mt-[76vh] xs:mt-[72px] right-[11px] w-[100px] sm:w-[175px]  md:mt-0  md:right-[7vw] ">
+			<button v-if="$store.state.audioDuration>0" @click="reloadapp"
+				class="dropbtn   border-sky-500 bg-sky-600 hover:bg-sky-500  fixed mt-[76vh] xs:mt-[72px] right-[11px] w-[100px] md:w-[175px]  md:mt-0  md:right-[7vw] ">
+
+				<p class="font-medium "
+					:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">
+					{{ $store.state.promptsObject.nGetLatestAppVersion }}</p>
+
+			</button>
+
+			<button v-else @click="reloadapp"
+				class="dropbtn   border-sky-500 bg-sky-600 hover:bg-sky-500  fixed mt-[4vh] right-[50px] w-[100px] sm:w-[175px]  sm:mt-0  sm:right-[7vw] ">
 
 				<p class="font-medium "
 					:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">
