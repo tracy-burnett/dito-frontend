@@ -1,5 +1,5 @@
 <template>
-	<div class="h-full">
+	<div class="h-full singleint">
 		<span v-if="showSyncingModal" class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen">
 			<SyncingModal :audio_id="audio_id" :interpretation_id="interpretation_id"
 				:editingversion="interpretationFull.version" :title="interpretationFull.version"
@@ -137,7 +137,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="mt-[6vh] singleint">
+		<div class="mt-[6vh]">
 			<!-- this component will depend on the user's selection of component to vue via a menu in a different component -->
 			<component v-bind:is="styleoption" :audio_id="audio_id" :timestep="timestep" :scribing="scribing"
 				:studying="studying" :fontsize="fontsize" :key="prompterReloadCounter"
