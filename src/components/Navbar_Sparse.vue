@@ -5,8 +5,8 @@
 			<img class="cursor-pointer" src="@/assets/dito_logo_main_color.svg" @click="gohome" />
 		</div>
 
-		<div class="flex dropdown">
-			<button v-if="$store.state.audioDuration>0"
+		<div class="flex dropdown"  v-if="$store.state.audioDuration>0">
+			<button
 				class="z-10 dropbtn right-[11px] mt-[18.2vh] xs:mt-0 xs:right-[50px] md:right-[550px] md-lg:right-[700px] lg:right-[820px] fixed sm:ml-[100px]  w-20  md:w-[100px] border-sky-500 bg-sky-600 hover:bg-sky-500">
 				<div class="flex flex-row justify-around">
 					<p class="flex font-medium"
@@ -17,8 +17,15 @@
 					</div>
 				</div>
 			</button>
+			<div class="right-[11px] mt-[24vh] xs:mt-[6vh] xs:right-[50px] md:right-[550px] md-lg:right-[700px] lg:right-[820px] fixed sm:ml-[100px]  w-20  md:w-[100px] text-sm dropdown-content">
+				<a @click="selectLanguage('English')">English</a>
+				<a @click="selectLanguage('中文')">中文</a>
+				<a class="text-lg" @click="selectLanguage('བོད་ཡིག')">བོད་ཡིག</a>
+			</div>
+		</div>
+		<div v-else class="flex dropdown">
 
-			<button v-else
+			<button
 				class="z-10 dropbtn ml-[80px] mt-[4vh]  fixed sm:ml-[100px] sm:mt-0 w-20   border-sky-500 bg-sky-600 hover:bg-sky-500">
 				<div class="flex flex-row justify-around">
 					<p class="flex font-medium"
@@ -30,7 +37,7 @@
 				</div>
 			</button>
 
-			<div class="text-sm dropdown-content">
+			<div class="ml-[80px] mt-[10vh]  fixed sm:ml-[100px] sm:mt-[5vh] w-20  text-sm dropdown-content ">
 				<a @click="selectLanguage('English')">English</a>
 				<a @click="selectLanguage('中文')">中文</a>
 				<a class="text-lg" @click="selectLanguage('བོད་ཡིག')">བོད་ཡིག</a>
@@ -233,12 +240,11 @@ export default {
 
 .dropdown-content {
 	display: none;
-	position: absolute;
-	right: 0;
+	/* right: 0; */
 	background-color: #f9f9f9;
 	min-width: 160px;
 	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-	z-index: 1;
+	/* z-index: 50; */
 }
 
 .dropdown-content a {
