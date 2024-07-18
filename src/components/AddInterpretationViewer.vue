@@ -21,7 +21,7 @@
 				{{ $store.state.promptsObject.oUploadInterpretationFile }}</p>
 		</div>
 		<!-- this is a button for adding another column that shows an Interpretation that you have access to but aren't yet viewing -->
-		<div class="flex flex-col items-left pt-[2vh]" v-show="interpretationsList[0] && $store.state.consoleswidth>=465" id="add" @click="add"
+		<div class="flex flex-col items-left pt-[2vh]" v-show="interpretationsList[0] && ($store.state.consoleswidth>=465 || $store.state.consoles.length==0)" id="add" @click="add"
 			style="cursor:pointer">
 			<div class="w-[7.5vh]">
 				<img src="@/assets/icon_add_fill.svg" />

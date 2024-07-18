@@ -1,13 +1,13 @@
 <template>
 	<div class="sticky top-0 z-30 flex flex-row h-0 bg-sky-600">
 
-		<div class="w-[130px] fixed -ml-[46px] -mt-[24px] flex">
+		<div class="w-[130px] fixed -ml-[46px] -mt-[24px] flex ">
 			<img class="cursor-pointer" src="@/assets/dito_logo_main_color.svg" @click="gohome" />
 		</div>
 
 		<div class="flex dropdown" v-if="$store.state.audioDuration > 0">
 			<button
-				class="z-10 dropbtn right-[11px] mt-[18.2vh] xs:mt-0 xs:right-[50px] md:right-[550px] md-lg:right-[700px] lg:right-[820px] fixed sm:ml-[100px]  w-20  md:w-[100px] border-sky-500 bg-sky-600 hover:bg-sky-500">
+				class="z-10 dropbtn right-[11px] mt-[18.2vh] xs:mt-0 xs:right-[50px] md:right-[550px] md-lg:right-[700px] lg:right-[820px] fixed  sm:ml-[100px]  w-20  md:w-[100px] border-sky-500 bg-sky-600 hover:bg-sky-500">
 				<div class="flex flex-row justify-around">
 					<p class="flex font-medium"
 						:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">
@@ -18,7 +18,7 @@
 				</div>
 			</button>
 			<div
-				class="right-[11px] mt-[24vh] xs:mt-[6vh] xs:right-[50px] md:right-[550px] md-lg:right-[700px] lg:right-[820px] fixed sm:ml-[100px]  w-20  md:w-[100px] text-sm dropdown-content">
+				class="right-[11px] mt-[24vh] xs:mt-[6vh] xs:right-[50px] md:right-[550px] md-lg:right-[700px] lg:right-[820px] fixed  sm:ml-[100px]  w-20  md:w-[100px] text-sm dropdown-content">
 				<a @click="selectLanguage('English')">English</a>
 				<a @click="selectLanguage('中文')">中文</a>
 				<a class="text-lg" @click="selectLanguage('བོད་ཡིག')">བོད་ཡིག</a>
@@ -27,7 +27,7 @@
 		<div v-else class="flex dropdown">
 
 			<button
-				class="z-10 dropbtn ml-[80px] mt-[4vh]  fixed sm:ml-[100px] sm:mt-0 w-20   border-sky-500 bg-sky-600 hover:bg-sky-500">
+				class="z-10 dropbtn ml-[80px] mt-[4vh]  fixed  sm:ml-[100px] sm:mt-0 w-20   border-sky-500 bg-sky-600 hover:bg-sky-500">
 				<div class="flex flex-row justify-around">
 					<p class="flex font-medium"
 						:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">
@@ -38,7 +38,7 @@
 				</div>
 			</button>
 
-			<div class="ml-[80px] mt-[10vh]  fixed sm:ml-[100px] sm:mt-[5vh] w-20  text-sm dropdown-content ">
+			<div class="ml-[80px] mt-[10vh]  fixed  sm:ml-[100px] sm:mt-[5vh] w-20  text-sm dropdown-content ">
 				<a @click="selectLanguage('English')">English</a>
 				<a @click="selectLanguage('中文')">中文</a>
 				<a class="text-lg" @click="selectLanguage('བོད་ཡིག')">བོད་ཡིག</a>
@@ -46,7 +46,7 @@
 		</div>
 
 
-		<div class="fixed justify-center m-auto left-0 right-0 w-[70vw] flex mt-[.1vh]">
+		<div class="fixed  justify-center m-auto left-0 right-0 w-[70vw] flex mt-[.1vh]">
 			<!-- <slot></slot> -->
 			<p class="mt-1 text-sm font-semibold text-center text-slate-100">
 				{{ $store.state.portalname }}</p>
@@ -58,7 +58,7 @@
 
 		<div class="flex dropdown">
 			<button v-if="$store.state.audioDuration > 0" @click="reloadapp"
-				class="dropbtn   border-sky-500 bg-sky-600 hover:bg-sky-500  fixed mt-[76vh] xs:mt-[72px] right-[11px] w-[100px] md:w-[175px]  md:mt-0  md:right-[7vw] ">
+				class="dropbtn   border-sky-500 bg-sky-600 hover:bg-sky-500   fixed mt-[76vh] xs:mt-[72px] right-[11px] w-[100px] md:w-[175px]  md:mt-0  md:right-[7vw] ">
 
 				<p class="font-medium "
 					:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">
@@ -273,6 +273,8 @@ export default {
 		/* 20px */
 	;
 }
+
+
 
 .nottibetantiny {
 	font-size: 0.875rem
