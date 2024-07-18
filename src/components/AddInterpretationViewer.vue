@@ -11,8 +11,8 @@
 				{{ $store.state.promptsObject.oCreateNewInterpretation }}</p>
 		</div>
 		<!-- this is a button for creating a new Interpretation and having it displayed in its own column -->
-		<div v-if="$store.state.user" class="flex flex-col items-left py-[2vh]"
-			id="upload" @click="upload" style="cursor:pointer">
+		<div v-if="$store.state.user" class="flex flex-col items-left py-[2vh]" id="upload" @click="upload"
+			style="cursor:pointer">
 			<div class="w-[7.5vh]">
 				<img src="@/assets/icon_add_no_fill.svg" />
 			</div>
@@ -21,7 +21,7 @@
 				{{ $store.state.promptsObject.oUploadInterpretationFile }}</p>
 		</div>
 		<!-- this is a button for adding another column that shows an Interpretation that you have access to but aren't yet viewing -->
-		<div class="flex flex-col items-left pt-[2vh]" v-show="interpretationsList[0]" id="add" @click="add"
+		<div class="flex flex-col items-left pt-[2vh]" v-show="interpretationsList[0] && $store.state.consoleswidth>=465" id="add" @click="add"
 			style="cursor:pointer">
 			<div class="w-[7.5vh]">
 				<img src="@/assets/icon_add_fill.svg" />
@@ -54,8 +54,7 @@ export default {
 			this.$emit("toggleInterpretationModal");
 		},
 		upload() {
-			if (this.$store.state.user && this.$store.state.audioDuration > 0)
-			{this.$emit("toggleUploadIntModal");}
+			if (this.$store.state.user && this.$store.state.audioDuration > 0) { this.$emit("toggleUploadIntModal"); }
 		},
 		add() {
 			if (this.interpretationsList[0]) {
