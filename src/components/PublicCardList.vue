@@ -25,6 +25,14 @@
 		class="flex flex-row flex-wrap justify-around basis-full pt-[10vh] lg:basis-2/5">processing information from
 		server; please wait...</div>
 
+		<div class="flex justify-center">
+		<button class=" dropbtn border-emerald-900 bg-emerald-800 hover:bg-emerald-900" @click="openPhraseRequest"
+			:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">
+
+			REQUEST A NEW PHRASE
+		</button>
+	</div>
+
 </template>
 
 <script>
@@ -96,6 +104,9 @@ export default {
 		// }
 	},
 	methods: {
+		openPhraseRequest() {
+			window.open('https://forms.gle/D4UiGqzKbtBbXr7V7', '_blank').focus();
+		},
 		onEnded() {
 
 			this.oldaudioid = ""
@@ -233,6 +244,20 @@ export default {
 </script>
 
 <style scoped>
+
+.dropbtn {
+	/* background-color: #7833ff; */
+	border: none;
+	color: white;
+	padding: 1vh 3vh;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	/* margin: 4px 2px; */
+	cursor: pointer;
+	border-radius: 16px;
+}
+
 .cardlist {
 	-ms-overflow-style: none;
 	/* for Internet Explorer, Edge */

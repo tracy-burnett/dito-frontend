@@ -10,7 +10,7 @@
 				}}</div>
 			<div @click.stop="cardclicked"
 				class=" shrink-0 relative z-20 my-[1vh] flex items-center justify-center w-10 h-10 mr-[1vw] rounded-full shadow-lg bg-cyan-700">
-				<div class="absolute inset-0 z-30 rounded-full shadow-lg opacity-0 bg-cyan-800 group-hover:opacity-100">
+				<div class="absolute inset-0 z-30 rounded-full shadow-lg opacity-0 bg-cyan-800 ">
 				</div>
 				<!-- <img class="z-40 w-6 ml-1 storybookicon" src="@/assets/white_book_icon.svg"
 					@click.stop="cardclicked" /> -->
