@@ -1,5 +1,5 @@
 <template>
-	<div @click.ctrl.exact="playerPlayPause++" class="absolute w-full">
+	<div @click.ctrl.exact="playerPlayPause++" class="w-full">
 		<span v-if="showAddInterpretationModal"
 			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen">
 			<AddInterpretationModal :audio_id="audio_ID" @addCreatedInterpretation="addCreatedInterpretation($event)"
@@ -399,17 +399,6 @@ export default {
 </script>
 
 <style scoped>
-
-html {
-    height  : 100%;
-    overflow: hidden;
-    position: relative;
-}
-body {
-    height  : 100%;
-    overflow: auto;
-    position: relative;
-}
 
 .dropbtn {
 	/* background-color: #7833ff; */
