@@ -17,7 +17,7 @@
 			<span @click="$store.commit('toggleInfobit', 'CreateStorybook');" @touchend="$store.commit('toggleInfobit', 'CreateStorybook');">
 				<div class="cursor-pointer contents" v-if="contribute == false" @mouseover="contribute = true"
 					@mouseleave="contribute = false">
-					<img class="object-scale-down mt-[40px] md:ml-[50px] lg:mt-0 h-[35vh] w-[20vw]" :src="image2" />
+					<img class="object-scale-down mt-[40px]  lg:mt-0 h-[35vh] w-[20vw]" :src="image2" />
 				</div>
 
 				<div class="flex flex-col items-center justify-center cursor-pointer h-[35vh] w-[20vw]"
@@ -28,7 +28,7 @@
 			<span @click="$store.commit('toggleInfobit', 'InfoPublish');" @touchend="$store.commit('toggleInfobit', 'InfoPublish');">
 				<div class="cursor-pointer contents" v-if="publish == false" @mouseover="publish = true"
 					@mouseleave="publish = false">
-					<img class="object-scale-down mt-[40px] md:ml-[50px] lg:mt-0 h-[35vh] w-[20vw]" :src="image3" />
+					<img class="object-scale-down mt-[40px]  lg:mt-0 h-[35vh] w-[20vw]" :src="image3" />
 				</div>
 
 				<div class="flex flex-col items-center justify-center cursor-pointer h-[35vh] w-[20vw]"
@@ -40,7 +40,7 @@
 			<span @click="$store.commit('toggleInfobit', 'PublicCardList');" @touchend="$store.commit('toggleInfobit', 'PublicCardList');">
 				<div class="cursor-pointer contents" v-if="revitalize == false" @mouseover="revitalize = true"
 					@mouseleave="revitalize = false">
-					<img class="object-scale-down mt-[40px] md:ml-[50px] lg:mt-0 h-[35vh] w-[20vw]" :src="image4" />
+					<img class="object-scale-down mt-[40px]  lg:mt-0 h-[35vh] w-[20vw]" :src="image4" />
 				</div>
 
 				<div class="flex flex-col items-center justify-center  cursor-pointer h-[35vh] w-[20vw]"
@@ -74,7 +74,7 @@
 			<span @click="$store.commit('toggleInfobit', 'InfoRevitalize');" @touchend="$store.commit('toggleInfobit', 'InfoRevitalize');">
 				<div class="cursor-pointer contents" v-if="revitalize == false" @mouseover="revitalize = true"
 					@mouseleave="revitalize = false">
-					<img class="object-scale-down mt-[40px] md:ml-[50px] lg:mt-0 h-[35vh] w-[20vw]" :src="image4" />
+					<img class="object-scale-down mt-[40px] lg:mt-0 h-[35vh] w-[20vw]" :src="image4" />
 				</div>
 
 				<div class="flex flex-col items-center justify-center  cursor-pointer h-[35vh] w-[20vw]"
