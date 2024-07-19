@@ -48,6 +48,7 @@ export default new Vuex.Store({
     promptsObject: { name: "English", code: "en" },
     consoleschanged: 0,
     portalname: "",
+    routeName: "",
 
   },
   getters: {
@@ -267,6 +268,10 @@ export default new Vuex.Store({
 
     updatePortalName(state, portalname) {
       state.portalname = portalname
+    },
+
+    updateRouteName(state, routename) {
+      state.routeName = routename
     },
 
     updateStartTimePrompter(state, starttimeprompter) {

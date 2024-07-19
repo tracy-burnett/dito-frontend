@@ -108,4 +108,6 @@ export default {
 	font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	/* overscroll-behavior-x: none; */
 }
+
+
 </style>

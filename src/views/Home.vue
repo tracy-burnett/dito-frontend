@@ -44,6 +44,11 @@ export default {
 			return this.$store.state.user;
 		},
 	},
+
+	mounted() {
+		
+		this.$store.commit("updateRouteName", "Home")
+	},
 	// mounted() {
 
 	// 	if (this.$store.state.promptsObject.code != "en") {

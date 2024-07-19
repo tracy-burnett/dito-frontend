@@ -1,7 +1,7 @@
 <template>
 	<div class="w-full privatecardlist pb-[8vh]" style="overflow: scroll; height:44vh;">
 
-		<div class="fixed z-[8] flex flex-row justify-around w-full -mt-[5vh]">
+		<div class="absolute z-[8] flex flex-row justify-around w-full -mt-[5vh]">
 
 			<div class="flex flex-row flex-wrap justify-between basis-full lg:basis-2/5">
 				<p>Filters:</p>
