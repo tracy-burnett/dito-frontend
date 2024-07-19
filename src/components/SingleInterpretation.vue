@@ -355,8 +355,10 @@ export default {
 	/* for Internet Explorer, Edge */
 	scrollbar-width: none;
 	/* for Firefox */
-	overflow-y: scroll;
-	overscroll-behavior: none;
+	/* overflow-y: scroll;
+	overscroll-behavior: none; */
+	scroll-snap-type: y mandatory;
+	scroll-snap-align: start;
 }
 
 .singleint::-webkit-scrollbar {
