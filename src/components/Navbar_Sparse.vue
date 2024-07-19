@@ -76,7 +76,7 @@
 			</button>
 		</div>
 
-		<div class="fixed right-0 flex flex-col items-center">
+		<div class="absolute right-0 flex flex-col items-center">
 
 			<div class="flex flex-col items-center cursor-pointer mr-[1vw]" v-if="LoginLogoutButton"
 				@click="signoutuser()">
