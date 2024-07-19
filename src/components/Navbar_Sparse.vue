@@ -5,7 +5,7 @@
 			<img class="cursor-pointer" src="@/assets/dito_logo_main_color.svg" @click="gohome" />
 		</div>
 
-		<div class="flex dropdown" v-if="$store.state.audioDuration > 0">
+		<div class="flex dropdown" v-if="$store.state.routeName == 'Storybook'">
 			<button
 				class="z-10 dropbtn right-[11px] mt-[18.2vh] xs:mt-0 xs:right-[50px] md:right-[550px] md-lg:right-[700px] lg:right-[820px] fixed  sm:ml-[100px]  w-20  md:w-[100px] border-sky-500 bg-sky-600 hover:bg-sky-500">
 				<div class="flex flex-row justify-around">
@@ -24,7 +24,7 @@
 				<a class="text-lg" @click="selectLanguage('བོད་ཡིག')">བོད་ཡིག</a>
 			</div>
 		</div>
-		<div v-else class="flex dropdown">
+		<div v-else-if="$store.state.routeName=='Home'" class="flex dropdown">
 
 			<button
 				class="z-10 dropbtn ml-[80px] mt-[4vh]  fixed  sm:ml-[100px] sm:mt-0 w-20   border-sky-500 bg-sky-600 hover:bg-sky-500">
@@ -57,7 +57,7 @@
 		</div>
 
 		<div class="flex dropdown">
-			<button v-if="$store.state.audioDuration > 0" @click="reloadapp"
+			<button v-if="$store.state.routeName == 'Storybook'" @click="reloadapp"
 				class="dropbtn   border-sky-500 bg-sky-600 hover:bg-sky-500   fixed mt-[76vh] xs:mt-[72px] right-[11px] w-[100px] md:w-[175px]  md:mt-0  md:right-[7vw] ">
 
 				<p class="font-medium "
@@ -66,7 +66,7 @@
 
 			</button>
 
-			<button v-else @click="reloadapp"
+			<button v-else-if="$store.state.routeName=='Home'" @click="reloadapp"
 				class="dropbtn   border-sky-500 bg-sky-600 hover:bg-sky-500  fixed mt-[4vh] right-[50px] w-[100px] sm:w-[175px]  sm:mt-0  sm:right-[7vw] ">
 
 				<p class="font-medium "
