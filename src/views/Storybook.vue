@@ -1,5 +1,5 @@
 <template>
-	<div @click.ctrl.exact="playerPlayPause++" class="w-full">
+	<div @click.ctrl.exact="playerPlayPause++" class="fixed w-full">
 		<span v-if="showAddInterpretationModal"
 			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen">
 			<AddInterpretationModal :audio_id="audio_ID" @addCreatedInterpretation="addCreatedInterpretation($event)"
@@ -15,7 +15,7 @@
 				{{ $store.state.portalname }}
 			</p> -->
 		</Navbar>
-		<div class="relative overflow-x-hidden justify-items-center hero">
+		<div class="absolute w-full overflow-x-hidden justify-items-center hero">
 			<div class="pt-[5vh] flex flex-row justify-between h-[100vh]">
 
 				<div>
