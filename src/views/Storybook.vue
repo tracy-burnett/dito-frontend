@@ -400,6 +400,11 @@ export default {
 
 <style scoped>
 
+html {
+    overflow: hidden;
+    position: relative;
+}
+
 .dropbtn {
 	/* background-color: #7833ff; */
 	border: none;
