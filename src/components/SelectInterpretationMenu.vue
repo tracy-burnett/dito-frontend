@@ -3,7 +3,7 @@
 		<div class="dropdown" style="float: right">
 			<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">{{$store.state.promptsObject.bInterpretation}}</button>
 
-			<div class="dropdown-content">
+			<div class="z-50 dropdown-content">
 				<!-- for each interpretation in the list of interpretations to show in the menu, create a menu option that displays the language name -->
 				<span v-for="interpretation in interpretationsList" :key="interpretation.id">
 					<a @click="selectInterpretationMenu(interpretation.id)">{{ interpretation.title }}, in {{

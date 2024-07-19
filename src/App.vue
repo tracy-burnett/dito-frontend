@@ -109,14 +109,5 @@ export default {
 	/* overscroll-behavior-x: none; */
 }
 
-html {
-    height  : 100%;
-    overflow: hidden;
-    position: relative;
-}
-body {
-    height  : 100%;
-    overflow: auto;
-    position: relative;
-}
+
 </style>

@@ -399,6 +399,18 @@ export default {
 </script>
 
 <style scoped>
+
+html {
+    height  : 100%;
+    overflow: hidden;
+    position: relative;
+}
+body {
+    height  : 100%;
+    overflow: auto;
+    position: relative;
+}
+
 .dropbtn {
 	/* background-color: #7833ff; */
 	border: none;
