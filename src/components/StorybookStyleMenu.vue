@@ -89,7 +89,7 @@
 				v-else
 				class="border-sky-600 bg-sky-700 hover:bg-sky-600 dropbtn px-[.6vw] py-[1vh]"
 			>Interaction</button> -->
-			<div class="dropdown-content" v-if="tier=='project'">
+			<div class="z-40 dropdown-content" v-if="tier=='project'">
 
 				<div class="absolute right-0 mr-[1vw] grid h-full">
 					<img
