@@ -22,8 +22,7 @@
 					<PlayerVertical v-if="this.$store.state.authCompleted" :key="playerKey" :audio_ID="audio_ID"
 						:playerPlayPause="playerPlayPause" @rerenderPlayer="playerKey++" />
 				</div>
-				<div class="flex flex-row ml-[105px] mr-[105px]] absolute"
-					:style="{ 'width': this.consolespace + 'px' }">
+				<div class="flex flex-row ml-[105px] mr-[105px]] w-full">
 
 					<span v-for="interpretation in $store.state.consoles" :key="interpretation"
 						class="w-full box-border px-[.5vw]">
@@ -90,9 +89,9 @@ export default {
 		// title: "",
 	},
 	computed: {
-		consolespace() {
-			return this.$store.state.consoleswidth - 210;
-		},
+		// consolespace() {
+		// 	return this.$store.state.consoleswidth - 210;
+		// },
 	},
 
 	watch: {
