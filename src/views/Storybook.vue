@@ -1,6 +1,7 @@
 <template>
 	<div @click.ctrl.exact="playerPlayPause++">
-		<span v-if="showAddInterpretationModal" class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen">
+		<span v-if="showAddInterpretationModal"
+			class="fixed inset-0 z-40 flex items-center justify-center w-full h-screen">
 			<AddInterpretationModal :audio_id="audio_ID" @addCreatedInterpretation="addCreatedInterpretation($event)"
 				@closeInterpretationModal="closeInterpretationModal()" />
 		</span>
@@ -21,7 +22,8 @@
 					<PlayerVertical v-if="this.$store.state.authCompleted" :key="playerKey" :audio_ID="audio_ID"
 						:playerPlayPause="playerPlayPause" @rerenderPlayer="playerKey++" />
 				</div>
-				<div class="flex flex-row w-full ml-[105px] mr-[105px]">
+				<div class="flex flex-row ml-[105px] mr-[105px]] absolute"
+					:style="{ 'width': this.consolespace + 'px' }">
 
 					<span v-for="interpretation in $store.state.consoles" :key="interpretation"
 						class="w-full box-border px-[.5vw]">
@@ -88,7 +90,9 @@ export default {
 		// title: "",
 	},
 	computed: {
-
+		consolespace() {
+			return this.$store.state.consoleswidth - 210;
+		},
 	},
 
 	watch: {
