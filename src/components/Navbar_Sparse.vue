@@ -24,7 +24,7 @@
 				<a class="text-lg" @click="selectLanguage('བོད་ཡིག')">བོད་ཡིག</a>
 			</div>
 		</div>
-		<div v-else-if="$store.state.routeName=='Home'" class="flex dropdown">
+		<div v-else-if="$store.state.routeName == 'Home'" class="flex dropdown">
 
 			<button
 				class="z-10 dropbtn ml-[80px] mt-[4vh]  fixed  sm:ml-[100px] sm:mt-0 w-20   border-sky-500 bg-sky-600 hover:bg-sky-500">
@@ -46,7 +46,7 @@
 		</div>
 
 
-		<div class="fixed  justify-center m-auto left-0 right-0 w-[70vw] flex mt-[.1vh]">
+		<div class=" justify-center m-auto left-0 right-0 w-[70vw] flex mt-[.1vh]">
 			<!-- <slot></slot> -->
 			<p class="mt-1 text-sm font-semibold text-center text-slate-100">
 				{{ $store.state.portalname }}</p>
@@ -66,7 +66,7 @@
 
 			</button>
 
-			<button v-else-if="$store.state.routeName=='Home'" @click="reloadapp"
+			<button v-else-if="$store.state.routeName == 'Home'" @click="reloadapp"
 				class="dropbtn   border-sky-500 bg-sky-600 hover:bg-sky-500  fixed mt-[4vh] right-[50px] w-[100px] sm:w-[175px]  sm:mt-0  sm:right-[7vw] ">
 
 				<p class="font-medium "
