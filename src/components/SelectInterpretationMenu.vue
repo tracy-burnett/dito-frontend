@@ -1,11 +1,11 @@
 <template>
 	<div>
-		<div class="z-40 dropdown" style="float: right">
+		<div class="dropdown" style="float: right">
 			<button class="dropbtn border-sky-600 bg-sky-700 hover:bg-sky-600" :class="{ tibetan: $store.state.promptsObject.name=='བོད་ཡིག', nottibetan: $store.state.promptsObject.name!='བོད་ཡིག' }">{{$store.state.promptsObject.bInterpretation}}</button>
 
-			<div class="z-40 dropdown-content">
+			<div class="dropdown-content">
 				<!-- for each interpretation in the list of interpretations to show in the menu, create a menu option that displays the language name -->
-				<span class="z-40" v-for="interpretation in interpretationsList" :key="interpretation.id">
+				<span  v-for="interpretation in interpretationsList" :key="interpretation.id">
 					<a @click="selectInterpretationMenu(interpretation.id)">{{ interpretation.title }}, in {{
 						interpretation.language_name
 					}}</a>
@@ -59,11 +59,11 @@ export default {
 .dropdown-content {
 	display: none;
 	position: absolute;
-	right: 0;
+	left: 0;
 	background-color: #f9f9f9;
 	min-width: 160px;
 	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-	z-index: 40;
+	/* z-index: 50; */
 }
 
 .dropdown-content a {
