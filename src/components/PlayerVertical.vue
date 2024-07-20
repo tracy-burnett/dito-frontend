@@ -166,6 +166,7 @@ export default {
 	// watch these variables to see if they change.  if they do, then call the corresponding functions.
 	watch: {
 		"$store.state.playnoPausecounter": function () {
+			console.log("play no pause")
 			this.playWithoutPause();
 		},
 
@@ -174,6 +175,7 @@ export default {
 		// },
 
 		playerPlayPause: function () {
+			console.log("play")
 			this.play();
 		},
 
@@ -218,6 +220,7 @@ export default {
 			this.wavesurfer.setPlaybackRate(this.playbackspeed);
 		},
 		"$store.state.currentTimeUpdated": function () {
+			console.log("current time updated")
 			// if (
 			// 	this.$store.state.incomingCurrentTime >= this.startTimeSeconds &&
 			// 	this.$store.state.incomingCurrentTime < this.endTimeSeconds
@@ -271,9 +274,11 @@ export default {
 			}
 		},
 		"$store.state.playerRerender": function () {
+			console.log("rerender player")
 			this.shouldRerender(this.$store.state.playerRerender);
 		},
 		"$store.state.regionRerender": function () {
+			console.log("rerender region")
 			// console.log(this.$store.state.startTimePrompter)
 			// console.log(this.$store.state.endTimePrompter)
 			this.startTime = this.secondsToTime(
