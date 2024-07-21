@@ -347,7 +347,7 @@ export default {
 
 		latest_text_slices() {
 			this.substringArray = [];
-			if (this.parsedAssociations.length > 1) {
+			if (this.parsedAssociations.length >= 1) {
 				// console.log("here")
 				this.i = 0;
 				while (this.i + 1 <= this.parsedAssociations.length) {
@@ -434,14 +434,16 @@ export default {
 				// }
 
 				// console.log(this.substringArray)
-			} else if (this.parsedAssociations.length == 1) {
-				let slice = {};
-				slice.text = this.latest_text;
-				slice.startingcharacter = 0;
-				slice.starttime = 0;
-				slice.endtime = this.$store.state.audioDuration;
-				this.substringArray.push(slice);
-			}
+			} 
+			// else if (this.parsedAssociations.length == 1) {
+				
+			// 	let slice = {};
+			// 	slice.text = this.latest_text;
+			// 	slice.startingcharacter = 0;
+			// 	slice.starttime = 0;
+			// 	slice.endtime = this.$store.state.audioDuration;
+			// 	this.substringArray.push(slice);
+			// }
 
 			if (this.substringArrayUpdatingStill == false) {
 				this.substringArrayUpdatingStill = true;

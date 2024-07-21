@@ -17,8 +17,8 @@
 				:class="{ tibetantiny: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetantiny: $store.state.promptsObject.name != 'བོད་ཡིག' }">{{ $store.state.promptsObject.sZoom }}</span><span
 				class="text-xs" :class="{ 'mt-[1.5vh]': $store.state.promptsObject.name == 'བོད་ཡིག'}">&nbsp;{{ zoomnumber }}x</span>
 		</div>
-		<div class="-mt-[.6vh]" @mouseup="zoom()">
-			<input id="slider" v-model="zoomnumber" type="range" min="0" max="500" step=".10" style="width: 105px" />
+		<div class="-mt-[.6vh]" >
+			<input @mouseup="zoom()" @touchend="zoom()" id="slider" v-model="zoomnumber" type="range" min="0" max="500" step=".10" style="width: 105px" />
 		</div>
 		<!-- audio player body -->
 
@@ -530,6 +530,7 @@ export default {
 		});
 
 		this.wavesurfer.on("finish", function () {
+			console.log("finished")
 			if (that.repeat == true) {
 				that.wavesurfer.seekTo(that.startTimeSeconds / that.totalDuration);
 
