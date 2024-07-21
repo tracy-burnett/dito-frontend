@@ -1,7 +1,7 @@
 // import Vue from 'vue'
 import Vuex from 'vuex'
 import { auth } from '../firebase'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "firebase/auth";
 
 
 export default new Vuex.Store({
@@ -49,6 +49,8 @@ export default new Vuex.Store({
     consoleschanged: 0,
     portalname: "",
     routeName: "",
+    passwordreset: 0,
+    passwordresetretry: 0,
 
   },
   getters: {
@@ -192,6 +194,14 @@ export default new Vuex.Store({
 
     Logout_User(state) {
       state.user = null
+    },
+
+    Reset_Password(state) {
+      state.passwordreset++
+    },
+
+    Reset_Password_Retry(state) {
+      state.passwordresetretry++
     },
 
     Login_User(state, user) {
@@ -489,8 +499,8 @@ export default new Vuex.Store({
               });
           })
         .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
+          // const errorCode = error.code;
+          // const errorMessage = error.message;
           console.log("Oops. " + error.code + ": " + error.message);
         }
 
@@ -501,6 +511,19 @@ export default new Vuex.Store({
         );
 
 
+
+    },
+
+
+    Reset_Password: (context, { email }) => {
+      sendPasswordResetEmail(auth, email)
+        .then(() => {
+          context.commit('Reset_Password')
+        })
+        .catch((error) => {
+          console.log("Oops. " + error.code + ": " + error.message);
+          context.commit('Reset_Password_Retry')
+        });
 
     },
 
