@@ -14,10 +14,8 @@
 				</div>
 				<!-- <img class="z-40 w-6 ml-1 storybookicon" src="@/assets/white_book_icon.svg"
 					@click.stop="cardclicked" /> -->
-					<img v-if="currentaudioid==audio_ID" class="z-40 w-10 h-10 " src="@/assets/pause.svg"
-					 />
-					<img v-else class="z-40 w-6 h-6 ml-1" src="@/assets/play.svg"
-				/>
+				<img v-if="currentaudioid == audio_ID" class="z-40 w-10 h-10 " src="@/assets/pause.svg" />
+				<img v-else class="z-40 w-6 h-6 ml-1" src="@/assets/play.svg" />
 			</div>
 
 			<!-- </div> -->
@@ -30,6 +28,12 @@
 				{{ description }}
 			</p>
 			<label class="text-xs text-gray-400">Created by {{ uploader }} on {{ date }}</label>
+		</div>
+
+		<div class="py-1" :id="chartid">
+			<!-- <p class="mb-3 text-xs text-gray-400">
+				chart goes here
+			</p> -->
 		</div>
 
 	</div>
@@ -72,13 +76,54 @@ export default {
 	},
 
 
+	computed: {
+		chartid() {
+			return "id" + this.audio_ID.split(".")[0]
+		},
+	},
 
-	// mounted() {
-
+	mounted() {
+		this.drawChart();
 		// this.$refs.storybooktitle.scrollIntoView({ block: "center" });
-	// },
+	},
 
 	methods: {
+
+		drawChart() {
+			// Sample dataset
+			const data = [100, 200, 300];
+			// Set dimensions and margins of the chart
+			const margin = { top: 0, right: 0, bottom: 0, left: 0 },
+				width = document.getElementById(this.chartid).clientWidth,
+				height = 30;
+			// Append the svg object to the #chart div
+			const svg = d3.select("#" + this.chartid).append("svg")
+				.attr("width", width - margin.left - margin.right)
+				.attr("height", height - margin.top - margin.bottom)
+				.append("g")
+				.attr("transform", `translate(${margin.left},${margin.top})`);
+			// Scale the range of the data in the domains
+			const x = d3.scaleBand()
+				.range([0, width + margin.left + margin.right])
+				.padding(0.1);
+			const y = d3.scaleLinear()
+				.range([height, 0 + margin.top + margin.bottom]);
+			x.domain(data.map((d, i) => i));
+			y.domain([0, d3.max(data, (d) => d)]);
+			// Append the rectangles for the bar chart
+			svg.selectAll(".bar")
+				.data(data)
+				.enter().append("rect")
+				.attr("class", "bar")
+				.attr("x", (d, i) => x(i))
+				.attr("width", x.bandwidth())
+				.attr("y", (d) => y(d))
+				.attr("height", (d) => height - y(d));
+		},
+
+
+
+
 		cardclicked() {
 			this.$emit("clicked", this.audio_ID);
 		},
@@ -111,6 +156,14 @@ export default {
 	/* for Chrome, Safari, and Opera */
 }
 
+/* 
+#chart {
+        position: relative;
+        left: 0px;
+        right: 0px;
+        top: 0px;
+        bottom: 0px;
+      } */
 /* .play {
 	top: calc(50% - 1.75rem);
 	right: 0;
