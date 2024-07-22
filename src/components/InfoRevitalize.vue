@@ -4,7 +4,16 @@
 			placeholder="Search Storybooks" v-model="searchterm" @keyup.enter="search" />
 	</div>
 	<!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
-	<div class="flex flex-col items-start hover:overflow-x-auto cardlist">
+	<div ref="scrollingcards" class="flex flex-col items-start overscroll-none hover:overflow-x-auto cardlist">
+		<div @mouseenter="scrollLeft" @mouseleave="noScroll"
+			class="absolute z-30 mt-[19vh]  hover:border-cyan-500 hover:bg-cyan-500 hover:text-gray-50 cursor-pointer left-[3vh] text-lg text-cyan-600 font-extrabold border-[3px] border-cyan-600 opacity-50 rounded-full pr-2 pl-2">
+			<p>&lt;</p>
+		</div>
+		<div @mouseenter="scrollRight" @mouseleave="noScroll"
+			class="absolute z-30 mt-[19vh] hover:border-cyan-500 hover:bg-cyan-500 hover:text-gray-50  cursor-pointer right-[3vh] text-lg text-cyan-600 font-extrabold border-[3px] border-cyan-600 opacity-50 rounded-full pr-2 pl-2">
+			<p>></p>
+		</div>
+
 		<div v-if="searchResultAudioArray.length > 0" class="pt-[9vh]  flex flex-row items-center">
 			<div v-for="audio in searchResultAudioArray" :key="audio.id">
 
@@ -32,7 +41,7 @@
 	<div v-if="processingStorybooks == true"
 		class="flex flex-row flex-wrap justify-around basis-full pt-[10vh] lg:basis-2/5">
 		processing information from server; please wait...</div>
-	<div v-if="$store.state.portalname=='sfcanto'" class="flex justify-center">
+	<div v-if="$store.state.portalname == 'sfcanto'" class="flex justify-center">
 		<button class=" dropbtn border-emerald-900 bg-emerald-800 hover:bg-emerald-900" @click="openPhraseRequest"
 			:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">
 
@@ -85,6 +94,7 @@ export default {
 	components: {
 		Card,
 	},
+	beforeUnmount() { clearInterval(window.handle) },
 	unmounted() {
 		this.audioplayer.pause()
 	},
@@ -112,6 +122,21 @@ export default {
 		// }
 	},
 	methods: {
+		scrollLeft() {
+			window.handle = setInterval(this.scrollLeftHelper, .02);
+		},
+		scrollLeftHelper() {
+			this.$refs.scrollingcards.scrollLeft -= 2
+		},
+		scrollRight() {
+			window.handle = setInterval(this.scrollRightHelper, .02);
+		},
+		scrollRightHelper() {
+			this.$refs.scrollingcards.scrollLeft += 2
+		},
+		noScroll() {
+			clearInterval(window.handle)
+		},
 		openPhraseRequest() {
 			window.open('https://forms.gle/D4UiGqzKbtBbXr7V7', '_blank').focus();
 		},
