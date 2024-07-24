@@ -6,11 +6,13 @@
 	<div ref="scrollingcards" class="flex flex-col items-start overscroll-none hover:overflow-x-auto cardlist">
 		<!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
 
-		<div @mouseenter="scrollLeft" @mouseleave="noScroll"  @touchstart="scrollLeft" @focusout="noScroll" @touchend="noScroll" :class="{ scrollhover: scrollingLeft==true, notscrolling: scrollingLeft==false }"
+		<div @mouseenter="scrollLeft" @mouseleave="noScroll" @touchstart="scrollLeft" @focusout="noScroll"
+			@touchend="noScroll" :class="{ scrollhover: scrollingLeft == true, notscrolling: scrollingLeft == false }"
 			class="scrollbutton absolute z-30    cursor-pointer left-[1vh] md:left-[3vh] text-lg font-extrabold border-[3px]  rounded-full pr-2 pl-2">
 			<p>&lt;</p>
 		</div>
-		<div @mouseenter="scrollRight"  @mouseleave="noScroll"  @touchstart="scrollRight" @focusout="noScroll" @touchend="noScroll" :class="{ scrollhover: scrollingRight==true, notscrolling: scrollingRight==false }"
+		<div @mouseenter="scrollRight" @mouseleave="noScroll" @touchstart="scrollRight" @focusout="noScroll"
+			@touchend="noScroll" :class="{ scrollhover: scrollingRight == true, notscrolling: scrollingRight == false }"
 			class="scrollbutton absolute z-30  cursor-pointer right-[1vh] md:right-[3vh] text-lg  font-extrabold border-[3px] rounded-full pr-2 pl-2">
 			<p>></p>
 		</div>
@@ -119,7 +121,7 @@ export default {
 	methods: {
 		scrollLeft() {
 			clearInterval(window.handle)
-			this.scrollingLeft=true
+			this.scrollingLeft = true
 			window.handle = setInterval(this.scrollLeftHelper, .02);
 		},
 
@@ -129,7 +131,7 @@ export default {
 
 		scrollRight() {
 			clearInterval(window.handle)
-			this.scrollingRight=true;
+			this.scrollingRight = true;
 			window.handle = setInterval(this.scrollRightHelper, .02);
 
 		},
@@ -139,8 +141,8 @@ export default {
 		},
 
 		noScroll() {
-			this.scrollingLeft=false;
-			this.scrollingRight=false;
+			this.scrollingLeft = false;
+			this.scrollingRight = false;
 			clearInterval(window.handle)
 		},
 
