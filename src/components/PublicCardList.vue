@@ -1,17 +1,17 @@
 <template>
 	<div class="flex flex-col items-center pt-[2.2vh] ">
 		<input class="px-3 absolute py-.5 text-sm border border-gray-300 rounded w-[70vw] md:w-[70vw] lg:w-[30vw]"
-			placeholder="Search Storybooks" v-model="searchterm" @keyup.enter="search" />
+			placeholder="Search" v-model="searchterm" @keyup.enter="search" />
 	</div>
 	<div ref="scrollingcards" class="flex flex-col items-start overscroll-none hover:overflow-x-auto cardlist">
 		<!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
 
-		<div @mouseenter="scrollLeft" @mouseleave="noScroll" @touchstart="scrollLeft" @touchend="noScroll"
-			class=" absolute z-30  hover:border-emerald-800 opacity-60 hover:opacity-90 hover:bg-emerald-800 hover:text-gray-50 cursor-pointer left-[3vh] text-lg text-emerald-800 font-extrabold border-[3px] border-emerald-800  rounded-full pr-2 pl-2">
+		<div @mouseenter="scrollLeft" @mouseleave="noScroll"  @touchstart="scrollLeft" @focusout="noScroll" @touchend="noScroll" :class="{ scrollhover: scrollingLeft==true, notscrolling: scrollingLeft==false }"
+			class="scrollbutton absolute z-30    cursor-pointer left-[3vh] text-lg font-extrabold border-[3px]  rounded-full pr-2 pl-2">
 			<p>&lt;</p>
 		</div>
-		<div @mouseenter="scrollRight" @mouseleave="noScroll" @touchstart="scrollRight" @touchend="noScroll"
-			class=" absolute z-30  hover:border-emerald-800 opacity-60 hover:opacity-90 hover:bg-emerald-800 hover:text-gray-50  cursor-pointer right-[3vh] text-lg text-emerald-800 font-extrabold border-[3px] border-emerald-800  rounded-full pr-2 pl-2">
+		<div @mouseenter="scrollRight"  @mouseleave="noScroll"  @touchstart="scrollRight" @focusout="noScroll" @touchend="noScroll" :class="{ scrollhover: scrollingRight==true, notscrolling: scrollingRight==false }"
+			class="scrollbutton absolute z-30  cursor-pointer right-[3vh] text-lg  font-extrabold border-[3px] rounded-full pr-2 pl-2">
 			<p>></p>
 		</div>
 		<div v-if="searchResultAudioArray.length > 0" class="pt-[9vh]  flex flex-row items-center">
@@ -58,6 +58,8 @@ export default {
 			processingStorybooks: false,
 			currentaudioid: "",
 			oldaudioid: "",
+			scrollingLeft: false,
+			scrollingRight: false,
 		};
 	},
 	name: "PublicCardList",
@@ -116,6 +118,8 @@ export default {
 	},
 	methods: {
 		scrollLeft() {
+			clearInterval(window.handle)
+			this.scrollingLeft=true
 			window.handle = setInterval(this.scrollLeftHelper, .02);
 		},
 
@@ -124,6 +128,8 @@ export default {
 		},
 
 		scrollRight() {
+			clearInterval(window.handle)
+			this.scrollingRight=true;
 			window.handle = setInterval(this.scrollRightHelper, .02);
 
 		},
@@ -133,6 +139,8 @@ export default {
 		},
 
 		noScroll() {
+			this.scrollingLeft=false;
+			this.scrollingRight=false;
 			clearInterval(window.handle)
 		},
 
@@ -325,6 +333,31 @@ export default {
 
 :-ms-input-placeholder {
 	text-align: center;
+
+
+}
+
+.scrollbutton {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.scrollhover {
+	border-color: #065f46;
+	color: #f9fafb;
+	opacity: 90;
+	background-color: #065f46;
+}
+
+.notscrolling {
+	color: #065f46;
+	border-color: #065f46;
+	opacity: 60;
+
 }
 
 /* @media (pointer: fine) {
