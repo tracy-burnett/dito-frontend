@@ -6,12 +6,12 @@
 	<div ref="scrollingcards" class="flex flex-col items-start overscroll-none hover:overflow-x-auto cardlist">
 		<!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
 
-		<div @mouseenter="scrollLeft" @mouseleave="noScroll"
-			class="absolute z-30 mt-[19vh]  hover:border-cyan-500 hover:bg-cyan-500 hover:text-gray-50 cursor-pointer left-[3vh] text-lg text-cyan-600 font-extrabold border-[3px] border-cyan-600 opacity-50 rounded-full pr-2 pl-2">
+		<div @mouseenter="scrollLeft" @mouseleave="noScroll" @touchstart="scrollLeft" @touchend="noScroll"
+			class=" absolute z-30  hover:border-emerald-800 opacity-60 hover:opacity-90 hover:bg-emerald-800 hover:text-gray-50 cursor-pointer left-[3vh] text-lg text-emerald-800 font-extrabold border-[3px] border-emerald-800  rounded-full pr-2 pl-2">
 			<p>&lt;</p>
 		</div>
-		<div @mouseenter="scrollRight" @mouseleave="noScroll"
-			class="absolute z-30 mt-[19vh] hover:border-cyan-500 hover:bg-cyan-500 hover:text-gray-50  cursor-pointer right-[3vh] text-lg text-cyan-600 font-extrabold border-[3px] border-cyan-600 opacity-50 rounded-full pr-2 pl-2">
+		<div @mouseenter="scrollRight" @mouseleave="noScroll" @touchstart="scrollRight" @touchend="noScroll"
+			class=" absolute z-30  hover:border-emerald-800 opacity-60 hover:opacity-90 hover:bg-emerald-800 hover:text-gray-50  cursor-pointer right-[3vh] text-lg text-emerald-800 font-extrabold border-[3px] border-emerald-800  rounded-full pr-2 pl-2">
 			<p>></p>
 		</div>
 		<div v-if="searchResultAudioArray.length > 0" class="pt-[9vh]  flex flex-row items-center">
@@ -326,4 +326,16 @@ export default {
 :-ms-input-placeholder {
 	text-align: center;
 }
+
+/* @media (pointer: fine) {
+	.scrollarrow {
+		z-index: 30
+	}
+}
+
+@media (pointer: coarse) {
+	.scrollarrow {
+		z-index: -1
+	}
+} */
 </style>
