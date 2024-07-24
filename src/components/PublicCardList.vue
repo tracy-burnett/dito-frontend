@@ -1,11 +1,21 @@
 <template>
 	<div class="flex flex-col items-center pt-[2.2vh] ">
 		<input class="px-3 absolute py-.5 text-sm border border-gray-300 rounded w-[70vw] md:w-[70vw] lg:w-[30vw]"
-			placeholder="Search Storybooks" v-model="searchterm" @keyup.enter="search" />
+			placeholder="Search" v-model="searchterm" @keyup.enter="search" />
 	</div>
-	<div class="flex flex-col items-start hover:overflow-x-auto cardlist">
+	<div ref="scrollingcards" class="flex flex-col items-start overscroll-none hover:overflow-x-auto cardlist">
 		<!-- for each audio file in the list of audio files owned by, or shared with, the logged-in user, display a "Card" with information about that audio storybook -->
 
+		<div @mouseenter="scrollLeft" @mouseleave="noScroll" @touchstart="scrollLeft" @focusout="noScroll"
+			@touchend="noScroll" :class="{ scrollhover: scrollingLeft == true, notscrolling: scrollingLeft == false }"
+			class="scrollbutton absolute z-30    cursor-pointer left-[1vh] md:left-[3vh] text-lg font-extrabold border-[3px]  rounded-full pr-2 pl-2">
+			<p>&lt;</p>
+		</div>
+		<div @mouseenter="scrollRight" @mouseleave="noScroll" @touchstart="scrollRight" @focusout="noScroll"
+			@touchend="noScroll" :class="{ scrollhover: scrollingRight == true, notscrolling: scrollingRight == false }"
+			class="scrollbutton absolute z-30  cursor-pointer right-[1vh] md:right-[3vh] text-lg  font-extrabold border-[3px] rounded-full pr-2 pl-2">
+			<p>></p>
+		</div>
 		<div v-if="searchResultAudioArray.length > 0" class="pt-[9vh]  flex flex-row items-center">
 			<div v-for="audio in searchResultAudioArray" :key="audio.id">
 				<Card :date="audio.uploaded_at.substring(0, 10) + ' UTC'" :uploader="audio.uploaded_by.display_name"
@@ -25,7 +35,7 @@
 		class="flex flex-row flex-wrap justify-around basis-full pt-[10vh] lg:basis-2/5">processing information from
 		server; please wait...</div>
 
-	<div v-if="$store.state.portalname=='sfcanto'" class="flex justify-center">
+	<div v-if="$store.state.portalname == 'sfcanto'" class="flex justify-center">
 		<button class=" dropbtn border-emerald-900 bg-emerald-800 hover:bg-emerald-900" @click="openPhraseRequest"
 			:class="{ tibetan: $store.state.promptsObject.name == 'བོད་ཡིག', nottibetan: $store.state.promptsObject.name != 'བོད་ཡིག' }">
 
@@ -50,6 +60,8 @@ export default {
 			processingStorybooks: false,
 			currentaudioid: "",
 			oldaudioid: "",
+			scrollingLeft: false,
+			scrollingRight: false,
 		};
 	},
 	name: "PublicCardList",
@@ -77,10 +89,13 @@ export default {
 	components: {
 		Card,
 	},
+
+	beforeUnmount() { clearInterval(window.handle) },
 	unmounted() {
 		this.audioplayer.pause()
 	},
 	async mounted() {
+
 		// if (this.$store.state.idToken) {
 
 		this.getStorybooks();
@@ -104,6 +119,33 @@ export default {
 		// }
 	},
 	methods: {
+		scrollLeft() {
+			clearInterval(window.handle)
+			this.scrollingLeft = true
+			window.handle = setInterval(this.scrollLeftHelper, .02);
+		},
+
+		scrollLeftHelper() {
+			this.$refs.scrollingcards.scrollLeft -= 2
+		},
+
+		scrollRight() {
+			clearInterval(window.handle)
+			this.scrollingRight = true;
+			window.handle = setInterval(this.scrollRightHelper, .02);
+
+		},
+
+		scrollRightHelper() {
+			this.$refs.scrollingcards.scrollLeft += 2
+		},
+
+		noScroll() {
+			this.scrollingLeft = false;
+			this.scrollingRight = false;
+			clearInterval(window.handle)
+		},
+
 		openPhraseRequest() {
 			window.open('https://forms.gle/D4UiGqzKbtBbXr7V7', '_blank').focus();
 		},
@@ -263,6 +305,7 @@ export default {
 	scrollbar-width: none;
 	/* for Firefox */
 	overflow-x: scroll;
+	/* scroll-behavior: smooth; */
 }
 
 .cardlist::-webkit-scrollbar {
@@ -292,5 +335,42 @@ export default {
 
 :-ms-input-placeholder {
 	text-align: center;
+
+
 }
+
+.scrollbutton {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.scrollhover {
+	border-color: #065f46;
+	color: #f9fafb;
+	opacity: 90;
+	background-color: #065f46;
+}
+
+.notscrolling {
+	color: #065f46;
+	border-color: #065f46;
+	opacity: 60;
+
+}
+
+/* @media (pointer: fine) {
+	.scrollarrow {
+		z-index: 30
+	}
+}
+
+@media (pointer: coarse) {
+	.scrollarrow {
+		z-index: -1
+	}
+} */
 </style>
